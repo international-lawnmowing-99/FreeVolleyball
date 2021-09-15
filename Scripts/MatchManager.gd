@@ -1,0 +1,25 @@
+extends Spatial
+
+class_name MatchManager
+
+enum GameState {
+	Initialisation,
+	PreService,
+	Service,
+	Receive,
+	Set,
+	MiddleBlock,
+	Spike,
+	BlockInProgress,
+	PointJustScored
+}
+
+var gameState = GameState.Receive
+
+var teamA
+var teamB
+
+
+func _on_ServingMachine_ballServed(_a,_b):
+	gameState = GameState.Receive
+	pass # Replace with function body.

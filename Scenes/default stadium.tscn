@@ -20,6 +20,8 @@ extents = Vector3( 3, 1, 1 )
 [node name="default stadium" instance=ExtResource( 1 )]
 
 [node name="OmniLight" type="OmniLight" parent="floor" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0312001, 0 )
+visible = false
 
 [node name="StaticBody" type="StaticBody" parent="floor" index="1"]
 
