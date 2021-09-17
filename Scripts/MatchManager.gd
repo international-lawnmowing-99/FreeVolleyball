@@ -14,10 +14,10 @@ enum GameState {
 	PointJustScored
 }
 
-var gameState = GameState.Receive
-
-var teamA
-var teamB
+var gameState = GameState.Initialisation
+ 
+var teamA = preload("res://Scripts/HumanTeam.gd")
+var teamB = preload("res://Scripts/ComputerTeam.gd")
 
 
 func _on_ServingMachine_ballServed(_a,_b):

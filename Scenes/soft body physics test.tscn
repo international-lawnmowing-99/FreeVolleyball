@@ -156,7 +156,6 @@ material/0 = SubResource( 4 )
 
 [node name="default stadium" parent="." instance=ExtResource( 7 )]
 transform = Transform( 60, 0, 0, 0, 20, 0, 0, 0, 60, 0, 20, 0 )
-visible = false
 
 [node name="ball" parent="." instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.26472, 0.715383, 0 )
@@ -198,6 +197,7 @@ shape = SubResource( 8 )
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 margin_right = 288.0
 margin_bottom = 124.0
+color = Color( 0, 0.27451, 1, 0.415686 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

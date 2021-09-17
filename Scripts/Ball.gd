@@ -138,3 +138,14 @@ func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, ai
 	projectileVelocity.z = xzDirection.z * xzProjectileVel
 
 	return projectileVelocity
+
+func Serve(startPos, attackTarget, topspin):
+		gravity_scale = 1 + topspin
+		
+		rotation = Vector3.ZERO
+		angular_velocity = Vector3 ( rand_range(-.5,.5),rand_range(-.5,.5), topspin * 80)
+		linear_velocity = Vector3.ZERO
+		
+		var impulse = CalculateBallOverNetVelocity(startPos, attackTarget, 2.6)
+		impulse *= mass
+		linear_velocity = impulse

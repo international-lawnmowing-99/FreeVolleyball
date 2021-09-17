@@ -32,8 +32,11 @@ var anglewanted = transform.basis.y
 	#var offset : float = rand_range(0, anim.current_animation_length)
 	#anim.advance(offset)
 var digAngle = 0
+var timeTillBallReachesMe = 9999
+
 
 func _ready():
+	
 	#DebugOverlay.draw.add_vector(self, "basisx", 1, 4, Color(0,1,0, 0.5))
 	#DebugOverlay.draw.add_vector(self, "anglewanted", 1, 4, Color(1,1,0, 0.5))
 	
@@ -53,30 +56,25 @@ func _ready():
 	#play_randomized("Idle take 1")
 	pass
 func _physics_process(_delta):
-	if ball.translation.y < .9 && \
-		(Vector3(ball.translation.x,0, ball.translation.z)).distance_to(translation) < .66\
+	if ball.translation.y < 1 && \
+		(Vector3(ball.translation.x,0, ball.translation.z)).distance_to(translation) < 1\
 		&& matchManager.gameState == MatchManager.GameState.Receive:
 	#	if ball.translation.distance_to(self.translation) < 1 && matchManager.gameState == matchManager.GameState.Receive:
 			PassBall()
 		
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	#digAngle += _delta * 100 #ball.SignedAngle(transform.basis.x,skel.get_bone_global_pose(spineBone01Id).origin - ball.translation, Vector3.UP)
-	#RotateDigPlatform(digAngle)
-	
-	
-	
-	if ball:
-		if ball.linear_velocity.length() <.5:
-			pass
-		else:
-			#var distanceFactor = self.translation.distance_to(ball.translation)/100
-			#print (str(distanceFactor))
-			animTree.set("parameters/BlendSpace1D/BlendPosition", 1)
-		
-	#$"godette volleyball/Skeleton".find_bone("wrist.L").transform.basis = $"godette volleyball/Skeleton".find_bone("lowerarm02.L").transform.basis
-	#var originalLeftBasis = leftIK.
 
+	if matchManager.gameState == matchManager.GameState.Receive && ball.linear_velocity.x!=0:
+		timeTillBallReachesMe = Vector3(ball.translation.x, 0, ball.translation.z).distance_to(Vector3(translation.x, 0, translation.z))\
+				/Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length()
+		var animFactor = 1.3-  timeTillBallReachesMe 
+		animTree.set("parameters/BlendSpace1D/blend_position", animFactor)
+		RotateDigPlatform(lerp(0,digAngle,(min(1,1/timeTillBallReachesMe - 2))))
+	else:
+		var a = animTree.get("parameters/BlendSpace1D/blend_position")
+		animTree.set("parameters/BlendSpace1D/blend_position", lerp(a, 0, 5*_delta))
+		digAngle = lerp(digAngle,0,3*_delta)
+		RotateDigPlatform(digAngle)
 func PassBall():
 	#Engine.time_scale = 0.25
 	matchManager.gameState = MatchManager.GameState.Set
@@ -84,7 +82,7 @@ func PassBall():
 	
 	ball.linear_velocity = Vector3.ZERO
 	ball.gravity_scale = 1
-	
+
 	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, Vector3(-0.5, 2.5, 0), rand_range(3,9)))
 	yield(get_tree(),"idle_frame")
 	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, Vector3(-0.5, 2.5, 0), rand_range(3,9)))
@@ -102,9 +100,9 @@ func RotateDigPlatform(angle):
 	skel.set_bone_custom_pose(neckBone02Id, acustomPoseNeck02)
 
 
-func _on_ServingMachine_ballServed(attackTarget, servePos):
+func _on_ServingMachine_ballServed(_attackTarget, servePos):
 
-	translation =  attackTarget + Vector3(0,0, rand_range(-.5,.51))
+	translation =  ball.BallPositionAtGivenHeight(0.9) + Vector3(0,-.9, rand_range(-.5,.51))
 	look_at(Vector3(servePos.x,0, servePos.z), Vector3.UP)
 	rotate(Vector3.UP, PI)
 	basisx = transform.basis.z
@@ -113,7 +111,7 @@ func _on_ServingMachine_ballServed(attackTarget, servePos):
 	#translation = attackTarget
 	#var moveFactor = Vector3(ballPassingV3.x,0, ballPassingV3.z).distance_to( attackTarget)/1.5
 	
-	translate(-transform.basis.x)# * moveFactor)
+	translate(transform.basis.x/2)# * moveFactor)
 	
 	#point where a circle will intersect with the xz vector of the ball's motion
 	#circle is (x-h)^2 + (y-k)^2 = r^2
@@ -129,23 +127,20 @@ func _on_ServingMachine_ballServed(attackTarget, servePos):
 	
 	var m
 	if xPart == 0 && zPart == 0:
-		print("no vel to work with")
+		pass
+		#print("no vel to work with")
 	elif zPart == 0:
 		m = 0
-		print("m = 0")
+		#print("m = 0")
 	elif xPart == 0:
 		m = 999999
-		print("m = big")
+		#print("m = big")
 	else:
 		m = zPart/xPart 
 	#y=mx+b
 	#b = y - mx
 	var b = servePos.z - m * servePos.x
 	
-	#print("test: firing from " + str(origin))
-	#print("aiming at " + str(attackTarget))
-	#var predictedZ = m * attackTarget.x + b
-	#print (str(attackTarget.x) + " should imply z = " + str(predictedZ))
 	#Will the two meet??
 	# circle = line 
 	
@@ -164,9 +159,6 @@ func _on_ServingMachine_ballServed(attackTarget, servePos):
 		# Choose t
 		var point1x =  (-bDet + sqrt(determinate))/(2*aDet)
 		var point2x = (-bDet - sqrt(determinate))/(2*aDet)
-		#print ("Options:")
-		#print(point1x)
-		print ("good")
 		intersectionPointX = max(point1x, point2x)
 	else:
 		# No intersections
@@ -174,15 +166,10 @@ func _on_ServingMachine_ballServed(attackTarget, servePos):
 		print("can't make that work chap")
 		
 	var intersectionPointZ = m*intersectionPointX + b
-	#print(Vector2(intersectionPointX, intersectionPointZ))
 	
 	#get_node("../target").translation =  Vector3(intersectionPointX,0,intersectionPointZ)
 	
-	var tentativeDir = rad2deg(  ball.SignedAngle(transform.basis.z, -translation + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
-	print (tentativeDir)
-	RotateDigPlatform(( tentativeDir))
+	digAngle = rad2deg(  ball.SignedAngle(transform.basis.z, -translation + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
+
 	anglewanted = - translation + Vector3(intersectionPointX,0,intersectionPointZ)
 	
-	#print (tentativeDir)
-	#print (rad2deg( tentativeDir))
-	pass # Replace with function body.
