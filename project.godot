@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Spatial",
+"class": "Athlete",
+"language": "GDScript",
+"path": "res://Scripts/Athlete.gd"
+}, {
 "base": "RigidBody",
 "class": "Ball",
 "language": "GDScript",
@@ -18,10 +23,17 @@ _global_script_classes=[ {
 "class": "MatchManager",
 "language": "GDScript",
 "path": "res://Scripts/MatchManager.gd"
+}, {
+"base": "Node",
+"class": "Set",
+"language": "GDScript",
+"path": "res://Set.gd"
 } ]
 _global_script_class_icons={
+"Athlete": "",
 "Ball": "",
-"MatchManager": ""
+"MatchManager": "",
+"Set": ""
 }
 
 [application]
@@ -33,7 +45,11 @@ config/icon="res://icon.png"
 
 [autoload]
 
-DebugOverlay="*res://Scenes/DebugOverlay.gd"
+DebugOverlay="*res://Addons/DebugOverlay.gd"
+
+[debug]
+
+gdscript/warnings/unreachable_code=false
 
 [display]
 
@@ -105,6 +121,10 @@ camera_control={
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
+
+[network]
+
+limits/debugger_stdout/max_chars_per_second=16384
 
 [physics]
 

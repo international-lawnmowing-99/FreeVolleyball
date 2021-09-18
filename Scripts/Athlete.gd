@@ -1,11 +1,19 @@
 extends Spatial
-
+class_name Athlete
 signal ballPassed
 
+enum Role{
+	Setter,
+	Outside,
+	Opposite,
+	Middle,
+	Libero
+	}
 
 #onready var anim = $AnimationPlayer2
 
 onready var target = $Target
+onready var moveTargetModel = $"../MoveTarget"
 
 onready var animTree = $AnimationTree
 
@@ -23,8 +31,16 @@ var customPose02
 var customPoseNeck01
 var customPoseNeck02
 
-var basisx = transform.basis.z
+var basisz = transform.basis.z
+var basisx = transform.basis.x
 var anglewanted = transform.basis.y
+
+var MAXSPEED = 13
+var speed = 0
+var acceleration = 101
+
+var rotationSpeed = 101
+
 
 #func play_randomized(animation_name : String):
 	#randomize()
@@ -33,12 +49,13 @@ var anglewanted = transform.basis.y
 	#anim.advance(offset)
 var digAngle = 0
 var timeTillBallReachesMe = 9999
-
+var moveTarget = Vector3.ZERO
+var servePos = Vector3.ZERO
 
 func _ready():
 	
-	#DebugOverlay.draw.add_vector(self, "basisx", 1, 4, Color(0,1,0, 0.5))
-	#DebugOverlay.draw.add_vector(self, "anglewanted", 1, 4, Color(1,1,0, 0.5))
+	DebugOverlay.draw.add_vector(self, "basisz", 1, 4, Color(0,1,0, 0.5))
+	DebugOverlay.draw.add_vector(self, "basisx", 1, 4, Color(1,1,0, 0.5))
 	
 	skel = get_node("godette volleyball/Skeleton")
 	spineBone01Id = skel.find_bone("spine01")
@@ -62,8 +79,15 @@ func _physics_process(_delta):
 	#	if ball.translation.distance_to(self.translation) < 1 && matchManager.gameState == matchManager.GameState.Receive:
 			PassBall()
 		
+func _input(_event):
+	#if event.is_action_pressed("ui_accept"):
+	#	moveTarget = Vector3(rand_range(-13,13),0, rand_range(-13,13))
+	#	moveTargetModel.translation = moveTarget + Vector3(0,0.1,0)
+		
+	pass
 func _process(_delta):
-
+	basisz = transform.basis.z
+	basisx = transform.basis.x
 	if matchManager.gameState == matchManager.GameState.Receive && ball.linear_velocity.x!=0:
 		timeTillBallReachesMe = Vector3(ball.translation.x, 0, ball.translation.z).distance_to(Vector3(translation.x, 0, translation.z))\
 				/Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length()
@@ -75,6 +99,39 @@ func _process(_delta):
 		animTree.set("parameters/BlendSpace1D/blend_position", lerp(a, 0, 5*_delta))
 		digAngle = lerp(digAngle,0,3*_delta)
 		RotateDigPlatform(digAngle)
+	if translation.distance_squared_to(moveTarget)>0.01:
+		Move(_delta)
+	else: 
+		speed = 0
+		
+func Move(delta):
+	# For the future - measure the length, use it to determine if you should strafe or turn
+	
+	
+	var distanceToTarget = translation.distance_to(moveTarget)
+	var stoppingDistance = (speed * speed) / (2*acceleration)
+	
+	if stoppingDistance >= distanceToTarget && speed > acceleration * delta:
+		speed -= acceleration * delta
+		rotation.y = lerp_angle(rotation.y, atan2(servePos.x - translation.x,servePos.z - translation.z), delta * rotationSpeed)
+		
+	
+	elif(speed < MAXSPEED):
+		#print ("accelerating " + "%10.2f" % speed + " | " + "%10.2f" %distanceToTarget +" | " + "%4.2f" %stoppingDistance)
+		speed += acceleration * delta
+		rotation.y = lerp_angle(rotation.y, atan2(moveTarget.x - translation.x,moveTarget.z - translation.z), delta * rotationSpeed)
+	
+	#rotation_degrees += rotationSpeed * delta
+	
+	
+	var moveVector = (moveTarget - translation).normalized()
+	translation += moveVector * speed * delta
+	
+	
+	
+	#rotate_y(deg2rad(rotationSpeed))
+	pass
+	
 func PassBall():
 	#Engine.time_scale = 0.25
 	matchManager.gameState = MatchManager.GameState.Set
@@ -83,9 +140,9 @@ func PassBall():
 	ball.linear_velocity = Vector3.ZERO
 	ball.gravity_scale = 1
 
-	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, Vector3(-0.5, 2.5, 0), rand_range(3,9)))
+	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, Vector3(-0.5, 2.5, 0), rand_range(3,7)))
 	yield(get_tree(),"idle_frame")
-	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, Vector3(-0.5, 2.5, 0), rand_range(3,9)))
+	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, Vector3(-0.5, 2.5, 0), rand_range(3,7)))
 
 func RotateDigPlatform(angle):
 	
@@ -100,18 +157,20 @@ func RotateDigPlatform(angle):
 	skel.set_bone_custom_pose(neckBone02Id, acustomPoseNeck02)
 
 
-func _on_ServingMachine_ballServed(_attackTarget, servePos):
+func _on_ServingMachine_ballServed(_attackTarget, _servePos):
+	moveTarget = ball.BallPositionAtGivenHeight(0.9) + Vector3(0,-.9, rand_range(-.5,.51))
+	moveTarget += (moveTarget - Vector3(_servePos.x, 0, _servePos.z)).normalized()/2
+	moveTargetModel.translation = moveTarget
+	servePos = _servePos  
+	#look_at(Vector3(servePos.x,0, servePos.z), Vector3.UP)
+	#rotate(Vector3.UP, PI)
 
-	translation =  ball.BallPositionAtGivenHeight(0.9) + Vector3(0,-.9, rand_range(-.5,.51))
-	look_at(Vector3(servePos.x,0, servePos.z), Vector3.UP)
-	rotate(Vector3.UP, PI)
-	basisx = transform.basis.z
 	
 	#var ballPassingV3 = ball.BallPositionAtGivenHeight(.85)
 	#translation = attackTarget
 	#var moveFactor = Vector3(ballPassingV3.x,0, ballPassingV3.z).distance_to( attackTarget)/1.5
 	
-	translate(transform.basis.x/2)# * moveFactor)
+	#translation -= transform.basis.z/2 # * moveFactor)
 	
 	#point where a circle will intersect with the xz vector of the ball's motion
 	#circle is (x-h)^2 + (y-k)^2 = r^2
@@ -162,8 +221,8 @@ func _on_ServingMachine_ballServed(_attackTarget, servePos):
 		intersectionPointX = max(point1x, point2x)
 	else:
 		# No intersections
-		intersectionPointX = h
-		print("can't make that work chap")
+		intersectionPointX = h +1
+		#print("can't make that work chap")
 		
 	var intersectionPointZ = m*intersectionPointX + b
 	

@@ -36,4 +36,4 @@ func LaunchBall():
 		#print(str(impulse.length()*3.6))
 		
 		emit_signal("ballServed", attackTarget, ball.translation)
-		#attackTargetModel.translation = attackTarget
+		attackTargetModel.translation = attackTarget

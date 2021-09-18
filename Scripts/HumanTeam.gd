@@ -1,16 +1,16 @@
 extends "res://Scripts/Team.gd"
 
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass 
 
+func _process(delta):
+	if !isNextToAttack && (mManager.gameState == mManager.GameState.Set || mManager.gameState == mManager.GameState.Spike || mManager.gameState == mManager.GameState.Receive):
+		GetBlockInput()
+	if isNextToAttack && (mManager.gameState == mManager.GameState.Receive || mManager.gameState == mManager.GameState.Set):
+		ChoosePlay()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func GetBlockInput():
+	pass
+	
+func ChoosePlay():
+	pass
