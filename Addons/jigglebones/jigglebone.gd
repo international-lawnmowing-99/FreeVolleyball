@@ -20,6 +20,9 @@ var prev_pos = Vector3()
 # Rest length of the distance constraint
 var rest_length = 1
 
+var bone_id
+var bone_id_parent
+
 func jiggleprint(text):
 	print("[Jigglebones] Error: " + text)
 	
@@ -35,7 +38,9 @@ func get_bone_forward_local():
 func _ready():
 	set_as_toplevel(true)  # Ignore parent transformation
 	prev_pos = global_transform.origin
-
+	bone_id = skeleton.find_bone(bone_name)
+	bone_id_parent = skeleton.get_bone_parent(bone_id)
+	
 func _process(delta):
 	
 	
@@ -47,14 +52,10 @@ func _process(delta):
 		jiggleprint("Please enter a bone name")
 		return
 	
-	var bone_id = skeleton.find_bone(bone_name)
-	
 	if bone_id == -1:
 		jiggleprint("Unknown bone %s - please enter a valid bone name" % bone_name)
 		return
 		
-	var bone_id_parent = skeleton.get_bone_parent(bone_id)
-	
 	# Note:
 	# Local space = local to the bone
 	# Object space = local to the skeleton (confusingly called "global" in get_bone_global_pose)

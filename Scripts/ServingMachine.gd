@@ -1,6 +1,6 @@
 extends Node
 
-signal ballServed
+#signal ballServed
 
 onready var ball:RigidBody = get_node("../ball")
 onready var targetModel = get_node("../new new woman")
@@ -11,6 +11,7 @@ onready var posAt12 = get_node("../target2")
 
 func _ready():
 	#Engine.time_scale = 0.2
+	return
 	targetModel.get_node("Target").realTarget = ball
 	targetModel.ball = ball
 	targetModel.matchManager = get_node("../")

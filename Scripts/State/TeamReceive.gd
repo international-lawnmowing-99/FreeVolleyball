@@ -1,0 +1,23 @@
+extends "res://Scripts/State/TeamState.gd"
+
+func Enter(team:Team):
+	#ChooseReceiver
+	for athlete in team.courtPlayers:
+
+		athlete.translation = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
+		athlete.moveTarget = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
+
+
+	if team.outsideFront.rotationPosition == 2 && team.oppositeHitter.rotationPosition == 4:
+		team.outsideFront.roleCurrentlyPerforming = team.Role.Opposite;
+		team.oppositeHitter.roleCurrentlyPerforming = team.Role.Outside;
+		team.markUndoChangesToRoles = true;
+
+
+func Update(team:Team):
+	#Is the ball close enough
+	pass
+func Exit(team:Team):
+	#Discard receiver info?
+	pass
+

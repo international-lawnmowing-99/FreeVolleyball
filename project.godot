@@ -12,34 +12,118 @@ _global_script_classes=[ {
 "base": "Spatial",
 "class": "Athlete",
 "language": "GDScript",
-"path": "res://Scripts/Athlete.gd"
+"path": "res://Scripts/MatchScene/Athlete.gd"
+}, {
+"base": "Node",
+"class": "AthleteState",
+"language": "GDScript",
+"path": "res://Scripts/State/AthleteState.gd"
 }, {
 "base": "RigidBody",
 "class": "Ball",
 "language": "GDScript",
-"path": "res://Scripts/Ball.gd"
+"path": "res://Scripts/MatchScene/Ball.gd"
+}, {
+"base": "",
+"class": "ComputerTeam",
+"language": "GDScript",
+"path": "res://Scripts/MatchScene/ComputerTeam.gd"
+}, {
+"base": "Node",
+"class": "Continent",
+"language": "GDScript",
+"path": "res://Scripts/World/Continent.gd"
+}, {
+"base": "Node",
+"class": "GameWorld",
+"language": "GDScript",
+"path": "res://Scripts/World/GameWorld.gd"
+}, {
+"base": "",
+"class": "HumanTeam",
+"language": "GDScript",
+"path": "res://Scripts/MatchScene/HumanTeam.gd"
 }, {
 "base": "Spatial",
 "class": "MatchManager",
 "language": "GDScript",
-"path": "res://Scripts/MatchManager.gd"
+"path": "res://Scripts/MatchScene/MatchManager.gd"
+}, {
+"base": "Node",
+"class": "Nation",
+"language": "GDScript",
+"path": "res://Scripts/World/Nation.gd"
+}, {
+"base": "Node",
+"class": "NationalTeam",
+"language": "GDScript",
+"path": "res://Scripts/World/NationalTeam.gd"
+}, {
+"base": "Node",
+"class": "NewMatchData",
+"language": "GDScript",
+"path": "res://Scripts/World/NewMatchData.gd"
+}, {
+"base": "Node",
+"class": "PlayerChoiceState",
+"language": "GDScript",
+"path": "res://Scripts/World/PlayerChoiceState.gd"
 }, {
 "base": "Node",
 "class": "Set",
 "language": "GDScript",
 "path": "res://Set.gd"
+}, {
+"base": "Node",
+"class": "State",
+"language": "GDScript",
+"path": "res://Scripts/State/State.gd"
+}, {
+"base": "Node",
+"class": "StateMachine",
+"language": "GDScript",
+"path": "res://Scripts/State/StateMachine.gd"
+}, {
+"base": "Node",
+"class": "Stats",
+"language": "GDScript",
+"path": "res://Scripts/MatchScene/Stats.gd"
+}, {
+"base": "Node",
+"class": "Team",
+"language": "GDScript",
+"path": "res://Scripts/Team.gd"
+}, {
+"base": "Node",
+"class": "TeamState",
+"language": "GDScript",
+"path": "res://Scripts/State/TeamState.gd"
 } ]
 _global_script_class_icons={
 "Athlete": "",
+"AthleteState": "",
 "Ball": "",
+"ComputerTeam": "",
+"Continent": "",
+"GameWorld": "",
+"HumanTeam": "",
 "MatchManager": "",
-"Set": ""
+"Nation": "",
+"NationalTeam": "",
+"NewMatchData": "",
+"PlayerChoiceState": "",
+"Set": "",
+"State": "",
+"StateMachine": "",
+"Stats": "",
+"Team": "",
+"TeamState": ""
 }
 
 [application]
 
 config/name="FreeVolleyball"
-run/main_scene="res://Scenes/soft body physics test.tscn"
+run/main_scene="res://Scenes/matchScene.tscn"
 boot_splash/image="res://icon.png"
 config/icon="res://icon.png"
 
@@ -49,6 +133,7 @@ DebugOverlay="*res://Addons/DebugOverlay.gd"
 
 [debug]
 
+gdscript/warnings/unused_argument=false
 gdscript/warnings/unreachable_code=false
 
 [display]

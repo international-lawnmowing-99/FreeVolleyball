@@ -1,0 +1,245 @@
+Country/Independent State	2019 Pop	FIFA		IOC
+
+Africa
+
+Algeria				42228429	ALG		ALG
+Angola				30809762	ANG		ANG
+Benin 				11485048 	BEN		BEN
+Botswana			2254126		BOT		BOT
+Burkina Faso 			19751535 	BFA		BFA
+Burundi 			11175378 	BDI		BDI
+Cameroon 			25216237 	CMR		CMR
+Cape Verde Islands 		543767 		CPV		CPV
+Central African Republic	4666377		CTA		CAF
+Chad				15477751	CHA		CHA
+Comoros Islands			832322	 	COM		COM
+Congo				5244363		CGO		CGO
+Congo DR			84068091	COD		COD
+Cote d’Ivoire 			25069229 	CIV		CIV
+Djibouti 			958920 		DJI		DJI
+Egypt				98423595	EGY		EGY
+Equatorial Guinea		1308974		EQG		GEQ
+Eritrea 			3213972 	ERI		ERI
+Ethiopia 			109224559 	ETH		ETH
+Gabon 				2119275 	GAB		GAB
+Gambia				2280102		GAM		GAM
+Ghana 				29767108 	GHA		GHA
+Guinea				12414318	GUI		GUI
+Guinea-Bissau 			1874309 	GNB		GNB
+Kenya 				51393010 	KEN		KEN
+Lesotho				2108132		LES		LES
+Liberia 			4818977 	LBR		LBR
+Libya 				6678567 	LBY		LBY
+Madagascar			26262368	MAD		MAD
+Malawi 				18143315 	MWI		MWI
+Mali 				19077690 	MLI		MLI
+Mauritania			4403319		MTN		MTN
+Mauritius			1265303		MRI		MRI
+Morocco 			36029138 	MAR		MAR
+Mozambique 			29495962 	MOZ		MOZ
+Namibia 			2448255 	NAM		NAM
+Niger				22442948	NIG		NIG
+Nigeria 			195874740 	NGA		NGA
+Rwanda 				12301939 	RWA		RWA
+Sao Tome e Principe 		211028	 	STP		STP
+Senegal 			15854360 	SEN		SEN
+Seychelles			96762		SEY		SEY
+Sierra Leone 			7650154 	SLE		SLE
+Somalia 			15008154 	SOM		SOM
+South Africa			57779622	RSA		RSA
+South Sudan 			10975920 	SSD		SSD
+Sudan 				41801533 	SDN		SDN
+Eswatini			1136191 	SWZ		SWZ
+Tanzania			56318348	TAN		TAN
+Togo				7889094		TOG		TOG
+Tunisia 			11565204 	TUN		TUN
+Uganda 				42723139 	UGA		UGA
+Zambia				17351822	ZAM		ZAM
+Zimbabwe			14439018	ZIM		ZIM
+
+Antarctica
+
+Antarctica			3000		ANT		ANT
+Penguins			12000000	PEN		PEN
+
+Asia
+
+Afghanistan 			37172386	AFG		AFG
+Bahrain 			1569439		BHR		BHR
+Bangladesh			161356039	BAN		BAN
+Bhutan				754394		BHU		BHU
+Brunei Darussalam		428962		BRU		BRU
+Cambodia			16249798	CAM		CAM
+China PR 			1392730000	CHN		CHN
+Chinese Taipei			23780452	TPE		TPE
+East Timor 			1267972		TLS		TLS
+Hong Kong			7451000		HKG		HKG
+India 				1352617328	IND		IND
+Indonesia 			267663435	IDN		IDN
+Iran				81800269	IRN		IRI
+Iraq 				38433600	IRQ		IRQ
+Israel 				8882800		ISR		ISR
+Japan 				126529100	JPN		JPN
+Jordan 				9956011		JOR		JOR
+Korea DPR			25549819	PRK		PRK
+Korea Republic			51606633	KOR		KOR
+Kuwait				4137309		KUW		KUW
+Kyrgyzstan 			6322800		KGZ		KGZ
+Laos 				7061507		LAO		LAO
+Lebanon 			6848925		LBN		LBN
+Macao				631636		MAC		-----
+Malaysia			31528585	MAS		MAS
+Maldives 			515696		MDV		MDV
+Mongolia			3170208		MGL		MGL
+Myanmar				53708395	MYA		MYA
+Nepal				28087871	NEP		NEP
+Oman				4829483		OMA		OMA
+Pakistan 			212215030	PAK		PAK
+Palestine			5000000		PAL		PLE
+Philippines			106651922	PHI		PHI
+Qatar 				2781677		QAT		QAT
+Saudi Arabia			33699947	KSA		KSA
+Singapore			5638676		SIN		SIN
+Sri Lanka			21670000	SRI		SRI
+Syria 				16906283	SYR		SYR
+Tajikistan 			9100837		TJK		TJK
+Thailand 			69428524	THA		THA
+Turkmenistan 			5850908		TKM		TKM
+United Arab Emirates		9630959		UAE		UAE
+Uzbekistan 			32955400	UZB		UZB
+Vietnam 			95540395	VIE		VIE
+Yemen				28498687	YEM		YEM
+
+Europe
+
+Albania 			2866376		ALB		ALB
+Andorra 			77006		AND		AND
+Armenia 			2951776		ARM		ARM
+Austria 			8840521		AUT		AUT
+Azerbaijan 			9939800		AZE		AZE
+Belarus 			9483499		BLR		BLR
+Belgium 			11433256	BEL		BEL
+Bosnia Herzegovina 		3323929		BIH		BIH
+Bulgaria			7025037		BUL		BUL
+Croatia				4087843		CRO		CRO
+Cyprus 				1189265		CYP		CYP
+Czech Republic 			10629928	CZE		CZE
+Denmark				5793636		DEN		DEN
+England				56000000	ENG		-----
+Estonia 			1321977		EST		EST
+Faeroe Islands 			48497		FRO		FRO
+Finland 			5515525		FIN		FIN
+France 				66977107	FRA		FRA
+Georgia 			3726549		GEO		GEO
+Germany				82905782	GER		GER
+Gibraltar 			33718		GIB		GIB
+Great Britain			66650000	-----		GBR
+Greece				10731726	GRE		GRE
+Netherlands			17231624	NED		NED
+Hungary 			9775564		HUN		HUN
+Iceland 			352721		ISL		ISL
+Italy 				60421760	ITA		ITA
+Kazakhstan 			18272430	KAZ		KAZ
+Kosovo				1845300		KVX		KOS
+Latvia 				1927174		LVA		LVA
+Liechtenstein 			37910		LIE		LIE
+Lithuania 			2801543		LTU		LTU
+Luxembourg 			607950		LUX		LUX
+Macedonia  			2082958		MKD		MKD
+Malta 				484630		MLT		MLT
+Moldova 			2706049		MDA		MDA
+Monaco				38682		-----		MON
+Montenegro 			622227		MNE		MNE
+Northern Ireland		1882000		NIR		-----
+Norway 				5311916		NOR		NOR
+Poland 				37974750	POL		POL
+Portugal			10283822	POR		POR
+Republic of Ireland 		4867309		IRL		IRL
+Romania 			19466145	ROU		ROU
+Russia 				144478050	RUS		RUS
+San Marino 			33785		SMR		SMR
+Scotland			5454000		SCO		-----
+Serbia 				6982604		SRB		SRB
+Slovakia 			5446771		SVK		SVK
+Slovenia 			2073894		SVN		SVN
+Spain 				46796540	ESP		ESP
+Sweden 				10175214	SWE		SWE
+Switzerland			8513227		SUI		SUI
+Turkey 				82319724	TUR		TUR
+Ukraine 			44622516	UKR		UKR
+Wales				3136000		WAL		-----
+Vatican				900		-----		VAT
+
+North America
+
+Anguilla			15094		AIA		-----
+Antigua & Barbuda 		96286		ATG		ATG
+Aruba				105845		ARU		ARU
+Bahamas				385640		BAH		BAH
+Barbados 			286641		BRB		BRB
+Belize 				383071		BLZ		BLZ
+Bermuda				63973		BER		BER
+British Virgin Islands 		29802		VGB		VGB
+Canada 				37057765	CAN		CAN
+Cayman Islands			64174		CAY		CAY
+Costa Rica			4999441		CRC		CRC
+Cuba 				11338138	CUB		CUB
+Curaçao 			159800		CUW		CUW
+Dominica 			71625		DMA		DMA
+Dominican Republic 		10627165	DOM		DOM
+El Salvador 			6420744		SLV		SLV
+Grenada				111454		GRN		GRN
+Guatemala			17247807	GUA		GUA
+Guyana 				779004		GUY		GUY
+Haiti				11123176	HAI		HAI
+Honduras			9587522		HON		HON
+Jamaica 			2934855		JAM		JAM
+Mexico 				126190788	MEX		MEX
+Montserrat			5900		MSR		-----
+Nicaragua			6465513		NCA		NCA
+Panama 				4176873		PAN		PAN
+Puerto Rico			3195153		PUR		PUR
+St Kitts & Nevis		52441		SKN		SKN
+St Lucia 			181889		LCA		LCA
+St Vincent & The Grenadines	110210		VIN		VIN
+Surinam 			575991		SUR		SUR
+Trinidad & Tobago		1389858		TRI		TRI
+Turks & Caicos Islands 		37665		TCA		TCA
+United States of America 	326687501	USA		USA
+United States Virgin Islands 	106977		VIR		VIR
+
+Oceania
+
+American Samoa			55465		ASA		ASA
+Australia 			24982688	AUS		AUS
+Cook Islands			17379		COK		COK
+Fiji				883483		FIJ		FIJ
+Guam				165768		-----		GUM
+Kiribati			115847		-----		KIR
+Marshall Islands		58413		-----		MHL
+Micronesia			112640		-----		FSM
+Nauru				12704		-----		NRU
+New Caledonia 			284060		NCL		NCL
+New Zealand 			4841000		NZL		NZL
+Palau				17907		-----		PLW
+Papua New Guinea 		8606316		PNG		PNG
+Samoa				196130		SAM		SAM
+Solomon Islands			652858		SOL		SOL
+Tahiti				189517		TAH		-----
+Tonga				103197		TGA		TGA
+Tuvalu				11508		-----		TUV
+Vanuatu				292680		VAN		VAN
+
+South America
+
+Argentina 			44494502	ARG		ARG
+Bolivia 			11353142	BOL		BOL
+Brazil 				209469333	BRA		BRA
+Chile 				170499		CHI		CHI
+Colombia 			49648685	COL		COL
+Ecuador 			17084357	ECU		ECU
+Paraguay			6956071		PAR		PAR
+Peru 				31989256	PER		PER
+Uruguay				3449299		URU		URU
+Venezuela			28870195	VEN		VEN
+/end
