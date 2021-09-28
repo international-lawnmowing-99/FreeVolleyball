@@ -1,18 +1,18 @@
 extends Node
 
+const Athlete = preload("res://Scripts/MatchScene/Athlete.gd")
+
 class_name Nation
 
 var countryName
 var population:int
 
-var nationalTeam
+var nationalTeam:NationalTeam
 #Maybe some nations will be able to support more than one sort of league??? Never!
-var league
+var league = []
 var players
 
 func Populate(firstNames, lastNames, r:RandomNumberGenerator):
-
-
 	var numberOfTeams:int = clamp((population / 700000), 2, 30)
 	nationalTeam = NationalTeam.new()
 	nationalTeam.teamName = countryName
@@ -32,17 +32,17 @@ func Populate(firstNames, lastNames, r:RandomNumberGenerator):
 		for _j in range(12):
 			var stats = Stats.new()
 			randomize()
-			var skill = rand_range(0,50)
+			var skill = rand_range(0,10) + rand_range(0,10) + rand_range(0,10) + rand_range(0,10) + rand_range(0,10)
 			stats.firstName = firstNames[r.randi_range(0, firstNames.size() - 1)]
 			stats.lastName = lastNames[r.randi_range(0, lastNames.size() - 1)]
 			stats.nation = countryName
-			stats.serve = skill + 50 * rand_range(0,50)
-			stats.reception = skill + 50 * rand_range(0,50)
-			stats.block = skill + 50 * rand_range(0,50)
-			stats.set = skill + 50 * rand_range(0,50)
-			stats.spike = skill + 50 * rand_range(0,50)
-			stats.verticalJump = rand_range(.5,1.5)
-			stats.height = rand_range(1.5,2.3)
+			stats.serve = skill + 50 * rand_range(0,.50)
+			stats.reception = skill + 50 * rand_range(0,.50)
+			stats.block = skill + 50 * rand_range(0,.50)
+			stats.set = skill + 50 * rand_range(0,.50)
+			stats.spike = skill + 50 * rand_range(0,.50)
+			stats.verticalJump = rand_range(.2,.5) + rand_range(.2,.5) + rand_range(.2,.5)
+			stats.height = rand_range(.5,.8) + rand_range(.5,.8) + rand_range(.5,.8)
 			stats.speed = 5
 			#//1.25 is the arm factor of newWoman
 			stats.spikeHeight = stats.height * (1.33) + stats.verticalJump
@@ -50,8 +50,11 @@ func Populate(firstNames, lastNames, r:RandomNumberGenerator):
 			stats.setHeight = stats.height + 0.2
 			#stats.shirtNumber = shirtNumbers[j];
 			#stats.image = images[j];
-			team.allPlayers.append(stats);
-			nationalTeam.players.Add(stats);
+			var athlete = Athlete.new()
+			athlete.stats = stats
+			team.allPlayers.append(athlete)
+			nationalTeam.players.append(athlete)
+			
 			#DateTime oldest = new DateTime(1975, 1, 1);
 
 			#int daysRange = (DateTime.Today.AddYears(-17) - oldest).Days;
@@ -59,7 +62,8 @@ func Populate(firstNames, lastNames, r:RandomNumberGenerator):
 
 			#team.CalculateMacroStats();
 
-			league.clubTeams.Add(team);
+		league.append(team)
+	nationalTeam.SelectNationalTeam()
 #nationalTeam.CalculateMacroStats();
 func _init(nam, _pop):
 	countryName = nam

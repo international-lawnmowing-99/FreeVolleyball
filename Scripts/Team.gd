@@ -1,8 +1,7 @@
 extends Node
 
 class_name Team
-
-
+const Enums = preload("res://Scripts/World/Enums.gd")
 var AthleteScene = preload("res://Scenes/Athlete.tscn")
 
 var teamName:String
@@ -90,7 +89,7 @@ var setTarget:Set
 
 var timeTillDigTarget:float
 
-var mManager:MatchManager
+
 var ball:Ball
 # Setter in 1 so outside, middle, oppo etc in 2,3,4...
 var transitionPositionsSetterBack = [ Vector3(0.5, 0, 0), Vector3(4, 0, 3.75), Vector3(4, 0, 0), Vector3(4, 0, -3.75), Vector3(8, 0, 0), Vector3(5.5, 0, -3.15) ]
@@ -121,19 +120,21 @@ var preserviceState:State = load("res://Scripts/State/TeamPreService.gd").new()
 
 #var serveState:State = load("res://Scripts/State/TeamServe.gd").new()
 
-func init(mM, _ball):
-	mManager = mM
+func init(_ball, choiceState, gameWorld, clubOrInternational):
+	var team = gameWorld.GetTeam(choiceState, clubOrInternational)
+	allPlayers = team.allPlayers
+	
 	ball = _ball
 	
 	stateMachine._init(self)
 	stateMachine.SetCurrentState(serveState)
 	
-	
 	AutoSelectTeamLineup()
-	
+	PlaceTeam()
 	CachePlayers()
-
+	
 func PlaceTeam():
+
 	for i in range(12):
 		var pos
 		var rot
@@ -150,8 +151,16 @@ func PlaceTeam():
 
 		var lad = AthleteScene.instance()
 		
+		lad.stats = allPlayers[i].stats
+		lad.role = allPlayers[i].role
+		
+		
 		add_child(lad)
-		lad.name = str(i + 1) + " " + self.name 
+		var ladscale = lad.stats.height /1.8
+		
+		lad.scale = Vector3(ladscale, ladscale, ladscale)
+		
+		lad.name = lad.stats.firstName + " " + lad.stats.lastName 
 		lad.translation = pos
 		lad.rotation = rot
 		
@@ -173,17 +182,17 @@ func xzVector(vec:Vector3):
 
 func UpdateTimeTillDigTarget():
 	return
-	if (mManager.gameState == MatchManager.GameState.Set):
-		timeTillDigTarget = xzVector(ball.translation).distance_to(xzVector(receptionTarget)) / xzVector(ball.linear_velocity).length();
+	#if (mManager.gameState == MatchManager.GameState.Set):
+	#	timeTillDigTarget = xzVector(ball.translation).distance_to(xzVector(receptionTarget)) / xzVector(ball.linear_velocity).length();
 
-	elif mManager.gameState == mManager.GameState.Spike:
-		timeTillDigTarget = 0;
+#	e#lif mManager.gameState == mManager.GameState.Spike:
+#		timeTillDigTarget = 0;
 
-	elif mManager.gameState == mManager.GameState.Receive:
-		timeTillDigTarget = 12345;
+#	elif mManager.gameState == mManager.GameState.Receive:
+#		timeTillDigTarget = 12345;
 
-	else:
-		timeTillDigTarget = 54321;
+#	else:
+#		timeTillDigTarget = 54321;
 		
 func CacheBlockers():
 	if setter.FrontCourt():	
@@ -272,76 +281,98 @@ func InstantaneouslySwapPlayers(outgoing, incoming):
 
 func CachePlayers():
 	for player in courtPlayers:
-		if player.role == Athlete.Role.Setter:
+		if player.role == Enums.Role.Setter:
 			setter = player
-		elif player.role == Athlete.Role.Middle && player.FrontCourt():
+		elif player.role == Enums.Role.Middle && player.FrontCourt():
 			middleFront = player
-		elif player.role == Athlete.Role.Middle && !player.FrontCourt():
+		elif player.role == Enums.Role.Middle && !player.FrontCourt():
 			middleBack = player
-		elif player.role == Athlete.Role.Outside && player.FrontCourt():
+		elif player.role == Enums.Role.Outside && player.FrontCourt():
 			outsideFront = player
-		elif player.role == Athlete.Role.outside && !player.FrontCourt():
+		elif player.role == Enums.Role.Outside && !player.FrontCourt():
 			outsideBack = player
-		elif player.role == Athlete.Role.Opposite:
+		elif player.role == Enums.Role.Opposite:
 			oppositeHitter = player
 
 func AutoSelectTeamLineup():
-	var orderedSetterList = allPlayers.sort_custom(Athlete, "SortSet")
-	var orderedOutsideList = allPlayers.sort_custom(Athlete, "SortOutside")
-	var orderedLiberoList = allPlayers.sort_custom(Athlete, "SortLibero")
-	var orderedOppositeList = allPlayers.sort_custom(Athlete, "SortOpposite")
-	var orderedMiddleList = allPlayers.sort_custom(Athlete, "SortMiddle")
+	allPlayers.sort_custom(Athlete, "SortSet")
+	var orderedSetterList =  allPlayers.duplicate(false)
+	
+	allPlayers.sort_custom(Athlete, "SortOutside")
+	var orderedOutsideList = allPlayers.duplicate(false)
+	
+	allPlayers.sort_custom(Athlete, "SortLibero")
+	var orderedLiberoList = allPlayers.duplicate(false)
+	
+	allPlayers.sort_custom(Athlete, "SortOpposite")
+	var orderedOppositeList = allPlayers.duplicate(false) 
+	
+	allPlayers.sort_custom(Athlete, "SortMiddle")
+	var orderedMiddleList = allPlayers.duplicate(false)
 
 	var aptitudeLists = [orderedSetterList,orderedLiberoList,orderedOutsideList,orderedOppositeList,orderedMiddleList]
 
 
 	var nsetter = orderedSetterList[0]
 	SwapPlayer(nsetter, 0)
-	nsetter.role = Athlete.Role.Setter
+	nsetter.role = Enums.Role.Setter
 	for list in aptitudeLists:
-		list.Remove(setter)
+		list.erase(nsetter)
 
-	var middle1 = orderedMiddleList[0]
-	var middle2 = orderedMiddleList[1]
-	middle1.role = Athlete.Role.Middle
-	middle2.role = Athlete.Role.Middle
-	SwapPlayer(middle1, 2)
-	SwapPlayer(middle2, 5)
+	var nmiddle1 = orderedMiddleList[0]
+	var nmiddle2 = orderedMiddleList[1]
+	nmiddle1.role = Enums.Role.Middle
+	nmiddle2.role = Enums.Role.Middle
+	SwapPlayer(nmiddle1, 2)
+	SwapPlayer(nmiddle2, 5)
 	for list in aptitudeLists:
-		list.Remove(middle1)
-		list.Remove(middle2)
-	var outside1 = orderedOutsideList[0]
-	var outside2 = orderedOutsideList[1]
-	outside1.role = Athlete.Role.Outside
-	outside2.role = Athlete.Role.Outside
-	SwapPlayer(outside1, 1)
-	SwapPlayer(outside2, 4)
+		list.erase(nmiddle1)
+		list.erase(nmiddle2)
+	
+	var noutside1 = orderedOutsideList[0]
+	var noutside2 = orderedOutsideList[1]
+	noutside1.role = Enums.Role.Outside
+	noutside2.role = Enums.Role.Outside
+	SwapPlayer(noutside1, 1)
+	SwapPlayer(noutside2, 4)
 	for list in aptitudeLists:
-		list.Remove(outside1)
-		list.Remove(outside2)
-	var opposite = orderedOppositeList[0]
-	opposite.role = Athlete.Role.Opposite
-	SwapPlayer(opposite, 3)
+		list.erase(noutside1)
+		list.erase(noutside2)
+	var nopposite = orderedOppositeList[0]
+	nopposite.role = Enums.Role.Opposite
+	SwapPlayer(nopposite, 3)
 	for list in aptitudeLists:
-		list.Remove(opposite)
+		list.erase(nopposite)
 	var nlibero = orderedLiberoList[0]
-	nlibero.role = Athlete.Role.Libero
+	nlibero.role = Enums.Role.Libero
 	SwapPlayer(nlibero, 6)
 	for list in aptitudeLists:
-		list.Remove(libero)
+		list.erase(nlibero)
 	var backupSetter = orderedSetterList[0]
 	SwapPlayer(backupSetter, 7)
-	backupSetter.role = Athlete.Role.Setter
+	backupSetter.role = Enums.Role.Setter
 	for list in aptitudeLists:
-		list.Remove(backupSetter)
+		list.erase(backupSetter)
+
+
 
 func SwapPlayer(player,newPostion):
+	#print("-----------")
+	#print("")
 	var index = -1;
 	for i in range(allPlayers.size()):
 		if (allPlayers[i] == player):
 			index = i;
 			break
+	
+	#for i in range(allPlayers.size()):
+	#	print(str(allPlayers[i].role) + " " + str(i))
 
+	#print ("")
 	var temp = allPlayers[newPostion]
 	allPlayers[newPostion] = player
 	allPlayers[index] = temp
+	
+	#for i in range(allPlayers.size()):
+	#	print(str(allPlayers[i].role) + " " + str(i))
+	

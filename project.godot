@@ -24,7 +24,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/MatchScene/Ball.gd"
 }, {
-"base": "",
+"base": "Node",
 "class": "ComputerTeam",
 "language": "GDScript",
 "path": "res://Scripts/MatchScene/ComputerTeam.gd"
@@ -39,7 +39,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scripts/World/GameWorld.gd"
 }, {
-"base": "",
+"base": "Node",
 "class": "HumanTeam",
 "language": "GDScript",
 "path": "res://Scripts/MatchScene/HumanTeam.gd"
@@ -72,7 +72,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "Set",
 "language": "GDScript",
-"path": "res://Set.gd"
+"path": "res://Scripts/MatchScene/Set.gd"
 }, {
 "base": "Node",
 "class": "State",
@@ -135,6 +135,8 @@ DebugOverlay="*res://Addons/DebugOverlay.gd"
 
 gdscript/warnings/unused_argument=false
 gdscript/warnings/unreachable_code=false
+gdscript/warnings/narrowing_conversion=false
+gdscript/warnings/integer_division=false
 
 [display]
 

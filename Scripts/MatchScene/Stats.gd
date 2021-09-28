@@ -21,14 +21,14 @@ var verticalJump:float
 var power:float
 var spikeHeight:float
 
-var setHeight;
-var blockHeight;
+var setHeight:float
+var blockHeight:float
 
 var nation;
 var role
 
 var dob = OS.get_datetime(true) 
-var floatServe
+var floatServe:float
 
 #public int age(System.DateTime timeNow)
 #return (int)(timeNow - dob).TotalDays/365;

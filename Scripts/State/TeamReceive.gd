@@ -9,8 +9,8 @@ func Enter(team:Team):
 
 
 	if team.outsideFront.rotationPosition == 2 && team.oppositeHitter.rotationPosition == 4:
-		team.outsideFront.roleCurrentlyPerforming = team.Role.Opposite;
-		team.oppositeHitter.roleCurrentlyPerforming = team.Role.Outside;
+		team.outsideFront.role = Enums.Role.Opposite;
+		team.oppositeHitter.role = Enums.Role.Outside;
 		team.markUndoChangesToRoles = true;
 
 

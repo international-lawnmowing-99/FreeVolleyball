@@ -2,13 +2,7 @@ extends Spatial
 class_name Athlete
 #signal ballPassed
 
-enum Role{
-	Setter,
-	Outside,
-	Opposite,
-	Middle,
-	Libero
-	}
+
 
 var role
 var stats:Stats = Stats.new()

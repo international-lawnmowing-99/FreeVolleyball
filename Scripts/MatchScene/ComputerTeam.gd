@@ -11,7 +11,6 @@ signal teamBBallOverNet
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	flip = -1
-	PlaceTeam()
 	pass # Replace with function body.
 
 

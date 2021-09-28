@@ -2,49 +2,35 @@ extends Node
 
 class_name NewMatchData
 
-enum ClubOrInternational {
-NotSelected,
-Club,
-International
-}
-enum Gender {
-NotSelected,
-Male,
-Female
-}
 
-enum HomeTeam {
-NotSelected,
-TeamA,
-TeamB
-}
 
 var teamASelected = false
 var teamBSelected = false
 var aChoiceState
 var bChoiceState
 
-var clubOrInternational = ClubOrInternational.NotSelected;
-var gender = Gender.NotSelected;
-var homeTeam = HomeTeam.NotSelected;
+const Enums = preload("res://Scripts/World/Enums.gd")
+var clubOrInternational = Enums.ClubOrInternational.NotSelected;
+var gender = Enums.Gender.NotSelected;
+var homeTeam = Enums.HomeTeam.NotSelected;
 
 func ChooseRandom(gameWorld):
 	var r = RandomNumberGenerator.new()
 	r.randomize()
-	if (r.randi(0,1) == 1):
-		clubOrInternational = ClubOrInternational.International;
+	if (r.randi_range(0,1) == 1):
+		clubOrInternational = Enums.ClubOrInternational.International;
 	else:
-		clubOrInternational = ClubOrInternational.Club;
+		clubOrInternational = Enums.ClubOrInternational.Club;
 	
-	if (r.randi(0,1)==1):
-		gender = Gender.Female;
+	if (r.randi_range(0,1)==1):
+		gender = Enums.Gender.Female;
 	else:
-		gender = Gender.Male;
+		gender = Enums.Gender.Male;
 		
-	if (r.randi(0,1)==1):
-		homeTeam = HomeTeam.TeamA;
+	if (r.randi_range(0,1)==1):
+		homeTeam = Enums.HomeTeam.TeamA;
 	else:
-		homeTeam = HomeTeam.TeamB;
+		homeTeam = Enums.HomeTeam.TeamB;
 		
 	aChoiceState = PlayerChoiceState.new(gameWorld);
 	bChoiceState = PlayerChoiceState.new(gameWorld);

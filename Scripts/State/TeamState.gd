@@ -1,4 +1,5 @@
 extends "res://Scripts/State/State.gd"
+const Enums = preload("res://Scripts/World/Enums.gd")
 
 class_name TeamState
 
