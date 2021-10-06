@@ -1,7 +1,7 @@
 extends "res://Scripts/Team.gd"
 class_name ComputerTeam
 
-signal teamBBallOverNet
+
 
 # Declare member variables here. Examples:
 # var a = 2

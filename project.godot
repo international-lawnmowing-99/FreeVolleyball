@@ -97,7 +97,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "TeamState",
 "language": "GDScript",
-"path": "res://Scripts/State/TeamState.gd"
+"path": "res://Scripts/State/Team/TeamState.gd"
 } ]
 _global_script_class_icons={
 "Athlete": "",
@@ -135,6 +135,7 @@ DebugOverlay="*res://Addons/DebugOverlay.gd"
 
 gdscript/warnings/unused_argument=false
 gdscript/warnings/unreachable_code=false
+gdscript/warnings/standalone_expression=false
 gdscript/warnings/narrowing_conversion=false
 gdscript/warnings/integer_division=false
 
@@ -150,6 +151,7 @@ window/stretch/aspect="keep"
 
 splash=false
 grav=false
+standal=false
 
 [input]
 

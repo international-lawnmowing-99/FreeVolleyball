@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Addons/DebugDraw3D.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/MatchScene/MatchManager.gd" type="Script" id=2]
@@ -12,8 +12,22 @@
 [ext_resource path="res://Scenes/default stadium.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Scenes/net.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Scenes/ball.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Textures/Scorecard.png" type="Texture" id=13]
+[ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=14]
 
-[sub_resource type="Environment" id=1]
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 14 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 20
+font_data = ExtResource( 14 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 32
+font_data = ExtResource( 14 )
+
+[sub_resource type="Environment" id=4]
 background_mode = 2
 ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_energy = 0.0
@@ -44,14 +58,14 @@ adjustment_brightness = 0.8
 adjustment_contrast = 1.5
 adjustment_saturation = 0.73
 
-[sub_resource type="SpatialMaterial" id=2]
+[sub_resource type="SpatialMaterial" id=5]
 metallic = 1.0
 metallic_specular = 1.0
 
-[sub_resource type="PlaneMesh" id=3]
-material = SubResource( 2 )
+[sub_resource type="PlaneMesh" id=6]
+material = SubResource( 5 )
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=7]
 params_use_alpha_scissor = true
 params_alpha_scissor_threshold = 0.2
 albedo_texture = ExtResource( 9 )
@@ -62,10 +76,104 @@ normal_texture = ExtResource( 8 )
 [node name="MatchScene" type="Spatial"]
 script = ExtResource( 2 )
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+visible = false
+margin_right = 288.0
+margin_bottom = 124.0
+color = Color( 0, 0.27451, 1, 0.415686 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+margin_right = 267.0
+margin_bottom = 88.0
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+anchor_left = 0.025
+anchor_top = 0.025
+anchor_right = 1.0
+anchor_bottom = 0.025
+margin_right = -1561.0
+margin_bottom = 108.0
+texture = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreTeamAText" type="Label" parent="CanvasLayer/TextureRect"]
+margin_left = 108.0
+margin_top = 6.0
+margin_right = 252.0
+margin_bottom = 50.0
+custom_fonts/font = SubResource( 1 )
+text = "AUS"
+
+[node name="ScoreTeamBText" type="Label" parent="CanvasLayer/TextureRect"]
+margin_left = 109.89
+margin_top = 57.6568
+margin_right = 253.89
+margin_bottom = 101.657
+custom_fonts/font = SubResource( 1 )
+text = "FRA"
+
+[node name="ScoreTeamASetScore" type="Label" parent="CanvasLayer/TextureRect"]
+margin_left = 239.0
+margin_top = 24.0
+margin_right = 260.0
+margin_bottom = 51.0
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.929688, 0.52349, 0.330475, 1 )
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreTeamBSetScore" type="Label" parent="CanvasLayer/TextureRect"]
+margin_left = 239.0
+margin_top = 75.5466
+margin_right = 260.0
+margin_bottom = 102.547
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.929688, 0.52349, 0.330475, 1 )
+text = "0"
+
+[node name="ScoreTeamAPointScore" type="Label" parent="CanvasLayer/TextureRect"]
+margin_left = 258.0
+margin_top = 3.0
+margin_right = 308.0
+margin_bottom = 53.0
+custom_fonts/font = SubResource( 3 )
+text = "13"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreTeamBPointScore" type="Label" parent="CanvasLayer/TextureRect"]
+margin_left = 258.0
+margin_top = 55.0
+margin_right = 308.0
+margin_bottom = 105.0
+custom_fonts/font = SubResource( 3 )
+text = "13"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Lights" type="Node" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Lights"]
-environment = SubResource( 1 )
+environment = SubResource( 4 )
 __meta__ = {
 "_editor_description_": ""
 }
@@ -111,26 +219,8 @@ directional_shadow_bias_split_scale = 1.0
 directional_shadow_depth_range = 1
 directional_shadow_max_distance = 50.0
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Lights"]
-
-[node name="ColorRect" type="ColorRect" parent="Lights/CanvasLayer"]
-margin_right = 288.0
-margin_bottom = 124.0
-color = Color( 0, 0.27451, 1, 0.415686 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Lights/CanvasLayer"]
-margin_right = 267.0
-margin_bottom = 88.0
-script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 0.430606, 0, 0.90254, 0, 1, 0, -0.90254, 0, 0.430606, 9, 0.816, -1.123 )
+transform = Transform( -0.644697, 0, 0.764438, 0, 1, 0, -0.764438, 0, -0.644697, 15.2079, 2.96034, -7.86975 )
 fov = 50.0
 near = 0.1
 far = 264.0
@@ -157,16 +247,17 @@ transform = Transform( 60, 0, 0, 0, 20, 0, 0, 0, 60, 0, 20, 0 )
 
 [node name="floor small" type="MeshInstance" parent="Building"]
 transform = Transform( 9, 0, 0, 0, 50, 0, 0, 0, 5.5, 0, 0.01, 0 )
-mesh = SubResource( 3 )
-material/0 = SubResource( 4 )
+mesh = SubResource( 6 )
+material/0 = SubResource( 7 )
 
 [node name="net" parent="Building" instance=ExtResource( 11 )]
 
-[node name="TeamA" type="Node" parent="."]
+[node name="TeamA" type="Spatial" parent="."]
 script = ExtResource( 5 )
 
-[node name="TeamB" type="Node" parent="."]
+[node name="TeamB" type="Spatial" parent="."]
 script = ExtResource( 4 )
 
 [node name="ball" parent="." instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.45254, 0 )
+angular_velocity = Vector3( 2, 3, 1 )

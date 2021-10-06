@@ -1,18 +1,15 @@
-extends "res://Scripts/State/TeamState.gd"
+extends "res://Scripts/State/Team/TeamState.gd"
 
 func Enter(team:Team):
 	#ChooseReceiver
 	for athlete in team.courtPlayers:
-
 		athlete.translation = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
 		athlete.moveTarget = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
-
 
 	if team.outsideFront.rotationPosition == 2 && team.oppositeHitter.rotationPosition == 4:
 		team.outsideFront.role = Enums.Role.Opposite;
 		team.oppositeHitter.role = Enums.Role.Outside;
 		team.markUndoChangesToRoles = true;
-
 
 func Update(team:Team):
 	#Is the ball close enough
@@ -20,4 +17,3 @@ func Update(team:Team):
 func Exit(team:Team):
 	#Discard receiver info?
 	pass
-

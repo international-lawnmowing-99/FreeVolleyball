@@ -1,9 +1,7 @@
 extends Spatial
 class_name Athlete
 #signal ballPassed
-
-
-
+var g = ProjectSettings.get_setting("physics/3d/default_gravity")
 var role
 var stats:Stats = Stats.new()
 
@@ -13,10 +11,25 @@ var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(
 #onready var target = $Target
 #onready var moveTargetModel = $"../MoveTarget"
 
-onready var animTree = $AnimationTree
+onready var animTree = $"new new woman import/AnimationTree"
+onready var rb:RigidBody = $"."
+onready var rbCollisionShape:CollisionShape = $CollisionShape
+var team
+
+var serveState
+onready var defendState = load("res://Scripts/State/Athlete/AthleteDefendState.gd").new()
+onready var passState = load("res://Scripts/State/Athlete/AthletePassState.gd").new()
+onready var transitionState = load("res://Scripts/State/Athlete/AthleteTransitionState.gd").new()
+onready var setState = load("res://Scripts/State/Athlete/AthleteSetState.gd").new()
+onready var spikeState = load("res://Scripts/State/Athlete/AthleteSpikeState.gd").new()
+onready var blockState = load("res://Scripts/State/Athlete/AthleteBlockState.gd").new()
+onready var chillState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
+
+var blockingTarget:Athlete
 
 var ball:Ball
 var skel:Skeleton
+
 
 var spineBone01Id
 var spineBone02Id
@@ -49,13 +62,45 @@ var digAngle = 0
 var timeTillBallReachesMe = 9999
 var moveTarget = Vector3.ZERO
 var servePos = Vector3.ZERO
+var setRequest:Set
+
+var middleSpikes
+var outsideBackSpikes
+var outsideFrontSpikes
+var oppositeFrontSpikes
+var oppositeBackSpikes
+
+#because can't work out how to pass arguments to the sort_custom class
+var distanceHack
+
+func CreateSpikes():
+	
+	middleSpikes = [ Set.new(0.5, stats.spikeHeight, -0.5, stats.spikeHeight),
+Set.new(0.5, stats.spikeHeight, -1.5, stats.spikeHeight+ 0.1),
+Set.new(0.5, stats.spikeHeight, 0.5, stats.spikeHeight+ 0.1),
+		]
+	outsideFrontSpikes = [ Set.new(.5, stats.spikeHeight, -4.2, max(3, stats.spikeHeight + 1)),
+Set.new(.5, stats.spikeHeight, -2.75, 3.5),
+Set.new(.5, stats.spikeHeight, -1, 3.43)
+		]
+	outsideBackSpikes = [ Set.new(2, stats.spikeHeight, -1, max(3, stats.spikeHeight + .5)),
+Set.new(2.5, stats.spikeHeight, 1, 3.8)
+]
+	oppositeFrontSpikes = [ Set.new(.5, stats.spikeHeight, 4.5, max(3, stats.spikeHeight + 1)),
+Set.new(.4, stats.spikeHeight, 1, 13.43),
+Set.new(.4, stats.spikeHeight, 4.2, 13.8)
+]
+	oppositeBackSpikes = [ Set.new(2.5, stats.spikeHeight, 4.2, max(3, stats.spikeHeight + 1)),
+Set.new(2.5, stats.spikeHeight, 1, 3.8),
+]
 
 func _ready():
+	CreateSpikes()
 	
 	#DebugOverlay.draw.add_vector(self, "basisz", 1, 4, Color(0,1,0, 0.5))
 	#DebugOverlay.draw.add_vector(self, "basisx", 1, 4, Color(1,1,0, 0.5))
 	
-	skel = get_node("godette volleyball/Skeleton")
+	skel = get_node("new new woman import/godette volleyball/Skeleton")
 	spineBone01Id = skel.find_bone("spine01")
 	spineBone02Id = skel.find_bone("spine02")
 	neckBone01Id = skel.find_bone("neck01")
@@ -70,27 +115,18 @@ func _ready():
 	#Engine.time_scale = .1
 	#play_randomized("Idle take 1")
 	pass
-func _physics_process(_delta):
-#	if ball.translation.y < 1 && \
-#		(Vector3(ball.translation.x,0, ball.translation.z)).distance_to(translation) < 1\
-#		&& matchManager.gameState == MatchManager.GameState.Receive:
-	#	if ball.translation.distance_to(self.translation) < 1 && matchManager.gameState == matchManager.GameState.Receive:
-#			PassBall()
-	pass
-		
-func _input(_event):
-	#if event.is_action_pressed("ui_accept"):
-	#	moveTarget = Vector3(rand_range(-13,13),0, rand_range(-13,13))
-	#	moveTargetModel.translation = moveTarget + Vector3(0,0.1,0)
-		
+
+
 	pass
 func _process(_delta):
+	if stateMachine.currentState:
+		stateMachine.currentState.Update(self)
+	BaseMove(_delta)
 	basisz = transform.basis.z
 	basisx = transform.basis.x
 	return
-#	if matchManager.gameState == matchManager.GameState.Receive && ball.linear_velocity.x!=0:
-#		timeTillBallReachesMe = Vector3(ball.translation.x, 0, ball.translation.z).distance_to(Vector3(translation.x, 0, translation.z))\
-#				/Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length()
+
+
 #		var animFactor = 1.3-  timeTillBallReachesMe 
 #		animTree.set("parameters/BlendSpace1D/blend_position", animFactor)
 #		RotateDigPlatform(lerp(0,digAngle,(min(1,1/timeTillBallReachesMe - 2))))
@@ -99,10 +135,10 @@ func _process(_delta):
 #		animTree.set("parameters/BlendSpace1D/blend_position", lerp(a, 0, 5*_delta))
 #		digAngle = lerp(digAngle,0,3*_delta)
 #		RotateDigPlatform(digAngle)
-	if translation.distance_squared_to(moveTarget)>0.01:
-		Move(_delta)
-	else: 
-		speed = 0
+	#if translation.distance_squared_to(moveTarget)>0.01:
+		#Move(_delta)
+	#else: 
+	#	speed = 0
 		
 func Move(delta):
 	# For the future - measure the length, use it to determine if you should strafe or turn
@@ -132,16 +168,6 @@ func Move(delta):
 	#rotate_y(deg2rad(rotationSpeed))
 	pass
 	
-func PassBall():
-	#Engine.time_scale = 0.25
-	emit_signal("ballPassed")
-	
-	ball.linear_velocity = Vector3.ZERO
-	ball.gravity_scale = 1
-
-	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, Vector3(-0.5, 2.5, 0), rand_range(3,7)))
-	yield(get_tree(),"idle_frame")
-	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, Vector3(-0.5, 2.5, 0), rand_range(3,7)))
 
 func RotateDigPlatform(angle):
 	
@@ -256,9 +282,48 @@ static func SortOutside(a,b):
 		return true
 	return false
 
+static func SortDistance(a,b):
+	#It's min distance 
+	if a.distanceHack < b.distanceHack:
+		return true
+	return false
+
 func FrontCourt()->bool:
 	if (rotationPosition == 1 || rotationPosition>4):
 		return false
 		
 	else:
 		return true
+
+func CalculateTimeTillJumpPeak(takeOffXZ):
+	var timeTillJumpPeak
+	if rb.mode == RigidBody.MODE_KINEMATIC:
+	
+		var runupTime
+		var jumpTime
+		var runupDist
+
+		runupDist = Vector3(translation.x, 0, translation.z).distance_to(takeOffXZ)
+		runupTime = runupDist / stats.speed
+
+		var jumpYVel = sqrt(2 * g * stats.verticalJump)
+		jumpTime = jumpYVel / g
+
+		timeTillJumpPeak = runupTime + jumpTime
+	
+	else:
+	
+		timeTillJumpPeak = -rb.linear_velocity.y / g
+	
+	return timeTillJumpPeak
+
+
+func BaseMove(_delta):
+	if rb.mode == RigidBody.MODE_KINEMATIC && translation.distance_to(moveTarget) > .1:
+		var dir = (moveTarget - translation).normalized()
+		translation += dir * stats.speed * _delta
+		if translation.x != moveTarget.x:
+			look_at_from_position(translation, moveTarget, Vector3.UP)
+			rotate_y(PI)
+	#else:
+	#	moveTarget = Vector3(rand_range(-20,20), 0, rand_range(-20,20))

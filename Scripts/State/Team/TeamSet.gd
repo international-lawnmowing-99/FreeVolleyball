@@ -1,4 +1,4 @@
-extends "res://Scripts/State/TeamState.gd"
+extends "res://Scripts/State/Team/TeamState.gd"
 
 func Enter(team:Team):
 	#ChooseSetter

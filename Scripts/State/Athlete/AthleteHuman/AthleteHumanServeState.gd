@@ -1,6 +1,4 @@
-extends "res://Scripts/State/State.gd"
-
-class_name AthleteState
+extends "res://Scripts/State/AthleteState.gd"
 
 func Enter(athlete:Athlete):
 	pass

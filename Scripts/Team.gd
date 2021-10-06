@@ -6,6 +6,8 @@ var AthleteScene = preload("res://Scenes/Athlete.tscn")
 
 var teamName:String
 
+var isHuman:bool = false
+
 var isLiberoOnCourt:bool
 var isNextToAttack:bool
 var markUndoChangesToRoles:bool
@@ -31,51 +33,51 @@ var rightSideBlocker
 
 var defaultReceiveRotations =  [
 	[
-		Vector3(5.5, 0, 4),
-		Vector3(5.0, 0, 2.8),
-		Vector3(3, 0, -1.3),
-		Vector3(3.5, 0, -4),
-		Vector3(5.3, 0, -2.6),
+		Vector3(5.5, 0, -4),
+		Vector3(5.0, 0, -2.8),
+		Vector3(3, 0, 1.3),
+		Vector3(3.5, 0, 4),
+		Vector3(5.3, 0, 2.6),
 		Vector3(6.5, 0, 0)
 	],
 	[
-		Vector3(5.5, 0, 1),
-		Vector3(3.0, 0, 3.8),
-		Vector3(.5, 0, 2.5),
-		Vector3(3.5, 0, -4),
-		Vector3(5, 0, -1),
+		Vector3(5.5, 0, -1),
+		Vector3(3.0, 0, -3.8),
+		Vector3(.5, 0, -2.5),
+		Vector3(3.5, 0, 4),
+		Vector3(5, 0, 1),
 		Vector3(1, 0, 0)
 	],
 	[#setter in 5
-		Vector3(5.5, 0, 3.25),
-		Vector3(2.75, 0, 3.0),
-		Vector3(5, 0, -2.5),
-		Vector3(.5, 0, -4),
-		Vector3(1.5, 0, -1.3),
+		Vector3(5.5, 0, -3.25),
+		Vector3(2.75, 0, -3.0),
+		Vector3(5, 0, 2.5),
+		Vector3(.5, 0, 4),
+		Vector3(1.5, 0, 1.3),
 		Vector3(6.5, 0, 0)
 	],
 	[#setter 4
-		Vector3(5.5, 0, 4),
-		Vector3(5.0, 0, -2.5),
-		Vector3(2.75, 0, -3.25),
-		Vector3(.5, 0, -4),
+		Vector3(5.5, 0, -4),
+		Vector3(5.0, 0, 2.5),
+		Vector3(2.75, 0, 3.25),
+		Vector3(.5, 0, 4),
 		Vector3(6.5, 0, 0),
-		Vector3(5, 0, 3.5)
+		Vector3(5, 0, -3.5)
 	],
 	[#setter 3
-		Vector3(5.5, 0, 2.75),
-		Vector3(2.75, 0, 1),
+		Vector3(5.5, 0, -2.75),
+		Vector3(2.75, 0, -1),
 		Vector3(5, 0, 0),
-		Vector3(4.5, 0, -2.5),
+		Vector3(4.5, 0, 2.5),
 		Vector3(6.5, 0, 0),
-		Vector3(7.5, 0, 1.75)
+		Vector3(7.5, 0, -1.75)
 	],
 	[
-		Vector3(5.5, 0, 3),
+		Vector3(5.5, 0, -3),
 		Vector3(.5, 0, 0),
-		Vector3(5, 0, -2.75),
-		Vector3(1.5, 0, -3.75),
-		Vector3(7.75, 0, -.6),
+		Vector3(5, 0, 2.75),
+		Vector3(1.5, 0, 3.75),
+		Vector3(7.75, 0, .6),
 		Vector3(6.5, 0, 0)
 	]
 ]
@@ -112,13 +114,13 @@ var defaultDefensivePositions = [
 	Vector3(7.5,0,0)]
 	
 var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(self)
-var serveState:State = load("res://Scripts/State/TeamServe.gd").new()
-var receiveState:State = load("res://Scripts/State/TeamReceive.gd").new()
-var setState:State = load("res://Scripts/State/TeamState.gd").new()
-var spikeState:State = load("res://Scripts/State/TeamSpike.gd").new()
-var preserviceState:State = load("res://Scripts/State/TeamPreService.gd").new()
-
-#var serveState:State = load("res://Scripts/State/TeamServe.gd").new()
+var serveState:State = load("res://Scripts/State/Team/TeamServe.gd").new()
+var receiveState:State = load("res://Scripts/State/Team/TeamReceive.gd").new()
+var setState:State = load("res://Scripts/State/Team/TeamState.gd").new()
+var spikeState:State = load("res://Scripts/State/Team/TeamSpike.gd").new()
+var preserviceState:State = load("res://Scripts/State/Team/TeamPreService.gd").new()
+var defendState:State = load("res://Scripts/State/Team/TeamDefend.gd").new()
+var prereceiveState:State = load("res://Scripts/State/Team/TeamPreReceive.gd").new()
 
 func init(_ball, choiceState, gameWorld, clubOrInternational):
 	var team = gameWorld.GetTeam(choiceState, clubOrInternational)
@@ -163,7 +165,9 @@ func PlaceTeam():
 		lad.name = lad.stats.firstName + " " + lad.stats.lastName 
 		lad.translation = pos
 		lad.rotation = rot
+		lad.team = self
 		
+		lad.moveTarget = Vector3(pos.x,0,pos.z)
 		allPlayers.append(lad)
 		
 		if i  < 6 :
@@ -175,7 +179,13 @@ func PlaceTeam():
 		if i == 6:
 			libero = lad
 			lad.rotate_y(18)
-
+		
+		lad.ball = ball
+			
+		if isHuman:
+			lad.serveState = load("res://Scripts/State/Athlete/AthleteHuman/AthleteHumanServeState.gd").new()
+		else:
+			lad.serveState = load("res://Scripts/State/Athlete/AthleteComputer/AthleteComputerServeState.gd").new()
 
 func xzVector(vec:Vector3):
 	return Vector3(vec.x, 0, vec.z)
@@ -207,8 +217,8 @@ func CacheBlockers():
 			rightSideBlocker = oppositeHitter;
 			leftSideBlocker = outsideFront;
 
-func SpikeBall():
-	pass
+func _process(_delta):
+	stateMachine.Update()
 
 func Rotate():
 	if markUndoChangesToRoles:

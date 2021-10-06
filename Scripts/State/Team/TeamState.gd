@@ -3,10 +3,8 @@ const Enums = preload("res://Scripts/World/Enums.gd")
 
 class_name TeamState
 
-var flip
 
 func Enter(team:Team):
-	
 	pass
 func Update(team:Team):
 	pass

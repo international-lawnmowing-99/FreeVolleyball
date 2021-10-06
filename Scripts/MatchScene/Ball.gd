@@ -3,20 +3,32 @@ extends RigidBody
 class_name Ball
 
 var g
+var _parented:bool = false
+var _pseudoParent
+var wasLastTouchedByA:bool
+var attackTarget
 
 var lads = Vector3(-0.5,2.5,0)
 
 func _process(_delta):
+	if is_inside_tree() && _parented && _pseudoParent:
+		translation = _pseudoParent.global_transform.origin
 	#lads = Vector3(-0.5,2.5,0) - transform.origin
 	pass
 	
 func _ready():
 	#DebugOverlay.draw.add_vector(self, "lads", 1, 4, Color(0,1,1, 0.5))
+	
 	pass
 	
 func _on_ball_body_entered(_body):
 	gravity_scale = 1
 	#print (_body)
+
+func PretendToBeParented(node):
+	_parented = true
+	_pseudoParent = node
+
 
 
 func BallPositionAtGivenHeight(height:float):
@@ -139,13 +151,23 @@ func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, ai
 
 	return projectileVelocity
 
-func Serve(startPos, attackTarget, topspin):
+func Serve(startPos, _attackTarget, topspin):
 		gravity_scale = 1 + topspin
 		
 		rotation = Vector3.ZERO
+		if (_attackTarget - startPos).x > 0:
+			topspin *= -1
 		angular_velocity = Vector3 ( rand_range(-.5,.5),rand_range(-.5,.5), topspin * 80)
 		linear_velocity = Vector3.ZERO
 		
-		var impulse = CalculateBallOverNetVelocity(startPos, attackTarget, 2.6)
+		var impulse = CalculateBallOverNetVelocity(startPos, _attackTarget, 2.6)
 		impulse *= mass
 		linear_velocity = impulse
+		
+		attackTarget = _attackTarget
+
+func TouchedByB():
+	wasLastTouchedByA = false
+	
+func TouchedByA():
+	wasLastTouchedByA = true
