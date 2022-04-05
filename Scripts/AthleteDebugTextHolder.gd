@@ -1,0 +1,24 @@
+extends Spatial
+const Enums = preload("res://Scripts/World/Enums.gd")
+
+var camera
+var text:RichTextLabel
+var athlete:Athlete
+func _ready():
+	camera = get_node("/root/MatchScene/Camera")
+	text = $RichTextLabel
+	athlete = $"../../"
+	text.text = athlete.stats.lastName
+	
+func _process(delta):
+	var screen_pos = camera.unproject_position(global_transform.origin)
+	text.set_position(screen_pos+Vector2.ONE)
+
+	if athlete.role && athlete.stateMachine.currentState: 
+		text.text = athlete.stats.lastName + "\n" + \
+		"role: " + Enums.Role.keys()[athlete.role] + "\n" + \
+		"state: " + str(athlete.stateMachine.currentState.nameOfState)
+		if athlete.stateMachine.currentState == athlete.spikeState:
+			text.text += "\n" + athlete.spikeState.SpikeState.keys()[athlete.spikeState.spikeState]
+ 
+	

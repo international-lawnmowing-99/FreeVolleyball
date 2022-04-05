@@ -4,7 +4,7 @@ class_name MatchManager
 
 enum GameState {
 
-
+	UNDEFINED,
 	BlockInProgress,
 	PointJustScored
 }
@@ -59,6 +59,21 @@ func BallOverNet(hitByTeamA:bool):
 	else:
 		teamB.stateMachine.SetCurrentState(teamB.defendState)
 		teamA.stateMachine.SetCurrentState(teamA.receiveState)
+
+func BallReceived(receivedByTeamA:bool):
+	if receivedByTeamA:
+		teamA.stateMachine.SetCurrentState(teamA.setState)
+	else:
+		teamB.stateMachine.SetCurrentState(teamB.setState)
+
+func BallSet(setByTeamA:bool):
+	if setByTeamA:
+		teamA.stateMachine.SetCurrentState(teamA.spikeState)
+	else:
+		teamB.stateMachine.SetCurrentState(teamB.spikeState)
+
+func BallSpiked(spikedByTeamA:bool):
+	pass
 
 func _input(_event):
 	

@@ -36,6 +36,7 @@ func Update(team:Team):
 	pass
 func Exit(team:Team):
 	#Discard receiver info?
+	team.UpdateTimeTillDigTarget()
 	pass
 
 func CheckForFlip(set:Set, team:Team):

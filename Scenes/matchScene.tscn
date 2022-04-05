@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Addons/DebugDraw3D.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/MatchScene/MatchManager.gd" type="Script" id=2]
@@ -37,7 +37,7 @@ fog_depth_begin = 0.0
 fog_depth_end = 91.7
 fog_depth_curve = 0.15932
 tonemap_mode = 1
-tonemap_white = 0.95
+tonemap_white = 2.0
 auto_exposure_scale = 1.08
 auto_exposure_min_luma = 11.0
 auto_exposure_max_luma = 16.0
@@ -58,14 +58,9 @@ adjustment_brightness = 0.8
 adjustment_contrast = 1.5
 adjustment_saturation = 0.73
 
-[sub_resource type="SpatialMaterial" id=5]
-metallic = 1.0
-metallic_specular = 1.0
+[sub_resource type="PlaneMesh" id=5]
 
-[sub_resource type="PlaneMesh" id=6]
-material = SubResource( 5 )
-
-[sub_resource type="SpatialMaterial" id=7]
+[sub_resource type="SpatialMaterial" id=6]
 params_use_alpha_scissor = true
 params_alpha_scissor_threshold = 0.2
 albedo_texture = ExtResource( 9 )
@@ -128,8 +123,8 @@ margin_left = 239.0
 margin_top = 24.0
 margin_right = 260.0
 margin_bottom = 51.0
-custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0.929688, 0.52349, 0.330475, 1 )
+custom_fonts/font = SubResource( 2 )
 text = "0"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -140,8 +135,8 @@ margin_left = 239.0
 margin_top = 75.5466
 margin_right = 260.0
 margin_bottom = 102.547
-custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0.929688, 0.52349, 0.330475, 1 )
+custom_fonts/font = SubResource( 2 )
 text = "0"
 
 [node name="ScoreTeamAPointScore" type="Label" parent="CanvasLayer/TextureRect"]
@@ -220,7 +215,7 @@ directional_shadow_depth_range = 1
 directional_shadow_max_distance = 50.0
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( -0.644697, 0, 0.764438, 0, 1, 0, -0.764438, 0, -0.644697, 15.2079, 2.96034, -7.86975 )
+transform = Transform( -4.37053e-08, -0.74572, 0.666166, 0, 0.666259, 0.745616, -0.99986, 3.25965e-08, -2.9119e-08, 13, 13, 0 )
 fov = 50.0
 near = 0.1
 far = 264.0
@@ -247,8 +242,8 @@ transform = Transform( 60, 0, 0, 0, 20, 0, 0, 0, 60, 0, 20, 0 )
 
 [node name="floor small" type="MeshInstance" parent="Building"]
 transform = Transform( 9, 0, 0, 0, 50, 0, 0, 0, 5.5, 0, 0.01, 0 )
-mesh = SubResource( 6 )
-material/0 = SubResource( 7 )
+mesh = SubResource( 5 )
+material/0 = SubResource( 6 )
 
 [node name="net" parent="Building" instance=ExtResource( 11 )]
 

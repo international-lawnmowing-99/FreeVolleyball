@@ -18,7 +18,9 @@ TeamA,
 TeamB
 }
 
+#Weird bug when setter was the first element, couldn't be set, so to say...
 enum Role{
+UNDEFINED,
 Setter,
 Outside,
 Opposite,

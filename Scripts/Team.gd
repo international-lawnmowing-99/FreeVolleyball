@@ -94,7 +94,7 @@ var timeTillDigTarget:float
 
 var ball:Ball
 # Setter in 1 so outside, middle, oppo etc in 2,3,4...
-var transitionPositionsSetterBack = [ Vector3(0.5, 0, 0), Vector3(4, 0, 3.75), Vector3(4, 0, 0), Vector3(4, 0, -3.75), Vector3(8, 0, 0), Vector3(5.5, 0, -3.15) ]
+var transitionPositionsSetterBack = [ Vector3(0.5, 0, 0), Vector3(4, 0, -3.75), Vector3(4, 0, 0), Vector3(4, 0, 3.75), Vector3(8, 0, 0), Vector3(5.5, 0, 3.15) ]
 #    //Setter in 4
 var transitionPositionsSetterFront = [Vector3(7.75, 0, 4), Vector3(8, 0, 0), Vector3(5.5, 0, -3.15), Vector3(0.5, 0, 0), Vector3(4, 0, -3.5), Vector3(4, 0, 0) ]
 var defaultPositions = [
@@ -116,7 +116,7 @@ var defaultDefensivePositions = [
 var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(self)
 var serveState:State = load("res://Scripts/State/Team/TeamServe.gd").new()
 var receiveState:State = load("res://Scripts/State/Team/TeamReceive.gd").new()
-var setState:State = load("res://Scripts/State/Team/TeamState.gd").new()
+var setState:State = load("res://Scripts/State/Team/TeamSet.gd").new()
 var spikeState:State = load("res://Scripts/State/Team/TeamSpike.gd").new()
 var preserviceState:State = load("res://Scripts/State/Team/TeamPreService.gd").new()
 var defendState:State = load("res://Scripts/State/Team/TeamDefend.gd").new()
@@ -166,7 +166,7 @@ func PlaceTeam():
 		lad.translation = pos
 		lad.rotation = rot
 		lad.team = self
-		
+		lad.CreateSpikes()
 		lad.moveTarget = Vector3(pos.x,0,pos.z)
 		allPlayers.append(lad)
 		
@@ -191,18 +191,18 @@ func xzVector(vec:Vector3):
 	return Vector3(vec.x, 0, vec.z)
 
 func UpdateTimeTillDigTarget():
-	return
-	#if (mManager.gameState == MatchManager.GameState.Set):
-	#	timeTillDigTarget = xzVector(ball.translation).distance_to(xzVector(receptionTarget)) / xzVector(ball.linear_velocity).length();
+	
+	if (stateMachine.currentState == setState):
+		timeTillDigTarget = xzVector(ball.translation).distance_to(xzVector(receptionTarget)) / xzVector(ball.linear_velocity).length();
 
-#	e#lif mManager.gameState == mManager.GameState.Spike:
-#		timeTillDigTarget = 0;
+	elif stateMachine.currentState == spikeState:
+		timeTillDigTarget = 0;
 
-#	elif mManager.gameState == mManager.GameState.Receive:
-#		timeTillDigTarget = 12345;
+	elif stateMachine.currentState == receiveState:
+		timeTillDigTarget = 12345;
 
-#	else:
-#		timeTillDigTarget = 54321;
+	else:
+		timeTillDigTarget = 54321;
 		
 func CacheBlockers():
 	if setter.FrontCourt():	
@@ -363,6 +363,9 @@ func AutoSelectTeamLineup():
 	backupSetter.role = Enums.Role.Setter
 	for list in aptitudeLists:
 		list.erase(backupSetter)
+		
+	for athlete in orderedLiberoList:
+		athlete.role = Enums.Role.UNDEFINED
 
 
 
@@ -386,3 +389,42 @@ func SwapPlayer(player,newPostion):
 	#for i in range(allPlayers.size()):
 	#	print(str(allPlayers[i].role) + " " + str(i))
 	
+func GetTransitionPosition(athlete):
+	if (setter.FrontCourt()):
+		if athlete == setter:
+			return CheckIfFlipped(transitionPositionsSetterFront[3])
+		if athlete == outsideFront:
+			return CheckIfFlipped(transitionPositionsSetterFront[4])
+		if athlete == oppositeHitter:
+			return CheckIfFlipped(transitionPositionsSetterFront[0])
+		else:
+			return CheckUnchangingTransitionPositions(athlete)
+	else:
+		if markUndoChangesToRoles:
+			if athlete == outsideFront:
+				return CheckIfFlipped(transitionPositionsSetterBack[1])
+			if athlete == oppositeHitter:
+				return CheckIfFlipped(transitionPositionsSetterBack[3])
+		else:
+			if athlete == outsideFront:
+				return CheckIfFlipped(transitionPositionsSetterBack[3])
+			if (athlete == oppositeHitter):
+				return CheckIfFlipped(transitionPositionsSetterBack[1])
+		if athlete == setter:
+			return CheckIfFlipped(transitionPositionsSetterBack[0])
+		else:
+			return CheckUnchangingTransitionPositions(athlete)
+
+func CheckUnchangingTransitionPositions(athlete):
+	if athlete == outsideBack:
+		return CheckIfFlipped(transitionPositionsSetterBack[4])
+	elif athlete == middleBack || athlete == libero:
+		return CheckIfFlipped(transitionPositionsSetterBack[5])
+
+	elif athlete == middleFront:
+		return CheckIfFlipped(transitionPositionsSetterBack[2])
+	else:
+		return Vector3.ZERO
+
+func CheckIfFlipped(vectorToBeChecked:Vector3):
+	return Vector3(flip * vectorToBeChecked.x, vectorToBeChecked.y,  vectorToBeChecked.z)

@@ -24,8 +24,8 @@ var spikeHeight:float
 var setHeight:float
 var blockHeight:float
 
-var nation;
-var role
+var nation
+#var role
 
 var dob = OS.get_datetime(true) 
 var floatServe:float

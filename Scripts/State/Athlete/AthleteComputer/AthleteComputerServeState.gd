@@ -17,6 +17,7 @@ var takeOffTarget
 var attackTarget
 
 func Enter(athlete:Athlete):
+	nameOfState="ComputerServe"
 	ball = athlete.ball
 	serveState = ServeState.Walking
 	athlete.moveTarget = Vector3(-11.5, 0, 2)
@@ -49,8 +50,7 @@ func Update(athlete:Athlete):
 
 				var tossTarget = Vector3(athlete.translation.x + runup.x + jumpDistance.x, athlete.stats.spikeHeight, athlete.translation.z + runup.y + jumpDistance.y)
 				takeOffTarget = Vector3(athlete.translation.x + runup.x, 0, athlete.translation.z + runup.y)
-				#ball.rb.isKinematic = false;
-				#ball.rb.
+
 				ball.mode = RigidBody.MODE_RIGID
 				ball.linear_velocity = ball.FindWellBehavedParabola(ball.translation, tossTarget, athlete.stats.spikeHeight + 5)
 				
@@ -91,7 +91,7 @@ func Update(athlete:Athlete):
 				#anim.SetTrigger("jump");
 
 		ServeState.Jump:
-			if athlete.rb.linear_velocity.y >0:
+			#if athlete.rb.linear_velocity.y >0:
 				if ball.linear_velocity.y < 0 && athlete.stats.spikeHeight >= ball.translation.y:
 					var topspin = rand_range(.5,1.8)
 					ball.Serve(ball.translation, attackTarget, topspin)
@@ -103,6 +103,7 @@ func Update(athlete:Athlete):
 		ServeState.Landing:
 			if (athlete.translation.y <= 0.01 && athlete.rb.linear_velocity.y < 0):
 				athlete.rb.mode =RigidBody.MODE_KINEMATIC
+				athlete.rb.gravity_scale = 0
 				
 				athlete.translation.y = 0
 				serveState = ServeState.Walking;
