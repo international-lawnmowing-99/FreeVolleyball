@@ -20,5 +20,7 @@ func _process(delta):
 		"state: " + str(athlete.stateMachine.currentState.nameOfState)
 		if athlete.stateMachine.currentState == athlete.spikeState:
 			text.text += "\n" + athlete.spikeState.SpikeState.keys()[athlete.spikeState.spikeState]
- 
+		if athlete.stateMachine.currentState == athlete.blockState:
+			text.text += "\n" + athlete.blockState.BlockState.keys()[athlete.blockState.blockState]
+
 	

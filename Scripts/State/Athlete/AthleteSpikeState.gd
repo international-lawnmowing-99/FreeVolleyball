@@ -7,10 +7,11 @@ Runup,
 Jump
 }
 var takeOffXZ:Vector3
-
+var timeTillJumpPeak
 var spikeState = SpikeState.NotSpiking
+var athlete:Athlete
 
-func Enter(athlete:Athlete):
+func Enter(_athlete:Athlete):
 	nameOfState="Spike"
 	if !athlete.setRequest:
 		athlete.setRequest = athlete.middleSpikes[0]
@@ -20,7 +21,7 @@ func Enter(athlete:Athlete):
 	athlete.CalculateTimeTillJumpPeak(takeOffXZ)
 	spikeState = SpikeState.ChoiceConfirmed
 	pass
-func Update(athlete:Athlete):
+func Update(_athlete:Athlete):
 	#if athlete.team.flip == 1 && athlete.rotationPosition == 2:
 		#print(spikeState)
 	match spikeState:
@@ -55,8 +56,8 @@ func Update(athlete:Athlete):
 			if timeTillBallReachesSetTarget <= athlete.CalculateTimeTillJumpPeak(takeOffXZ) && athlete.team.stateMachine.currentState != athlete.team.receiveState:
 				spikeState = SpikeState.Runup
 				athlete.moveTarget = takeOffXZ
-				print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
-				print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState != athlete.team.receiveState))
+				#print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
+				#print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState != athlete.team.receiveState))
 
 		SpikeState.Runup:
 			if athlete.team.xzVector(takeOffXZ - athlete.translation).length() < 0.1:
@@ -71,10 +72,12 @@ func Update(athlete:Athlete):
 			if athlete.translation.y <= 0.05 && athlete.rb.linear_velocity.y < 0:
 				athlete.rb.mode = RigidBody.MODE_KINEMATIC
 				athlete.rb.gravity_scale = 0
-				athlete.PrepareToDefend()
+				athlete.translation.y = 0
+				athlete.moveTarget = athlete.translation
+				#athlete.PrepareToDefend()
 				spikeState = SpikeState.NotSpiking
 			pass
 
 	pass
-func Exit(athlete:Athlete):
+func Exit(_athlete:Athlete):
 	pass

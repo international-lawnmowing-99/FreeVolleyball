@@ -15,8 +15,8 @@ var gameWorld = load("res://Scripts/World/GameWorld.gd").new()
 var isTeamAServingFirst:bool = false
 var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 
-onready var teamA = $TeamA
-onready var teamB = $TeamB
+onready var teamA:Team = $TeamA
+onready var teamB:Team = $TeamB
 
 
 
@@ -30,7 +30,8 @@ func _ready():
 	teamA.isHuman = true
 	teamA.init(ball, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational)
 	teamB.init(ball, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational)
-
+	teamA.defendState.otherTeam = teamB
+	teamB.defendState.otherTeam = teamA
 	#var _zzz = connect("teamBBallOverNet", teamA, "BallHitOverNet")
 	#var _zzzz = connect("teamABallOverNet", teamB, "BallHitOverNet")
 	var rand = RandomNumberGenerator.new()

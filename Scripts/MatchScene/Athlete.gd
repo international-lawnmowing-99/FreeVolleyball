@@ -27,7 +27,6 @@ var blockingTarget:Athlete
 var ball:Ball
 var skel:Skeleton
 
-
 var spineBone01Id
 var spineBone02Id
 var neckBone01Id
@@ -67,7 +66,7 @@ var distanceHack
 
 func CreateSpikes():
 	
-	middleSpikes = [ Set.new(0.5, stats.spikeHeight, 0.5, stats.spikeHeight + 0.0125),
+	middleSpikes = [ Set.new(0.5, stats.spikeHeight, 0.5, stats.spikeHeight + 0.1),
 Set.new(0.5, stats.spikeHeight, 1.5, stats.spikeHeight+ 0.1),
 Set.new(0.5, stats.spikeHeight, -0.5, stats.spikeHeight+ 0.1)]
 		
@@ -219,7 +218,6 @@ func CalculateTimeTillJumpPeak(takeOffXZ):
 		timeTillJumpPeak = runupTime + jumpTime
 	
 	else:
-	
 		timeTillJumpPeak = -rb.linear_velocity.y / g
 	
 	return timeTillJumpPeak
