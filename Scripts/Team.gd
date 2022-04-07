@@ -194,38 +194,38 @@ func xzVector(vec:Vector3):
 func UpdateTimeTillDigTarget():
 	
 	if (stateMachine.currentState == setState):
-		timeTillDigTarget = xzVector(ball.translation).distance_to(xzVector(receptionTarget)) / xzVector(ball.linear_velocity).length();
+		timeTillDigTarget = xzVector(ball.translation).distance_to(xzVector(receptionTarget)) / xzVector(ball.linear_velocity).length()
 
 	elif stateMachine.currentState == spikeState:
-		timeTillDigTarget = 0;
+		timeTillDigTarget = 0
 
 	elif stateMachine.currentState == receiveState:
-		timeTillDigTarget = 12345;
+		timeTillDigTarget = 12345
 
 	else:
-		timeTillDigTarget = 54321;
+		timeTillDigTarget = 54321
 		
 func CacheBlockers():
 	if setter.FrontCourt():	
-		rightSideBlocker = setter;
-		leftSideBlocker = outsideFront;
+		rightSideBlocker = setter
+		leftSideBlocker = outsideFront
 
 	else:
 		if markUndoChangesToRoles:
-			rightSideBlocker = outsideFront;
-			leftSideBlocker = oppositeHitter;
+			rightSideBlocker = outsideFront
+			leftSideBlocker = oppositeHitter
 		else:
-			rightSideBlocker = oppositeHitter;
-			leftSideBlocker = outsideFront;
+			rightSideBlocker = oppositeHitter
+			leftSideBlocker = outsideFront
 
 func _process(_delta):
 	stateMachine.Update()
 
 func Rotate():
 	if markUndoChangesToRoles:
-		outsideFront.roleCurrentlyPerforming = Athlete.Role.Outside;
-		oppositeHitter.roleCurrentlyPerforming = Athlete.Role.Opposite;
-		markUndoChangesToRoles = false;
+		outsideFront.roleCurrentlyPerforming = Athlete.Role.Outside
+		oppositeHitter.roleCurrentlyPerforming = Athlete.Role.Opposite
+		markUndoChangesToRoles = false
 	
 	server += 1
 	if server >= 6:
@@ -238,8 +238,8 @@ func Rotate():
 		else:
 			athlete.rotationPosition -= 1
 			
-	CheckForLiberoChange();
-	CachePlayers();
+	CheckForLiberoChange()
+	CachePlayers()
 
 func BallHitOverNet():
 	stateMachine.SetCurrentState(receiveState)
@@ -247,21 +247,21 @@ func BallHitOverNet():
 func CheckForLiberoChange():
 #// if the libero is entering the frontcourt, get rid of them
 	if isLiberoOnCourt && libero.FrontCourt():
-		InstantaneouslySwapPlayers(libero, benchPlayers[0]);
-		isLiberoOnCourt = false;
+		InstantaneouslySwapPlayers(libero, benchPlayers[0])
+		isLiberoOnCourt = false
 
 #// if the back middle isn't serving, get rid of them
 	if !isLiberoOnCourt && middleBack:
 		if !isNextToAttack:
 			if middleBack != courtPlayers[server]:
-				InstantaneouslySwapPlayers(middleBack, libero);
-				isLiberoOnCourt = true;
+				InstantaneouslySwapPlayers(middleBack, libero)
+				isLiberoOnCourt = true
 
 			else:
 				return
 		else:
-			InstantaneouslySwapPlayers(middleBack, libero);
-			isLiberoOnCourt = true;
+			InstantaneouslySwapPlayers(middleBack, libero)
+			isLiberoOnCourt = true
 
 func InstantaneouslySwapPlayers(outgoing, incoming):
 
@@ -280,14 +280,14 @@ func InstantaneouslySwapPlayers(outgoing, incoming):
 
 	if (incoming.roleCurrentlyPerforming != Athlete.Role.Libero && outgoing.roleCurrentlyPerforming != Athlete.Role.Libero):
 
-		incoming.roleCurrentlyPerforming = outgoing.roleCurrentlyPerforming;
+		incoming.roleCurrentlyPerforming = outgoing.roleCurrentlyPerforming
 
-		incoming.moveTarget = incoming.translation;
-		outgoing.moveTarget = outgoing.translation;
+		incoming.moveTarget = incoming.translation
+		outgoing.moveTarget = outgoing.translation
 
-		var tempRot = incoming.rotation;
-		incoming.rotation = outgoing.rotation;
-		outgoing.rotation = tempRot;
+		var tempRot = incoming.rotation
+		incoming.rotation = outgoing.rotation
+		outgoing.rotation = tempRot
 		outgoing.Chill()
 
 func CachePlayers():
@@ -373,10 +373,10 @@ func AutoSelectTeamLineup():
 func SwapPlayer(player,newPostion):
 	#print("-----------")
 	#print("")
-	var index = -1;
+	var index = -1
 	for i in range(allPlayers.size()):
 		if (allPlayers[i] == player):
-			index = i;
+			index = i
 			break
 	
 	#for i in range(allPlayers.size()):

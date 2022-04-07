@@ -33,10 +33,10 @@ func PretendToBeParented(node):
 
 func BallPositionAtGivenHeight(height:float):
 
-	var timeOfFlight = TimeTillBallReachesHeight(height);
-	var xzPos = Vector2(translation.x, translation.z);
-	var xzVel = Vector2(linear_velocity.x, linear_velocity.z);
-	var newXZPos = xzPos + xzVel * timeOfFlight;
+	var timeOfFlight = TimeTillBallReachesHeight(height)
+	var xzPos = Vector2(translation.x, translation.z)
+	var xzVel = Vector2(linear_velocity.x, linear_velocity.z)
+	var newXZPos = xzPos + xzVel * timeOfFlight
 
 	return Vector3(newXZPos.x, height, newXZPos.y)
 	
@@ -46,7 +46,7 @@ func TimeTillBallReachesHeight(height:float):
 	var finalV = sqrt(linear_velocity.y * linear_velocity.y + 2 * g * (translation.y - height))
 	var remainingTime = (finalV + linear_velocity.y) / g
 
-	return remainingTime;
+	return remainingTime
 
 
 func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float):
@@ -56,7 +56,7 @@ func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float)
 	
 	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x,0, endPos.z))
-	var yVel = abs(sqrt(2 * gravity * (maxHeight - startPos.y)));
+	var yVel = abs(sqrt(2 * gravity * (maxHeight - startPos.y)))
 	
 	var time = yVel / gravity + sqrt(2 * gravity * (maxHeight - endPos.y)) / gravity
 	var xzVel = xzDist / time
@@ -67,9 +67,9 @@ func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float)
 
 
 func SignedAngle(from, to, up):
-	var cross_to = from.cross(to);
-	var unsigned_angle = atan2(cross_to.length(), from.dot(to));
-	var theSign = cross_to.dot(up);
+	var cross_to = from.cross(to)
+	var unsigned_angle = atan2(cross_to.length(), from.dot(to))
+	var theSign = cross_to.dot(up)
 	if theSign < 0:
 		return -unsigned_angle
 	else:
@@ -80,9 +80,9 @@ func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNe
 	g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
 	var distanceFactor = startPos.x / (abs(startPos.x) + abs(target.x))
 	if startPos.x < 0:
-		distanceFactor *= -1;
+		distanceFactor *= -1
 
-	var netPass:Vector3 = startPos + (target - startPos) * distanceFactor;
+	var netPass:Vector3 = startPos + (target - startPos) * distanceFactor
 	netPass.y = heightOverNet
 
 	var xzDistToTarget = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(target.x, 0, target.z))
@@ -105,11 +105,11 @@ func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNe
 	var xzVel = cos(theta) * vel
 	var time = xzDistToTarget / xzVel
 
-	var finalYVel = -(sin(theta) * vel - g * time);
+	var finalYVel = -(sin(theta) * vel - g * time)
 
 
 	var xzTheta = SignedAngle(Vector3(1, 0, 0), Vector3(target.x, 0, target.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
-	#xzTheta *= Mathf.Deg2Rad;
+	#xzTheta *= Mathf.Deg2Rad
 
 	var velocity = Vector3(vel * cos(theta) * cos(-xzTheta), finalYVel, vel * cos(theta) * sin(-xzTheta))
 	return velocity
@@ -118,11 +118,11 @@ func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNe
 func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, aimingUp:bool):
 	g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
 	
-	var xzDirection = target - startPos;
-	xzDirection.y = 0;
+	var xzDirection = target - startPos
+	xzDirection.y = 0
 
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(target.x, 0, target.z))
-	var yDist =  target.y - startPos.y;
+	var yDist =  target.y - startPos.y
 
 	var idealAngle
 	var angle1
@@ -133,7 +133,7 @@ func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, ai
 		idealAngle = 45
 	else:
 		angle1 = atan((speed * speed + sqrt(determinant)) / (g * xzDist))
-		angle2 = atan((speed * speed - sqrt(determinant)) / (g * xzDist));
+		angle2 = atan((speed * speed - sqrt(determinant)) / (g * xzDist))
 
 		if aimingUp:
 			idealAngle = max(angle1, angle2)

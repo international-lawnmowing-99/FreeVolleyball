@@ -74,8 +74,8 @@ func BallSet(setByTeamA:bool):
 		teamB.stateMachine.SetCurrentState(teamB.spikeState)
 
 func BallSpiked(spikedByTeamA:bool):
-	pass
-
+	if spikedByTeamA:
+		pass
 func _input(_event):
 	
 	if Input.is_action_just_pressed("ui_accept"):

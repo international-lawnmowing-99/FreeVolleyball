@@ -161,7 +161,7 @@ func _update_movement(delta):
 		global_translate(_speed * delta)
 
 func _update_rotation(delta):
-	var offset = Vector2();
+	var offset = Vector2()
 	
 	if not freelook_mode == Freelook_Modes.INPUT_ACTION:
 		offset += _mouse_offset * sensitivity

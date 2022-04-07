@@ -29,13 +29,13 @@ func Update(athlete:Athlete):
 		ServeState.Walking:
 			if athlete.translation.distance_to(athlete.moveTarget) < 0.1:
 				athlete.look_at_from_position(athlete.translation, Vector3.ZERO, Vector3.UP)
-				serveState = ServeState.Aiming;
+				serveState = ServeState.Aiming
 			
 		ServeState.Aiming:
 			
 			attackTarget = Vector3(rand_range(3, 10), 0, rand_range(-5, 5))
 			#anim.SetTrigger("jumpServeToss");
-			serveState = ServeState.Tossing;
+			serveState = ServeState.Tossing
 		
 		ServeState.Tossing:
 #//we want to hit it after a 3m runup and a jump
@@ -57,7 +57,7 @@ func Update(athlete:Athlete):
 				ball.rotation = Vector3.ZERO
 				ball.angular_velocity = Vector3 ( rand_range(-.5,.5),rand_range(-.5,.5), rand_range(-10,-30))
 				
-				serveState = ServeState.WatchingTheBallInTheAir;
+				serveState = ServeState.WatchingTheBallInTheAir
 				#anim.SetTrigger("startRunup");
 
 
@@ -66,13 +66,13 @@ func Update(athlete:Athlete):
 			#transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(MyMaths.xzVector(ball.attackTarget - transform.position)), 15 * Time.deltaTime);
 			if (ball.TimeTillBallReachesHeight(athlete.stats.spikeHeight) <= athlete.CalculateTimeTillJumpPeak(takeOffTarget)):
 				serveState = ServeState.Runup
-				athlete.moveTarget = takeOffTarget;
+				athlete.moveTarget = takeOffTarget
 		
 		ServeState.Runup:
 			var distanceToTakeoff = athlete.translation.distance_to(takeOffTarget)
 			if (distanceToTakeoff >= .1):
 				#transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(MyMaths.xzVector(ball.attackTarget - transform.position)), 45 * Time.deltaTime);
-				pass#athlete.BaseMove();
+				pass#athlete.BaseMove()
 
 			else:
 				athlete.rb.mode =RigidBody.MODE_RIGID
@@ -86,7 +86,7 @@ func Update(athlete:Athlete):
 				athlete.rb.linear_velocity = ball.FindWellBehavedParabola(athlete.translation, landing, athlete.stats.verticalJump)
 				
 				
-				serveState = ServeState.Jump;
+				serveState = ServeState.Jump
 				#if (timeTillJumpPeak<= jumpAnimationTime)
 				#anim.SetTrigger("jump");
 
@@ -106,7 +106,7 @@ func Update(athlete:Athlete):
 				athlete.rb.gravity_scale = 0
 				
 				athlete.translation.y = 0
-				serveState = ServeState.Walking;
+				serveState = ServeState.Walking
 				athlete.stateMachine.SetCurrentState(athlete.defendState)
 
 	

@@ -7,9 +7,9 @@ func Enter(team:Team):
 		athlete.moveTarget = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
 
 	if team.outsideFront.rotationPosition == 2 && team.oppositeHitter.rotationPosition == 4:
-		team.outsideFront.role = Enums.Role.Opposite;
-		team.oppositeHitter.role = Enums.Role.Outside;
-		team.markUndoChangesToRoles = true;
+		team.outsideFront.role = Enums.Role.Opposite
+		team.oppositeHitter.role = Enums.Role.Outside
+		team.markUndoChangesToRoles = true
 
 func Update(team:Team):
 	#Is the ball close enough

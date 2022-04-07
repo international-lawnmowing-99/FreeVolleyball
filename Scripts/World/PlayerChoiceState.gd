@@ -3,7 +3,6 @@ extends Node
 class_name PlayerChoiceState
 const Enums = preload("res://Scripts/World/Enums.gd")
 
-# r = new System.Random(Guid.NewGuid().GetHashCode());
 
 var continentIndex = -1
 

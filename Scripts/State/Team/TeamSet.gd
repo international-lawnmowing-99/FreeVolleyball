@@ -58,7 +58,10 @@ func SetBall(team:Team):
 	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.translation, team.setTarget.target, team.setTarget.height)
 	yield(team.get_tree(), "idle_frame")
 	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.translation, team.setTarget.target, team.setTarget.height)
-	team.setTarget = null
+	
+	
+	
+	#team.setTarget = null
 	
 
 	

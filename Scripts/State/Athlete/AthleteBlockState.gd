@@ -10,7 +10,7 @@ Preparing,
 Jump
 }
 
-var blockState = BlockState.NotBlocking;
+var blockState = BlockState.NotBlocking
 
 var blockingTarget:Athlete
 var timeTillBlockPeak:float
@@ -18,7 +18,7 @@ var timeTillBlockPeak:float
 func Enter(athlete:Athlete):
 	nameOfState="Block"
 	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
-	timeTillBlockPeak =  jumpYVel / athlete.g;
+	timeTillBlockPeak =  jumpYVel / athlete.g
 	blockState = BlockState.Watching
 	pass
 func Update(athlete:Athlete):
@@ -35,7 +35,7 @@ func Update(athlete:Athlete):
 		BlockState.Preparing:
 			#Perhaps adding a random offset would make this look less choreographed...
 			if blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
-				blockState = BlockState.Jump;
+				blockState = BlockState.Jump
 				if athlete.rb.mode !=  RigidBody.MODE_RIGID:
 					athlete.rb.mode = RigidBody.MODE_RIGID
 					athlete.rb.gravity_scale = 1

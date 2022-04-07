@@ -20,7 +20,7 @@ func Populate(firstNames, lastNames, r:RandomNumberGenerator):
 	for i in range(numberOfTeams):
 		var team = Team.new()
 		team.teamName = countryName + " Club Team " + str(i + 1)
-#List<int> shirtNumbers = new List<int>(), images = new List<int>();
+#List<int> shirtNumbers = new List<int>(), images = new List<int>()
 #for (int shirt = 0; shirt < 13; shirt++)
 
 #shirtNumbers.Add(shirt + 1);
