@@ -66,9 +66,9 @@ var distanceHack
 
 func CreateSpikes():
 	
-	middleSpikes = [ Set.new(0.5, stats.spikeHeight, 0.5, stats.spikeHeight + 0.1),
-Set.new(0.5, stats.spikeHeight, 1.5, stats.spikeHeight+ 0.1),
-Set.new(0.5, stats.spikeHeight, -0.5, stats.spikeHeight+ 0.1)]
+	middleSpikes = [ Set.new(0.5, stats.spikeHeight, 0.5, stats.spikeHeight + 0.05),
+Set.new(0.5, stats.spikeHeight, 1.5, stats.spikeHeight+ 0.05),
+Set.new(0.5, stats.spikeHeight, -0.5, stats.spikeHeight+ 0.05)]
 		
 	outsideFrontSpikes = [ Set.new(.5, stats.spikeHeight, 4.2, max(3, stats.spikeHeight + 1)),
 Set.new(.5, stats.spikeHeight, -2.75, 3.5),
@@ -239,3 +239,14 @@ func BaseMove(_delta):
 		if translation.x != moveTarget.x:
 			look_at_from_position(translation, moveTarget, Vector3.UP)
 			rotate_y(PI)
+			
+func ReEvaluateState():
+	match team.stateMachine.currentState:
+		team.receiveState:
+			stateMachine.SetCurrentState(transitionState)
+		team.setState:
+			stateMachine.SetCurrentState(transitionState)
+		team.spikeState:
+			stateMachine.SetCurrentState(spikeState)
+		team.defendState:
+			stateMachine.SetCurrentState(defendState)

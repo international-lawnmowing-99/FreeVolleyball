@@ -4,6 +4,7 @@ func Enter(team:Team):
 	for i in range(6):
 		#	var pos = team.defaultPositions[team.courtPlayers[i].rotationPosition -1]
 		team.courtPlayers[i].translation = team.defaultPositions[team.courtPlayers[i].rotationPosition -1] * team.flip 
+		team.courtPlayers[i].moveTarget = team.courtPlayers[i].translation
 		team.courtPlayers[i].stateMachine.SetCurrentState(team.courtPlayers[i].chillState)
 	var server:Athlete = team.courtPlayers[team.server]
 	server.translation = team.flip * Vector3(10,0,-2)

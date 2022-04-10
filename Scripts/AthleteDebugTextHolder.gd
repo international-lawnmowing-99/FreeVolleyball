@@ -9,11 +9,13 @@ func _ready():
 	text = $RichTextLabel
 	athlete = $"../../"
 	text.text = athlete.stats.lastName
+
 	
 func _process(delta):
 	var screen_pos = camera.unproject_position(global_transform.origin)
 	text.set_position(screen_pos+Vector2.ONE)
-
+	if !athlete.team.isHuman:
+		text.set("custom_colors/default_color",Color(1,1,0))
 	if athlete.role && athlete.stateMachine.currentState: 
 		text.text = athlete.stats.lastName + "\n" + \
 		"role: " + Enums.Role.keys()[athlete.role] + "\n" + \

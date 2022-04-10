@@ -7,7 +7,8 @@ func Enter(athlete:Athlete):
 	athlete.moveTarget = athlete.team.GetTransitionPosition(athlete)
 	pass
 func Update(athlete:Athlete):
-	if athlete.translation.distance_squared_to(athlete.moveTarget) < 0.1:
+	if athlete.translation.distance_squared_to(athlete.moveTarget) < 0.1\
+	&& athlete.rb.mode != RigidBody.MODE_RIGID:
 		if athlete == athlete.team.libero || athlete == athlete.team.middleBack:
 			pass
 		else:

@@ -35,7 +35,7 @@ func Update(athlete:Athlete):
 		BlockState.Preparing:
 			#Perhaps adding a random offset would make this look less choreographed...
 			if blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
-				blockState = BlockState.Jump
+				blockState = BlockState.Jump	
 				if athlete.rb.mode !=  RigidBody.MODE_RIGID:
 					athlete.rb.mode = RigidBody.MODE_RIGID
 					athlete.rb.gravity_scale = 1
@@ -49,17 +49,9 @@ func Update(athlete:Athlete):
 				athlete.rb.mode = RigidBody.MODE_KINEMATIC
 				athlete.translation.y = 0
 				athlete.rb.gravity_scale = 0
-				
-				if athlete.team.isNextToAttack:
-					athlete.stateMachine.SetCurrentState(athlete.spikeState)
+				athlete.ReEvaluateState()
+#				if athlete.team.isNextToAttack:
+#					athlete.stateMachine.SetCurrentState(athlete.spikeState)
 
 func Exit(athlete:Athlete):
 	pass
-
-	
-
-
-
-
-
-

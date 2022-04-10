@@ -7,11 +7,13 @@ var rightSideBlocker
 
 func Enter(team:Team):
 	for player in team.courtPlayers:
-		if !player.FrontCourt():
-			if player.rb.mode == RigidBody.MODE_KINEMATIC:
+#		print(player.stats.lastName)
+		if player.rb.mode != RigidBody.MODE_RIGID:
+#			print(player.stats.lastName + "Changing")
+			if player.FrontCourt():
+				player.stateMachine.SetCurrentState(player.blockState)
+			else:
 				player.stateMachine.SetCurrentState(player.defendState)
-		else:
-			player.stateMachine.SetCurrentState(player.blockState)
 	
 	CacheBlockers(team)
 	if team.setter.FrontCourt():

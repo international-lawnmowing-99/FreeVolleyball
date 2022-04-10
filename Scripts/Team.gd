@@ -194,7 +194,7 @@ func xzVector(vec:Vector3):
 func UpdateTimeTillDigTarget():
 	
 	if (stateMachine.currentState == setState):
-		timeTillDigTarget = xzVector(ball.translation).distance_to(xzVector(receptionTarget)) / xzVector(ball.linear_velocity).length()
+		timeTillDigTarget = xzVector(ball.translation).distance_to(xzVector(receptionTarget)) / max(xzVector(ball.linear_velocity).length(),.0001) 
 
 	elif stateMachine.currentState == spikeState:
 		timeTillDigTarget = 0
@@ -428,4 +428,4 @@ func CheckUnchangingTransitionPositions(athlete):
 		return Vector3.ZERO
 
 func CheckIfFlipped(vectorToBeChecked:Vector3):
-	return Vector3(flip * vectorToBeChecked.x, vectorToBeChecked.y,  vectorToBeChecked.z)
+	return Vector3(flip * vectorToBeChecked.x, vectorToBeChecked.y, flip * vectorToBeChecked.z)

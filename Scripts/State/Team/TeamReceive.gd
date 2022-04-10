@@ -5,7 +5,9 @@ func Enter(team:Team):
 		
 	for lad in team.courtPlayers:
 		lad.distanceHack = team.ball.attackTarget.distance_squared_to(lad.translation)
-	
+		if lad.rb.mode == RigidBody.MODE_RIGID:
+			lad.distanceHack = 9999
+			
 	team.courtPlayers.sort_custom(Athlete, "SortDistance")
 	var orderedList = team.courtPlayers.duplicate(false)
 	
@@ -26,7 +28,10 @@ func Enter(team:Team):
 		team.outsideFront.setRequest = CheckForFlip(team.outsideFront.outsideFrontSpikes[0], team)
 
 	for i in range(1, team.courtPlayers.size()):
-		team.courtPlayers[i].stateMachine.SetCurrentState(team.courtPlayers[i].transitionState)
+		#print(team.courtPlayers[i].stats.lastName)
+		if team.courtPlayers[i].rb.mode != RigidBody.MODE_RIGID:
+			#print(team.courtPlayers[i].stats.lastName + " transitnio")
+			team.courtPlayers[i].stateMachine.SetCurrentState(team.courtPlayers[i].transitionState)
 		
 	team.chosenReceiver.stateMachine.SetCurrentState(team.chosenReceiver.passState)
 

@@ -18,7 +18,7 @@ func Enter(team:Team):
 		team.chosenSetter = team.setter
 	
 	for athlete in team.courtPlayers:
-		if athlete!= team.chosenSetter && athlete != team.chosenReceiver:
+		if athlete!= team.chosenSetter && athlete != team.chosenReceiver && athlete.rb.mode != RigidBody.MODE_RIGID:
 			athlete.stateMachine.SetCurrentState(athlete.transitionState)
 func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
@@ -40,7 +40,7 @@ func SetBall(team:Team):
 		#team.ball.linear_velocity = team.ball.CalculateWellBehavedParabola(team.ball.translation, setTarget.target, setTarget.height)
 		#BallOverNet()
 
-		team.chosenSetter.setState.WaitThenDefend(team.chosenSetter, 0.3)
+		team.chosenSetter.setState.WaitThenDefend(team.chosenSetter, 0.5)
 		team.chosenSetter = null
 		if (team.markUndoChangesToRoles):
 			team.setTarget = team.oppositeHitter.outsideFrontSpikes[0]

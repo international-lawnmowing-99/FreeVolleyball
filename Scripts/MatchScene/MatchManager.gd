@@ -28,6 +28,8 @@ func _ready():
 	
 	#lel
 	teamA.isHuman = true
+	teamB.isHuman = false
+	
 	teamA.init(ball, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational)
 	teamB.init(ball, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational)
 	teamA.defendState.otherTeam = teamB

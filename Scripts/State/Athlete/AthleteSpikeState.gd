@@ -14,7 +14,7 @@ var athlete:Athlete
 func Enter(_athlete:Athlete):
 	nameOfState="Spike"
 	if !athlete.setRequest:
-		athlete.setRequest = athlete.middleSpikes[0]
+		athlete.setRequest = athlete.team.CheckIfFlipped(athlete.middleSpikes[0] as Vector3)
 	takeOffXZ = Vector3(athlete.setRequest.target.x\
 	 - athlete.team.flip * athlete.stats.verticalJump / 2, \
 	0, athlete.setRequest.target.z)
@@ -56,8 +56,8 @@ func Update(_athlete:Athlete):
 			if timeTillBallReachesSetTarget <= athlete.CalculateTimeTillJumpPeak(takeOffXZ) && athlete.team.stateMachine.currentState != athlete.team.receiveState:
 				spikeState = SpikeState.Runup
 				athlete.moveTarget = takeOffXZ
-				#print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
-				#print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState != athlete.team.receiveState))
+				print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
+				print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState))
 
 		SpikeState.Runup:
 			if athlete.team.xzVector(takeOffXZ - athlete.translation).length() < 0.1:
@@ -76,6 +76,7 @@ func Update(_athlete:Athlete):
 				athlete.moveTarget = athlete.translation
 				#athlete.PrepareToDefend()
 				spikeState = SpikeState.NotSpiking
+				athlete.ReEvaluateState()
 			pass
 
 	pass

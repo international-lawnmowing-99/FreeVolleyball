@@ -63,7 +63,7 @@ nodes/walkAnim/node = SubResource( 9 )
 nodes/walkAnim/position = Vector2( -440, 320 )
 nodes/walkSpeed/node = SubResource( 12 )
 nodes/walkSpeed/position = Vector2( -218.333, 359.25 )
-node_connections = [ "output", 0, "isStrafing", "isStrafing", 0, "strafeSpeed", "isStrafing", 1, "walkSpeed", "walkSpeed", 0, "walkAnim", "strafeSpeed", 0, "strafe" ]
+node_connections = [ "output", 0, "isStrafing", "strafeSpeed", 0, "strafe", "isStrafing", 0, "strafeSpeed", "isStrafing", 1, "walkSpeed", "walkSpeed", 0, "walkAnim" ]
 
 [sub_resource type="DynamicFont" id=13]
 size = 12
