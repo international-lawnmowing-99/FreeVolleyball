@@ -2,23 +2,12 @@ extends Spatial
 
 class_name MatchManager
 
-enum GameState {
-
-	UNDEFINED,
-	BlockInProgress,
-	PointJustScored
-}
-
-#var gameState = GameState.Initialisation
- 
 var gameWorld = load("res://Scripts/World/GameWorld.gd").new()
 var isTeamAServingFirst:bool = false
 var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 
 onready var teamA:Team = $TeamA
 onready var teamB:Team = $TeamB
-
-
 
 onready var ball = $ball
 
@@ -79,7 +68,11 @@ func BallSpiked(spikedByTeamA:bool):
 	if spikedByTeamA:
 		pass
 func _input(_event):
-	
 	if Input.is_action_just_pressed("ui_accept"):
 		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
 		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
+
+func PointToTeamA():
+	pass
+func PointToTeamB():
+	pass

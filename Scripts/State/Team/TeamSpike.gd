@@ -12,18 +12,18 @@ func Update(team:Team):
 		team.ball.linear_velocity.y <= 0 && \
 		(team.ball.translation - team.chosenSpiker.setRequest.target).length() < 0.5):
 			SpikeBall(team)
-		elif (team.ball.translation.z < team.chosenSpiker.setRequest.target.z &&\
-			 team.ball.linear_velocity.y <= 0 && \
-			(team.ball.translation - team.chosenSpiker.setRequest.target).length() < 0.5):
-				SpikeBall(team)
+	elif (team.ball.translation.z < team.chosenSpiker.setRequest.target.z &&\
+		 team.ball.linear_velocity.y <= 0 && \
+		(team.ball.translation - team.chosenSpiker.setRequest.target).length() < 0.5):
+			SpikeBall(team)
 
 func Exit(team:Team):
 	pass
 
 func SpikeBall(team:Team):
 	var ball:Ball = team.ball
-	if (team.isHuman):
-		ball.attackTarget = team.CheckIfFlipped(Vector3(-rng.randf_range(1, 9), 0, -4.5 + rng.randf_range(0, 9)))
+	
+	ball.attackTarget = team.CheckIfFlipped(Vector3(-rng.randf_range(1, 9), 0, -4.5 + rng.randf_range(0, 9)))
 
 	if team.setTarget.height > 2.43:
 		#Draw a line from the ball to the target. If the point where it crosses the 

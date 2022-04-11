@@ -1,4 +1,5 @@
 extends "res://Scripts/State/AthleteState.gd"
+const Enums = preload("res://Scripts/World/Enums.gd")
 
 var ball
 var timeTillBallReachesMe
@@ -107,4 +108,7 @@ func PassBall(athlete):
 	athlete.get_tree().get_root().get_node("MatchScene").BallReceived(athlete.team.isHuman)
 
 	yield(athlete.get_tree().create_timer(.5), "timeout")
-	athlete.stateMachine.SetCurrentState(athlete.transitionState)
+	if athlete.role == Enums.Role.Setter:
+		athlete.stateMachine.SetCurrentState(athlete.defendState)
+	else:
+		athlete.stateMachine.SetCurrentState(athlete.transitionState)

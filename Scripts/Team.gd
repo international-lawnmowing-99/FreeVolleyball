@@ -105,13 +105,13 @@ var defaultPositions = [
 	Vector3(6,0,4),
 	Vector3(6,0,0)]
 
-var defaultDefensivePositions = [
-	Vector3(5.5, 0, -2.2),
-	Vector3(.5,0,-3),
-	Vector3(.5,0,0),
-	Vector3(.5,0,3),
-	Vector3(5.5,0,2.2),
-	Vector3(7.5,0,0)]
+#var defaultDefensivePositions = [
+#	Vector3(5.5, 0, -2.2),
+#	Vector3(.5,0,-3),
+#	Vector3(.5,0,0),
+#	Vector3(.5,0,3),
+#	Vector3(5.5,0,2.2),
+#	Vector3(7.5,0,0)]
 	
 var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(self)
 var serveState:State = load("res://Scripts/State/Team/TeamServe.gd").new()

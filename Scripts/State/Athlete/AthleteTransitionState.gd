@@ -12,7 +12,10 @@ func Update(athlete:Athlete):
 		if athlete == athlete.team.libero || athlete == athlete.team.middleBack:
 			pass
 		else:
-			athlete.stateMachine.SetCurrentState(athlete.spikeState)
+			if athlete == athlete.team.setter:
+				athlete.stateMachine.SetCurrentState(athlete.setState)
+			else:
+				athlete.stateMachine.SetCurrentState(athlete.spikeState)
 	pass
 func Exit(athlete:Athlete):
 	pass

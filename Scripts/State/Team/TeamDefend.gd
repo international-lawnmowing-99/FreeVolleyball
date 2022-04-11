@@ -16,9 +16,10 @@ func Enter(team:Team):
 				player.stateMachine.SetCurrentState(player.defendState)
 	
 	CacheBlockers(team)
+	
 	if team.setter.FrontCourt():
 		team.setter.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, -3))
-		team.oppositeHitter.moveTarget = team.CheckIfFlipped(Vector3(5.5, 0, -2.2))
+#		team.oppositeHitter.moveTarget = team.CheckIfFlipped(Vector3(5.5, 0, -2.2))
 		team.outsideFront.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, -3))
 	else:
 		if team.markUndoChangesToRoles:
@@ -28,16 +29,8 @@ func Enter(team:Team):
 			team.oppositeHitter.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, 3))
 			team.outsideFront.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, -3))
 
-		team.setter.moveTarget = team.CheckIfFlipped(Vector3(5.5, 0, 2.2))
+#		team.setter.moveTarget = team.CheckIfFlipped(Vector3(5.5, 0, 2.2))
 
-	if (team.isLiberoOnCourt):
-		team.libero.moveTarget = team.CheckIfFlipped(Vector3(5.5, 0, -2.2))
-	else:
-		team.middleBack.moveTarget = team.CheckIfFlipped(Vector3(5.5, 0, -2.2))
-
-
-	team.outsideBack.moveTarget = team.CheckIfFlipped(Vector3(8, 0, 0.3))
-	team.middleFront.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, 0))
 
 
 	if otherTeam.markUndoChangesToRoles:

@@ -1,4 +1,5 @@
 extends "res://Scripts/State/AthleteState.gd"
+const Enums = preload("res://Scripts/World/Enums.gd")
 
 enum SpikeState {
 NotSpiking,
@@ -14,7 +15,8 @@ var athlete:Athlete
 func Enter(_athlete:Athlete):
 	nameOfState="Spike"
 	if !athlete.setRequest:
-		athlete.setRequest = athlete.team.CheckIfFlipped(athlete.middleSpikes[0] as Vector3)
+		print(athlete.stats.lastName + ": " + Enums.Role.keys()[athlete.role])
+		athlete.setRequest = athlete.middleSpikes[0]
 	takeOffXZ = Vector3(athlete.setRequest.target.x\
 	 - athlete.team.flip * athlete.stats.verticalJump / 2, \
 	0, athlete.setRequest.target.z)

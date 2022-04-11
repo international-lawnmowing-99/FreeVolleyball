@@ -7,25 +7,26 @@ func Enter(team:Team):
 		lad.distanceHack = team.ball.attackTarget.distance_squared_to(lad.translation)
 		if lad.rb.mode == RigidBody.MODE_RIGID:
 			lad.distanceHack = 9999
-			
+		if lad == team.setter:
+			lad.distanceHack*=3
 	team.courtPlayers.sort_custom(Athlete, "SortDistance")
 	var orderedList = team.courtPlayers.duplicate(false)
 	
 	team.chosenReceiver = orderedList[0]
 
-	team.middleFront.setRequest = CheckForFlip(team.middleFront.middleSpikes[0], team)
-	team.outsideBack.setRequest =  CheckForFlip(team.outsideBack.outsideBackSpikes[0], team)
+	team.middleFront.setRequest = team.middleFront.middleSpikes[0]
+	team.outsideBack.setRequest =  team.outsideBack.outsideBackSpikes[0]
 	if team.oppositeHitter.FrontCourt():
 		if team.markUndoChangesToRoles:
-			team.oppositeHitter.setRequest = CheckForFlip(team.oppositeHitter.outsideFrontSpikes[0], team)
-			team.outsideFront.setRequest = CheckForFlip(team.outsideFront.oppositeFrontSpikes[0], team)
+			team.oppositeHitter.setRequest = team.oppositeHitter.outsideFrontSpikes[0]
+			team.outsideFront.setRequest = team.outsideFront.oppositeFrontSpikes[0]
 	
 		else:
-			team.oppositeHitter.setRequest =  CheckForFlip(team.oppositeHitter.oppositeFrontSpikes[0], team)
-			team.outsideFront.setRequest = CheckForFlip(team.outsideFront.outsideFrontSpikes[0], team)
+			team.oppositeHitter.setRequest =  team.oppositeHitter.oppositeFrontSpikes[0]
+			team.outsideFront.setRequest = team.outsideFront.outsideFrontSpikes[0]
 	else:
-		team.oppositeHitter.setRequest =  CheckForFlip(team.oppositeHitter.oppositeBackSpikes[0], team)
-		team.outsideFront.setRequest = CheckForFlip(team.outsideFront.outsideFrontSpikes[0], team)
+		team.oppositeHitter.setRequest =  team.oppositeHitter.oppositeBackSpikes[0]
+		team.outsideFront.setRequest = team.outsideFront.outsideFrontSpikes[0]
 
 	for i in range(1, team.courtPlayers.size()):
 		#print(team.courtPlayers[i].stats.lastName)

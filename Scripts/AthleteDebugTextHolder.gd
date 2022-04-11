@@ -17,7 +17,7 @@ func _process(delta):
 	if !athlete.team.isHuman:
 		text.set("custom_colors/default_color",Color(1,1,0))
 	if athlete.role && athlete.stateMachine.currentState: 
-		text.text = athlete.stats.lastName + "\n" + \
+		text.text = athlete.stats.lastName + " " +  str(athlete.rotationPosition) + "\n"  +\
 		"role: " + Enums.Role.keys()[athlete.role] + "\n" + \
 		"state: " + str(athlete.stateMachine.currentState.nameOfState)
 		if athlete.stateMachine.currentState == athlete.spikeState:

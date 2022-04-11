@@ -222,15 +222,15 @@ func CalculateTimeTillJumpPeak(takeOffXZ):
 	
 	return timeTillJumpPeak
 
-func PrepareToDefend():
-	if FrontCourt():
-		if rb.mode == RigidBody.MODE_KINEMATIC:
-			stateMachine.SetCurrentState(blockState)
-		else:
-			print("wag1 here...")
-			pass
-	else:
-		 stateMachine.SetCurrentState(defendState)
+#func PrepareToDefend():
+#	if FrontCourt():
+#		if rb.mode == RigidBody.MODE_KINEMATIC:
+#			stateMachine.SetCurrentState(blockState)
+#		else:
+#			print("wag1 here...")
+#			pass
+#	else:
+#		 stateMachine.SetCurrentState(defendState)
 
 func BaseMove(_delta):
 	if rb.mode == RigidBody.MODE_KINEMATIC && translation.distance_to(moveTarget) > .1:
@@ -249,4 +249,7 @@ func ReEvaluateState():
 		team.spikeState:
 			stateMachine.SetCurrentState(spikeState)
 		team.defendState:
-			stateMachine.SetCurrentState(defendState)
+			if FrontCourt():
+				stateMachine.SetCurrentState(blockState)
+			else:
+				stateMachine.SetCurrentState(defendState)

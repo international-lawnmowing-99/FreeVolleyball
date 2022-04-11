@@ -26,12 +26,11 @@ func Update(athlete:Athlete):
 		BlockState.Watching:
 			if blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Runup:
 				blockState = BlockState.Preparing
-			if athlete.role == Enums.Role.Middle:
-				#well this is silly... 
-				if athlete.team.isHuman:
-					athlete.moveTarget = athlete.team.CheckIfFlipped(Vector3(-.5, 0, blockingTarget.spikeState.takeOffXZ.z))
-				else:
-					athlete.moveTarget = athlete.team.CheckIfFlipped(Vector3(.5, 0, blockingTarget.spikeState.takeOffXZ.z))
+				if athlete.role == Enums.Role.Middle:
+					if athlete.team.isHuman:
+						athlete.moveTarget = Vector3(.5, 0, blockingTarget.spikeState.takeOffXZ.z)
+					else:
+						athlete.moveTarget = Vector3(-.5, 0, blockingTarget.spikeState.takeOffXZ.z)
 		BlockState.Preparing:
 			#Perhaps adding a random offset would make this look less choreographed...
 			if blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
@@ -50,8 +49,5 @@ func Update(athlete:Athlete):
 				athlete.translation.y = 0
 				athlete.rb.gravity_scale = 0
 				athlete.ReEvaluateState()
-#				if athlete.team.isNextToAttack:
-#					athlete.stateMachine.SetCurrentState(athlete.spikeState)
-
 func Exit(athlete:Athlete):
 	pass
