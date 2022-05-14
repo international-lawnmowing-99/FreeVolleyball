@@ -9,8 +9,9 @@ func Enter(team:Team):
 			lad.distanceHack = 9999
 		if lad == team.setter:
 			lad.distanceHack*=3
-	team.courtPlayers.sort_custom(Athlete, "SortDistance")
+
 	var orderedList = team.courtPlayers.duplicate(false)
+	orderedList.sort_custom(Athlete, "SortDistance")
 	
 	team.chosenReceiver = orderedList[0]
 

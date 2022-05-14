@@ -39,7 +39,7 @@ func SetBall(team:Team):
 		#ball.attackTarget = setTarget.target
 		#team.ball.linear_velocity = team.ball.CalculateWellBehavedParabola(team.ball.translation, setTarget.target, setTarget.height)
 		#BallOverNet()
-
+		team.get_tree().root.find_node("MatchScene", true, false).console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set")
 		team.chosenSetter.setState.WaitThenDefend(team.chosenSetter, 0.5)
 		team.chosenSetter = null
 		if (team.markUndoChangesToRoles):
@@ -53,6 +53,7 @@ func SetBall(team:Team):
 		team.chosenSpiker = team.middleFront
 		team.setTarget = team.middleFront.middleSpikes[0]
 		
+
 		#CalculateSetDifficulty()
 
 	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.translation, team.setTarget.target, team.setTarget.height)

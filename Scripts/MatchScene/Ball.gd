@@ -7,6 +7,8 @@ var _parented:bool = false
 var _pseudoParent
 var wasLastTouchedByA:bool
 var attackTarget
+var mManager
+var inPlay:bool = true
 
 var lads = Vector3(-0.5,2.5,0)
 
@@ -17,14 +19,29 @@ func _process(_delta):
 	pass
 	
 func _ready():
+
 	#DebugOverlay.draw.add_vector(self, "lads", 1, 4, Color(0,1,1, 0.5))
 	
 	pass
 	
-func _on_ball_body_entered(_body):
+func _on_ball_body_entered(body):
 	gravity_scale = 1
-	#print (_body)
-
+#	print (body.name)
+	if inPlay:
+		if body.is_in_group("ZoneOut"):
+#		print("out got him yes")
+			inPlay = false
+			if wasLastTouchedByA:
+				print("ball out, point to b")
+				mManager.PointToTeamB()
+				
+			else:
+				print("ball out, point to a")
+				mManager.PointToTeamA()
+		if body.is_in_group("ZoneInA"):
+			mManager.PointToTeamA()
+		if body.is_in_group("ZoneInB"):
+			mManager.PointToTeamB()
 func PretendToBeParented(node):
 	_parented = true
 	_pseudoParent = node
@@ -165,7 +182,8 @@ func Serve(startPos, _attackTarget, topspin):
 		linear_velocity = impulse
 		
 		attackTarget = _attackTarget
-
+		inPlay = true
+		
 func TouchedByB():
 	wasLastTouchedByA = false
 	

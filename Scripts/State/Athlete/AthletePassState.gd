@@ -3,8 +3,10 @@ const Enums = preload("res://Scripts/World/Enums.gd")
 
 var ball
 var timeTillBallReachesMe
+var isBallAlreadyPassed:bool = false
 
 func Enter(athlete:Athlete):
+	isBallAlreadyPassed = false
 	nameOfState="pass"
 	ball = athlete.team.ball
 	var servePos = ball.translation
@@ -83,7 +85,7 @@ func Update(athlete:Athlete):
 		#athlete.animTree.set("parameters/BlendSpace1D/blend_position", lerp(a, 0, 5*athlete.myDelta))
 		#athlete.digAngle = lerp(athlete.digAngle,0,3*athlete.myDelta)
 		#athlete.RotateDigPlatform(athlete.digAngle)
-	if ball.translation.y < 1 && \
+	if !isBallAlreadyPassed && ball.translation.y < 1 && \
 		(Vector3(ball.translation.x,0, ball.translation.z)).distance_to(athlete.translation) < 1:
 			PassBall(athlete)
 			
@@ -91,12 +93,13 @@ func Exit(athlete:Athlete):
 	pass
 	
 func PassBall(athlete):
+	isBallAlreadyPassed = true
 	#Engine.time_scale = 0.25
 #	emit_signal("ballPassed")
-	
+	athlete.get_tree().root.find_node("MatchScene", true, false).console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")
 	ball.linear_velocity = Vector3.ZERO
 	ball.gravity_scale = 1
-	
+	ball.angular_velocity += Vector3 ( rand_range(-5,5),rand_range(-5,5), rand_range(-5,5))
 	var receptionTarget = Vector3(athlete.team.flip * 0.5, 2.5, 0)
 	athlete.team.receptionTarget = receptionTarget
 	

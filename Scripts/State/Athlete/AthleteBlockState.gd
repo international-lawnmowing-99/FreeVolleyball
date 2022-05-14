@@ -20,11 +20,14 @@ func Enter(athlete:Athlete):
 	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
 	timeTillBlockPeak =  jumpYVel / athlete.g
 	blockState = BlockState.Watching
+	
+	if athlete.role == Enums.Role.Middle:
+		athlete.moveTarget = athlete.team.CheckIfFlipped(Vector3(0.5, 0, -0.5))
 	pass
 func Update(athlete:Athlete):
 	match blockState:
 		BlockState.Watching:
-			if blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Runup:
+			if blockingTarget && blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Runup:
 				blockState = BlockState.Preparing
 				if athlete.role == Enums.Role.Middle:
 					if athlete.team.isHuman:

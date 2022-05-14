@@ -34,11 +34,13 @@ func Update(athlete:Athlete):
 		ServeState.Aiming:
 			
 			attackTarget = Vector3(rand_range(3, 10), 0, rand_range(-5, 5))
+			athlete.get_tree().root.find_node("MatchScene", true, false).console.AddNewLine(athlete.stats.lastName + " jump serve, max aggression: GOOD SERVE")
+			
 			#anim.SetTrigger("jumpServeToss");
 			serveState = ServeState.Tossing
 		
 		ServeState.Tossing:
-#//we want to hit it after a 3m runup and a jump
+#we want to hit it after a 3m runup and a jump
 			if (true):
 				var runupLength = 2.75
 				var runup = Vector2(attackTarget.x - athlete.translation.x, attackTarget.z - athlete.translation.z).normalized() * runupLength
@@ -99,7 +101,7 @@ func Update(athlete:Athlete):
 					serveState = ServeState.Landing
 
 					athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(false)
-
+					athlete.get_tree().root.find_node("MatchScene", true, false).console.AddNewLine("Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 		ServeState.Landing:
 			if (athlete.translation.y <= 0.01 && athlete.rb.linear_velocity.y < 0):
 				athlete.rb.mode =RigidBody.MODE_KINEMATIC

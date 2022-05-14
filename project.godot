@@ -138,6 +138,7 @@ gdscript/warnings/unreachable_code=false
 gdscript/warnings/standalone_expression=false
 gdscript/warnings/narrowing_conversion=false
 gdscript/warnings/integer_division=false
+shapes/collision/shape_color=Color( 0, 0.6, 0.701961, 1 )
 
 [display]
 

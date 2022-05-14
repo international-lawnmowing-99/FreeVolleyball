@@ -12,6 +12,9 @@ func Enter(team:Team):
 		team.oppositeHitter.role = Enums.Role.Outside
 		team.markUndoChangesToRoles = true
 
+	team.isNextToSpike = true
+	team.CheckForLiberoChange()
+	
 func Update(team:Team):
 	#Is the ball close enough
 	pass

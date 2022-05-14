@@ -24,6 +24,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0312001, 0 )
 visible = false
 
 [node name="StaticBody" type="StaticBody" parent="floor" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.307, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="floor/StaticBody" index="0"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )

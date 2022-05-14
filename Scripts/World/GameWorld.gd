@@ -2,13 +2,11 @@ extends Node
 
 class_name GameWorld
 const Enums = preload("res://Scripts/World/Enums.gd")
-		#System.Random r = new System.Random();
+
 var firstNames = []
 var lastNames = []
 var nationsText = []
-		#public GameObject loadingScreen;
-
-		#// There are players, organised in teams, in competitions, national teams, national competitions, and it's organised by continent for ease of navigation
+#There are players, organised in teams, in competitions, national teams, national competitions, and it's organised by continent for ease of navigation
 var continents = []
 
 

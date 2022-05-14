@@ -20,14 +20,14 @@ func Enter(team:Team):
 	if team.setter.FrontCourt():
 		team.setter.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, -3))
 #		team.oppositeHitter.moveTarget = team.CheckIfFlipped(Vector3(5.5, 0, -2.2))
-		team.outsideFront.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, -3))
+		team.outsideFront.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, 3))
 	else:
 		if team.markUndoChangesToRoles:
 			team.oppositeHitter.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, 3))
 			team.outsideFront.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, -3))
 		else:
-			team.oppositeHitter.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, 3))
-			team.outsideFront.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, -3))
+			team.oppositeHitter.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, -3))
+			team.outsideFront.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, 3))
 
 #		team.setter.moveTarget = team.CheckIfFlipped(Vector3(5.5, 0, 2.2))
 

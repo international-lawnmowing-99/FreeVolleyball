@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://Addons/DebugDraw3D.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/MatchScene/MatchManager.gd" type="Script" id=2]
@@ -15,10 +15,12 @@
 [ext_resource path="res://Textures/Scorecard.png" type="Texture" id=13]
 [ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=14]
 [ext_resource path="res://Scenes/FrameStepper.gd" type="Script" id=15]
-
-[sub_resource type="DynamicFont" id=1]
-size = 32
-font_data = ExtResource( 14 )
+[ext_resource path="res://Textures/antenna-uv.png" type="Texture" id=16]
+[ext_resource path="res://Scenes/Score.gd" type="Script" id=17]
+[ext_resource path="res://Scenes/a font.tres" type="DynamicFont" id=18]
+[ext_resource path="res://Scenes/Console.gd" type="Script" id=19]
+[ext_resource path="res://MatchScene/ConsoleLine.tscn" type="PackedScene" id=20]
+[ext_resource path="res://Scenes/teamNameFont.tres" type="DynamicFont" id=21]
 
 [sub_resource type="DynamicFont" id=2]
 size = 20
@@ -26,12 +28,14 @@ font_data = ExtResource( 14 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 32
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 14 )
 
 [sub_resource type="Environment" id=4]
 background_mode = 2
 ambient_light_color = Color( 1, 1, 1, 1 )
-ambient_light_energy = 0.0
+ambient_light_energy = 0.5
 fog_enabled = true
 fog_color = Color( 0, 0, 0, 1 )
 fog_depth_begin = 0.0
@@ -59,6 +63,34 @@ adjustment_brightness = 0.8
 adjustment_contrast = 1.5
 adjustment_saturation = 0.73
 
+[sub_resource type="GDScript" id=9]
+script/source = "extends Spatial
+
+onready var mManager:MatchManager = get_tree().root.get_node(\"MatchScene\")
+
+func BallOut(ball:Ball):
+	if ball.wasLastTouchedByA:
+		mManager.PointToTeamB
+	else:
+		mManager.PointToTeamA
+
+
+func _on_Area_body_entered(body):
+	if body is Ball:
+		BallOut(body)
+	else:
+		print (typeof(body))
+"
+
+[sub_resource type="BoxShape" id=7]
+extents = Vector3( 100, 2.05, 50 )
+
+[sub_resource type="BoxShape" id=8]
+extents = Vector3( 50, 2.05, 4.5 )
+
+[sub_resource type="BoxShape" id=10]
+extents = Vector3( 4.5, 2.05, 4.5 )
+
 [sub_resource type="PlaneMesh" id=5]
 
 [sub_resource type="SpatialMaterial" id=6]
@@ -74,24 +106,537 @@ script = ExtResource( 2 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+[node name="ColourRect" type="ColorRect" parent="CanvasLayer"]
 visible = false
-margin_right = 288.0
-margin_bottom = 124.0
+margin_left = 425.494
+margin_top = 147.998
+margin_right = 1515.49
+margin_bottom = 955.998
 color = Color( 0, 0.27451, 1, 0.415686 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Label" type="Label" parent="CanvasLayer"]
+[node name="CourtGraphic" type="TextureRect" parent="CanvasLayer/ColourRect"]
+margin_left = 812.0
+margin_top = -38.0
+margin_right = 2612.0
+margin_bottom = 1062.0
+rect_rotation = 90.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 9 )
+stretch_mode = 1
+
+[node name="TeamA" type="Control" parent="CanvasLayer/ColourRect/CourtGraphic"]
+visible = false
+
+[node name="PlayerGraphic" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 1451.07
+margin_top = 207.32
+margin_right = 1851.07
+margin_bottom = 607.32
+rect_scale = Vector2( 0.3, 0.3 )
+hint_tooltip = "Your mum"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic"]
+margin_left = 391.559
+margin_top = 603.213
+margin_right = 1147.56
+margin_bottom = 802.213
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic2" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 1002.08
+margin_top = 200.586
+margin_right = 1402.08
+margin_bottom = 600.586
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic2"]
+margin_left = 391.559
+margin_top = 603.212
+margin_right = 1147.56
+margin_bottom = 802.212
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic3" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 1017.8
+margin_top = 481.201
+margin_right = 1417.8
+margin_bottom = 881.201
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic3"]
+margin_left = 391.559
+margin_top = 603.212
+margin_right = 1147.56
+margin_bottom = 802.212
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic4" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 1024.53
+margin_top = 755.081
+margin_right = 1424.53
+margin_bottom = 1155.08
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic4"]
+margin_left = 391.559
+margin_top = 603.213
+margin_right = 1147.56
+margin_bottom = 802.213
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic5" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 1435.35
+margin_top = 746.101
+margin_right = 1835.35
+margin_bottom = 1146.1
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic5"]
+margin_left = 391.559
+margin_top = 603.213
+margin_right = 1147.56
+margin_bottom = 802.213
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic6" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 1489.23
+margin_top = 472.221
+margin_right = 1889.23
+margin_bottom = 872.221
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic6"]
+margin_left = 391.559
+margin_top = 603.213
+margin_right = 1147.56
+margin_bottom = 802.213
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic7" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 916.775
+margin_top = 1255.7
+margin_right = 1316.78
+margin_bottom = 1655.7
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic7"]
+margin_left = 391.559
+margin_top = 603.213
+margin_right = 1147.56
+margin_bottom = 802.213
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic8" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 1087.39
+margin_top = 1260.19
+margin_right = 1487.39
+margin_bottom = 1660.19
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic8"]
+margin_left = 391.559
+margin_top = 603.213
+margin_right = 1147.56
+margin_bottom = 802.213
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic9" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 1233.31
+margin_top = 1271.41
+margin_right = 1633.31
+margin_bottom = 1671.41
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic9"]
+margin_left = 391.559
+margin_top = 603.212
+margin_right = 1147.56
+margin_bottom = 802.212
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic10" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 1390.45
+margin_top = 1271.41
+margin_right = 1790.45
+margin_bottom = 1671.41
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic10"]
+margin_left = 391.559
+margin_top = 603.213
+margin_right = 1147.56
+margin_bottom = 802.213
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic11" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 1525.15
+margin_top = 1282.64
+margin_right = 1925.15
+margin_bottom = 1682.64
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic11"]
+margin_left = 391.559
+margin_top = 603.212
+margin_right = 1147.56
+margin_bottom = 802.212
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic12" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+margin_left = 1698.01
+margin_top = 1287.13
+margin_right = 2098.01
+margin_bottom = 1687.13
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic12"]
+margin_left = 391.559
+margin_top = 603.212
+margin_right = 1147.56
+margin_bottom = 802.212
+rect_rotation = -89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="TeamB" type="Control" parent="CanvasLayer/ColourRect/CourtGraphic"]
+visible = false
+margin_left = 1800.0
+margin_top = 1100.0
+margin_right = 1800.0
+margin_bottom = 1100.0
+rect_rotation = 180.0
+
+[node name="PlayerGraphic" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 1451.07
+margin_top = 207.32
+margin_right = 1851.07
+margin_bottom = 607.32
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic"]
+margin_left = -21.166
+margin_top = -148.158
+margin_right = 734.834
+margin_bottom = 50.8423
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic2" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 1002.08
+margin_top = 200.586
+margin_right = 1402.08
+margin_bottom = 600.586
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic2"]
+margin_left = -21.165
+margin_top = -148.158
+margin_right = 734.835
+margin_bottom = 50.8418
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic3" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 1017.8
+margin_top = 481.201
+margin_right = 1417.8
+margin_bottom = 881.201
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic3"]
+margin_left = -21.165
+margin_top = -148.158
+margin_right = 734.835
+margin_bottom = 50.8418
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic4" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 1024.53
+margin_top = 755.081
+margin_right = 1424.53
+margin_bottom = 1155.08
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic4"]
+margin_left = -21.165
+margin_top = -148.158
+margin_right = 734.835
+margin_bottom = 50.8418
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic5" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 1435.35
+margin_top = 746.101
+margin_right = 1835.35
+margin_bottom = 1146.1
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic5"]
+margin_left = -21.165
+margin_top = -148.158
+margin_right = 734.835
+margin_bottom = 50.8423
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic6" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 1489.23
+margin_top = 472.221
+margin_right = 1889.23
+margin_bottom = 872.221
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic6"]
+margin_left = -21.165
+margin_top = -148.158
+margin_right = 734.835
+margin_bottom = 50.8423
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic7" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 916.775
+margin_top = 1255.7
+margin_right = 1316.78
+margin_bottom = 1655.7
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic7"]
+margin_left = -21.166
+margin_top = -148.158
+margin_right = 734.834
+margin_bottom = 50.8423
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic8" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 1087.39
+margin_top = 1260.19
+margin_right = 1487.39
+margin_bottom = 1660.19
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic8"]
+margin_left = -21.165
+margin_top = -148.158
+margin_right = 734.835
+margin_bottom = 50.8418
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic9" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 1233.31
+margin_top = 1271.41
+margin_right = 1633.31
+margin_bottom = 1671.41
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic9"]
+margin_left = -21.166
+margin_top = -148.158
+margin_right = 734.834
+margin_bottom = 50.8423
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic10" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 1390.45
+margin_top = 1271.41
+margin_right = 1790.45
+margin_bottom = 1671.41
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic10"]
+margin_left = -21.165
+margin_top = -148.158
+margin_right = 734.835
+margin_bottom = 50.8418
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic11" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 1525.15
+margin_top = 1282.64
+margin_right = 1925.15
+margin_bottom = 1682.64
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic11"]
+margin_left = -21.165
+margin_top = -148.158
+margin_right = 734.835
+margin_bottom = 50.8418
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="PlayerGraphic12" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+margin_left = 1698.01
+margin_top = 1287.13
+margin_right = 2098.01
+margin_bottom = 1687.13
+rect_scale = Vector2( 0.3, 0.3 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 16 )
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic12"]
+margin_left = -21.166
+margin_top = -148.158
+margin_right = 734.834
+margin_bottom = 50.8418
+rect_rotation = 89.9999
+custom_fonts/font = ExtResource( 18 )
+text = "999955695"
+
+[node name="Console" type="ColorRect" parent="CanvasLayer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -808.0
+margin_right = 1090.0
+color = Color( 0, 0.27451, 1, 0 )
+script = ExtResource( 19 )
+
+[node name="ConsoleLine" parent="CanvasLayer/Console" instance=ExtResource( 20 )]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -67.0
+margin_right = 439.0
+margin_bottom = 0.0
+
+[node name="FPS Counter" type="Label" parent="CanvasLayer"]
 margin_right = 267.0
 margin_bottom = 88.0
 script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+[node name="Score" type="TextureRect" parent="CanvasLayer"]
 anchor_left = 0.025
 anchor_top = 0.025
 anchor_right = 1.0
@@ -99,27 +644,25 @@ anchor_bottom = 0.025
 margin_right = -1561.0
 margin_bottom = 108.0
 texture = ExtResource( 13 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource( 17 )
 
-[node name="ScoreTeamAText" type="Label" parent="CanvasLayer/TextureRect"]
+[node name="ScoreTeamAText" type="Label" parent="CanvasLayer/Score"]
 margin_left = 108.0
 margin_top = 6.0
 margin_right = 252.0
 margin_bottom = 50.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = ExtResource( 21 )
 text = "AUS"
 
-[node name="ScoreTeamBText" type="Label" parent="CanvasLayer/TextureRect"]
+[node name="ScoreTeamBText" type="Label" parent="CanvasLayer/Score"]
 margin_left = 109.89
 margin_top = 57.6568
 margin_right = 253.89
 margin_bottom = 101.657
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = ExtResource( 21 )
 text = "FRA"
 
-[node name="ScoreTeamASetScore" type="Label" parent="CanvasLayer/TextureRect"]
+[node name="ScoreTeamASetScore" type="Label" parent="CanvasLayer/Score"]
 margin_left = 239.0
 margin_top = 24.0
 margin_right = 260.0
@@ -131,7 +674,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScoreTeamBSetScore" type="Label" parent="CanvasLayer/TextureRect"]
+[node name="ScoreTeamBSetScore" type="Label" parent="CanvasLayer/Score"]
 margin_left = 239.0
 margin_top = 75.5466
 margin_right = 260.0
@@ -140,7 +683,7 @@ custom_colors/font_color = Color( 0.929688, 0.52349, 0.330475, 1 )
 custom_fonts/font = SubResource( 2 )
 text = "0"
 
-[node name="ScoreTeamAPointScore" type="Label" parent="CanvasLayer/TextureRect"]
+[node name="ScoreTeamAPointScore" type="Label" parent="CanvasLayer/Score"]
 margin_left = 258.0
 margin_top = 3.0
 margin_right = 308.0
@@ -153,7 +696,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScoreTeamBPointScore" type="Label" parent="CanvasLayer/TextureRect"]
+[node name="ScoreTeamBPointScore" type="Label" parent="CanvasLayer/Score"]
 margin_left = 258.0
 margin_top = 55.0
 margin_right = 308.0
@@ -165,6 +708,49 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ColourRect2" type="ColorRect" parent="CanvasLayer"]
+visible = false
+margin_left = 1.04538
+margin_top = 277.364
+margin_right = 63.0454
+margin_bottom = 759.364
+
+[node name="ColourRect3" type="ColorRect" parent="CanvasLayer"]
+margin_left = 1438.76
+margin_top = 977.816
+margin_right = 1748.76
+margin_bottom = 1065.82
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect3"]
+margin_right = 310.0
+margin_bottom = 89.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 18 )
+text = "Substutition"
+align = 1
+valign = 1
+
+[node name="ColourRect4" type="ColorRect" parent="CanvasLayer"]
+margin_left = 1077.76
+margin_top = 977.816
+margin_right = 1387.76
+margin_bottom = 1065.82
+
+[node name="Label" type="Label" parent="CanvasLayer/ColourRect4"]
+margin_right = 310.0
+margin_bottom = 89.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 18 )
+text = "Time Out"
+align = 1
+valign = 1
+
+[node name="Button" type="Button" parent="CanvasLayer"]
+margin_left = 1811.05
+margin_top = 979.44
+margin_right = 1906.05
+margin_bottom = 1067.44
 
 [node name="Lights" type="Node" parent="."]
 pause_mode = 2
@@ -237,6 +823,46 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ZoneOut" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.443, 0 )
+script = SubResource( 9 )
+
+[node name="StaticBody" type="StaticBody" parent="ZoneOut" groups=["ZoneOut"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, -54.5 )
+
+[node name="CollisionShape" type="CollisionShape" parent="ZoneOut/StaticBody"]
+shape = SubResource( 7 )
+
+[node name="StaticBody2" type="StaticBody" parent="ZoneOut" groups=["ZoneOut"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, 54.5 )
+
+[node name="CollisionShape" type="CollisionShape" parent="ZoneOut/StaticBody2"]
+shape = SubResource( 7 )
+
+[node name="StaticBody3" type="StaticBody" parent="ZoneOut" groups=["ZoneOut"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 59, -1.6, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="ZoneOut/StaticBody3"]
+shape = SubResource( 8 )
+
+[node name="StaticBody4" type="StaticBody" parent="ZoneOut" groups=["ZoneOut"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -59, -1.6, 0 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="ZoneOut/StaticBody4"]
+shape = SubResource( 8 )
+
+[node name="ZoneInA" type="StaticBody" parent="ZoneOut" groups=["ZoneInA"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, -1.6, 0 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="ZoneOut/ZoneInA"]
+shape = SubResource( 10 )
+
+[node name="ZoneInB" type="StaticBody" parent="ZoneOut" groups=["ZoneInB"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, -1.6, 0 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="ZoneOut/ZoneInB"]
+shape = SubResource( 10 )
 
 [node name="Building" type="Node" parent="."]
 

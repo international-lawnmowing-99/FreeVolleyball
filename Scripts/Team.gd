@@ -9,7 +9,7 @@ var teamName:String
 var isHuman:bool = false
 
 var isLiberoOnCourt:bool
-var isNextToAttack:bool
+var isNextToSpike:bool
 var markUndoChangesToRoles:bool
 
 var allPlayers = []
@@ -96,7 +96,7 @@ var ball:Ball
 # Setter in 1 so outside, middle, oppo etc in 2,3,4...
 var transitionPositionsSetterBack = [ Vector3(0.5, 0, 0), Vector3(4, 0, -3.75), Vector3(4, 0, 0), Vector3(4, 0, 3.75), Vector3(8, 0, 0), Vector3(5.5, 0, 3.15) ]
 #    //Setter in 4
-var transitionPositionsSetterFront = [Vector3(7.75, 0, 4), Vector3(8, 0, 0), Vector3(5.5, 0, -3.15), Vector3(0.5, 0, 0), Vector3(4, 0, -3.5), Vector3(4, 0, 0) ]
+var transitionPositionsSetterFront = [Vector3(7.75, 0, -4), Vector3(8, 0, 0), Vector3(5.5, 0, 3.15), Vector3(0.5, 0, 0), Vector3(4, 0, 3.75), Vector3(4, 0, 0) ]
 var defaultPositions = [
 	Vector3(6,0,-4),
 	Vector3(2,0,-4),
@@ -124,6 +124,7 @@ var prereceiveState:State = load("res://Scripts/State/Team/TeamPreReceive.gd").n
 
 func init(_ball, choiceState, gameWorld, clubOrInternational):
 	var team = gameWorld.GetTeam(choiceState, clubOrInternational)
+	teamName = team.teamName
 	allPlayers = team.allPlayers
 	
 	ball = _ball
@@ -179,7 +180,7 @@ func PlaceTeam():
 		
 		if i == 6:
 			libero = lad
-			lad.rotate_y(18)
+			lad.get_child(2).ChangeShirtColour()
 		
 		lad.ball = ball
 			
@@ -187,6 +188,8 @@ func PlaceTeam():
 			lad.serveState = load("res://Scripts/State/Athlete/AthleteHuman/AthleteHumanServeState.gd").new()
 		else:
 			lad.serveState = load("res://Scripts/State/Athlete/AthleteComputer/AthleteComputerServeState.gd").new()
+
+		
 
 func xzVector(vec:Vector3):
 	return Vector3(vec.x, 0, vec.z)
@@ -222,14 +225,19 @@ func _process(_delta):
 	stateMachine.Update()
 
 func Rotate():
+#	if isHuman:
+#		print(teamName + "  ROTATING")
+#
+#		for i in courtPlayers.size():
+#			print(courtPlayers[i].stats.lastName + "  |  " + str(Enums.Role.keys()[courtPlayers[i].role]) + " " + str(courtPlayers[i].rotationPosition))
+
 	if markUndoChangesToRoles:
-		outsideFront.roleCurrentlyPerforming = Athlete.Role.Outside
-		oppositeHitter.roleCurrentlyPerforming = Athlete.Role.Opposite
+		outsideFront.role = Enums.Role.Outside
+		oppositeHitter.role = Enums.Role.Opposite
 		markUndoChangesToRoles = false
 	
 	server += 1
 	if server >= 6:
-		
 		server = 0
 	
 	for athlete in courtPlayers:
@@ -237,7 +245,7 @@ func Rotate():
 			athlete.rotationPosition = 6
 		else:
 			athlete.rotationPosition -= 1
-			
+	CachePlayers()
 	CheckForLiberoChange()
 	CachePlayers()
 
@@ -245,51 +253,71 @@ func BallHitOverNet():
 	stateMachine.SetCurrentState(receiveState)
 
 func CheckForLiberoChange():
-#// if the libero is entering the frontcourt, get rid of them
+#	if isHuman:
+#		print("\nChecking for libero change \nisNextToSpike? " + str(isNextToSpike))
+# if the libero is entering the frontcourt, get rid of them
 	if isLiberoOnCourt && libero.FrontCourt():
 		InstantaneouslySwapPlayers(libero, benchPlayers[0])
 		isLiberoOnCourt = false
-
-#// if the back middle isn't serving, get rid of them
+# if the back middle isn't serving, get rid of them
 	if !isLiberoOnCourt && middleBack:
-		if !isNextToAttack:
+
+		if !isNextToSpike:
+#			print(teamName + " current server: " + courtPlayers[server].stats.lastName)
 			if middleBack != courtPlayers[server]:
+				print("\nMiddleBack: " + middleBack.stats.lastName)
+				print("courtPlayers[server]: " + courtPlayers[server].stats.lastName + "\n")
 				InstantaneouslySwapPlayers(middleBack, libero)
 				isLiberoOnCourt = true
 
-			else:
-				return
 		else:
 			InstantaneouslySwapPlayers(middleBack, libero)
 			isLiberoOnCourt = true
 
-func InstantaneouslySwapPlayers(outgoing, incoming):
+func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
+#	if isHuman:
+#		print("Swapping " + outgoing.name + " for " + incoming.name)
+	
+	var outgoingIndex = courtPlayers.find(outgoing)
+	if outgoingIndex == -1:
+		print("Not found outgoing player: " + outgoing.name)
+		for lad in courtPlayers:
+			print ("court: " + lad.name + " " + str(lad.rotationPosition))
+		for lad in benchPlayers:
+			print ("bench: " + lad.name)
+	courtPlayers.remove(outgoingIndex)
+	
+	var incomingIndex = benchPlayers.find(incoming)
+	if incomingIndex == -1:
+		print("Not found outgoing player: " + incoming.name)
+		for lad in courtPlayers:
+			print ("court: " + lad.name)
+		for lad in benchPlayers:
+			print ("bench: " + lad.name)
+	benchPlayers.remove(incomingIndex)
 
-	var tempPos = incoming.translation
+	var tempPos = Vector3(incoming.translation.x, 0, incoming.translation.z)
 	incoming.translation = outgoing.translation
 	outgoing.translation = tempPos
 
 	incoming.rotationPosition = outgoing.rotationPosition
 	outgoing.rotationPosition = -1
 
-	courtPlayers.append(incoming)
-	benchPlayers.append(outgoing)
+	courtPlayers.insert(outgoingIndex, incoming)
+	benchPlayers.insert(incomingIndex, outgoing)
 
-	courtPlayers.remove(outgoing)
-	benchPlayers.remove(incoming)
 
-	if (incoming.roleCurrentlyPerforming != Athlete.Role.Libero && outgoing.roleCurrentlyPerforming != Athlete.Role.Libero):
+	if (incoming.role != Enums.Role.Libero && outgoing.role != Enums.Role.Libero):
+		incoming.role = outgoing.role
 
-		incoming.roleCurrentlyPerforming = outgoing.roleCurrentlyPerforming
+	incoming.moveTarget = incoming.translation
+	outgoing.moveTarget = outgoing.translation
 
-		incoming.moveTarget = incoming.translation
-		outgoing.moveTarget = outgoing.translation
-
-		var tempRot = incoming.rotation
-		incoming.rotation = outgoing.rotation
-		outgoing.rotation = tempRot
-		outgoing.Chill()
-
+	var tempRot = incoming.rotation
+	incoming.rotation = outgoing.rotation
+	outgoing.rotation = tempRot
+	
+	outgoing.stateMachine.SetCurrentState(outgoing.chillState)
 func CachePlayers():
 	for player in courtPlayers:
 		if player.role == Enums.Role.Setter:
@@ -429,3 +457,7 @@ func CheckUnchangingTransitionPositions(athlete):
 
 func CheckIfFlipped(vectorToBeChecked:Vector3):
 	return Vector3(flip * vectorToBeChecked.x, vectorToBeChecked.y, flip * vectorToBeChecked.z)
+
+func Chill():
+	for player in courtPlayers:
+		player.stateMachine.SetCurrentState(player.chillState)

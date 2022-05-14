@@ -59,6 +59,8 @@ func SpikeBall(team:Team):
 		ball.linear_velocity = ball.FindWellBehavedParabola(ball.translation, ball.attackTarget,  min(2.45, team.setTarget.height + 0.5))
 		ball.difficultyOfReception = team.chosenSpiker.stats.spike/4
 		team.setTarget = null
+		
+	# "#Efficiency"
 	team.get_tree().get_root().get_node("MatchScene").BallOverNet(team.isHuman)
-
+	team.get_tree().root.find_node("MatchScene", true, false).console.AddNewLine(team.chosenSpiker.stats.lastName + " cranks the ball at " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 	

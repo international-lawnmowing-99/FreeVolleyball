@@ -58,8 +58,8 @@ func Update(_athlete:Athlete):
 			if timeTillBallReachesSetTarget <= athlete.CalculateTimeTillJumpPeak(takeOffXZ) && athlete.team.stateMachine.currentState != athlete.team.receiveState:
 				spikeState = SpikeState.Runup
 				athlete.moveTarget = takeOffXZ
-				print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
-				print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState))
+#				print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
+#				print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState))
 
 		SpikeState.Runup:
 			if athlete.team.xzVector(takeOffXZ - athlete.translation).length() < 0.1:
