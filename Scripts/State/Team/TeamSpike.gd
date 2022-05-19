@@ -62,5 +62,9 @@ func SpikeBall(team:Team):
 		
 	# "#Efficiency"
 	team.get_tree().get_root().get_node("MatchScene").BallOverNet(team.isHuman)
-	team.get_tree().root.find_node("MatchScene", true, false).console.AddNewLine(team.chosenSpiker.stats.lastName + " cranks the ball at " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
+	
+	# 9 court target segments
+	# standard aggressive spike, tool off block, tip, 
+	
+	Console.AddNewLine(team.chosenSpiker.stats.lastName + " cranks the ball at " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 	

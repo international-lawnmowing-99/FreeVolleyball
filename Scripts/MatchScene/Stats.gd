@@ -55,7 +55,7 @@ func MiddleEvaluation()->float:
 
 	eval += serve / 10
 	eval += spike / 4
-#//Debug.Log("MiddleEvaluation " + eval + " " + lastName);
+#Debug.Log("MiddleEvaluation " + eval + " " + lastName);
 
 	return eval
 	

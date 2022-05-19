@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scenes/Console.gd" type="Script" id=1]
+
+[node name="Console" type="ColorRect"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -808.0
+margin_right = 1090.0
+color = Color( 0, 0.27451, 1, 0 )
+script = ExtResource( 1 )

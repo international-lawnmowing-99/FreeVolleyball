@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Addons/DebugDraw3D.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/MatchScene/MatchManager.gd" type="Script" id=2]
@@ -18,9 +18,11 @@
 [ext_resource path="res://Textures/antenna-uv.png" type="Texture" id=16]
 [ext_resource path="res://Scenes/Score.gd" type="Script" id=17]
 [ext_resource path="res://Scenes/a font.tres" type="DynamicFont" id=18]
-[ext_resource path="res://Scenes/Console.gd" type="Script" id=19]
-[ext_resource path="res://MatchScene/ConsoleLine.tscn" type="PackedScene" id=20]
+[ext_resource path="res://Textures/headIcon.jpg" type="Texture" id=19]
+[ext_resource path="res://Scenes/PreMatchUI.gd" type="Script" id=20]
 [ext_resource path="res://Scenes/teamNameFont.tres" type="DynamicFont" id=21]
+[ext_resource path="res://Textures/net-graphic.png" type="Texture" id=22]
+[ext_resource path="res://MatchScene/NameCard1.tscn" type="PackedScene" id=23]
 
 [sub_resource type="DynamicFont" id=2]
 size = 20
@@ -100,6 +102,30 @@ albedo_texture = ExtResource( 9 )
 normal_enabled = true
 normal_scale = 0.05
 normal_texture = ExtResource( 8 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 24
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 14 )
+
+[sub_resource type="DynamicFont" id=12]
+size = 50
+outline_size = 4
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 14 )
+
+[sub_resource type="StyleBoxFlat" id=13]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color( 1, 0.678431, 0, 1 )
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
 [node name="MatchScene" type="Spatial"]
 script = ExtResource( 2 )
@@ -616,21 +642,6 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="Console" type="ColorRect" parent="CanvasLayer"]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = -808.0
-margin_right = 1090.0
-color = Color( 0, 0.27451, 1, 0 )
-script = ExtResource( 19 )
-
-[node name="ConsoleLine" parent="CanvasLayer/Console" instance=ExtResource( 20 )]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = -67.0
-margin_right = 439.0
-margin_bottom = 0.0
-
 [node name="FPS Counter" type="Label" parent="CanvasLayer"]
 margin_right = 267.0
 margin_bottom = 88.0
@@ -717,6 +728,7 @@ margin_right = 63.0454
 margin_bottom = 759.364
 
 [node name="ColourRect3" type="ColorRect" parent="CanvasLayer"]
+visible = false
 margin_left = 1438.76
 margin_top = 977.816
 margin_right = 1748.76
@@ -732,6 +744,7 @@ align = 1
 valign = 1
 
 [node name="ColourRect4" type="ColorRect" parent="CanvasLayer"]
+visible = false
 margin_left = 1077.76
 margin_top = 977.816
 margin_right = 1387.76
@@ -747,6 +760,7 @@ align = 1
 valign = 1
 
 [node name="Button" type="Button" parent="CanvasLayer"]
+visible = false
 margin_left = 1811.05
 margin_top = 979.44
 margin_right = 1906.05
@@ -885,3 +899,150 @@ script = ExtResource( 4 )
 [node name="ball" parent="." instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -3 )
 angular_velocity = Vector3( 2, 3, 1 )
+
+[node name="PreMatchUI" type="CanvasLayer" parent="."]
+script = ExtResource( 20 )
+
+[node name="ColourRect" type="ColorRect" parent="PreMatchUI"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.588235 )
+
+[node name="Label" type="Label" parent="PreMatchUI/ColourRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -111.5
+margin_bottom = -44.5
+custom_fonts/font = ExtResource( 18 )
+text = "Australia vs. France"
+align = 1
+
+[node name="Label2" type="Label" parent="PreMatchUI/ColourRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -34.5
+margin_bottom = 34.5
+custom_fonts/font = SubResource( 11 )
+text = "Friday 11/11/2022
+Sydney Olympic Park, Australia"
+align = 1
+
+[node name="Button" type="Button" parent="PreMatchUI/ColourRect"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -328.5
+margin_top = 227.5
+margin_right = 328.5
+margin_bottom = 380.5
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Team Selection "
+icon = ExtResource( 19 )
+
+[node name="TeamSelectionUI" type="ColorRect" parent="PreMatchUI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 1, 0, 0, 1 )
+
+[node name="Line2D" type="Line2D" parent="PreMatchUI/TeamSelectionUI"]
+position = Vector2( 0, 272 )
+points = PoolVector2Array( 1920.37, -3.66284, -2.39679, -3.8028 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TextureRect" type="TextureRect" parent="PreMatchUI/TeamSelectionUI"]
+margin_left = 1532.0
+margin_top = 2.0
+margin_right = 1888.0
+margin_bottom = 279.0
+texture = ExtResource( 22 )
+expand = true
+stretch_mode = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PreMatchUI/TeamSelectionUI"]
+margin_left = 140.0
+margin_top = 26.0
+margin_right = 1455.0
+margin_bottom = 239.0
+
+[node name="OppositionTeam" type="GridContainer" parent="PreMatchUI/TeamSelectionUI/ScrollContainer"]
+margin_right = 2720.0
+margin_bottom = 201.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 6
+
+[node name="NameCard1" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_right = 450.0
+margin_bottom = 80.0
+
+[node name="NameCard2" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_left = 454.0
+margin_right = 904.0
+margin_bottom = 80.0
+
+[node name="NameCard3" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_left = 908.0
+margin_right = 1358.0
+margin_bottom = 80.0
+
+[node name="NameCard4" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_left = 1362.0
+margin_right = 1812.0
+margin_bottom = 80.0
+
+[node name="NameCard5" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_left = 1816.0
+margin_right = 2266.0
+margin_bottom = 80.0
+
+[node name="NameCard6" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_left = 2270.0
+margin_right = 2720.0
+margin_bottom = 80.0
+
+[node name="NameCard7" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_top = 84.0
+margin_right = 450.0
+margin_bottom = 164.0
+
+[node name="NameCard8" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_left = 454.0
+margin_top = 84.0
+margin_right = 904.0
+margin_bottom = 164.0
+
+[node name="NameCard9" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_left = 908.0
+margin_top = 84.0
+margin_right = 1358.0
+margin_bottom = 164.0
+
+[node name="NameCard10" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_left = 1362.0
+margin_top = 84.0
+margin_right = 1812.0
+margin_bottom = 164.0
+
+[node name="NameCard11" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_left = 1816.0
+margin_top = 84.0
+margin_right = 2266.0
+margin_bottom = 164.0
+
+[node name="NameCard12" parent="PreMatchUI/TeamSelectionUI/ScrollContainer/OppositionTeam" instance=ExtResource( 23 )]
+margin_left = 2270.0
+margin_top = 84.0
+margin_right = 2720.0
+margin_bottom = 164.0
+
+[connection signal="pressed" from="PreMatchUI/ColourRect/Button" to="PreMatchUI" method="_on_Button_pressed"]

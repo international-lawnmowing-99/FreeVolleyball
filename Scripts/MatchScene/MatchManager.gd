@@ -11,7 +11,7 @@ onready var teamB:Team = $TeamB
 onready var ball = $ball
 
 onready var score = $CanvasLayer/Score
-onready var console = $CanvasLayer/Console
+#onready var console = $CanvasLayer/Console
 
 var isTeamAServing:bool
 

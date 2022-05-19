@@ -17,9 +17,42 @@ func Enter(team:Team):
 		team.setter.stateMachine.SetCurrentState(team.setter.setState)
 		team.chosenSetter = team.setter
 	
+	
+	
+	# Choose to attack on 2nd??
+	if team.chosenSetter.FrontCourt():
+		var dump = bool(randi()%2)
+		if dump:
+			Console.AddNewLine("Dumping", Color.white)
+
+	#Can the spiker get back to their runup and if not, how will that affect their spike?
+	var possibleSpikers = []
+	
 	for athlete in team.courtPlayers:
 		if athlete!= team.chosenSetter && athlete != team.chosenReceiver && athlete.rb.mode != RigidBody.MODE_RIGID:
 			athlete.stateMachine.SetCurrentState(athlete.transitionState)
+			possibleSpikers.append(athlete)
+			
+	Console.AddNewLine("Choosing set option...")
+
+	var setChoice = randi()%possibleSpikers.size()
+	
+	team.chosenSpiker = possibleSpikers[setChoice]
+	
+	match team.chosenSpiker.role:
+		Enums.Role.Middle:
+			team.setTarget = team.chosenSpiker.middleSpikes[0]
+		Enums.Role.Outside:
+			if team.chosenSpiker.FrontCourt():
+				team.setTarget = team.chosenSpiker.outsideFrontSpikes[0]
+			else:
+				team.setTarget = team.chosenSpiker.outsideBackSpikes[0]
+		Enums.Role.Opposite:
+			if team.chosenSpiker.FrontCourt():
+				team.setTarget = team.chosenSpiker.oppositeFrontSpikes[0]
+			else:
+				team.setTarget = team.chosenSpiker.oppositeBackSpikes[0]
+	team.chosenSpiker.setRequest = team.setTarget
 func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
 	
@@ -34,12 +67,24 @@ func Exit(team:Team):
 
 
 func SetBall(team:Team):
+	
+	# mint set, poor set (short, long, mis-timed, tight, over, or some combo thereof - so many ways to set poorly!), 2 hits/carry ("setting error")
+	randomize()
+	var setExecution = randi()%3
+	
+	if setExecution == 0:
+		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.darkorchid)
+	elif setExecution == 1:
+		Console.AddNewLine(team.chosenSetter.stats.lastName + " shitty set", Color.red)
+	elif setExecution == 2:
+		Console.AddNewLine(team.chosenSetter.stats.lastName + " setting error", Color.blue)
+		
 	if !team.setTarget:
 		#setTarget = Set(-4.5, 0, 0, randf() * 6 + 2.5)
 		#ball.attackTarget = setTarget.target
 		#team.ball.linear_velocity = team.ball.CalculateWellBehavedParabola(team.ball.translation, setTarget.target, setTarget.height)
 		#BallOverNet()
-		team.get_tree().root.find_node("MatchScene", true, false).console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set")
+
 		team.chosenSetter.setState.WaitThenDefend(team.chosenSetter, 0.5)
 		team.chosenSetter = null
 		if (team.markUndoChangesToRoles):

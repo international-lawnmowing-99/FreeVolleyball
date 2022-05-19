@@ -226,7 +226,7 @@ func BaseMove(_delta):
 	if rb.mode == RigidBody.MODE_KINEMATIC && translation.distance_to(moveTarget) > .1:
 		var dir = (moveTarget - translation).normalized()
 		translation += dir * stats.speed * _delta
-		if translation.distance_squared_to(moveTarget) < 0.5:
+		if abs(translation.x - moveTarget.x) > .3 && abs(translation.z - moveTarget.z) > .3:
 			look_at_from_position(translation, moveTarget, Vector3.UP)
 			rotate_y(PI)
 			

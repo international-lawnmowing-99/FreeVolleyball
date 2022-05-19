@@ -44,7 +44,7 @@ func Populate(firstNames, lastNames, r:RandomNumberGenerator):
 			stats.verticalJump = rand_range(.2,.5) + rand_range(.2,.5) + rand_range(.2,.5)
 			stats.height = rand_range(.5,.8) + rand_range(.5,.8) + rand_range(.5,.8)
 			stats.speed = rand_range(5,7)
-			#//1.25 is the arm factor of newWoman
+			#1.25 is the arm factor of newWoman
 			stats.spikeHeight = stats.height * (1.33) + stats.verticalJump
 			stats.blockHeight = stats.height * (1.25) + stats.verticalJump
 			stats.setHeight = stats.height + 0.2

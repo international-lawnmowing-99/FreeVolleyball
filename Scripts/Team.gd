@@ -95,7 +95,7 @@ var timeTillDigTarget:float
 var ball:Ball
 # Setter in 1 so outside, middle, oppo etc in 2,3,4...
 var transitionPositionsSetterBack = [ Vector3(0.5, 0, 0), Vector3(4, 0, -3.75), Vector3(4, 0, 0), Vector3(4, 0, 3.75), Vector3(8, 0, 0), Vector3(5.5, 0, 3.15) ]
-#    //Setter in 4
+#    Setter in 4
 var transitionPositionsSetterFront = [Vector3(7.75, 0, -4), Vector3(8, 0, 0), Vector3(5.5, 0, 3.15), Vector3(0.5, 0, 0), Vector3(4, 0, 3.75), Vector3(4, 0, 0) ]
 var defaultPositions = [
 	Vector3(6,0,-4),
@@ -148,7 +148,7 @@ func PlaceTeam():
 
 		else:
 
-			#//bench
+			#bench
 			pos = Vector3(flip * (i + 3), 0, 10)
 			rot = Vector3(0,flip*PI,0)
 

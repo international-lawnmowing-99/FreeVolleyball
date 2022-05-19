@@ -92,6 +92,8 @@ func SignedAngle(from, to, up):
 	else:
 		return unsigned_angle
 
+func BallMaxHeight():
+	return 2.4
 
 func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNet:float):
 	g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)

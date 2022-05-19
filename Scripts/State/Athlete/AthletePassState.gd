@@ -1,7 +1,7 @@
 extends "res://Scripts/State/AthleteState.gd"
 const Enums = preload("res://Scripts/World/Enums.gd")
 
-var ball
+var ball:Ball
 var timeTillBallReachesMe
 var isBallAlreadyPassed:bool = false
 
@@ -25,8 +25,7 @@ func Enter(athlete:Athlete):
 	
 	var m
 	if xPart == 0 && zPart == 0:
-		pass
-		#print("no vel to work with")
+		print("no vel to work with")
 	elif zPart == 0:
 		m = 0
 		#print("m = 0")
@@ -85,7 +84,7 @@ func Update(athlete:Athlete):
 		#athlete.animTree.set("parameters/BlendSpace1D/blend_position", lerp(a, 0, 5*athlete.myDelta))
 		#athlete.digAngle = lerp(athlete.digAngle,0,3*athlete.myDelta)
 		#athlete.RotateDigPlatform(athlete.digAngle)
-	if !isBallAlreadyPassed && ball.translation.y < 1 && \
+	if !isBallAlreadyPassed && ball.inPlay && ball.translation.y < 1 && \
 		(Vector3(ball.translation.x,0, ball.translation.z)).distance_to(athlete.translation) < 1:
 			PassBall(athlete)
 			
@@ -95,14 +94,46 @@ func Exit(athlete:Athlete):
 func PassBall(athlete):
 	isBallAlreadyPassed = true
 	#Engine.time_scale = 0.25
-#	emit_signal("ballPassed")
-	athlete.get_tree().root.find_node("MatchScene", true, false).console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")
+	var receptionTarget
+	#perfect pass, 2-pass, 1-pass, shank, some sort of uncontrolled ball that hits the floor near your feet
+	var passQuality = randi()% 4#5
+	
+	if passQuality == 0:
+		# what is the ideal height for the setter to jump set??
+		receptionTarget = Vector3(athlete.team.flip * 0.5, 2.5, 0)
+		Console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")
+	elif passQuality == 1:
+		receptionTarget = Vector3(athlete.team.flip * rand_range(0.5, 1.5), 2.5, rand_range(-2, 2))
+		Console.AddNewLine(athlete.stats.lastName + " 2-point pass")
+		pass
+	elif passQuality == 2:
+		receptionTarget = Vector3(athlete.translation.x + rand_range(-3,3), 2.4, athlete.translation.z + rand_range(-3,3))
+		Console.AddNewLine(athlete.stats.lastName + " 1-point pass")
+		pass	
+	elif passQuality == 3:
+		ball.linear_velocity.y *= -1
+		if ball.BallMaxHeight() >= 2.4:
+			receptionTarget = ball.BallPositionAtGivenHeight(2.5)
+		else:
+			receptionTarget = ball.BallPositionAtGivenHeight(0)
+
+		Console.AddNewLine(athlete.stats.lastName + " - Shit pass mate")
+		pass	
+	elif passQuality == 4:
+		pass
+
+
 	ball.linear_velocity = Vector3.ZERO
 	ball.gravity_scale = 1
 	ball.angular_velocity += Vector3 ( rand_range(-5,5),rand_range(-5,5), rand_range(-5,5))
-	var receptionTarget = Vector3(athlete.team.flip * 0.5, 2.5, 0)
-	athlete.team.receptionTarget = receptionTarget
 	
+	if athlete.team.isHuman:
+		ball.TouchedByA()
+	else:
+		ball.TouchedByB()
+	
+	athlete.team.receptionTarget = receptionTarget
+		
 	#Bizzare physics hack needed
 	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, rand_range(4,8)))
 	yield(athlete.get_tree(),"idle_frame")
