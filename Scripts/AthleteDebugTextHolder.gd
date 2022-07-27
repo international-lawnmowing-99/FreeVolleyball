@@ -10,7 +10,7 @@ func _ready():
 	athlete = $"../../"
 	text.text = athlete.stats.lastName
 
-	
+
 func _process(delta):
 	var screen_pos = camera.unproject_position(global_transform.origin)
 	text.set_position(screen_pos+Vector2.ONE)
@@ -24,5 +24,3 @@ func _process(delta):
 			text.text += "\n" + athlete.spikeState.SpikeState.keys()[athlete.spikeState.spikeState]
 		if athlete.stateMachine.currentState == athlete.blockState:
 			text.text += "\n" + athlete.blockState.BlockState.keys()[athlete.blockState.blockState]
-
-	

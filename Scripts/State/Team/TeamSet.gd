@@ -14,7 +14,8 @@ func Enter(team:Team):
 			team.middleBack.stateMachine.SetCurrentState(team.middleBack.setState)
 			team.chosenSetter = team.middleBack
 	else:
-		team.setter.stateMachine.SetCurrentState(team.setter.setState)
+		if team.setter.rb.mode == RigidBody.MODE_KINEMATIC:
+			team.setter.stateMachine.SetCurrentState(team.setter.setState)
 		team.chosenSetter = team.setter
 	
 	

@@ -1,4 +1,4 @@
-extends ColorRect
+extends CanvasLayer
 var consoleLine = preload("res://MatchScene/ConsoleLine.tscn")
 
 

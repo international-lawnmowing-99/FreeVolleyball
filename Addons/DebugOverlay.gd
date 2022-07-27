@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-onready var draw =  $"/root/MatchScene/DebugOverlay/DebugDraw3D"
+#onready var draw =  $"/root/MatchScene/DebugOverlay/DebugDraw3D"
 
 func _ready():
 	if not InputMap.has_action("toggle_debug"):

@@ -1,37 +1,68 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://MatchScene/NameCard.gd" type="Script" id=2]
 
-[sub_resource type="DynamicFont" id=14]
-size = 30
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 1 )
-
-[sub_resource type="DynamicFont" id=15]
+[sub_resource type="DynamicFont" id=16]
 size = 20
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 1 )
 
-[node name="NameCard1" type="ColorRect"]
-margin_right = 447.013
-rect_min_size = Vector2( 450, 80 )
+[sub_resource type="DynamicFont" id=17]
+size = 30
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=15]
+size = 18
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )
+
+[node name="NameCard" type="ColorRect"]
+margin_right = 250.0
+margin_bottom = 80.0
+rect_min_size = Vector2( 250, 100 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
 color = Color( 0, 0, 0, 1 )
+script = ExtResource( 2 )
 
-[node name="Label" type="Label" parent="."]
-margin_top = 2.0
-margin_right = 450.0
-margin_bottom = 69.0
-custom_fonts/font = SubResource( 14 )
-text = "Karteez Arminhalf"
-align = 1
+[node name="FirstName" type="Label" parent="."]
+margin_left = 22.0
+margin_top = 32.0
+margin_right = 248.0
+margin_bottom = 73.0
+custom_fonts/font = SubResource( 16 )
+text = "Karteez"
 
-[node name="Label2" type="Label" parent="."]
-margin_left = -1.0
-margin_top = 39.0
-margin_right = 449.0
-margin_bottom = 106.0
+[node name="LastName" type="Label" parent="."]
+margin_left = 22.0
+margin_top = 52.0
+margin_right = 248.0
+margin_bottom = 100.0
+custom_fonts/font = SubResource( 17 )
+text = "Arminhalf"
+
+[node name="Skill" type="Label" parent="."]
+margin_left = 23.0
+margin_right = 273.0
+margin_bottom = 27.0
 custom_fonts/font = SubResource( 15 )
-text = "84     Opposite     199.9cm"
+text = "84"
+
+[node name="Role" type="Label" parent="."]
+margin_left = -16.0
+margin_right = 234.0
+margin_bottom = 27.0
+custom_fonts/font = SubResource( 15 )
+text = "Opposite"
 align = 1
+
+[node name="Height" type="Label" parent="."]
+margin_left = -16.0
+margin_right = 234.0
+margin_bottom = 27.0
+custom_fonts/font = SubResource( 15 )
+text = "199.9cm"
+align = 2

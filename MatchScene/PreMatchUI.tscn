@@ -1,0 +1,700 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://Scenes/PreMatchUI.gd" type="Script" id=2]
+[ext_resource path="res://Textures/headIcon.jpg" type="Texture" id=3]
+[ext_resource path="res://Textures/net-graphic.png" type="Texture" id=4]
+[ext_resource path="res://Textures/143640-allan-border-s-cricket-dos-screenshot-coin-toss.png" type="Texture" id=5]
+[ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://MatchScene/NameCard1.tscn" type="PackedScene" id=7]
+[ext_resource path="res://MatchScene/gridTheme.tres" type="Theme" id=8]
+[ext_resource path="res://Scenes/a font.tres" type="DynamicFont" id=9]
+
+[sub_resource type="DynamicFont" id=11]
+size = 24
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=12]
+size = 50
+outline_size = 4
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 6 )
+
+[sub_resource type="StyleBoxFlat" id=13]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color( 1, 0.678431, 0, 1 )
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="DynamicFont" id=18]
+size = 150
+outline_size = 3
+outline_color = Color( 0.254902, 0.662745, 0.647059, 1 )
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=19]
+size = 89
+outline_size = 3
+outline_color = Color( 0.254902, 0.662745, 0.647059, 1 )
+font_data = ExtResource( 6 )
+
+[sub_resource type="Theme" id=15]
+GridContainer/constants/hseparation = 50
+GridContainer/constants/vseparation = 20
+VBoxContainer/constants/separation = 20
+
+[sub_resource type="StyleBoxFlat" id=17]
+bg_color = Color( 0.756863, 1, 0, 1 )
+
+[node name="PreMatchUI" type="CanvasLayer"]
+script = ExtResource( 2 )
+
+[node name="ColourRectIntro" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.803922 )
+
+[node name="Label" type="Label" parent="ColourRectIntro"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -111.5
+margin_bottom = -44.5
+custom_fonts/font = ExtResource( 9 )
+text = "Australia vs. France"
+align = 1
+
+[node name="Label2" type="Label" parent="ColourRectIntro"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -34.5
+margin_bottom = 34.5
+custom_fonts/font = SubResource( 11 )
+text = "Friday 11/11/2022
+Sydney Olympic Park, Australia"
+align = 1
+
+[node name="Button" type="Button" parent="ColourRectIntro"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -328.5
+margin_top = 227.5
+margin_right = 328.5
+margin_bottom = 380.5
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Continue          "
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="Toss" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.92549, 0.811765, 0.364706, 1 )
+
+[node name="ChooseHeads" type="Button" parent="Toss"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 207.5
+margin_top = -244.5
+margin_right = 864.5
+margin_bottom = -91.5
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Choose Heads"
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ChooseTails" type="Button" parent="Toss"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 211.385
+margin_top = 24.375
+margin_right = 868.385
+margin_bottom = 177.375
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Choose Tails"
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="TextureRect" type="TextureRect" parent="Toss"]
+margin_left = 406.25
+margin_top = 315.378
+margin_right = 1046.25
+margin_bottom = 715.378
+texture = ExtResource( 5 )
+
+[node name="WonToss" type="ColorRect" parent="Toss"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.74902, 0.92549, 0.364706, 1 )
+
+[node name="ChooseServeReceive" type="Button" parent="Toss/WonToss"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 207.5
+margin_top = -244.5
+margin_right = 864.5
+margin_bottom = -91.5
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Choose Serve/Receive"
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ChooseSide" type="Button" parent="Toss/WonToss"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 211.385
+margin_top = 24.375
+margin_right = 868.385
+margin_bottom = 177.375
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Choose Side of Court"
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ChooseServe" type="Button" parent="Toss/WonToss"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 207.5
+margin_top = -236.5
+margin_right = 864.5
+margin_bottom = -83.5
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Choose To Serve"
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ChooseReceive" type="Button" parent="Toss/WonToss"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 211.385
+margin_top = 24.375
+margin_right = 868.385
+margin_bottom = 177.375
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Choose To Receive"
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ChooseCurrentSide" type="Button" parent="Toss/WonToss"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 207.5
+margin_top = -236.5
+margin_right = 864.5
+margin_bottom = -83.5
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Stay On This Side"
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ChooseOtherSide" type="Button" parent="Toss/WonToss"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 211.385
+margin_top = 24.375
+margin_right = 868.385
+margin_bottom = 177.375
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Choose Other Side"
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="InfoText" type="Label" parent="Toss/WonToss"]
+margin_left = 245.852
+margin_top = 522.067
+margin_right = 914.852
+margin_bottom = 721.067
+custom_fonts/font = SubResource( 18 )
+text = "Won Toss"
+
+[node name="CoinResultText" type="Label" parent="Toss/WonToss"]
+margin_left = 201.307
+margin_top = 78.3992
+margin_right = 1164.31
+margin_bottom = 277.399
+custom_fonts/font = SubResource( 18 )
+text = "Coin is UNDEFINED!"
+
+[node name="LostToss" type="ColorRect" parent="Toss"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.192157, 0.52549, 0.0980392, 1 )
+
+[node name="ChooseCurrentSide" type="Button" parent="Toss/LostToss"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 207.5
+margin_top = -244.5
+margin_right = 864.5
+margin_bottom = -91.5
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Choose This Side"
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ChooseOtherSide" type="Button" parent="Toss/LostToss"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 211.385
+margin_top = 24.375
+margin_right = 868.385
+margin_bottom = 177.375
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Choose The Other Side"
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ChooseServe" type="Button" parent="Toss/LostToss"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 207.5
+margin_top = -244.5
+margin_right = 864.5
+margin_bottom = -91.5
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Choose To Serve "
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="ChooseReceive" type="Button" parent="Toss/LostToss"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 211.385
+margin_top = 24.375
+margin_right = 868.385
+margin_bottom = 177.375
+focus_mode = 0
+custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
+custom_fonts/font = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+enabled_focus_mode = 0
+text = "Choose To Receive"
+icon = ExtResource( 3 )
+expand_icon = true
+
+[node name="InfoText2" type="Label" parent="Toss/LostToss"]
+margin_left = 274.36
+margin_top = 507.812
+margin_right = 943.361
+margin_bottom = 706.812
+custom_fonts/font = SubResource( 18 )
+text = "Lost Toss"
+
+[node name="CoinResultText" type="Label" parent="Toss/LostToss"]
+margin_left = 124.689
+margin_top = 276.179
+margin_right = 1087.69
+margin_bottom = 475.179
+custom_fonts/font = SubResource( 18 )
+text = "Coin is Heads!"
+
+[node name="OppositionChoiceText" type="Label" parent="Toss/LostToss"]
+margin_left = 56.981
+margin_top = 759.046
+margin_right = 1839.98
+margin_bottom = 958.046
+custom_fonts/font = SubResource( 19 )
+text = "Other team chose to Serve"
+
+[node name="TeamSelectionUI" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 1, 0, 0, 1 )
+
+[node name="Line2D" type="Line2D" parent="TeamSelectionUI"]
+position = Vector2( 0, 184 )
+points = PoolVector2Array( 1920.37, -3.66284, -2.39679, -3.8028 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="HumanTeamBench" type="GridContainer" parent="TeamSelectionUI"]
+margin_left = 62.2182
+margin_top = 263.38
+margin_right = 636.218
+margin_bottom = 987.38
+theme = SubResource( 15 )
+
+[node name="NameCard1" parent="TeamSelectionUI/HumanTeamBench" instance=ExtResource( 7 )]
+margin_bottom = 100.0
+
+[node name="NameCard2" parent="TeamSelectionUI/HumanTeamBench" instance=ExtResource( 7 )]
+margin_top = 120.0
+margin_bottom = 220.0
+
+[node name="NameCard3" parent="TeamSelectionUI/HumanTeamBench" instance=ExtResource( 7 )]
+margin_top = 240.0
+margin_bottom = 340.0
+
+[node name="NameCard4" parent="TeamSelectionUI/HumanTeamBench" instance=ExtResource( 7 )]
+margin_top = 360.0
+margin_bottom = 460.0
+
+[node name="NameCard5" parent="TeamSelectionUI/HumanTeamBench" instance=ExtResource( 7 )]
+margin_top = 480.0
+margin_bottom = 580.0
+
+[node name="ColorRect" type="ColorRect" parent="TeamSelectionUI"]
+margin_left = 808.0
+margin_top = 197.0
+margin_right = 1796.0
+margin_bottom = 967.0
+color = Color( 0.839216, 0.623529, 0.207843, 1 )
+
+[node name="LiberoNameCard" parent="TeamSelectionUI" instance=ExtResource( 7 )]
+margin_left = 656.129
+margin_top = 726.075
+margin_right = 906.129
+margin_bottom = 826.075
+
+[node name="Line2D2" type="Line2D" parent="TeamSelectionUI"]
+position = Vector2( 787.567, 462.377 )
+scale = Vector2( 0.326706, 1.39676 )
+points = PoolVector2Array( 3177.78, -3.66284, -2.39679, -3.8028 )
+default_color = Color( 0.867188, 0.732952, 0.474243, 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Line2D3" type="Line2D" parent="TeamSelectionUI"]
+position = Vector2( 787.567, 218.695 )
+scale = Vector2( 0.326706, 2.57903 )
+points = PoolVector2Array( 3177.78, -3.66284, -2.39679, -3.8028 )
+default_color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TeamName" type="Label" parent="TeamSelectionUI"]
+margin_left = 16.0
+margin_right = 619.0
+margin_bottom = 199.0
+custom_fonts/font = SubResource( 18 )
+text = "Australia"
+
+[node name="Button" type="Button" parent="TeamSelectionUI"]
+margin_left = 1490.36
+margin_top = 947.916
+margin_right = 1920.36
+margin_bottom = 1079.92
+custom_fonts/font = ExtResource( 9 )
+text = "Accept"
+
+[node name="HumanTeam" type="Control" parent="TeamSelectionUI"]
+
+[node name="NameCard1" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 1532.31
+margin_top = 545.542
+margin_right = 1782.31
+margin_bottom = 645.542
+
+[node name="NameCard2" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 1531.58
+margin_top = 295.755
+margin_right = 1781.58
+margin_bottom = 395.755
+
+[node name="NameCard3" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 1182.0
+margin_top = 296.0
+margin_right = 1432.0
+margin_bottom = 396.0
+
+[node name="NameCard4" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 832.0
+margin_top = 295.0
+margin_right = 1082.0
+margin_bottom = 395.0
+
+[node name="NameCard5" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 832.0
+margin_top = 546.0
+margin_right = 1082.0
+margin_bottom = 646.0
+
+[node name="NameCard6" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 1183.0
+margin_top = 546.0
+margin_right = 1433.0
+margin_bottom = 646.0
+
+[node name="TeamLineUpsUI" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.972549, 0.976471, 0.576471, 1 )
+
+[node name="OppositionTeam" type="GridContainer" parent="TeamLineUpsUI"]
+margin_left = 1316.0
+margin_top = 119.0
+margin_right = 1856.0
+margin_bottom = 819.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 8 )
+columns = 2
+
+[node name="NameCard1" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_bottom = 100.0
+
+[node name="NameCard2" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_right = 540.0
+margin_bottom = 100.0
+
+[node name="NameCard3" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_top = 120.0
+margin_bottom = 220.0
+
+[node name="NameCard4" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_top = 120.0
+margin_right = 540.0
+margin_bottom = 220.0
+
+[node name="NameCard5" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_top = 240.0
+margin_bottom = 340.0
+
+[node name="NameCard6" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_top = 240.0
+margin_right = 540.0
+margin_bottom = 340.0
+
+[node name="NameCard7" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_top = 360.0
+margin_bottom = 460.0
+
+[node name="NameCard8" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_top = 360.0
+margin_right = 540.0
+margin_bottom = 460.0
+
+[node name="NameCard9" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_top = 480.0
+margin_bottom = 580.0
+
+[node name="NameCard10" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_top = 480.0
+margin_right = 540.0
+margin_bottom = 580.0
+
+[node name="NameCard11" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_top = 600.0
+margin_bottom = 700.0
+
+[node name="NameCard12" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_top = 600.0
+margin_right = 540.0
+margin_bottom = 700.0
+
+[node name="HumanTeam" type="GridContainer" parent="TeamLineUpsUI"]
+margin_left = 76.0
+margin_top = 133.0
+margin_right = 616.0
+margin_bottom = 833.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 8 )
+columns = 2
+
+[node name="NameCard1" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_bottom = 100.0
+
+[node name="NameCard2" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_right = 540.0
+margin_bottom = 100.0
+
+[node name="NameCard3" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_top = 120.0
+margin_bottom = 220.0
+
+[node name="NameCard4" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_top = 120.0
+margin_right = 540.0
+margin_bottom = 220.0
+
+[node name="NameCard5" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_top = 240.0
+margin_bottom = 340.0
+
+[node name="NameCard6" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_top = 240.0
+margin_right = 540.0
+margin_bottom = 340.0
+
+[node name="NameCard7" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_top = 360.0
+margin_bottom = 460.0
+
+[node name="NameCard8" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_top = 360.0
+margin_right = 540.0
+margin_bottom = 460.0
+
+[node name="NameCard9" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_top = 480.0
+margin_bottom = 580.0
+
+[node name="NameCard10" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_top = 480.0
+margin_right = 540.0
+margin_bottom = 580.0
+
+[node name="NameCard11" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_top = 600.0
+margin_bottom = 700.0
+
+[node name="NameCard12" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
+margin_left = 290.0
+margin_top = 600.0
+margin_right = 540.0
+margin_bottom = 700.0
+
+[node name="TeamAName" type="Label" parent="TeamLineUpsUI"]
+modulate = Color( 0, 0.0166669, 1, 1 )
+margin_left = 248.901
+margin_top = 12.7969
+margin_right = 448.901
+margin_bottom = 79.7969
+custom_fonts/font = ExtResource( 9 )
+text = "Australia"
+align = 1
+
+[node name="TeamBName" type="Label" parent="TeamLineUpsUI"]
+modulate = Color( 0, 0.0166669, 1, 1 )
+margin_left = 1488.9
+margin_top = 12.7969
+margin_right = 1688.9
+margin_bottom = 79.7969
+custom_fonts/font = ExtResource( 9 )
+text = "France"
+align = 1
+
+[node name="Button" type="Button" parent="TeamLineUpsUI"]
+margin_left = 1395.0
+margin_top = 943.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+custom_colors/font_color = Color( 0.290196, 0, 1, 1 )
+custom_fonts/font = ExtResource( 9 )
+custom_styles/normal = SubResource( 17 )
+text = "Continue"
+icon = ExtResource( 4 )
+expand_icon = true
+
+[connection signal="pressed" from="ColourRectIntro/Button" to="." method="_on_Intro_Button_pressed"]
+[connection signal="pressed" from="Toss/ChooseHeads" to="." method="_on_ChooseHeads_pressed"]
+[connection signal="pressed" from="Toss/ChooseTails" to="." method="_on_ChooseTails_pressed"]
+[connection signal="pressed" from="Toss/WonToss/ChooseServeReceive" to="." method="_on_ChooseServeReceive_pressed"]
+[connection signal="pressed" from="Toss/WonToss/ChooseSide" to="." method="_on_ChooseSide_pressed"]
+[connection signal="pressed" from="Toss/WonToss/ChooseServe" to="." method="_on_ChooseServe_pressed"]
+[connection signal="pressed" from="Toss/WonToss/ChooseReceive" to="." method="_on_ChooseReceive_pressed"]
+[connection signal="pressed" from="Toss/WonToss/ChooseCurrentSide" to="." method="_on_ChooseCurrentSide_pressed"]
+[connection signal="pressed" from="Toss/WonToss/ChooseOtherSide" to="." method="_on_ChooseOtherSide_pressed"]
+[connection signal="pressed" from="Toss/LostToss/ChooseCurrentSide" to="." method="_on_ChooseCurrentSide_pressed"]
+[connection signal="pressed" from="Toss/LostToss/ChooseOtherSide" to="." method="_on_ChooseOtherSide_pressed"]
+[connection signal="pressed" from="Toss/LostToss/ChooseServe" to="." method="_on_ChooseServe_pressed"]
+[connection signal="pressed" from="TeamSelectionUI/Button" to="." method="BeginButton_pressed"]
+[connection signal="pressed" from="TeamLineUpsUI/Button" to="." method="_Lineup_Button_pressed"]

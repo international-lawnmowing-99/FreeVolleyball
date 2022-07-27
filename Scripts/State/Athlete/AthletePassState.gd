@@ -26,6 +26,7 @@ func Enter(athlete:Athlete):
 	var m
 	if xPart == 0 && zPart == 0:
 		print("no vel to work with")
+		m = 9999
 	elif zPart == 0:
 		m = 0
 		#print("m = 0")
@@ -100,7 +101,10 @@ func PassBall(athlete):
 	
 	if passQuality == 0:
 		# what is the ideal height for the setter to jump set??
-		receptionTarget = Vector3(athlete.team.flip * 0.5, 2.5, 0)
+		if athlete.role == Enums.Role.Setter:
+			receptionTarget = Vector3(athlete.team.flip * 3.13, 2.5, 0)
+		else:
+			receptionTarget = Vector3(athlete.team.flip * 0.5, 2.5, 0)
 		Console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")
 	elif passQuality == 1:
 		receptionTarget = Vector3(athlete.team.flip * rand_range(0.5, 1.5), 2.5, rand_range(-2, 2))
@@ -112,6 +116,8 @@ func PassBall(athlete):
 		pass	
 	elif passQuality == 3:
 		ball.linear_velocity.y *= -1
+
+		
 		if ball.BallMaxHeight() >= 2.4:
 			receptionTarget = ball.BallPositionAtGivenHeight(2.5)
 		else:
@@ -123,7 +129,6 @@ func PassBall(athlete):
 		pass
 
 
-	ball.linear_velocity = Vector3.ZERO
 	ball.gravity_scale = 1
 	ball.angular_velocity += Vector3 ( rand_range(-5,5),rand_range(-5,5), rand_range(-5,5))
 	

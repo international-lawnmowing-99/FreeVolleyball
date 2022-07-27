@@ -32,16 +32,19 @@ func _on_ball_body_entered(body):
 #		print("out got him yes")
 			inPlay = false
 			if wasLastTouchedByA:
-				print("ball out, point to b")
+				Console.AddNewLine("ball out, point to b")
 				mManager.PointToTeamB()
 				
 			else:
-				print("ball out, point to a")
+				Console.AddNewLine("ball out, point to a")
 				mManager.PointToTeamA()
 		if body.is_in_group("ZoneInA"):
 			mManager.PointToTeamA()
+			Console.AddNewLine("Ball in, point to a")
+
 		if body.is_in_group("ZoneInB"):
 			mManager.PointToTeamB()
+			Console.AddNewLine("Ball in, point to b", Color.bisque)
 func PretendToBeParented(node):
 	_parented = true
 	_pseudoParent = node
@@ -68,7 +71,7 @@ func TimeTillBallReachesHeight(height:float):
 
 func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float):
 	if maxHeight <= startPos.y || maxHeight < endPos.y:
-		print("impossible parabola")
+		print("impossible parabola|| maxHeight = " + str(maxHeight) + ", startPos = " + str(startPos) + ", endPos = " + str(endPos))
 		return Vector3.ZERO
 	
 	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")

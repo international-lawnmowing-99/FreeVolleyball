@@ -11,6 +11,7 @@ onready var teamB:Team = $TeamB
 onready var ball = $ball
 
 onready var score = $CanvasLayer/Score
+onready var preMatchUI = $PreMatchUI
 #onready var console = $CanvasLayer/Console
 
 var isTeamAServing:bool
@@ -18,6 +19,8 @@ var isTeamAServing:bool
 func _ready():
 	gameWorld.GenerateDefaultWorld()
 	newMatch.ChooseRandom(gameWorld)
+	
+	ball.mManager = self
 	
 	teamA.isHuman = true
 	teamB.isHuman = false
@@ -30,24 +33,29 @@ func _ready():
 	var rand = RandomNumberGenerator.new()
 	rand.randomize()
 
-	if rand.randi_range(1,2) == 1:
-		pass
-	isTeamAServing = false
-	teamA.isNextToSpike = false
-	teamB.isNextToSpike = true
+	if rand.randi_range(1,2) == 0:
+		isTeamAServing = false
+		teamA.isNextToSpike = false
+		teamB.isNextToSpike = true
+	else:
+		isTeamAServing = true
+		teamA.isNextToSpike = true
+		teamB.isNextToSpike = false
 
 	if isTeamAServing:
 		teamA.stateMachine.SetCurrentState(teamA.preserviceState)
-		teamB.stateMachine.SetCurrentState(teamB.receiveState)
+		teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
 
 	else:
 		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
 		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
 
-	ball.mManager = self
 	
 	score.teamANameText.text = teamA.teamName
 	score.teamBNameText.text = teamB.teamName
+	
+	preMatchUI.PopulateUI(teamA, teamB)
+	preMatchUI.skipUI()
 
 func BallOverNet(hitByTeamA:bool):
 	teamA.isNextToSpike = !teamA.isNextToSpike

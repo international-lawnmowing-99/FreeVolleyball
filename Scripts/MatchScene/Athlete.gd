@@ -122,7 +122,10 @@ func _process(_delta):
 	basisz = transform.basis.z
 	basisx = transform.basis.x
 	return
-
+	
+	if transform.origin.y < -0.2:
+		print(stateMachine.currentState.nameOfState)
+	
 func Move(delta):
 	# For the future - measure the length, use it to determine if you should strafe or turn
 	
@@ -235,7 +238,10 @@ func ReEvaluateState():
 		team.receiveState:
 			stateMachine.SetCurrentState(transitionState)
 		team.setState:
-			stateMachine.SetCurrentState(transitionState)
+			if team.chosenSetter == self:
+				stateMachine.SetCurrentState(setState)
+			else:
+				stateMachine.SetCurrentState(transitionState)
 		team.spikeState:
 			stateMachine.SetCurrentState(spikeState)
 		team.defendState:
