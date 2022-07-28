@@ -880,6 +880,7 @@ angular_velocity = Vector3( 2, 3, 1 )
 
 [node name="ServeTarget" type="CSGMesh" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.45722, 0.276656, 0 )
+visible = false
 mesh = SubResource( 12 )
 material = SubResource( 13 )
 

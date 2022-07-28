@@ -171,7 +171,8 @@ func PlaceTeam():
 		lad.CreateSpikes()
 		lad.moveTarget = Vector3(pos.x,0,pos.z)
 		#allPlayers.append(lad)
-		
+		if !isHuman:
+			lad.get_child(2).ChangeShirtColour(Color(1,3,0))
 		if i  < 6 :
 			lad.rotationPosition = i + 1
 			courtPlayers.append(lad)
@@ -460,4 +461,5 @@ func CheckIfFlipped(vectorToBeChecked:Vector3):
 
 func Chill():
 	for player in courtPlayers:
+		
 		player.stateMachine.SetCurrentState(player.chillState)

@@ -9,7 +9,7 @@ class Vector:
 
 	var width  # Line width
 
-	var colour  # Draw color
+	var colour  # Draw colour
 
 
 	func _init(_object, _property, _scale, _width, _colour):

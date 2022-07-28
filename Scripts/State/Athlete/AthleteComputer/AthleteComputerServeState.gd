@@ -103,7 +103,7 @@ func Update(athlete:Athlete):
 				pass#athlete.BaseMove()
 
 			else:
-				athlete.rb.mode =RigidBody.MODE_RIGID
+				athlete.rb.mode = RigidBody.MODE_RIGID
 				athlete.rb.gravity_scale = 1
 
 				var landing = athlete.translation + Vector3(attackTarget.x - athlete.translation.x, 0, attackTarget.z - athlete.translation.z).normalized() * athlete.stats.verticalJump
@@ -149,7 +149,7 @@ func Update(athlete:Athlete):
 
 		ServeState.Landing:
 			if (athlete.translation.y <= 0.01 && athlete.rb.linear_velocity.y < 0):
-				athlete.rb.mode =RigidBody.MODE_KINEMATIC
+				athlete.rb.mode = RigidBody.MODE_KINEMATIC
 				athlete.rb.gravity_scale = 0
 				
 				athlete.translation.y = 0
