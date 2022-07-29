@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://MatchScene/NameCard.gd" type="Script" id=2]
+[ext_resource path="res://Textures/Captain.png" type="Texture" id=3]
+[ext_resource path="res://Textures/LiberoIcon.png" type="Texture" id=4]
 
 [sub_resource type="DynamicFont" id=16]
 size = 20
@@ -66,3 +68,37 @@ margin_bottom = 27.0
 custom_fonts/font = SubResource( 15 )
 text = "199.9cm"
 align = 2
+
+[node name="CaptainIcon" type="TextureRect" parent="."]
+margin_left = 222.499
+margin_top = 66.9187
+margin_right = 262.499
+margin_bottom = 106.919
+texture = ExtResource( 3 )
+expand = true
+
+[node name="LiberoIcon" type="TextureRect" parent="."]
+modulate = Color( 0.898039, 1, 0, 1 )
+margin_left = 222.499
+margin_top = 21.9187
+margin_right = 262.499
+margin_bottom = 61.9187
+texture = ExtResource( 4 )
+expand = true
+
+[node name="SubstituteButton" type="Button" parent="."]
+margin_left = 6.0
+margin_top = 89.0
+margin_right = 94.0
+margin_bottom = 109.0
+text = "Substitute"
+
+[node name="CaptainButton" type="Button" parent="."]
+margin_left = 104.0
+margin_top = 89.0
+margin_right = 192.0
+margin_bottom = 109.0
+text = "Captain"
+
+[connection signal="mouse_entered" from="." to="." method="_on_NameCard_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_NameCard_mouse_exited"]

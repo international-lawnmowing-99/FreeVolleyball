@@ -1,0 +1,13 @@
+extends ColorRect
+
+var nameCards:Array
+
+func _ready() -> void:
+	nameCards.append($LiberoNameCard)
+	for card in $HumanTeamBench.get_children():
+		nameCards.append(card)
+	for card in $HumanTeam.get_children():
+		nameCards.append(card)
+	for card in nameCards:
+		card.ChangeColour()
+		

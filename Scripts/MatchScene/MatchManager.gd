@@ -12,7 +12,7 @@ onready var ball = $ball
 
 onready var score = $CanvasLayer/Score
 onready var preMatchUI = $PreMatchUI
-#onready var console = $CanvasLayer/Console
+#onready var teamInfoUI = 
 
 var isTeamAServing:bool
 
@@ -55,7 +55,7 @@ func _ready():
 	score.teamBNameText.text = teamB.teamName
 	
 	preMatchUI.PopulateUI(teamA, teamB)
-	preMatchUI.skipUI()
+	#preMatchUI.skipUI()
 
 func BallOverNet(hitByTeamA:bool):
 	teamA.isNextToSpike = !teamA.isNextToSpike
@@ -93,6 +93,9 @@ func _input(_event):
 		PointToTeamA()
 	elif Input.is_key_pressed(KEY_C):
 		PointToTeamB()
+	
+	if Input.is_action_just_pressed("ui_focus_next"):
+		pass
 
 func PointToTeamA():
 	score.PointToTeamA()

@@ -64,7 +64,7 @@ func Update(athlete:Athlete):
 			if Input.is_key_pressed(KEY_SPACE):
 				athlete.moveTarget = athlete.translation
 				serveState = ServeState.Aiming
-				print("key pressed walking")
+				#print("key pressed walking")
 				serveTarget.visible = true
 				serveUI.HideServeChoice()
 			pass
@@ -79,7 +79,7 @@ func Update(athlete:Athlete):
 				serveTarget.translation.x += .1
 				
 			if Input.is_action_just_pressed("ui_accept"):
-				print("key pressed aiming")
+				#print("key pressed aiming")
 				attackTarget = Vector3(serveTarget.translation.x, 0, serveTarget.translation.z)
 				Console.AddNewLine(athlete.stats.lastName + ": " + "serving")
 				serveState = ServeState.Tossing

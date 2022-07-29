@@ -15,6 +15,7 @@ func _ready():
 	
 	teamSelection.hide()
 	teamLineups.hide()
+	$TeamSelectionUI/AcceptButton.connect("pressed", self, "TeamSelectionAcceptButton_pressed")
 	toss.hide()
 	wonToss.hide()
 	lostToss.hide()
@@ -29,11 +30,11 @@ func _Lineup_Button_pressed():
 	pass # Replace with function body.
 
 
-func BeginButton_pressed():
+func TeamSelectionAcceptButton_pressed():
 	teamSelection.hide()
 	toss.show()
 # warning-ignore:return_value_discarded
-	get_tree().root.get_node("MatchScene")
+	#get_tree().root.get_node("MatchScene")
 
 func PopulateUI(team:Team, otherTeam:Team):
 	$ColourRectIntro/Label.text = team.teamName + " vs " + otherTeam.teamName
@@ -58,6 +59,7 @@ func PopulateUI(team:Team, otherTeam:Team):
 
 func DoToss(choseHeads:bool):
 	var coin:bool = randi() % 1
+	print(coin)
 	if coin == true:
 		$Toss/WonToss/CoinResultText.text = "Coin is Heads!"
 		$Toss/LostToss/CoinResultText.text = "Coin is Heads!"
@@ -65,7 +67,7 @@ func DoToss(choseHeads:bool):
 		$Toss/WonToss/CoinResultText.text = "Coin is Tails!"
 		$Toss/LostToss/CoinResultText.text = "Coin is Tails!"
 	
-	if true:# coin == choseHeads:
+	if coin == choseHeads:
 		
 		wonToss.show()
 	else:
@@ -74,8 +76,8 @@ func DoToss(choseHeads:bool):
 		
 		if randi()%1 == 0:
 			#Other team chose to serve/receive
-			$Toss/LostToss/FirstOption.text = "Keep on current side of court"
-			$Toss/LostToss/SecondOption.text = "Swap sides"
+			$Toss/LostToss/ChooseCurrentSide.show()
+			$Toss/LostToss/ChooseOtherSide.show()
 			if randi()%1 == 0:
 				$Toss/LostToss/OppositionChoiceText.text = "Other team chose to serve"
 			else:
@@ -83,8 +85,9 @@ func DoToss(choseHeads:bool):
 			pass
 		else:
 			#Other team chose side of court
-			$Toss/LostToss/FirstOption.text = "Serve"
-			$Toss/LostToss/SecondOption.text = "Receive"
+			$Toss/LostToss/ChooseServe.show()
+			$Toss/LostToss/ChooseReceive.show()
+
 			if randi()%1 == 0:
 				$Toss/LostToss/OppositionChoiceText.text = "Other team chose to change sides of the court"
 			else:

@@ -39,10 +39,12 @@ func _on_ball_body_entered(body):
 				Console.AddNewLine("ball out, point to a")
 				mManager.PointToTeamA()
 		if body.is_in_group("ZoneInA"):
+			inPlay = false
 			mManager.PointToTeamA()
 			Console.AddNewLine("Ball in, point to a")
 
 		if body.is_in_group("ZoneInB"):
+			inPlay = false
 			mManager.PointToTeamB()
 			Console.AddNewLine("Ball in, point to b", Color.bisque)
 func PretendToBeParented(node):

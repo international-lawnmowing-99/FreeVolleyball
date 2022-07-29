@@ -1,13 +1,15 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
+[ext_resource path="res://MatchScene/TeamSelectionUI.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/PreMatchUI.gd" type="Script" id=2]
 [ext_resource path="res://Textures/headIcon.jpg" type="Texture" id=3]
 [ext_resource path="res://Textures/net-graphic.png" type="Texture" id=4]
 [ext_resource path="res://Textures/143640-allan-border-s-cricket-dos-screenshot-coin-toss.png" type="Texture" id=5]
 [ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=6]
-[ext_resource path="res://MatchScene/NameCard1.tscn" type="PackedScene" id=7]
+[ext_resource path="res://MatchScene/NameCard.tscn" type="PackedScene" id=7]
 [ext_resource path="res://MatchScene/gridTheme.tres" type="Theme" id=8]
 [ext_resource path="res://Scenes/a font.tres" type="DynamicFont" id=9]
+[ext_resource path="res://MatchScene/TeamLineUpsUI.gd" type="Script" id=10]
 
 [sub_resource type="DynamicFont" id=11]
 size = 24
@@ -44,11 +46,6 @@ size = 89
 outline_size = 3
 outline_color = Color( 0.254902, 0.662745, 0.647059, 1 )
 font_data = ExtResource( 6 )
-
-[sub_resource type="Theme" id=15]
-GridContainer/constants/hseparation = 50
-GridContainer/constants/vseparation = 20
-VBoxContainer/constants/separation = 20
 
 [sub_resource type="StyleBoxFlat" id=17]
 bg_color = Color( 0.756863, 1, 0, 1 )
@@ -284,7 +281,6 @@ custom_fonts/font = SubResource( 18 )
 text = "Coin is UNDEFINED!"
 
 [node name="LostToss" type="ColorRect" parent="Toss"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.192157, 0.52549, 0.0980392, 1 )
@@ -363,7 +359,7 @@ text = "Choose To Receive"
 icon = ExtResource( 3 )
 expand_icon = true
 
-[node name="InfoText2" type="Label" parent="Toss/LostToss"]
+[node name="InfoText" type="Label" parent="Toss/LostToss"]
 margin_left = 274.36
 margin_top = 507.812
 margin_right = 943.361
@@ -387,134 +383,14 @@ margin_bottom = 958.046
 custom_fonts/font = SubResource( 19 )
 text = "Other team chose to Serve"
 
-[node name="TeamSelectionUI" type="ColorRect" parent="."]
+[node name="TeamSelectionUI" parent="." instance=ExtResource( 1 )]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 1, 0, 0, 1 )
-
-[node name="Line2D" type="Line2D" parent="TeamSelectionUI"]
-position = Vector2( 0, 184 )
-points = PoolVector2Array( 1920.37, -3.66284, -2.39679, -3.8028 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="HumanTeamBench" type="GridContainer" parent="TeamSelectionUI"]
-margin_left = 62.2182
-margin_top = 263.38
-margin_right = 636.218
-margin_bottom = 987.38
-theme = SubResource( 15 )
-
-[node name="NameCard1" parent="TeamSelectionUI/HumanTeamBench" instance=ExtResource( 7 )]
-margin_bottom = 100.0
-
-[node name="NameCard2" parent="TeamSelectionUI/HumanTeamBench" instance=ExtResource( 7 )]
-margin_top = 120.0
-margin_bottom = 220.0
-
-[node name="NameCard3" parent="TeamSelectionUI/HumanTeamBench" instance=ExtResource( 7 )]
-margin_top = 240.0
-margin_bottom = 340.0
-
-[node name="NameCard4" parent="TeamSelectionUI/HumanTeamBench" instance=ExtResource( 7 )]
-margin_top = 360.0
-margin_bottom = 460.0
-
-[node name="NameCard5" parent="TeamSelectionUI/HumanTeamBench" instance=ExtResource( 7 )]
-margin_top = 480.0
-margin_bottom = 580.0
-
-[node name="ColorRect" type="ColorRect" parent="TeamSelectionUI"]
-margin_left = 808.0
-margin_top = 197.0
-margin_right = 1796.0
-margin_bottom = 967.0
-color = Color( 0.839216, 0.623529, 0.207843, 1 )
-
-[node name="LiberoNameCard" parent="TeamSelectionUI" instance=ExtResource( 7 )]
-margin_left = 656.129
-margin_top = 726.075
-margin_right = 906.129
-margin_bottom = 826.075
-
-[node name="Line2D2" type="Line2D" parent="TeamSelectionUI"]
-position = Vector2( 787.567, 462.377 )
-scale = Vector2( 0.326706, 1.39676 )
-points = PoolVector2Array( 3177.78, -3.66284, -2.39679, -3.8028 )
-default_color = Color( 0.867188, 0.732952, 0.474243, 1 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="Line2D3" type="Line2D" parent="TeamSelectionUI"]
-position = Vector2( 787.567, 218.695 )
-scale = Vector2( 0.326706, 2.57903 )
-points = PoolVector2Array( 3177.78, -3.66284, -2.39679, -3.8028 )
-default_color = Color( 0, 0, 0, 1 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="TeamName" type="Label" parent="TeamSelectionUI"]
-margin_left = 16.0
-margin_right = 619.0
-margin_bottom = 199.0
-custom_fonts/font = SubResource( 18 )
-text = "Australia"
-
-[node name="Button" type="Button" parent="TeamSelectionUI"]
-margin_left = 1490.36
-margin_top = 947.916
-margin_right = 1920.36
-margin_bottom = 1079.92
-custom_fonts/font = ExtResource( 9 )
-text = "Accept"
-
-[node name="HumanTeam" type="Control" parent="TeamSelectionUI"]
-
-[node name="NameCard1" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
-margin_left = 1532.31
-margin_top = 545.542
-margin_right = 1782.31
-margin_bottom = 645.542
-
-[node name="NameCard2" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
-margin_left = 1531.58
-margin_top = 295.755
-margin_right = 1781.58
-margin_bottom = 395.755
-
-[node name="NameCard3" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
-margin_left = 1182.0
-margin_top = 296.0
-margin_right = 1432.0
-margin_bottom = 396.0
-
-[node name="NameCard4" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
-margin_left = 832.0
-margin_top = 295.0
-margin_right = 1082.0
-margin_bottom = 395.0
-
-[node name="NameCard5" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
-margin_left = 832.0
-margin_top = 546.0
-margin_right = 1082.0
-margin_bottom = 646.0
-
-[node name="NameCard6" parent="TeamSelectionUI/HumanTeam" instance=ExtResource( 7 )]
-margin_left = 1183.0
-margin_top = 546.0
-margin_right = 1433.0
-margin_bottom = 646.0
 
 [node name="TeamLineUpsUI" type="ColorRect" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.972549, 0.976471, 0.576471, 1 )
+script = ExtResource( 10 )
 
 [node name="OppositionTeam" type="GridContainer" parent="TeamLineUpsUI"]
 margin_left = 1316.0
@@ -654,20 +530,19 @@ margin_bottom = 700.0
 
 [node name="TeamAName" type="Label" parent="TeamLineUpsUI"]
 modulate = Color( 0, 0.0166669, 1, 1 )
-margin_left = 248.901
-margin_top = 12.7969
-margin_right = 448.901
-margin_bottom = 79.7969
+margin_top = 21.0
+margin_right = 960.0
+margin_bottom = 88.0
 custom_fonts/font = ExtResource( 9 )
 text = "Australia"
 align = 1
 
 [node name="TeamBName" type="Label" parent="TeamLineUpsUI"]
 modulate = Color( 0, 0.0166669, 1, 1 )
-margin_left = 1488.9
-margin_top = 12.7969
-margin_right = 1688.9
-margin_bottom = 79.7969
+margin_left = 960.0
+margin_top = 13.0
+margin_right = 1920.0
+margin_bottom = 80.0
 custom_fonts/font = ExtResource( 9 )
 text = "France"
 align = 1
@@ -696,5 +571,5 @@ expand_icon = true
 [connection signal="pressed" from="Toss/LostToss/ChooseCurrentSide" to="." method="_on_ChooseCurrentSide_pressed"]
 [connection signal="pressed" from="Toss/LostToss/ChooseOtherSide" to="." method="_on_ChooseOtherSide_pressed"]
 [connection signal="pressed" from="Toss/LostToss/ChooseServe" to="." method="_on_ChooseServe_pressed"]
-[connection signal="pressed" from="TeamSelectionUI/Button" to="." method="BeginButton_pressed"]
+[connection signal="pressed" from="Toss/LostToss/ChooseReceive" to="." method="_on_ChooseReceive_pressed"]
 [connection signal="pressed" from="TeamLineUpsUI/Button" to="." method="_Lineup_Button_pressed"]
