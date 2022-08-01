@@ -5,7 +5,7 @@ const Enums = preload("res://Scripts/World/Enums.gd")
 var AthleteScene = preload("res://Scenes/Athlete.tscn")
 
 var teamName:String
-
+var mManager
 var isHuman:bool = false
 
 var isLiberoOnCourt:bool
@@ -122,7 +122,8 @@ var preserviceState:State = load("res://Scripts/State/Team/TeamPreService.gd").n
 var defendState:State = load("res://Scripts/State/Team/TeamDefend.gd").new()
 var prereceiveState:State = load("res://Scripts/State/Team/TeamPreReceive.gd").new()
 
-func init(_ball, choiceState, gameWorld, clubOrInternational):
+func init(_ball, choiceState, gameWorld, clubOrInternational, matchManager):
+	mManager = matchManager
 	var team = gameWorld.GetTeam(choiceState, clubOrInternational)
 	teamName = team.teamName
 	allPlayers = team.allPlayers
@@ -461,5 +462,37 @@ func CheckIfFlipped(vectorToBeChecked:Vector3):
 
 func Chill():
 	for player in courtPlayers:
-		
 		player.stateMachine.SetCurrentState(player.chillState)
+
+func AttemptBlock(spiker:Athlete):
+	var blockingChance:float = 0
+	#how many blockers are there?
+	var blockers:Array
+	for blocker in courtPlayers:
+		if blocker.FrontCourt():
+			if blocker.stateMachine.currentState.nameOfState == "Block":
+				if blocker.blockState.blockingTarget == spiker:
+					blockers.append(blocker)
+	
+	#No block
+	if len(blockers) == 0:
+		mManager.BallOverNet(!isHuman)
+		return
+	
+	# Is the spiker just too tall?
+	
+	var highestBlockHeight = 0
+	for blocker in blockers:
+		if blocker.stats.blockHeight > highestBlockHeight:
+			highestBlockHeight = blocker.stats.blockHeight
+
+	#the height of the ball over the net
+	
+	var netPass = ball.FindNetPass()
+	
+	if netPass.y - highestBlockHeight > 0.3:
+		Console.AddNewLine("OTT!!!", Color.azure)
+		Console.AddNewLine("Spike height: " + str(spiker.stats.spikeHeight), Color.azure)
+		Console.AddNewLine("Block height: " + str(highestBlockHeight), Color.azure)
+	
+	pass

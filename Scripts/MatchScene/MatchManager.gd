@@ -25,8 +25,8 @@ func _ready():
 	teamA.isHuman = true
 	teamB.isHuman = false
 	
-	teamA.init(ball, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational)
-	teamB.init(ball, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational)
+	teamA.init(ball, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational, self)
+	teamB.init(ball, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational, self)
 	teamA.defendState.otherTeam = teamB
 	teamB.defendState.otherTeam = teamA
 
@@ -55,7 +55,7 @@ func _ready():
 	score.teamBNameText.text = teamB.teamName
 	
 	preMatchUI.PopulateUI(teamA, teamB)
-	#preMatchUI.skipUI()
+	preMatchUI.skipUI()
 
 func BallOverNet(hitByTeamA:bool):
 	teamA.isNextToSpike = !teamA.isNextToSpike
@@ -84,6 +84,10 @@ func BallSet(setByTeamA:bool):
 
 func BallSpiked(spikedByTeamA:bool):
 	if spikedByTeamA:
+		teamB.AttemptBlock(teamA.chosenSpiker)
+		pass
+	else:
+		teamA.AttemptBlock(teamB.chosenSpiker)
 		pass
 func _input(_event):
 #	if Input.is_action_just_pressed("ui_accept"):

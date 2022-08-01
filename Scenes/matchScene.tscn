@@ -33,11 +33,11 @@ outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 14 )
 
-[sub_resource type="ProceduralSky" id=11]
+[sub_resource type="ProceduralSky" id=14]
 
 [sub_resource type="Environment" id=4]
 background_mode = 2
-background_sky = SubResource( 11 )
+background_sky = SubResource( 14 )
 ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_energy = 0.13
 fog_enabled = true
@@ -45,6 +45,8 @@ fog_color = Color( 0, 0, 0, 1 )
 fog_depth_begin = 0.0
 fog_depth_end = 91.7
 fog_depth_curve = 0.15932
+fog_transmit_enabled = true
+fog_transmit_curve = 0.0625
 auto_exposure_scale = 1.08
 auto_exposure_min_luma = 11.0
 auto_exposure_max_luma = 16.0

@@ -14,7 +14,6 @@ func ShowServeAggressionChoice():
 
 func HideServeAggressionChoice():
 	$ServeAggressionButtons.hide()
-	humanServeState.CommenceServe()
 
 #func _on_Button_pressed():
 #	HideServeChoice()

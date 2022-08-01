@@ -2,15 +2,16 @@ extends RigidBody
 
 class_name Ball
 
-var g
+#var g
 var _parented:bool = false
 var _pseudoParent
 var wasLastTouchedByA:bool
 var attackTarget
 var mManager
 var inPlay:bool = true
+var isDestingedToBeBlocked = false
 
-var lads = Vector3(-0.5,2.5,0)
+#var lads = Vector3(-0.5,2.5,0)
 
 func _process(_delta):
 	if is_inside_tree() && _parented && _pseudoParent:
@@ -63,7 +64,7 @@ func BallPositionAtGivenHeight(height:float):
 	return Vector3(newXZPos.x, height, newXZPos.y)
 	
 func TimeTillBallReachesHeight(height:float):
-	g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
+	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
 #I'm assuming this is on the way down...
 	var finalV = sqrt(linear_velocity.y * linear_velocity.y + 2 * g * (translation.y - height))
 	var remainingTime = (finalV + linear_velocity.y) / g
@@ -101,7 +102,7 @@ func BallMaxHeight():
 	return 2.4
 
 func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNet:float):
-	g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
+	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
 	var distanceFactor = startPos.x / (abs(startPos.x) + abs(target.x))
 	if startPos.x < 0:
 		distanceFactor *= -1
@@ -140,8 +141,7 @@ func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNe
 
 
 func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, aimingUp:bool):
-	g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
-	
+	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
 	var xzDirection = target - startPos
 	xzDirection.y = 0
 
@@ -154,6 +154,7 @@ func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, ai
 	
 	var determinant = pow(speed, 4) - g * (g * xzDist * xzDist + 2 * yDist * speed * speed)
 	if determinant < 0:
+		print("Can't make that parabola work mate, giving you the best we've got")
 		idealAngle = 45
 	else:
 		angle1 = atan((speed * speed + sqrt(determinant)) / (g * xzDist))
@@ -196,3 +197,17 @@ func TouchedByB():
 	
 func TouchedByA():
 	wasLastTouchedByA = true
+
+func FindNetPass()->Vector3:
+	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
+	var distanceFactor = translation.x / (abs(translation.x) + abs(attackTarget.x))
+	if translation.x < 0:
+		distanceFactor *= -1
+
+	var netPass:Vector3 = translation + (attackTarget - translation) * distanceFactor
+	var timeTillNet = abs(translation.x/linear_velocity.x)
+	netPass.y = translation.y + linear_velocity.y * timeTillNet + .5 * - g * timeTillNet * timeTillNet
+	
+	print(netPass)
+	
+	return netPass

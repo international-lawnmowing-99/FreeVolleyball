@@ -16,7 +16,7 @@ func Enter(team:Team):
 #		for i in range (6):
 #			print (team.courtPlayers[i].stats.lastName + " " + str(team.courtPlayers[i].rotationPosition))
 #		print(" ")
-	server.translation = team.flip * Vector3(10,0,-2)
+	server.translation = team.flip * Vector3(13,0,-2)
 	server.moveTarget = server.translation
 	
 	team.ball.translation = server.translation + Vector3.UP + Vector3.LEFT*team.flip/3

@@ -243,7 +243,11 @@ func ReEvaluateState():
 			else:
 				stateMachine.SetCurrentState(transitionState)
 		team.spikeState:
-			stateMachine.SetCurrentState(spikeState)
+			if stateMachine.currentState.nameOfState == "Spike":
+				#stateMachine.SetCurrentState(coverState)
+				pass
+			else:
+				stateMachine.SetCurrentState(spikeState)
 		team.defendState:
 			if FrontCourt():
 				stateMachine.SetCurrentState(blockState)

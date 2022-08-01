@@ -68,7 +68,7 @@ func SpikeBall(team:Team):
 		team.setTarget = null
 		
 	# "#Efficiency"
-	team.get_tree().get_root().get_node("MatchScene").BallOverNet(team.isHuman)
+	team.get_tree().get_root().get_node("MatchScene").BallSpiked(team.isHuman)
 	
 	# 9 court target segments
 	# standard aggressive spike, tool off block, tip, 

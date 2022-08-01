@@ -132,7 +132,6 @@ func Update(athlete:Athlete):
 				yield(athlete.get_tree(),"idle_frame")
 				athlete.rb.linear_velocity = ball.FindWellBehavedParabola(athlete.translation, landing, athlete.stats.verticalJump)
 				
-				
 				serveState = ServeState.Jump
 				#if (timeTillJumpPeak<= jumpAnimationTime)
 				#anim.SetTrigger("jump");
@@ -161,6 +160,7 @@ func Update(athlete:Athlete):
 						Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 						athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(true)
 					
+					ball.FindNetPass()
 					ball.TouchedByA()
 					serveState = ServeState.Landing
 
