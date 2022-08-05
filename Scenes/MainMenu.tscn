@@ -121,7 +121,6 @@ custom_styles/normal = SubResource( 5 )
 text = "Load"
 
 [node name="FileDialog" type="FileDialog" parent="LoadButton"]
-visible = true
 margin_left = -612.0
 margin_top = -462.0
 margin_right = 1132.0
@@ -130,7 +129,6 @@ window_title = "Open a File"
 mode = 0
 
 [node name="NewGameOptions" type="Control" parent="."]
-visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 

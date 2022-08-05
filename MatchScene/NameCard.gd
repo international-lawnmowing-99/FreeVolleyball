@@ -1,8 +1,12 @@
 extends ColorRect
 var Enums = preload("res://Scripts/World/Enums.gd")
 var selectable:bool
+var currentAthlete:Athlete
+var teamSelectionUI
+
 
 func DisplayStats(athlete:Athlete):
+	currentAthlete = athlete
 	$FirstName.text = athlete.stats.firstName
 	$LastName.text = athlete.stats.lastName
 	var skill = (athlete.stats.set + athlete.stats.spike + athlete.stats.block + athlete.stats.reception)/4
@@ -30,6 +34,8 @@ func ChangeColour(colour = Color(.75,0,0)):
 func _on_NameCard_mouse_entered() -> void:
 	ChangeColour(Color(0,1,1))
 	selectable = true
+	if teamSelectionUI:
+		teamSelectionUI.CardSelected(currentAthlete)
 	pass # Replace with function body.
 
 

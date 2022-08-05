@@ -9,7 +9,8 @@ var wasLastTouchedByA:bool
 var attackTarget
 var mManager
 var inPlay:bool = true
-var isDestingedToBeBlocked = false
+var blockWillBeAttempted = false
+var blockResolver = load("res://BlockResolver.gd").new(self)
 
 #var lads = Vector3(-0.5,2.5,0)
 
@@ -20,7 +21,7 @@ func _process(_delta):
 	pass
 	
 func _ready():
-
+	add_child(blockResolver)
 	#DebugOverlay.draw.add_vector(self, "lads", 1, 4, Color(0,1,1, 0.5))
 	
 	pass

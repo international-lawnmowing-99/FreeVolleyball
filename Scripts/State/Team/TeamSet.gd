@@ -30,7 +30,7 @@ func Enter(team:Team):
 	var possibleSpikers = []
 	
 	for athlete in team.courtPlayers:
-		if athlete!= team.chosenSetter && athlete != team.chosenReceiver && athlete.rb.mode != RigidBody.MODE_RIGID:
+		if athlete!= team.chosenSetter && athlete != team.chosenReceiver && athlete.rb.mode != RigidBody.MODE_RIGID && athlete.role != enums.Role.Libero:
 			athlete.stateMachine.SetCurrentState(athlete.transitionState)
 			possibleSpikers.append(athlete)
 			

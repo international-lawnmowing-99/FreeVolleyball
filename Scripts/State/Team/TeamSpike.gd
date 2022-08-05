@@ -1,21 +1,23 @@
 extends "res://Scripts/State/Team/TeamState.gd"
 var rng = RandomNumberGenerator.new()
-
+var hit = false
 
 func Enter(team:Team):
 	rng.randomize()
+	hit = false
 	pass
 func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
-	if team.ball.linear_velocity.z > 0:
-		if (team.ball.translation.z > team.chosenSpiker.setRequest.target.z && \
-		team.ball.linear_velocity.y <= 0 && \
-		(team.ball.translation - team.chosenSpiker.setRequest.target).length() < 0.5):
-			SpikeBall(team)
-	elif (team.ball.translation.z < team.chosenSpiker.setRequest.target.z &&\
-		 team.ball.linear_velocity.y <= 0 && \
-		(team.ball.translation - team.chosenSpiker.setRequest.target).length() < 0.5):
-			SpikeBall(team)
+	if !hit:
+		if team.ball.linear_velocity.z > 0:
+			if (team.ball.translation.z > team.chosenSpiker.setRequest.target.z && \
+			team.ball.linear_velocity.y <= 0 && \
+			(team.ball.translation - team.chosenSpiker.setRequest.target).length() < 0.5):
+				SpikeBall(team)
+		elif (team.ball.translation.z < team.chosenSpiker.setRequest.target.z &&\
+			 team.ball.linear_velocity.y <= 0 && \
+			(team.ball.translation - team.chosenSpiker.setRequest.target).length() < 0.5):
+				SpikeBall(team)
 
 func Exit(team:Team):
 	pass
@@ -69,7 +71,7 @@ func SpikeBall(team:Team):
 		
 	# "#Efficiency"
 	team.get_tree().get_root().get_node("MatchScene").BallSpiked(team.isHuman)
-	
+	hit = true
 	# 9 court target segments
 	# standard aggressive spike, tool off block, tip, 
 	

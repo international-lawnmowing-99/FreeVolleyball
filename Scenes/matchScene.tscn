@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Addons/DebugDraw3D.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/MatchScene/MatchManager.gd" type="Script" id=2]
@@ -22,6 +22,7 @@
 [ext_resource path="res://MatchScene/ServeUI.tscn" type="PackedScene" id=20]
 [ext_resource path="res://Scenes/teamNameFont.tres" type="DynamicFont" id=21]
 [ext_resource path="res://MatchScene/TeamSelectionUI.tscn" type="PackedScene" id=22]
+[ext_resource path="res://Scenes/TeamInfoUI.gd" type="Script" id=23]
 
 [sub_resource type="DynamicFont" id=2]
 size = 20
@@ -112,9 +113,9 @@ size = Vector3( 1, 1, 1 )
 [node name="MatchScene" type="Spatial"]
 script = ExtResource( 2 )
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="ScoreCanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="ColourRect" type="ColorRect" parent="CanvasLayer"]
+[node name="ColourRect" type="ColorRect" parent="ScoreCanvasLayer"]
 visible = false
 margin_left = 425.494
 margin_top = 147.998
@@ -122,7 +123,7 @@ margin_right = 1515.49
 margin_bottom = 955.998
 color = Color( 0, 0.27451, 1, 0.415686 )
 
-[node name="CourtGraphic" type="TextureRect" parent="CanvasLayer/ColourRect"]
+[node name="CourtGraphic" type="TextureRect" parent="ScoreCanvasLayer/ColourRect"]
 margin_left = 812.0
 margin_top = -38.0
 margin_right = 2612.0
@@ -132,10 +133,10 @@ rect_scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 9 )
 stretch_mode = 1
 
-[node name="TeamA" type="Control" parent="CanvasLayer/ColourRect/CourtGraphic"]
+[node name="TeamA" type="Control" parent="ScoreCanvasLayer/ColourRect/CourtGraphic"]
 visible = false
 
-[node name="PlayerGraphic" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 1451.07
 margin_top = 207.32
 margin_right = 1851.07
@@ -147,7 +148,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic"]
 margin_left = 391.559
 margin_top = 603.213
 margin_right = 1147.56
@@ -156,7 +157,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic2" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic2" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 1002.08
 margin_top = 200.586
 margin_right = 1402.08
@@ -167,7 +168,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic2"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic2"]
 margin_left = 391.559
 margin_top = 603.212
 margin_right = 1147.56
@@ -176,7 +177,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic3" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic3" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 1017.8
 margin_top = 481.201
 margin_right = 1417.8
@@ -187,7 +188,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic3"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic3"]
 margin_left = 391.559
 margin_top = 603.212
 margin_right = 1147.56
@@ -196,7 +197,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic4" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic4" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 1024.53
 margin_top = 755.081
 margin_right = 1424.53
@@ -207,7 +208,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic4"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic4"]
 margin_left = 391.559
 margin_top = 603.213
 margin_right = 1147.56
@@ -216,7 +217,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic5" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic5" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 1435.35
 margin_top = 746.101
 margin_right = 1835.35
@@ -227,7 +228,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic5"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic5"]
 margin_left = 391.559
 margin_top = 603.213
 margin_right = 1147.56
@@ -236,7 +237,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic6" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic6" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 1489.23
 margin_top = 472.221
 margin_right = 1889.23
@@ -247,7 +248,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic6"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic6"]
 margin_left = 391.559
 margin_top = 603.213
 margin_right = 1147.56
@@ -256,7 +257,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic7" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic7" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 916.775
 margin_top = 1255.7
 margin_right = 1316.78
@@ -267,7 +268,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic7"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic7"]
 margin_left = 391.559
 margin_top = 603.213
 margin_right = 1147.56
@@ -276,7 +277,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic8" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic8" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 1087.39
 margin_top = 1260.19
 margin_right = 1487.39
@@ -287,7 +288,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic8"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic8"]
 margin_left = 391.559
 margin_top = 603.213
 margin_right = 1147.56
@@ -296,7 +297,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic9" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic9" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 1233.31
 margin_top = 1271.41
 margin_right = 1633.31
@@ -307,7 +308,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic9"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic9"]
 margin_left = 391.559
 margin_top = 603.212
 margin_right = 1147.56
@@ -316,7 +317,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic10" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic10" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 1390.45
 margin_top = 1271.41
 margin_right = 1790.45
@@ -327,7 +328,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic10"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic10"]
 margin_left = 391.559
 margin_top = 603.213
 margin_right = 1147.56
@@ -336,7 +337,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic11" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic11" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 1525.15
 margin_top = 1282.64
 margin_right = 1925.15
@@ -347,7 +348,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic11"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic11"]
 margin_left = 391.559
 margin_top = 603.212
 margin_right = 1147.56
@@ -356,7 +357,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic12" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA"]
+[node name="PlayerGraphic12" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
 margin_left = 1698.01
 margin_top = 1287.13
 margin_right = 2098.01
@@ -367,7 +368,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic12"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic12"]
 margin_left = 391.559
 margin_top = 603.212
 margin_right = 1147.56
@@ -376,7 +377,7 @@ rect_rotation = -89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="TeamB" type="Control" parent="CanvasLayer/ColourRect/CourtGraphic"]
+[node name="TeamB" type="Control" parent="ScoreCanvasLayer/ColourRect/CourtGraphic"]
 visible = false
 margin_left = 1800.0
 margin_top = 1100.0
@@ -384,7 +385,7 @@ margin_right = 1800.0
 margin_bottom = 1100.0
 rect_rotation = 180.0
 
-[node name="PlayerGraphic" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 1451.07
 margin_top = 207.32
 margin_right = 1851.07
@@ -395,7 +396,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic"]
 margin_left = -21.166
 margin_top = -148.158
 margin_right = 734.834
@@ -404,7 +405,7 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic2" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic2" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 1002.08
 margin_top = 200.586
 margin_right = 1402.08
@@ -415,7 +416,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic2"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic2"]
 margin_left = -21.165
 margin_top = -148.158
 margin_right = 734.835
@@ -424,7 +425,7 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic3" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic3" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 1017.8
 margin_top = 481.201
 margin_right = 1417.8
@@ -435,7 +436,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic3"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic3"]
 margin_left = -21.165
 margin_top = -148.158
 margin_right = 734.835
@@ -444,7 +445,7 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic4" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic4" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 1024.53
 margin_top = 755.081
 margin_right = 1424.53
@@ -455,7 +456,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic4"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic4"]
 margin_left = -21.165
 margin_top = -148.158
 margin_right = 734.835
@@ -464,7 +465,7 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic5" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic5" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 1435.35
 margin_top = 746.101
 margin_right = 1835.35
@@ -475,7 +476,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic5"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic5"]
 margin_left = -21.165
 margin_top = -148.158
 margin_right = 734.835
@@ -484,7 +485,7 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic6" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic6" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 1489.23
 margin_top = 472.221
 margin_right = 1889.23
@@ -495,7 +496,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic6"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic6"]
 margin_left = -21.165
 margin_top = -148.158
 margin_right = 734.835
@@ -504,7 +505,7 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic7" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic7" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 916.775
 margin_top = 1255.7
 margin_right = 1316.78
@@ -515,7 +516,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic7"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic7"]
 margin_left = -21.166
 margin_top = -148.158
 margin_right = 734.834
@@ -524,7 +525,7 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic8" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic8" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 1087.39
 margin_top = 1260.19
 margin_right = 1487.39
@@ -535,7 +536,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic8"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic8"]
 margin_left = -21.165
 margin_top = -148.158
 margin_right = 734.835
@@ -544,7 +545,7 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic9" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic9" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 1233.31
 margin_top = 1271.41
 margin_right = 1633.31
@@ -555,7 +556,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic9"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic9"]
 margin_left = -21.166
 margin_top = -148.158
 margin_right = 734.834
@@ -564,7 +565,7 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic10" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic10" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 1390.45
 margin_top = 1271.41
 margin_right = 1790.45
@@ -575,7 +576,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic10"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic10"]
 margin_left = -21.165
 margin_top = -148.158
 margin_right = 734.835
@@ -584,7 +585,7 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic11" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic11" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 1525.15
 margin_top = 1282.64
 margin_right = 1925.15
@@ -595,7 +596,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic11"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic11"]
 margin_left = -21.165
 margin_top = -148.158
 margin_right = 734.835
@@ -604,7 +605,7 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="PlayerGraphic12" type="TextureRect" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB"]
+[node name="PlayerGraphic12" type="TextureRect" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
 margin_left = 1698.01
 margin_top = 1287.13
 margin_right = 2098.01
@@ -615,7 +616,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 stretch_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic12"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic12"]
 margin_left = -21.166
 margin_top = -148.158
 margin_right = 734.834
@@ -624,12 +625,12 @@ rect_rotation = 89.9999
 custom_fonts/font = ExtResource( 18 )
 text = "999955695"
 
-[node name="FPS Counter" type="Label" parent="CanvasLayer"]
+[node name="FPS Counter" type="Label" parent="ScoreCanvasLayer"]
 margin_right = 267.0
 margin_bottom = 88.0
 script = ExtResource( 6 )
 
-[node name="Score" type="TextureRect" parent="CanvasLayer"]
+[node name="Score" type="TextureRect" parent="ScoreCanvasLayer"]
 anchor_left = 0.025
 anchor_top = 0.025
 anchor_right = 1.0
@@ -639,7 +640,7 @@ margin_bottom = 108.0
 texture = ExtResource( 13 )
 script = ExtResource( 17 )
 
-[node name="ScoreTeamAText" type="Label" parent="CanvasLayer/Score"]
+[node name="ScoreTeamAText" type="Label" parent="ScoreCanvasLayer/Score"]
 margin_left = 108.0
 margin_top = 6.0
 margin_right = 252.0
@@ -647,7 +648,7 @@ margin_bottom = 50.0
 custom_fonts/font = ExtResource( 21 )
 text = "AUS"
 
-[node name="ScoreTeamBText" type="Label" parent="CanvasLayer/Score"]
+[node name="ScoreTeamBText" type="Label" parent="ScoreCanvasLayer/Score"]
 margin_left = 109.89
 margin_top = 57.6568
 margin_right = 253.89
@@ -655,7 +656,7 @@ margin_bottom = 101.657
 custom_fonts/font = ExtResource( 21 )
 text = "FRA"
 
-[node name="ScoreTeamASetScore" type="Label" parent="CanvasLayer/Score"]
+[node name="ScoreTeamASetScore" type="Label" parent="ScoreCanvasLayer/Score"]
 margin_left = 239.0
 margin_top = 24.0
 margin_right = 260.0
@@ -667,7 +668,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScoreTeamBSetScore" type="Label" parent="CanvasLayer/Score"]
+[node name="ScoreTeamBSetScore" type="Label" parent="ScoreCanvasLayer/Score"]
 margin_left = 239.0
 margin_top = 75.5466
 margin_right = 260.0
@@ -676,7 +677,7 @@ custom_colors/font_color = Color( 0.929688, 0.52349, 0.330475, 1 )
 custom_fonts/font = SubResource( 2 )
 text = "0"
 
-[node name="ScoreTeamAPointScore" type="Label" parent="CanvasLayer/Score"]
+[node name="ScoreTeamAPointScore" type="Label" parent="ScoreCanvasLayer/Score"]
 margin_left = 258.0
 margin_top = 3.0
 margin_right = 308.0
@@ -689,7 +690,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScoreTeamBPointScore" type="Label" parent="CanvasLayer/Score"]
+[node name="ScoreTeamBPointScore" type="Label" parent="ScoreCanvasLayer/Score"]
 margin_left = 258.0
 margin_top = 55.0
 margin_right = 308.0
@@ -702,21 +703,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColourRect2" type="ColorRect" parent="CanvasLayer"]
+[node name="ColourRect2" type="ColorRect" parent="ScoreCanvasLayer"]
 visible = false
 margin_left = 1.04538
 margin_top = 277.364
 margin_right = 63.0454
 margin_bottom = 759.364
 
-[node name="ColourRect3" type="ColorRect" parent="CanvasLayer"]
+[node name="ColourRect3" type="ColorRect" parent="ScoreCanvasLayer"]
 visible = false
 margin_left = 1438.76
 margin_top = 977.816
 margin_right = 1748.76
 margin_bottom = 1065.82
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect3"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect3"]
 margin_right = 310.0
 margin_bottom = 89.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -725,14 +726,14 @@ text = "Substutition"
 align = 1
 valign = 1
 
-[node name="ColourRect4" type="ColorRect" parent="CanvasLayer"]
+[node name="ColourRect4" type="ColorRect" parent="ScoreCanvasLayer"]
 visible = false
 margin_left = 1077.76
 margin_top = 977.816
 margin_right = 1387.76
 margin_bottom = 1065.82
 
-[node name="Label" type="Label" parent="CanvasLayer/ColourRect4"]
+[node name="Label" type="Label" parent="ScoreCanvasLayer/ColourRect4"]
 margin_right = 310.0
 margin_bottom = 89.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -741,7 +742,7 @@ text = "Time Out"
 align = 1
 valign = 1
 
-[node name="Button" type="Button" parent="CanvasLayer"]
+[node name="Button" type="Button" parent="ScoreCanvasLayer"]
 visible = false
 margin_left = 1811.05
 margin_top = 979.44
@@ -800,22 +801,15 @@ directional_shadow_depth_range = 1
 directional_shadow_max_distance = 50.0
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( -4.37053e-08, -0.74572, 0.666166, 0, 0.666259, 0.745616, -0.99986, 3.25965e-08, -2.9119e-08, 18, 15, 0 )
+transform = Transform( -4.15819e-08, -0.50397, 0.863721, 1.34771e-08, 0.863721, 0.50397, -1, 3.25965e-08, -2.91231e-08, 16.6423, 7.60317, 4.76837e-07 )
 fov = 50.0
 near = 0.1
 far = 264.0
 script = ExtResource( 3 )
+enabled = false
 sensitivity = 0.75
 acceleration = 0.1
 max_speed = Vector3( 10, 10, 10 )
-
-[node name="DebugOverlay" type="CanvasLayer" parent="."]
-script = ExtResource( 7 )
-
-[node name="DebugDraw3D" type="Control" parent="DebugOverlay"]
-margin_right = 40.0
-margin_bottom = 40.0
-script = ExtResource( 1 )
 
 [node name="ZoneOut" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.443, 0 )
@@ -879,17 +873,32 @@ script = ExtResource( 4 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -3 )
 angular_velocity = Vector3( 2, 3, 1 )
 
-[node name="PreMatchUI" parent="." instance=ExtResource( 19 )]
-
 [node name="ServeTarget" type="CSGMesh" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.45722, 0.276656, 0 )
 visible = false
 mesh = SubResource( 12 )
 material = SubResource( 13 )
 
+[node name="DebugOverlay" type="CanvasLayer" parent="."]
+script = ExtResource( 7 )
+
+[node name="DebugDraw3D" type="Control" parent="DebugOverlay"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+
+[node name="PreMatchUI" parent="." instance=ExtResource( 19 )]
+layer = 4
+
 [node name="ServeUI" parent="." instance=ExtResource( 20 )]
 
-[node name="TeamUI" type="CanvasLayer" parent="."]
+[node name="TeamInfoUI" type="CanvasLayer" parent="."]
+layer = 2
+script = ExtResource( 23 )
 
-[node name="TeamSelectionUI" parent="TeamUI" instance=ExtResource( 22 )]
+[node name="Control" type="Control" parent="TeamInfoUI"]
 visible = false
+margin_right = 1912.0
+margin_bottom = 1078.0
+
+[node name="TeamSelectionUI" parent="TeamInfoUI/Control" instance=ExtResource( 22 )]

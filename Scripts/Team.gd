@@ -467,7 +467,7 @@ func Chill():
 func AttemptBlock(spiker:Athlete):
 	var blockingChance:float = 0
 	#how many blockers are there?
-	var blockers:Array
+	var blockers:Array = []
 	for blocker in courtPlayers:
 		if blocker.FrontCourt():
 			if blocker.stateMachine.currentState.nameOfState == "Block":
@@ -494,5 +494,9 @@ func AttemptBlock(spiker:Athlete):
 		Console.AddNewLine("OTT!!!", Color.azure)
 		Console.AddNewLine("Spike height: " + str(spiker.stats.spikeHeight), Color.azure)
 		Console.AddNewLine("Block height: " + str(highestBlockHeight), Color.azure)
+		mManager.BallOverNet(!isHuman)
+		return
+	
+	ball.blockResolver.AddUpcomingBlock(isHuman, blockers, spiker)
 	
 	pass

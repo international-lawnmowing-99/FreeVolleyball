@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://MatchScene/TeamSelectionUI.gd" type="Script" id=1]
 [ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://MatchScene/NameCard.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/a font.tres" type="DynamicFont" id=4]
+[ext_resource path="res://MatchScene/PlayerStatsViewer.gd" type="Script" id=5]
 
 [sub_resource type="Theme" id=15]
 GridContainer/constants/hseparation = 50
@@ -14,6 +15,15 @@ VBoxContainer/constants/separation = 20
 size = 150
 outline_size = 3
 outline_color = Color( 0.254902, 0.662745, 0.647059, 1 )
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=19]
+bg_color = Color( 0.521569, 0.796078, 0.815686, 1 )
+
+[sub_resource type="DynamicFont" id=20]
+size = 27
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 2 )
 
 [node name="TeamSelectionUI" type="ColorRect"]
@@ -31,29 +41,33 @@ __meta__ = {
 
 [node name="HumanTeamBench" type="GridContainer" parent="."]
 margin_left = 62.2182
-margin_top = 263.38
+margin_top = 209.38
 margin_right = 636.218
-margin_bottom = 987.38
+margin_bottom = 933.38
 theme = SubResource( 15 )
+columns = 2
 
 [node name="NameCard1" parent="HumanTeamBench" instance=ExtResource( 3 )]
 margin_bottom = 100.0
 
 [node name="NameCard2" parent="HumanTeamBench" instance=ExtResource( 3 )]
+margin_left = 300.0
+margin_right = 550.0
+margin_bottom = 100.0
+
+[node name="NameCard3" parent="HumanTeamBench" instance=ExtResource( 3 )]
 margin_top = 120.0
 margin_bottom = 220.0
 
-[node name="NameCard3" parent="HumanTeamBench" instance=ExtResource( 3 )]
-margin_top = 240.0
-margin_bottom = 340.0
-
 [node name="NameCard4" parent="HumanTeamBench" instance=ExtResource( 3 )]
-margin_top = 360.0
-margin_bottom = 460.0
+margin_left = 300.0
+margin_top = 120.0
+margin_right = 550.0
+margin_bottom = 220.0
 
 [node name="NameCard5" parent="HumanTeamBench" instance=ExtResource( 3 )]
-margin_top = 480.0
-margin_bottom = 580.0
+margin_top = 240.0
+margin_bottom = 340.0
 
 [node name="ColorRect" type="ColorRect" parent="."]
 margin_left = 808.0
@@ -138,3 +152,83 @@ margin_left = 1183.0
 margin_top = 546.0
 margin_right = 1433.0
 margin_bottom = 646.0
+
+[node name="PlayerStatsViewer" type="Panel" parent="."]
+margin_left = 57.3008
+margin_top = 623.49
+margin_right = 632.301
+margin_bottom = 1015.49
+custom_styles/panel = SubResource( 19 )
+script = ExtResource( 5 )
+
+[node name="Name" type="Label" parent="PlayerStatsViewer"]
+margin_top = 10.0
+margin_right = 576.0
+margin_bottom = 47.0
+custom_fonts/font = SubResource( 20 )
+text = "Karteez Arminhalf"
+align = 1
+
+[node name="Serve" type="Label" parent="PlayerStatsViewer"]
+margin_left = 35.5636
+margin_top = 58.1085
+margin_right = 611.564
+margin_bottom = 95.1085
+custom_fonts/font = SubResource( 20 )
+text = "Serve: 99"
+
+[node name="Receive" type="Label" parent="PlayerStatsViewer"]
+margin_left = 35.5636
+margin_top = 90.1085
+margin_right = 611.564
+margin_bottom = 127.109
+custom_fonts/font = SubResource( 20 )
+text = "Receive: 99"
+
+[node name="Set" type="Label" parent="PlayerStatsViewer"]
+margin_left = 35.5636
+margin_top = 123.109
+margin_right = 611.564
+margin_bottom = 160.109
+custom_fonts/font = SubResource( 20 )
+text = "Set: 99"
+
+[node name="Block" type="Label" parent="PlayerStatsViewer"]
+margin_left = 35.5636
+margin_top = 155.109
+margin_right = 611.564
+margin_bottom = 192.109
+custom_fonts/font = SubResource( 20 )
+text = "Block: 99"
+
+[node name="Spike" type="Label" parent="PlayerStatsViewer"]
+margin_left = 299.564
+margin_top = 58.1085
+margin_right = 875.564
+margin_bottom = 95.1085
+custom_fonts/font = SubResource( 20 )
+text = "Spike: 99"
+
+[node name="Speed" type="Label" parent="PlayerStatsViewer"]
+margin_left = 299.564
+margin_top = 90.1085
+margin_right = 875.564
+margin_bottom = 127.109
+custom_fonts/font = SubResource( 20 )
+text = "Speed: 99"
+
+[node name="SpikeHeight" type="Label" parent="PlayerStatsViewer"]
+margin_left = 299.564
+margin_top = 123.109
+margin_right = 875.564
+margin_bottom = 160.109
+custom_fonts/font = SubResource( 20 )
+text = "Spike Height: 99"
+
+[node name="BlockHeight" type="Label" parent="PlayerStatsViewer"]
+margin_left = 299.564
+margin_top = 155.109
+margin_right = 875.564
+margin_bottom = 192.109
+custom_fonts/font = SubResource( 20 )
+text = "Block Height: 99"

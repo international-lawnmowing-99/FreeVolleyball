@@ -10,4 +10,8 @@ func _ready() -> void:
 		nameCards.append(card)
 	for card in nameCards:
 		card.ChangeColour()
-		
+		card.teamSelectionUI = self
+
+func CardSelected(athlete:Athlete):
+	if $PlayerStatsViewer:
+		$PlayerStatsViewer.Populate(athlete)

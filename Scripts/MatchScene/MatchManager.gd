@@ -5,12 +5,13 @@ class_name MatchManager
 var gameWorld = load("res://Scripts/World/GameWorld.gd").new()
 var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 
+
 onready var teamA:Team = $TeamA
 onready var teamB:Team = $TeamB
 
 onready var ball = $ball
 
-onready var score = $CanvasLayer/Score
+onready var score = $ScoreCanvasLayer/Score
 onready var preMatchUI = $PreMatchUI
 #onready var teamInfoUI = 
 
@@ -55,8 +56,13 @@ func _ready():
 	score.teamBNameText.text = teamB.teamName
 	
 	preMatchUI.PopulateUI(teamA, teamB)
-	preMatchUI.skipUI()
+	#preMatchUI.skipUI()
 
+func _physics_process(delta: float) -> void:
+	if ball.blockWillBeAttempted:
+		if teamA.isNextToSpike:
+			pass
+	
 func BallOverNet(hitByTeamA:bool):
 	teamA.isNextToSpike = !teamA.isNextToSpike
 	teamB.isNextToSpike = !teamB.isNextToSpike
