@@ -8,7 +8,7 @@ func Enter(athlete:Athlete):
 		athlete.rb.gravity_scale = 0
 		athlete.rb.linear_velocity = Vector3.ZERO
 		athlete.translation.y = 0
-		athlete.rotation = Vector3.ZERO
+		#athlete.rotation = Vector3.ZERO
 		athlete.rb.angular_velocity = Vector3.ZERO
 		
 	pass
@@ -18,7 +18,7 @@ func Update(athlete:Athlete):
 		athlete.rb.gravity_scale = 0
 		athlete.rb.linear_velocity = Vector3.ZERO
 		athlete.translation.y = 0
-		athlete.rotation = Vector3.ZERO
+		#athlete.rotation = Vector3.ZERO
 		athlete.rb.angular_velocity = Vector3.ZERO
 
 

@@ -131,6 +131,7 @@ config/icon="res://icon.png"
 
 DebugOverlay="*res://Addons/DebugOverlay.gd"
 Console="*res://MatchScene/Console.tscn"
+Enums="*res://Scripts/World/Enums.gd"
 
 [debug]
 

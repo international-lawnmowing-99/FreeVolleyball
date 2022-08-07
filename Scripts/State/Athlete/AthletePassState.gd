@@ -97,24 +97,24 @@ func PassBall(athlete):
 	#Engine.time_scale = 0.25
 	var receptionTarget
 	#perfect pass, 2-pass, 1-pass, shank, some sort of uncontrolled ball that hits the floor near your feet
-	var passQuality = randi()% 4#5
+	var passQuality = randi()% 100#5
 	
-	if passQuality == 0:
+	if passQuality <= 20:
 		# what is the ideal height for the setter to jump set??
 		if athlete.role == Enums.Role.Setter:
 			receptionTarget = Vector3(athlete.team.flip * 3.13, 2.5, 0)
 		else:
 			receptionTarget = Vector3(athlete.team.flip * 0.5, 2.5, 0)
 		Console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")
-	elif passQuality == 1:
+	elif passQuality <= 40:
 		receptionTarget = Vector3(athlete.team.flip * rand_range(0.5, 1.5), 2.5, rand_range(-2, 2))
 		Console.AddNewLine(athlete.stats.lastName + " 2-point pass")
 		pass
-	elif passQuality == 2:
+	elif passQuality <= 90:
 		receptionTarget = Vector3(athlete.translation.x + rand_range(-3,3), 2.4, athlete.translation.z + rand_range(-3,3))
 		Console.AddNewLine(athlete.stats.lastName + " 1-point pass")
 		pass	
-	elif passQuality == 3:
+	elif passQuality <= 999:
 		ball.linear_velocity.y *= -1
 
 		

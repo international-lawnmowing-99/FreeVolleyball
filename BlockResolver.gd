@@ -8,11 +8,15 @@ var spiker:Athlete
 
 func KillBlock():
 	ball.linear_velocity.x *= -1
-	
-	ball.linear_velocity *= .5
+	randomize()
+	ball.linear_velocity *= rand_range(.5,.9)
 	ball.attackTarget = ball.BallPositionAtGivenHeight(0)
 #	print(ball.attackTarget)
 	ball.blockWillBeAttempted = false
+	if spikedByA:
+		ball.TouchedByB()
+	else:
+		ball.TouchedByA()
 	pass
 	
 func ReflectBlock():

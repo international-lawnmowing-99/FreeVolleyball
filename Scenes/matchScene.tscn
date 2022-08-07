@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://Addons/DebugDraw3D.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/MatchScene/MatchManager.gd" type="Script" id=2]
@@ -23,6 +23,7 @@
 [ext_resource path="res://Scenes/teamNameFont.tres" type="DynamicFont" id=21]
 [ext_resource path="res://MatchScene/TeamSelectionUI.tscn" type="PackedScene" id=22]
 [ext_resource path="res://Scenes/TeamInfoUI.gd" type="Script" id=23]
+[ext_resource path="res://Models/BasicSeat.tscn" type="PackedScene" id=24]
 
 [sub_resource type="DynamicFont" id=2]
 size = 20
@@ -749,7 +750,7 @@ margin_top = 979.44
 margin_right = 1906.05
 margin_bottom = 1067.44
 
-[node name="Lights" type="Node" parent="."]
+[node name="Lights" type="Spatial" parent="."]
 pause_mode = 2
 script = ExtResource( 15 )
 
@@ -806,7 +807,6 @@ fov = 50.0
 near = 0.1
 far = 264.0
 script = ExtResource( 3 )
-enabled = false
 sensitivity = 0.75
 acceleration = 0.1
 max_speed = Vector3( 10, 10, 10 )
@@ -851,7 +851,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, -1.6, 0 )
 [node name="CollisionShape3" type="CollisionShape" parent="ZoneOut/ZoneInB"]
 shape = SubResource( 10 )
 
-[node name="Building" type="Node" parent="."]
+[node name="Building" type="Spatial" parent="."]
 
 [node name="default stadium" parent="Building" instance=ExtResource( 10 )]
 transform = Transform( 60, 0, 0, 0, 20, 0, 0, 0, 60, 0, 20, 0 )
@@ -862,6 +862,9 @@ mesh = SubResource( 5 )
 material/0 = SubResource( 6 )
 
 [node name="net" parent="Building" instance=ExtResource( 11 )]
+
+[node name="BasicSeat" parent="Building" instance=ExtResource( 24 )]
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 11.478 )
 
 [node name="TeamA" type="Spatial" parent="."]
 script = ExtResource( 5 )

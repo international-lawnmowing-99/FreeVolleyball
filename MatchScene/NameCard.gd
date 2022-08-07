@@ -1,9 +1,13 @@
 extends ColorRect
 var Enums = preload("res://Scripts/World/Enums.gd")
-var selectable:bool
+var isMouseHovering:bool
 var currentAthlete:Athlete
 var teamSelectionUI
+var state = Enums.NameCardState.UNDEFINED
+var previousColour:Color
 
+func _ready() -> void:
+	ChangeColour(Color.chocolate)
 
 func DisplayStats(athlete:Athlete):
 	currentAthlete = athlete
@@ -28,18 +32,41 @@ func DisplayEssentials():
 	$CaptainButton.hide()
 
 func ChangeColour(colour = Color(.75,0,0)):
+	previousColour = self.color
 	self.color = colour
 
 
 func _on_NameCard_mouse_entered() -> void:
-	ChangeColour(Color(0,1,1))
-	selectable = true
+	isMouseHovering = true
+	#ChangeColour(Color(0,1,1))
+	#selectable = true
 	if teamSelectionUI:
 		teamSelectionUI.CardSelected(currentAthlete)
 	pass # Replace with function body.
 
 
 func _on_NameCard_mouse_exited() -> void:
-	selectable = false
-	ChangeColour(Color(0,0,0))
+	isMouseHovering = false
+	#selectable = false
+	#ChangeColour(previousColour)
 	pass # Replace with function body.
+
+
+func _on_SubstituteButton_pressed() -> void:
+	if teamSelectionUI:
+		
+		teamSelectionUI.RequestSub(currentAthlete)
+		ChangeColour(Color.purple)
+	pass # Replace with function body.
+
+func Benched():
+	$SubstituteButton.hide()
+	$CaptainButton.hide()
+	$LiberoIcon.hide()
+	$CaptainIcon.hide()
+
+
+func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("LMB"):
+		if state == Enums.NameCardState.Substitutable && isMouseHovering:
+			teamSelectionUI.ExecuteSub(currentAthlete)

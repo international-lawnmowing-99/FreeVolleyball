@@ -123,8 +123,8 @@ func _process(_delta):
 	basisx = transform.basis.x
 	return
 	
-	if transform.origin.y < -0.2:
-		print(stateMachine.currentState.nameOfState)
+#	if transform.origin.y < -0.2:
+#		print(stateMachine.currentState.nameOfState)
 	
 func Move(delta):
 	# For the future - measure the length, use it to determine if you should strafe or turn

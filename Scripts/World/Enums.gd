@@ -27,3 +27,8 @@ Opposite,
 Middle,
 Libero
 }
+
+enum NameCardState{
+	UNDEFINED,
+	Substitutable
+	}
