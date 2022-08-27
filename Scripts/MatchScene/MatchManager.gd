@@ -140,11 +140,13 @@ func PointToTeamB():
 	teamB.stateMachine.SetCurrentState(teamB.preserviceState)
 	
 func SetToTeamA():
+	$TeamInfoUI/Control/TeamSelectionUI.EnableRotate()
 	RotateTheBoard()
 	#reset everyone and allow lineup changes
 	pass
 
 func SetToTeamB():
+	$TeamInfoUI/Control/TeamSelectionUI.EnableRotate()	
 	RotateTheBoard()
 	pass
 
@@ -176,4 +178,6 @@ func RotateAroundOrigin(node3D, angle):
 	# so we can translate it using pivot_radius.
 	# the translation moves the object away from the
 	# centre of the pivot_transform. 
-	node3D.transform = pivot_transform.rotated(Vector3.UP, angle).translated(pivot_radius)
+	node3D.transform = pivot_transform.rotated(Vector3.UP, node3D.transform.basis.get_euler().y + angle).translated(pivot_radius)
+	print(str(node3D.transform.basis.get_euler()))
+	

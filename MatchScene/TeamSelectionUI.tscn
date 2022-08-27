@@ -14,13 +14,13 @@ GridContainer/constants/vseparation = 20
 VBoxContainer/constants/separation = 20
 
 [sub_resource type="DynamicFont" id=18]
-size = 150
+size = 100
 outline_size = 3
-outline_color = Color( 0.254902, 0.662745, 0.647059, 1 )
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 2 )
 
 [sub_resource type="StyleBoxFlat" id=19]
-bg_color = Color( 0.521569, 0.796078, 0.815686, 1 )
+bg_color = Color( 0.839216, 0.623529, 0.207843, 1 )
 corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
@@ -47,6 +47,7 @@ script = ExtResource( 1 )
 [node name="Line2D" type="Line2D" parent="."]
 position = Vector2( 0, 184 )
 points = PoolVector2Array( 1920.37, -3.66284, -2.39679, -3.8028 )
+default_color = Color( 0.839216, 0.623529, 0.207843, 1 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -113,11 +114,14 @@ __meta__ = {
 }
 
 [node name="TeamName" type="Label" parent="."]
-margin_left = 16.0
-margin_right = 619.0
-margin_bottom = 199.0
+margin_left = -1.0
+margin_top = 5.0
+margin_right = 1919.0
+margin_bottom = 138.0
+custom_colors/font_color = Color( 0.952941, 0, 0, 1 )
 custom_fonts/font = SubResource( 18 )
 text = "Australia"
+align = 1
 
 [node name="AcceptButton" type="Button" parent="."]
 margin_left = 1490.36

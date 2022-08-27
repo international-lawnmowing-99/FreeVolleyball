@@ -35,6 +35,9 @@ func Enter(team:Team):
 			possibleSpikers.append(athlete)
 			
 	Console.AddNewLine("Choosing set option...")
+	if possibleSpikers.size() <= 0:
+		#Got to dump
+		pass
 
 	var setChoice = randi()%possibleSpikers.size()
 	

@@ -173,7 +173,7 @@ func PlaceTeam():
 		lad.moveTarget = Vector3(pos.x,0,pos.z)
 		#allPlayers.append(lad)
 		if !isHuman:
-			lad.get_child(2).ChangeShirtColour(Color(1,3,0))
+			lad.get_child(0).ChangeShirtColour(Color(1,3,0))
 		if i  < 6 :
 			lad.rotationPosition = i + 1
 			courtPlayers.append(lad)
@@ -182,7 +182,7 @@ func PlaceTeam():
 		
 		if i == 6:
 			libero = lad
-			lad.get_child(2).ChangeShirtColour()
+			lad.get_child(0).ChangeShirtColour()
 		
 		lad.ball = ball
 			

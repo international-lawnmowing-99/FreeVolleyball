@@ -78,3 +78,5 @@ func OutsideEvaluation()->float:
 
 	return eval
 
+func SkillTotal()->float:
+	return spike + block + set + reception + serve + spikeHeight*100

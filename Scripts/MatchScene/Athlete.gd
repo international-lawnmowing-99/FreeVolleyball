@@ -1,6 +1,6 @@
 extends Spatial
 class_name Athlete
-#signal ballPassed
+
 var g = ProjectSettings.get_setting("physics/3d/default_gravity")
 var role
 var stats:Stats = Stats.new()
@@ -8,7 +8,7 @@ var stats:Stats = Stats.new()
 var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(self)
 
 
-onready var animTree = $AnimationTree
+onready var animTree = $"new new woman import/AnimationTree"
 onready var rb:RigidBody = $"."
 
 var team
@@ -25,7 +25,7 @@ onready var chillState = load("res://Scripts/State/Athlete/AthleteChillState.gd"
 var blockingTarget:Athlete
 
 var ball:Ball
-var skel:Skeleton
+onready var skel:Skeleton = $"new new woman import/godette volleyball/Skeleton"
 
 var spineBone01Id
 var spineBone02Id
@@ -103,7 +103,6 @@ func _ready():
 	#DebugOverlay.draw.add_vector(self, "basisz", 1, 4, Color(0,1,0, 0.5))
 	#DebugOverlay.draw.add_vector(self, "basisx", 1, 4, Color(1,1,0, 0.5))
 	
-	skel = get_node("new new woman import/godette volleyball/Skeleton")
 	spineBone01Id = skel.find_bone("spine01")
 	spineBone02Id = skel.find_bone("spine02")
 	neckBone01Id = skel.find_bone("neck01")
@@ -149,7 +148,7 @@ func Move(delta):
 	var moveVector = (moveTarget - translation).normalized()
 	translation += moveVector * speed * delta
 	
-	animTree.set("parameters/BlendSpace2D/blend_position", Vector2(moveVector.x, moveVector.z))
+	animTree.set("parameters/BlendSpace2D/dig", Vector2(moveVector.x, moveVector.z))
 	
 	#rotate_y(deg2rad(rotationSpeed))
 	pass
@@ -173,6 +172,11 @@ static func SortSet(a,b):
 
 static func SortLib(a,b):
 	if a.stats.LiberoEvaluation() > b.stats.LiberoEvaluation():
+		return true
+	return false
+
+static func SortSkill(a,b):
+	if a.stats.SkillTotal() > b.stats.SkillTotal():
 		return true
 	return false
 
@@ -229,9 +233,9 @@ func BaseMove(_delta):
 	if rb.mode == RigidBody.MODE_KINEMATIC && translation.distance_to(moveTarget) > .1:
 		var dir = (moveTarget - translation).normalized()
 		translation += dir * stats.speed * _delta
-		if abs(translation.x - moveTarget.x) > .3 && abs(translation.z - moveTarget.z) > .3:
-			look_at_from_position(translation, moveTarget, Vector3.UP)
-			rotate_y(PI)
+		#if abs(translation.x - moveTarget.x) > .3 && abs(translation.z - moveTarget.z) > .3:
+			#look_at_from_position(translation, moveTarget, Vector3.UP)
+			#rotate_y(PI)
 			
 func ReEvaluateState():
 	match team.stateMachine.currentState:

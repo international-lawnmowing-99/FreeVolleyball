@@ -78,7 +78,7 @@ func Update(athlete:Athlete):
 				
 	if athlete.timeTillBallReachesMe <1.3:
 		var animFactor = 1.3-  athlete.timeTillBallReachesMe 
-		athlete.animTree.set("parameters/BlendSpace1D/blend_position", animFactor)
+		athlete.animTree.set("parameters/Dig/blend_amount", animFactor)
 		athlete.RotateDigPlatform(lerp(0,athlete.digAngle,(min(1,1/athlete.timeTillBallReachesMe - 2))))
 	#else:
 		#var a = athlete.animTree.get("parameters/BlendSpace1D/blend_position")

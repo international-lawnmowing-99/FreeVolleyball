@@ -21,9 +21,9 @@ export (int, 0, 360) var yaw_limit = 360
 export (int, 0, 360) var pitch_limit = 360
 
 # Pivot Settings
-export(NodePath) var privot setget set_privot
+export(NodePath) var pivot setget set_pivot
 export var distance = 5.0 setget set_distance
-export var rotate_privot = false
+export var rotate_pivot = false
 export var collisions = true setget set_collisions
 
 # Movement settings
@@ -81,10 +81,10 @@ func _ready():
 		rotate_down_action
 	])
 
-	if privot:
-		privot = get_node(privot)
+	if pivot:
+		pivot = get_node(pivot)
 	else:
-		privot = null
+		pivot = null
 
 	set_enabled(enabled)
 
@@ -118,7 +118,7 @@ func _process(delta):
 		_update_views(delta)
 
 func _update_views(delta):
-	if privot:
+	if pivot:
 		_update_distance()
 	if freelook:
 		_update_rotation(delta)
@@ -136,7 +136,7 @@ func _update_views_physics(delta):
 		_update_rotation(delta)
 
 	var space_state = get_world().get_direct_space_state()
-	var obstacle = space_state.intersect_ray(privot.get_translation(),  get_translation())
+	var obstacle = space_state.intersect_ray(pivot.get_translation(),  get_translation())
 	if not obstacle.empty():
 		set_translation(obstacle.position)
 
@@ -181,8 +181,8 @@ func _update_rotation(delta):
 	_total_yaw += _yaw
 	_total_pitch += _pitch
 
-	if privot:
-		var target = privot.get_translation()
+	if pivot:
+		var target = pivot.get_translation()
 		var dist = get_translation().distance_to(target)
 
 		set_translation(target)
@@ -190,20 +190,20 @@ func _update_rotation(delta):
 		rotate_object_local(Vector3(1,0,0), deg2rad(-_pitch))
 		translate(Vector3(0.0, 0.0, dist))
 
-		if rotate_privot:
-			privot.rotate_y(deg2rad(-_yaw))
+		if rotate_pivot:
+			pivot.rotate_y(deg2rad(-_yaw))
 	else:
 		rotate_y(deg2rad(-_yaw))
 		rotate_object_local(Vector3(1,0,0), deg2rad(-_pitch))
 
 func _update_distance():
-	var t = privot.get_translation()
+	var t = pivot.get_translation()
 	t.z -= distance
 	set_translation(t)
 
 func _update_process_func():
 	# Use physics process if collision are enabled
-	if collisions and privot:
+	if collisions and pivot:
 		set_physics_process(true)
 		set_process(false)
 	else:
@@ -216,8 +216,8 @@ func _check_actions(actions=[]):
 			if not InputMap.has_action(action):
 				print('WARNING: No action "' + action + '"')
 
-func set_privot(value):
-	privot = value
+func set_pivot(value):
+	pivot = value
 	_update_process_func()
 	if len(trigger_action)!=0:
 		_update_views(0)

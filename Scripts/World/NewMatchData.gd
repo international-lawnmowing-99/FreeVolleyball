@@ -36,3 +36,7 @@ func ChooseRandom(gameWorld):
 	bChoiceState = PlayerChoiceState.new(gameWorld)
 	aChoiceState = aChoiceState.ChooseRandom(gameWorld, clubOrInternational)
 	bChoiceState = bChoiceState.ChooseRandom(gameWorld, clubOrInternational)
+	
+	if clubOrInternational == Enums.ClubOrInternational.International:
+		gameWorld.GetTeam(aChoiceState, clubOrInternational).SelectNationalTeam()
+		gameWorld.GetTeam(bChoiceState, clubOrInternational).SelectNationalTeam()

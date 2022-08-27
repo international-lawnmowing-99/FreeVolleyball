@@ -1,0 +1,27 @@
+[gd_resource type="AnimationNodeBlendTree" load_steps=6 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "DigPreparation"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "DigContact"
+
+[sub_resource type="AnimationNodeBlend2" id=3]
+
+[sub_resource type="AnimationNodeBlendTree" id=4]
+
+[sub_resource type="AnimationNodeBlendTree" id=5]
+
+[resource]
+graph_offset = Vector2( -852.474, -238.814 )
+nodes/Animation/node = SubResource( 2 )
+nodes/Animation/position = Vector2( -980, 100 )
+"nodes/Animation 2/node" = SubResource( 1 )
+"nodes/Animation 2/position" = Vector2( -900, -40 )
+nodes/Dig/node = SubResource( 3 )
+nodes/Dig/position = Vector2( -620, 0 )
+nodes/DigTree/node = SubResource( 4 )
+nodes/DigTree/position = Vector2( -340, -40 )
+nodes/MoveTree/node = SubResource( 5 )
+nodes/MoveTree/position = Vector2( -380, 100 )
+node_connections = [ "Dig", 0, "Animation 2", "Dig", 1, "Animation", "output", 0, "Dig" ]

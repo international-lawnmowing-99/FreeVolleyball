@@ -34,7 +34,7 @@ func Update(athlete:Athlete):
 	match serveState:
 		ServeState.Walking:
 			if athlete.translation.distance_to(athlete.moveTarget) < 0.1:
-				athlete.look_at_from_position(athlete.translation, Vector3.ZERO, Vector3.UP)
+				#athlete.look_at(Vector3.ZERO, -Vector3.UP)
 				serveState = ServeState.Aiming
 			
 		ServeState.Aiming:

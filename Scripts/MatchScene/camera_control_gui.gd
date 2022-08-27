@@ -18,7 +18,7 @@ const MAX_SPEED = 50
 var camera
 var shortcut
 var node_list
-var privot
+var pivot
 var panel
 
 var mouse_over = false
@@ -80,20 +80,20 @@ func _ready():
 		smoothness.set_value(camera.smoothness)
 		smoothness.connect("value_changed",self,"_on_hsb_smoothness_value_changed")
 
-		var lbl_privot = Label.new()
-		lbl_privot.set_text("Privot")
+		var lbl_pivot = Label.new()
+		lbl_pivot.set_text("Pivot")
 
-		privot = OptionButton.new()
-		privot.set_text("Privot")
-		_update_privots()
-		privot.connect("item_selected",self,"_on_opt_privot_item_selected")
-		privot.connect("pressed",self,"_on_opt_privot_pressed")
+		pivot = OptionButton.new()
+		pivot.set_text("Pivot")
+		_update_pivots()
+		pivot.connect("item_selected",self,"_on_opt_pivot_item_selected")
+		pivot.connect("pressed",self,"_on_opt_pivot_pressed")
 
-		var btn_rot_privot = CheckButton.new()
-		btn_rot_privot.set_text("Rotate Privot")
-		btn_rot_privot.set_toggle_mode(true)
-		btn_rot_privot.set_pressed(camera.rotate_privot)
-		btn_rot_privot.connect("toggled",self,"_on_btn_rot_privot_toggled")
+		var btn_rot_pivot = CheckButton.new()
+		btn_rot_pivot.set_text("Rotate Pivot")
+		btn_rot_pivot.set_toggle_mode(true)
+		btn_rot_pivot.set_pressed(camera.rotate_pivot)
+		btn_rot_pivot.connect("toggled",self,"_on_btn_rot_pivot_toggled")
 
 		var lbl_distance = Label.new()
 		lbl_distance.set_text("Distance")
@@ -165,9 +165,9 @@ func _ready():
 		container.add_child(sensitivity)
 		container.add_child(lbl_smoothless)
 		container.add_child(smoothness)
-		container.add_child(lbl_privot)
-		container.add_child(privot)
-		container.add_child(btn_rot_privot)
+		container.add_child(lbl_pivot)
+		container.add_child(pivot)
+		container.add_child(btn_rot_pivot)
 		container.add_child(lbl_distance)
 		container.add_child(distance)
 		container.add_child(lbl_yaw)
@@ -197,12 +197,9 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed(shortcut):
 		if camera.enabled:
-			camera.enabled = false
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			self.show()
+			LockCamera()
 		else:
-			camera.enabled = true
-			self.hide()
+			UnlockCamera()
 			
 	if DRAGGABLE:
 		if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
@@ -211,20 +208,29 @@ func _input(event):
 		elif event is InputEventMouseMotion and mouse_over and mouse_pressed:
 			panel.set_begin(panel.get_begin() + event.relative)
 
-func _update_privots():
-	privot.clear()
-	privot.add_item("None")
+func LockCamera():
+	camera.enabled = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	self.show()
+
+func UnlockCamera():
+	camera.enabled = true
+	self.hide()
+
+func _update_pivots():
+	pivot.clear()
+	pivot.add_item("None")
 	node_list = _get_spatials_recusiv(get_tree().get_root(), [get_name(), camera.get_name()])
 
 	var size = node_list.size()
 	for i in range(0, size):
 		var node = node_list[i]
-		privot.add_item(node.get_name())
-		if node == camera.privot:
-			privot.select(i+1)
+		pivot.add_item(node.get_name())
+		if node == camera.pivot:
+			pivot.select(i+1)
 
-	if not camera.privot:
-		privot.select(0)
+	if not camera.pivot:
+		pivot.select(0)
 
 
 func _get_spatials_recusiv(node, exceptions=[]):
@@ -256,18 +262,18 @@ func _on_hsb_sensitivity_value_changed(value):
 func _on_hsb_smoothness_value_changed(value):
 	camera.smoothness = value
 
-func _on_opt_privot_pressed():
-	_update_privots()
+func _on_opt_pivot_pressed():
+	_update_pivots()
 
-func _on_opt_privot_item_selected(id):
+func _on_opt_pivot_item_selected(id):
 	if id > 0:
-		camera.privot = node_list[id-1]
+		camera.pivot = node_list[id-1]
 	else:
-		camera.privot = null
-	privot.select(id)
+		camera.pivot = null
+	pivot.select(id)
 
-func _on_btn_rot_privot_toggled(pressed):
-	camera.rotate_privot = pressed
+func _on_btn_rot_pivot_toggled(pressed):
+	camera.rotate_pivot = pressed
 
 func _on_box_distance_value_changed(value):
 	camera.distance = value

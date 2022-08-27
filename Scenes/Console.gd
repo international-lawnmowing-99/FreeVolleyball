@@ -16,3 +16,7 @@ func AddNewLine(text:String, colour:Color = Color.white):
 	for line in get_children():
 		line.rect_position = Vector2(line.rect_position.x, line.rect_position.y - 40)
 	add_child(lineOfSuspiciousPowder)
+
+func Clear():
+	for child in get_children():
+		child.queue_free()
