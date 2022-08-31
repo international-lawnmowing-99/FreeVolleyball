@@ -10,6 +10,10 @@ var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(
 
 onready var animTree = $"new new woman import/AnimationTree"
 onready var rb:RigidBody = $"."
+onready var leftIK = $"new new woman import/godette volleyball/Skeleton/LeftHandSkeletonIK"
+onready var rightIK = $"new new woman import/godette volleyball/Skeleton/RightHandSkeletonIK"
+onready var leftIKTarget = $"new new woman import/LeftHandTarget"
+onready var rightIKTarget = $"new new woman import/RightHandTarget"
 
 var team
 var myDelta
@@ -22,7 +26,7 @@ onready var spikeState = load("res://Scripts/State/Athlete/AthleteSpikeState.gd"
 onready var blockState = load("res://Scripts/State/Athlete/AthleteBlockState.gd").new()
 onready var chillState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
 
-var blockingTarget:Athlete
+#var blockingTarget:Athlete
 
 var ball:Ball
 onready var skel:Skeleton = $"new new woman import/godette volleyball/Skeleton"
@@ -148,7 +152,7 @@ func Move(delta):
 	var moveVector = (moveTarget - translation).normalized()
 	translation += moveVector * speed * delta
 	
-	animTree.set("parameters/BlendSpace2D/dig", Vector2(moveVector.x, moveVector.z))
+
 	
 	#rotate_y(deg2rad(rotationSpeed))
 	pass
@@ -233,6 +237,7 @@ func BaseMove(_delta):
 	if rb.mode == RigidBody.MODE_KINEMATIC && translation.distance_to(moveTarget) > .1:
 		var dir = (moveTarget - translation).normalized()
 		translation += dir * stats.speed * _delta
+		animTree.set("parameters/MoveTree/blend_position", Vector2(dir.x, dir.z))
 		#if abs(translation.x - moveTarget.x) > .3 && abs(translation.z - moveTarget.z) > .3:
 			#look_at_from_position(translation, moveTarget, Vector3.UP)
 			#rotate_y(PI)

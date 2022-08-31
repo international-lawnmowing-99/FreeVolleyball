@@ -161,6 +161,7 @@ func RotateTheBoard():
 	RotateAroundOrigin($Lights, PI)
 	RotateAroundOrigin($ZoneOut, PI)
 	RotateAroundOrigin($Building, PI)
+	RotateAroundOrigin($ZoneOut, PI)
 	
 func RotateAroundOrigin(node3D, angle):
 	#https://godotengine.org/qa/34248/rotate-around-a-fixed-point-in-3d-space

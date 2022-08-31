@@ -1,27 +1,63 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=6 format=2]
+[gd_resource type="AnimationNodeBlendTree" load_steps=12 format=2]
 
 [sub_resource type="AnimationNodeAnimation" id=1]
 animation = "DigPreparation"
+
+[sub_resource type="AnimationNodeAnimation" id=12]
+animation = "neutral"
 
 [sub_resource type="AnimationNodeAnimation" id=2]
 animation = "DigContact"
 
 [sub_resource type="AnimationNodeBlend2" id=3]
 
-[sub_resource type="AnimationNodeBlendTree" id=4]
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "Idle take 1"
 
-[sub_resource type="AnimationNodeBlendTree" id=5]
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "walkforwards"
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "Walk Back"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "strafe left"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "strafe right"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id=10]
+blend_point_0/node = SubResource( 5 )
+blend_point_0/pos = Vector2( 0, 0 )
+blend_point_1/node = SubResource( 6 )
+blend_point_1/pos = Vector2( 0, 1 )
+blend_point_2/node = SubResource( 7 )
+blend_point_2/pos = Vector2( 0, -0.9 )
+blend_point_3/node = SubResource( 8 )
+blend_point_3/pos = Vector2( -1, 0 )
+blend_point_4/node = SubResource( 9 )
+blend_point_4/pos = Vector2( 1, 0 )
+
+[sub_resource type="AnimationNodeTransition" id=11]
+input_count = 2
+xfade_time = 0.2
+input_0/name = "moving"
+input_0/auto_advance = false
+input_1/name = "digging"
+input_1/auto_advance = false
 
 [resource]
-graph_offset = Vector2( -852.474, -238.814 )
+graph_offset = Vector2( -630.623, -36.0164 )
 nodes/Animation/node = SubResource( 2 )
 nodes/Animation/position = Vector2( -980, 100 )
 "nodes/Animation 2/node" = SubResource( 1 )
 "nodes/Animation 2/position" = Vector2( -900, -40 )
+"nodes/Animation 3/node" = SubResource( 12 )
+"nodes/Animation 3/position" = Vector2( -220, 40 )
 nodes/Dig/node = SubResource( 3 )
-nodes/Dig/position = Vector2( -620, 0 )
-nodes/DigTree/node = SubResource( 4 )
-nodes/DigTree/position = Vector2( -340, -40 )
-nodes/MoveTree/node = SubResource( 5 )
-nodes/MoveTree/position = Vector2( -380, 100 )
-node_connections = [ "Dig", 0, "Animation 2", "Dig", 1, "Animation", "output", 0, "Dig" ]
+nodes/Dig/position = Vector2( -640, 120 )
+nodes/MoveTree/node = SubResource( 10 )
+nodes/MoveTree/position = Vector2( -400, -60 )
+nodes/state/node = SubResource( 11 )
+nodes/state/position = Vector2( -20, 100 )
+node_connections = [ "state", 0, "Animation 3", "state", 1, "Dig", "output", 0, "state", "Dig", 0, "Animation 2", "Dig", 1, "Animation" ]

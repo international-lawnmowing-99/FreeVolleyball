@@ -7,9 +7,37 @@
 [node name="new new woman import" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="3"]
+[node name="LeftHandSkeletonIK" type="SkeletonIK" parent="godette volleyball/Skeleton" index="6"]
+pause_mode = 2
+process_priority = 1
+root_bone = "upperarm01.L"
+tip_bone = "wrist.L"
+target_node = NodePath("../../../LeftHandTarget")
+
+[node name="RightHandSkeletonIK" type="SkeletonIK" parent="godette volleyball/Skeleton" index="7"]
+pause_mode = 2
+process_priority = 1
+root_bone = "upperarm01.R"
+tip_bone = "wrist.R"
+target_node = NodePath("../../../RightHandTarget")
+
+[node name="Empty" parent="." index="1"]
+transform = Transform( 0, 1.42731, 0, 0, 0, -1.42731, -1.42731, 0, 0, 0.655382, 0.855518, 1.41535 )
+
+[node name="LeftHandTarget" type="Position3D" parent="." index="2"]
+transform = Transform( -0.621714, 0.242423, -0.744783, -0.372363, 0.745081, 0.553354, 0.68907, 0.621358, -0.372958, 0.176506, 2.006, 0.484 )
+
+[node name="RightHandTarget" type="Position3D" parent="." index="3"]
+transform = Transform( -0.289166, -0.466263, 0.836051, 0.347203, 0.762808, 0.545503, -0.892095, 0.44802, -0.05869, -0.327531, 2.006, 0.484 )
+
+[node name="AnimationPlayer" parent="." index="4"]
+playback_process_mode = 0
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="5"]
 tree_root = ExtResource( 3 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 process_mode = 0
 parameters/Dig/blend_amount = 0.0
+parameters/MoveTree/blend_position = Vector2( 0.00417018, -0.0862069 )
+parameters/state/current = 0

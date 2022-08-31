@@ -40,10 +40,10 @@ func _init(_ball:Ball) -> void:
 func _process(delta: float) -> void:
 	if ball.blockWillBeAttempted:
 		if spikedByA:
-			if ball.translation.x <= 0:
+			if ball.translation.x >= 0:
 				ResolveBlock()
 		else:
-			if ball.translation.x >= 0:
+			if ball.translation.x <= 0:
 				ResolveBlock()
 	pass
 
@@ -60,7 +60,7 @@ func ResolveBlock():
 		blockStatsString += str(round(blocker.stats.block)) + " "
 		blockerCount += 1
 		totalBlockStrength += blocker.stats.block/blockerCount
-	Console.AddNewLine("Spiker stat: " + str(round(spiker.stats.spike)) + " || Blocker stat(s): " + blockStatsString, Color.yellowgreen)
+	Console.AddNewLine("Spiker stat: " + str(round(spiker.stats.spike)) + " || Blocker stat(s): " + blockStatsString + " ::" + str(totalBlockStrength), Color.yellowgreen)
 
 
 	var attackRoll = rand_range(1, spiker.stats.spike)

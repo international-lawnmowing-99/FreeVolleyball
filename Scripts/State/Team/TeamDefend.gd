@@ -2,8 +2,8 @@ extends "res://Scripts/State/Team/TeamState.gd"
 
 
 var otherTeam:Team
-var leftSideBlocker
-var rightSideBlocker
+var leftSideBlocker:Athlete
+var rightSideBlocker:Athlete
 
 func Enter(team:Team):
 	for player in team.courtPlayers:
@@ -42,12 +42,24 @@ func Enter(team:Team):
 
 
 	team.middleFront.blockState.blockingTarget = otherTeam.middleFront
-
-#	foreach athlete in team.courtPlayers:
-#		if (athlete != GetServer())
-#			athlete.PrepareToDefend()
 	
 func Update(team:Team):
+	if team.isHuman:
+		
+		#print("defend" + str(randf()))
+		if Input.is_key_pressed(KEY_LEFT):
+			#print("BlockingLeft")
+			if Input.is_key_pressed(KEY_SHIFT):
+				TripleBlockLeft(team)
+			else:
+				DoubleBlockLeft(team)
+		elif Input.is_key_pressed(KEY_RIGHT):
+			if Input.is_key_pressed(KEY_SHIFT):
+				TripleBlockRight(team)
+			else:
+				DoubleBlockRight(team)
+		elif Input.is_key_pressed(KEY_DOWN):
+			TripleBlockPipe(team)
 	pass
 func Exit(team:Team):
 	pass
@@ -63,3 +75,28 @@ func CacheBlockers(team:Team):
 		else:
 			rightSideBlocker = team.oppositeHitter
 			leftSideBlocker = team.outsideFront
+
+func TripleBlockLeft(team:Team):
+	rightSideBlocker.blockState.blockingTarget = otherTeam.oppositeHitter
+	team.middleFront.blockState.blockingTarget = otherTeam.oppositeHitter
+	
+	leftSideBlocker.moveTarget = team.flip * Vector3(0.5, 0, 4)
+	team.middleFront.moveTarget = leftSideBlocker.moveTarget + team.flip * Vector3(0,0,-0.8)
+	rightSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,-0.8)
+	
+func TripleBlockRight(team:Team):
+	leftSideBlocker.blockState.blockingTarget = otherTeam.outsideFront
+	team.middleFront.blockState.blockingTarget = otherTeam.outsideFront
+	
+	rightSideBlocker.moveTarget = team.flip * Vector3(0.5, 0, -4)
+	team.middleFront.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0,0,0.8)
+	leftSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,0.8)
+	
+func DoubleBlockLeft(team:Team):
+	team.middleFront.blockState.blockingTarget = otherTeam.outsideFront
+func DoubleBlockRight(team:Team):
+	team.middleFront.blockState.blockingTarget = otherTeam.oppositeHitter
+func TripleBlockPipe(team:Team):
+	rightSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
+	leftSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
+	team.middleFront.blockState.blockingTarget = otherTeam.outsideBack

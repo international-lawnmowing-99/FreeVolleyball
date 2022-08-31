@@ -11,6 +11,9 @@ Jump,
 Landing
 }
 
+const MAXTOPSPIN = 1.8
+const MINTOPSPIN = 0.4
+
 var serveState
 var ball:Ball
 var takeOffTarget
@@ -129,13 +132,14 @@ func Update(athlete:Athlete):
 					
 					var fuckupProb = .1#float(serveAggression + 1)/3 * float(1 - (athlete.stats.serve/100))
 					var roll = randf()
-					Console.AddNewLine("fuckup prob: " + str(fuckupProb) + "|| roll: " + str(roll))
+					#Console.AddNewLine("fuckup prob: " + str(fuckupProb) + "|| roll: " + str(roll))
 					if roll < fuckupProb:
-						attackTarget = Vector3(rand_range(-10, 10), 0, rand_range(-1, 8))
+						attackTarget = Vector3(rand_range(-1, 8), 0, rand_range(-10, 10))
 						topspin = 0
 						ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.translation, attackTarget, 10 + 30 * randf(), false)
-						ball.inPlay = true
+						ball.inPlay = false
 						Console.AddNewLine("BAD SERVE. Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
+						ball.mManager.PointToTeamA()
 					else:
 						topspin = rand_range(.5,1.8)
 						ball.Serve(ball.translation, attackTarget, topspin)

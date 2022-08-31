@@ -76,10 +76,12 @@ func Update(athlete:Athlete):
 	athlete.timeTillBallReachesMe = Vector3(ball.translation.x, 0, ball.translation.z).distance_to(Vector3(athlete.translation.x, 0, athlete.translation.z))\
 				/max(Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length(), 0.001)
 				
-	if athlete.timeTillBallReachesMe <1.3:
-		var animFactor = 1.3-  athlete.timeTillBallReachesMe 
+	if athlete.timeTillBallReachesMe <1.5:
+		athlete.animTree.set("parameters/state/current", 1)
+		var animFactor = 1.5-  athlete.timeTillBallReachesMe 
 		athlete.animTree.set("parameters/Dig/blend_amount", animFactor)
-		athlete.RotateDigPlatform(lerp(0,athlete.digAngle,(min(1,1/athlete.timeTillBallReachesMe - 2))))
+
+		athlete.RotateDigPlatform(lerp_angle(0,athlete.digAngle,(min(1,1/athlete.timeTillBallReachesMe - 2))))
 	#else:
 		#var a = athlete.animTree.get("parameters/BlendSpace1D/blend_position")
 		#athlete.animTree.set("parameters/BlendSpace1D/blend_position", lerp(a, 0, 5*athlete.myDelta))
@@ -90,10 +92,13 @@ func Update(athlete:Athlete):
 			PassBall(athlete)
 			
 func Exit(athlete:Athlete):
+	athlete.animTree.set("parameters/state/current", 0)
 	pass
 	
 func PassBall(athlete):
 	isBallAlreadyPassed = true
+	ball.floating = false
+	ball.floatDisplacement = Vector3.ZERO
 	#Engine.time_scale = 0.25
 	var receptionTarget
 	#perfect pass, 2-pass, 1-pass, shank, some sort of uncontrolled ball that hits the floor near your feet

@@ -36,7 +36,7 @@ func Populate(firstNames, lastNames, r:RandomNumberGenerator):
 			stats.firstName = firstNames[r.randi_range(0, firstNames.size() - 1)]
 			stats.lastName = lastNames[r.randi_range(0, lastNames.size() - 1)]
 			stats.nation = countryName
-			stats.serve = skill + 50 * rand_range(0,.50)
+			stats.serve = skill + rand_range(0,50)
 			stats.reception = skill + 50 * rand_range(0,.50)
 			stats.block = skill + 50 * rand_range(0,.50)
 			stats.set = skill + 50 * rand_range(0,.50)
@@ -63,7 +63,7 @@ func Populate(firstNames, lastNames, r:RandomNumberGenerator):
 			#team.CalculateMacroStats();
 
 		league.append(team)
-	#nationalTeam.SelectNationalTeam()
+
 #nationalTeam.CalculateMacroStats();
 func _init(nam, _pop):
 	countryName = nam

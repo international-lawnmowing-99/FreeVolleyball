@@ -23,13 +23,16 @@ func Enter(athlete:Athlete):
 	
 	if athlete.role == Enums.Role.Middle:
 		athlete.moveTarget = athlete.team.CheckIfFlipped(Vector3(0.5, 0, -0.5))
-	pass
+	
+	athlete.leftIK.start()
+	athlete.rightIK.start()
+	
 func Update(athlete:Athlete):
 	match blockState:
 		BlockState.Watching:
 			if blockingTarget && blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Runup:
 				blockState = BlockState.Preparing
-				if athlete.role == Enums.Role.Middle:
+				if athlete.role == Enums.Role.Middle && blockingTarget == athlete.team.defendState.otherTeam.middleFront:
 					if athlete.team.isHuman:
 						athlete.moveTarget = Vector3(.5, 0, blockingTarget.spikeState.takeOffXZ.z)
 					else:
@@ -46,6 +49,12 @@ func Update(athlete:Athlete):
 					yield(athlete.get_tree(),"idle_frame")
 					athlete.rb.linear_velocity = athlete.ball.FindWellBehavedParabola(athlete.translation, athlete.translation, athlete.stats.verticalJump)
 		BlockState.Jump:
+			athlete.leftIKTarget.global_transform.origin = lerp(athlete.leftIKTarget.global_transform.origin, blockingTarget.setRequest.target, athlete.myDelta)
+			athlete.rightIKTarget.global_transform.origin = lerp(athlete.rightIKTarget.global_transform.origin, blockingTarget.setRequest.target, athlete.myDelta)
+			if athlete.role == Enums.Role.Opposite:
+				print(str(blockingTarget.setRequest.target))
+				print(str(athlete.rightIKTarget.translation))
+			
 			if athlete.translation.y < 0.1 && athlete.rb.linear_velocity.y < 0:
 				blockState = BlockState.Watching
 				athlete.rb.mode = RigidBody.MODE_KINEMATIC
@@ -53,4 +62,6 @@ func Update(athlete:Athlete):
 				athlete.rb.gravity_scale = 0
 				athlete.ReEvaluateState()
 func Exit(athlete:Athlete):
+	athlete.leftIK.stop()
+	athlete.rightIK.stop()
 	pass

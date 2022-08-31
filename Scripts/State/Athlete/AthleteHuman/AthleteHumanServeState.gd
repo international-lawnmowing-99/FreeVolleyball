@@ -45,7 +45,10 @@ func Enter(athlete:Athlete):
 	serveUI.humanServeState = self
 	serveUI.ShowServeChoice()
 	
-	
+	if randi()%2 == 1:
+		serveType = ServeType.Float
+	else:
+		serveType = ServeType.Jump
 	serveTarget.visible = false
 	
 func Update(athlete:Athlete):
@@ -139,6 +142,8 @@ func Update(athlete:Athlete):
 		ServeState.Jump:
 			#if athlete.rb.linear_velocity.y >0:
 				if ball.linear_velocity.y < 0 && athlete.stats.spikeHeight >= ball.translation.y:
+					var serveRoll = rand_range(0, athlete.stats.serve)
+					
 					var topspin
 					# did they stuff up the serve?? 
 					# skill ~ 30 - 70 ~.5
@@ -149,13 +154,19 @@ func Update(athlete:Athlete):
 					var roll = randf()
 					Console.AddNewLine("fuckup prob: " + str(fuckupProb) + "|| roll: " + str(roll))
 					if roll < fuckupProb:
-						#attackTarget = Vector3(rand_range(-10, 10), 0, rand_range(1, -8))
+						attackTarget = Vector3(rand_range(1, -8), 0, rand_range(10, 10))
 						topspin = 0
 						ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.translation, attackTarget, 10 + 20 * randf(), false)
-						ball.inPlay = true
+						ball.inPlay = false
 						Console.AddNewLine("BAD SERVE. Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
+						ball.mManager.PointToTeamB()
 					else:
-						topspin = rand_range(.5,1.8)
+						if serveType == ServeType.Float:
+							topspin = 0
+							ball.floating = true
+						elif serveType == ServeType.Jump:
+							topspin = rand_range(.5,1.8)
+
 						ball.Serve(ball.translation, attackTarget, topspin)
 						Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 						athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(true)

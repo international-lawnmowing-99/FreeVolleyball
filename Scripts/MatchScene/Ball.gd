@@ -12,19 +12,30 @@ var inPlay:bool = true
 var blockWillBeAttempted = false
 var blockResolver = load("res://BlockResolver.gd").new(self)
 
+var floating:bool = false
+var floatDisplacement:Vector3 = Vector3.ZERO
+onready var mesh = $CollisionShape/ballv2
 #var lads = Vector3(-0.5,2.5,0)
 
 func _process(_delta):
-	if is_inside_tree() && _parented && _pseudoParent:
-		translation = _pseudoParent.global_transform.origin
+	if floating:
+		if mesh.translation.distance_to(floatDisplacement) < 0.1:
+			floatDisplacement = Vector3(0, rand_range(-.3,.3), rand_range(-.3,.3))
+			#ball will be passed at 0.5 metres high for now...
+		floatDisplacement = lerp(floatDisplacement, Vector3.ZERO, _delta /min(.1,abs(translation.y - 0.5)))
+	mesh.translation = lerp(mesh.translation, floatDisplacement, _delta * 4.5)
+		
+#	if is_inside_tree() && _parented && _pseudoParent:
+#		translation = _pseudoParent.global_transform.origin
 	#lads = Vector3(-0.5,2.5,0) - transform.origin
 	pass
 	
 func _ready():
 	add_child(blockResolver)
 	#DebugOverlay.draw.add_vector(self, "lads", 1, 4, Color(0,1,1, 0.5))
-	
-	pass
+	for i in range(10):
+		#var velocity = CalculateBallOverNetVelocity(Vector3(i,
+		pass
 	
 func _on_ball_body_entered(body):
 	gravity_scale = 1
@@ -32,6 +43,8 @@ func _on_ball_body_entered(body):
 	if inPlay:
 		if body.is_in_group("ZoneOut"):
 #		print("out got him yes")
+			floating = false
+			floatDisplacement = Vector3.ZERO
 			inPlay = false
 			if wasLastTouchedByA:
 				Console.AddNewLine("ball out, point to b")
@@ -41,11 +54,15 @@ func _on_ball_body_entered(body):
 				Console.AddNewLine("ball out, point to a")
 				mManager.PointToTeamA()
 		if body.is_in_group("ZoneInA"):
+			floating = false
+			floatDisplacement = Vector3.ZERO
 			inPlay = false
 			mManager.PointToTeamA()
 			Console.AddNewLine("Ball in, point to a")
 
 		if body.is_in_group("ZoneInB"):
+			floating = false
+			floatDisplacement = Vector3.ZERO
 			inPlay = false
 			mManager.PointToTeamB()
 			Console.AddNewLine("Ball in, point to b", Color.bisque)
@@ -209,6 +226,6 @@ func FindNetPass()->Vector3:
 	var timeTillNet = abs(translation.x/linear_velocity.x)
 	netPass.y = translation.y + linear_velocity.y * timeTillNet + .5 * - g * timeTillNet * timeTillNet
 	
-	print(netPass)
+	#print(netPass)
 	
 	return netPass
