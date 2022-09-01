@@ -1,9 +1,13 @@
 extends "res://Scripts/State/AthleteState.gd"
 
+class_name AthleteHumanServeState
+
 enum ServeState{
 NotServing,
 Walking,
+ChoosingServeType,
 Aiming,
+ChoosingServeAggression,
 Tossing,
 WatchingTheBallInTheAir,
 Runup,
@@ -33,6 +37,18 @@ var serveUI
 var attackTarget
 var takeOffTarget
 var ball:Ball
+
+var MINTARGETZ = -5
+var MAXTARGETZ = 5
+var MINTARGETX = -10
+var MAXTARGETX = -3
+
+const MINWALKZ = -4.5
+const MAXWALKZ = 4.5
+const MINWALKX = 9
+const MAXWALKX = 15.5
+
+var rememberingServeDetails:bool = false
 	
 func Enter(athlete:Athlete):
 	nameOfState="HumanServe"
@@ -43,8 +59,15 @@ func Enter(athlete:Athlete):
 	serveUI = athlete.get_tree().root.get_node("MatchScene").get_node("ServeUI")
 	
 	serveUI.humanServeState = self
-	serveUI.ShowServeChoice()
 	
+	
+	if rememberingServeDetails:
+		pass
+	else:
+		serveAggression = ServeAggression.UNDEFINED
+		serveType = ServeType.UNDEFINED
+		serveUI.ShowServeChoice()
+		
 	if randi()%2 == 1:
 		serveType = ServeType.Float
 	else:
@@ -64,12 +87,9 @@ func Update(athlete:Athlete):
 			if Input.is_key_pressed(KEY_K):
 				athlete.moveTarget.x += .1
 			
-			if Input.is_key_pressed(KEY_SPACE):
-				athlete.moveTarget = athlete.translation
-				serveState = ServeState.Aiming
-				#print("key pressed walking")
-				serveTarget.visible = true
-				serveUI.HideServeChoice()
+			athlete.moveTarget.x = clamp(athlete.moveTarget.x, MINWALKX,MAXWALKX)
+			athlete.moveTarget.z = clamp(athlete.moveTarget.z, MINWALKZ,MAXWALKZ)
+			
 			pass
 		ServeState.Aiming:
 			if Input.is_key_pressed(KEY_I):
@@ -80,7 +100,10 @@ func Update(athlete:Athlete):
 				serveTarget.translation.z -= .1
 			if Input.is_key_pressed(KEY_K):
 				serveTarget.translation.x += .1
-				
+			
+			serveTarget.translation.x = clamp(serveTarget.translation.x, MINTARGETX, MAXTARGETX)
+			serveTarget.translation.z = clamp(serveTarget.translation.z, MINTARGETZ, MAXTARGETZ)
+			
 			if Input.is_action_just_pressed("ui_accept"):
 				#print("key pressed aiming")
 				attackTarget = Vector3(serveTarget.translation.x, 0, serveTarget.translation.z)
@@ -186,6 +209,11 @@ func Update(athlete:Athlete):
 				serveState = ServeState.Walking
 				athlete.stateMachine.SetCurrentState(athlete.defendState)
 
-
+func ChooseServeType(type):
+	serveType = type
+	serveState = ServeState.Aiming
+	serveTarget.visible = true
+	serveUI.HideServeChoice()
+	
 func Exit(athlete:Athlete):
 	pass

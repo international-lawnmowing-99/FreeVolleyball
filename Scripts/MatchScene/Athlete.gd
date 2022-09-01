@@ -10,10 +10,10 @@ var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(
 
 onready var animTree = $"new new woman import/AnimationTree"
 onready var rb:RigidBody = $"."
-onready var leftIK = $"new new woman import/godette volleyball/Skeleton/LeftHandSkeletonIK"
-onready var rightIK = $"new new woman import/godette volleyball/Skeleton/RightHandSkeletonIK"
-onready var leftIKTarget = $"new new woman import/LeftHandTarget"
-onready var rightIKTarget = $"new new woman import/RightHandTarget"
+onready var leftIK:SkeletonIK = $"new new woman import/godette volleyball/Skeleton/LeftHandSkeletonIK"
+onready var rightIK:SkeletonIK = $"new new woman import/godette volleyball/Skeleton/RightHandSkeletonIK"
+onready var leftIKTarget:Position3D = $"new new woman import/LeftHandTarget"
+onready var rightIKTarget:Position3D = $"new new woman import/RightHandTarget"
 
 var team
 var myDelta

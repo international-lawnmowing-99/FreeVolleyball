@@ -117,6 +117,14 @@ func PassBall(athlete):
 		pass
 	elif passQuality <= 90:
 		receptionTarget = Vector3(athlete.translation.x + rand_range(-3,3), 2.4, athlete.translation.z + rand_range(-3,3))
+		
+		#prevent the setter chasing overpasses... by removing them! (for now)
+		if athlete.team.isHuman:
+			receptionTarget.x = max(receptionTarget.x, 0.1)
+		else:
+			receptionTarget.x = min(receptionTarget.x, -0.1)
+		######################################################################
+		
 		Console.AddNewLine(athlete.stats.lastName + " 1-point pass")
 		pass	
 	elif passQuality <= 999:

@@ -83,7 +83,7 @@ func BallPositionAtGivenHeight(height:float):
 	
 func TimeTillBallReachesHeight(height:float):
 	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
-#I'm assuming this is on the way down...
+
 	var finalV = sqrt(linear_velocity.y * linear_velocity.y + 2 * g * (translation.y - height))
 	var remainingTime = (finalV + linear_velocity.y) / g
 

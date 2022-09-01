@@ -51,9 +51,9 @@ func Update(athlete:Athlete):
 		BlockState.Jump:
 			athlete.leftIKTarget.global_transform.origin = lerp(athlete.leftIKTarget.global_transform.origin, blockingTarget.setRequest.target, athlete.myDelta)
 			athlete.rightIKTarget.global_transform.origin = lerp(athlete.rightIKTarget.global_transform.origin, blockingTarget.setRequest.target, athlete.myDelta)
-			if athlete.role == Enums.Role.Opposite:
-				print(str(blockingTarget.setRequest.target))
-				print(str(athlete.rightIKTarget.translation))
+			#if athlete.role == Enums.Role.Opposite:
+				#(str(blockingTarget.setRequest.target))
+				#print(str(athlete.rightIKTarget.translation))
 			
 			if athlete.translation.y < 0.1 && athlete.rb.linear_velocity.y < 0:
 				blockState = BlockState.Watching

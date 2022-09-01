@@ -103,14 +103,20 @@ extents = Vector3( 4.5, 2.05, 4.5 )
 params_use_alpha_scissor = true
 params_alpha_scissor_threshold = 0.2
 albedo_texture = ExtResource( 9 )
+roughness = 0.38
 normal_enabled = true
 normal_scale = 0.05
 normal_texture = ExtResource( 8 )
 
-[sub_resource type="PrismMesh" id=11]
-size = Vector3( 1, 1, 1 )
+[sub_resource type="CylinderMesh" id=15]
+height = 0.1
 
 [sub_resource type="SpatialMaterial" id=12]
+flags_transparent = true
+flags_do_not_receive_shadows = true
+params_blend_mode = 1
+params_depth_draw_mode = 3
+albedo_color = Color( 1, 1, 1, 0.352941 )
 
 [sub_resource type="StyleBoxFlat" id=13]
 bg_color = Color( 0.0745098, 0.0980392, 0.368627, 1 )
@@ -886,9 +892,8 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.98628, 0, -0.652901 )
 angular_velocity = Vector3( 2, 3, 1 )
 
 [node name="ServeTarget" type="CSGMesh" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.45722, 0.276656, 0 )
-visible = false
-mesh = SubResource( 11 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.84617, 0, 0.276108 )
+mesh = SubResource( 15 )
 material = SubResource( 12 )
 
 [node name="DebugOverlay" type="CanvasLayer" parent="."]
