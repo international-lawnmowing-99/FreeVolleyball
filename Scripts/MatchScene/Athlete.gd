@@ -36,6 +36,7 @@ var spineBone02Id
 var neckBone01Id
 var neckBone02Id
 
+
 var customPose01
 var customPose02
 var customPoseNeck01
@@ -43,7 +44,7 @@ var customPoseNeck02
 
 var basisz = transform.basis.z
 var basisx = transform.basis.x
-var anglewanted = transform.basis.y
+#var anglewanted = transform.basis.y
 
 var MAXSPEED = 13
 var speed = 0
@@ -124,7 +125,6 @@ func _process(_delta):
 	BaseMove(_delta)
 	basisz = transform.basis.z
 	basisx = transform.basis.x
-	return
 	
 #	if transform.origin.y < -0.2:
 #		print(stateMachine.currentState.nameOfState)

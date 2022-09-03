@@ -3,9 +3,7 @@ var consoleLine = preload("res://MatchScene/ConsoleLine.tscn")
 
 
 
-func _input(_event):
-	if Input.is_key_pressed(KEY_1):
-		AddNewLine("Good serve by lad A")
+#func _input(_event):
 
 func AddNewLine(text:String, colour:Color = Color.white):
 	var lineOfSuspiciousPowder = consoleLine.instance()

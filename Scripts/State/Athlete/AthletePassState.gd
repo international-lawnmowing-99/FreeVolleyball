@@ -9,6 +9,24 @@ func Enter(athlete:Athlete):
 	isBallAlreadyPassed = false
 	nameOfState="pass"
 	ball = athlete.team.ball
+	
+	#Make a determination as to whether the ball will land in the court
+	#Ideally take into account:
+	# 1: confidence that it's in
+	# 2: confidence that it's my ball to take
+	
+	if athlete.team.isHuman:
+		if ball.attackTarget.x > 9 || ball.attackTarget.x < 0 ||\
+		ball.attackTarget.z < -4.5 || ball.attackTarget.z > 4.5:
+			athlete.stateMachine.SetCurrentState(athlete.chillState)
+			return
+	else: 
+		if ball.attackTarget.x < -9 || ball.attackTarget.x > 0 ||\
+		ball.attackTarget.z < -4.5 || ball.attackTarget.z > 4.5:
+			athlete.stateMachine.SetCurrentState(athlete.chillState)
+			return
+
+	
 	var servePos = ball.translation
 	athlete.moveTarget = ball.BallPositionAtGivenHeight(0.9) + Vector3(0,-.9, rand_range(-.5,.51))
 	athlete.moveTarget += (athlete.moveTarget - Vector3(servePos.x, 0, servePos.z)).normalized()/2
@@ -68,7 +86,7 @@ func Enter(athlete:Athlete):
 	
 	athlete.digAngle = rad2deg(ball.SignedAngle(athlete.transform.basis.z, -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
 
-	athlete.anglewanted = -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ)
+	#athlete.anglewanted = -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ)
 
 
 func Update(athlete:Athlete):

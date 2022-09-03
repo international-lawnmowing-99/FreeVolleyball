@@ -6,8 +6,8 @@ enum ServeState{
 NotServing,
 Walking,
 ChoosingServeType,
-Aiming,
 ChoosingServeAggression,
+Aiming,
 Tossing,
 WatchingTheBallInTheAir,
 Runup,
@@ -29,24 +29,24 @@ enum ServeAggression{
 	Aggressive
 	}
 
+var _athlete
 var serveState = ServeState.NotServing
 var serveAggression = ServeAggression.UNDEFINED
 var serveType = ServeType.UNDEFINED
-var serveTarget
+var serveTarget:CSGMesh
 var serveUI
 var attackTarget
 var takeOffTarget
 var ball:Ball
 
-var MINTARGETZ = -5
-var MAXTARGETZ = 5
-var MINTARGETX = -10
-var MAXTARGETX = -3
+# -x, x, -z, z
+const AGGRESSIVEJUMPBOUNDS = [-10, -6.25, -5, 5]
+const FLOATANDSOFTJUMPBOUNDS = [-10, -3, -5, 5]
+const UNDERARMBOUNDS = [-10, -.5, -5, 5]
 
-const MINWALKZ = -4.5
-const MAXWALKZ = 4.5
-const MINWALKX = 9
-const MAXWALKX = 15.5
+const WALKBOUNDS = [9.25, 15.5, -4.25, 4.25]
+
+const SERVETARGETSPEED = 6
 
 var rememberingServeDetails:bool = false
 	
@@ -59,6 +59,7 @@ func Enter(athlete:Athlete):
 	serveUI = athlete.get_tree().root.get_node("MatchScene").get_node("ServeUI")
 	
 	serveUI.humanServeState = self
+	_athlete = athlete
 	
 	
 	if rememberingServeDetails:
@@ -79,38 +80,70 @@ func Update(athlete:Athlete):
 	match serveState:
 		ServeState.Walking:
 			if Input.is_key_pressed(KEY_I):
-				athlete.moveTarget.x -= .1
+				athlete.translation.x -= athlete.myDelta * athlete.stats.speed
 			if Input.is_key_pressed(KEY_J):
-				athlete.moveTarget.z += .1
+				athlete.translation.z += athlete.myDelta * athlete.stats.speed
 			if Input.is_key_pressed(KEY_L):
-				athlete.moveTarget.z -= .1
+				athlete.translation.z -= athlete.myDelta * athlete.stats.speed
 			if Input.is_key_pressed(KEY_K):
-				athlete.moveTarget.x += .1
+				athlete.translation.x += athlete.myDelta * athlete.stats.speed
 			
-			athlete.moveTarget.x = clamp(athlete.moveTarget.x, MINWALKX,MAXWALKX)
-			athlete.moveTarget.z = clamp(athlete.moveTarget.z, MINWALKZ,MAXWALKZ)
+			athlete.translation.x = clamp(athlete.translation.x, WALKBOUNDS[0],WALKBOUNDS[1])
+			athlete.translation.z = clamp(athlete.translation.z, WALKBOUNDS[2],WALKBOUNDS[3])
+			athlete.moveTarget = athlete.translation
 			
-			pass
 		ServeState.Aiming:
 			if Input.is_key_pressed(KEY_I):
-				serveTarget.translation.x -= .1
+				serveTarget.translation.x -= SERVETARGETSPEED * athlete.myDelta
 			if Input.is_key_pressed(KEY_J):
-				serveTarget.translation.z += .1
+				serveTarget.translation.z += SERVETARGETSPEED * athlete.myDelta
 			if Input.is_key_pressed(KEY_L):
-				serveTarget.translation.z -= .1
+				serveTarget.translation.z -= SERVETARGETSPEED * athlete.myDelta
 			if Input.is_key_pressed(KEY_K):
-				serveTarget.translation.x += .1
+				serveTarget.translation.x += SERVETARGETSPEED * athlete.myDelta
 			
-			serveTarget.translation.x = clamp(serveTarget.translation.x, MINTARGETX, MAXTARGETX)
-			serveTarget.translation.z = clamp(serveTarget.translation.z, MINTARGETZ, MAXTARGETZ)
+			#Aggressive jump serve can only be in the back 3 metres if you're not jumping a km into the air
+			#Float and soft jump can realistically be anywhere past the 3 metre line
+			#Underarm can go anywhere except the first 50cm without the Magnus Effect
+			match serveType:
+				ServeType.Jump:
+					if serveAggression == ServeAggression.Aggressive:
+						serveTarget.translation.x = clamp(serveTarget.translation.x, AGGRESSIVEJUMPBOUNDS[0], AGGRESSIVEJUMPBOUNDS[1])
+						serveTarget.translation.z = clamp(serveTarget.translation.z, AGGRESSIVEJUMPBOUNDS[2], AGGRESSIVEJUMPBOUNDS[3])
+					else:
+						serveTarget.translation.x = clamp(serveTarget.translation.x, AGGRESSIVEJUMPBOUNDS[0], AGGRESSIVEJUMPBOUNDS[1])
+						serveTarget.translation.z = clamp(serveTarget.translation.z, AGGRESSIVEJUMPBOUNDS[2], AGGRESSIVEJUMPBOUNDS[3])
+				
+				ServeType.Float:
+					serveTarget.translation.x = clamp(serveTarget.translation.x, FLOATANDSOFTJUMPBOUNDS[0], FLOATANDSOFTJUMPBOUNDS[1])
+					serveTarget.translation.z = clamp(serveTarget.translation.z, FLOATANDSOFTJUMPBOUNDS[2], FLOATANDSOFTJUMPBOUNDS[3])
+				
+				ServeType.Underarm:
+					serveTarget.translation.x = clamp(serveTarget.translation.x, UNDERARMBOUNDS[0], UNDERARMBOUNDS[1])
+					serveTarget.translation.z = clamp(serveTarget.translation.z, UNDERARMBOUNDS[2], UNDERARMBOUNDS[3])
+
 			
+
 			if Input.is_action_just_pressed("ui_accept"):
-				#print("key pressed aiming")
+				#Add some variation based on the lack of skill of the server
+				#print("what if... : " + str(Vector2.ZERO.normalized()))
+				var inaccuracy = Vector2(rand_range(-1, 1), rand_range(-1, 1)).normalized()
+				var inaccuracyLength = rand_range(0, serveTarget.mesh.top_radius)
+				inaccuracy *= inaccuracyLength
+				
 				attackTarget = Vector3(serveTarget.translation.x, 0, serveTarget.translation.z)
-				Console.AddNewLine(athlete.stats.lastName + ": " + "serving")
+				attackTarget.x += inaccuracy[0]
+				attackTarget.z += inaccuracy[1]
+				
+				#If the ball is landing on our side of the court? 
+				#Players will expect it to occur given the target shows it as a possibility
+				#For now just stop it happening
+				
+				attackTarget.x = clamp(attackTarget.x, -9999, -0.25)
+
 				serveState = ServeState.Tossing
 				serveTarget.visible = false
-				
+
 		ServeState.Tossing:
 				var runupLength = 2.75
 				var runup = Vector2(attackTarget.x - athlete.translation.x, attackTarget.z - athlete.translation.z).normalized() * runupLength
@@ -167,7 +200,7 @@ func Update(athlete:Athlete):
 				if ball.linear_velocity.y < 0 && athlete.stats.spikeHeight >= ball.translation.y:
 					var serveRoll = rand_range(0, athlete.stats.serve)
 					
-					var topspin
+					var topspin = 0
 					# did they stuff up the serve?? 
 					# skill ~ 30 - 70 ~.5
 					# expecting 5 - 30% error rate, depending on aggro, avg 10%
@@ -185,7 +218,6 @@ func Update(athlete:Athlete):
 						ball.mManager.PointToTeamB()
 					else:
 						if serveType == ServeType.Float:
-							topspin = 0
 							ball.floating = true
 						elif serveType == ServeType.Jump:
 							topspin = rand_range(.5,1.8)
@@ -198,8 +230,6 @@ func Update(athlete:Athlete):
 					ball.TouchedByA()
 					serveState = ServeState.Landing
 
-
-
 		ServeState.Landing:
 			if (athlete.translation.y <= 0.01 && athlete.rb.linear_velocity.y < 0):
 				athlete.rb.mode = RigidBody.MODE_KINEMATIC
@@ -211,9 +241,38 @@ func Update(athlete:Athlete):
 
 func ChooseServeType(type):
 	serveType = type
-	serveState = ServeState.Aiming
-	serveTarget.visible = true
+	serveState = ServeState.ChoosingServeAggression
+	
+
+	
 	serveUI.HideServeChoice()
+	
+
+func ChooseServeAggression(aggression):
+	serveAggression = aggression
+
+	serveTarget.visible = true
+	serveTarget.mesh.top_radius = (100.0 - _athlete.stats.serve)/25
+	serveTarget.mesh.bottom_radius = serveTarget.mesh.top_radius
+	
+	serveState = ServeState.Aiming
+	
+	match serveType:
+		ServeType.Jump:
+			if serveAggression == ServeAggression.Aggressive:
+				serveTarget.translation.x = rand_range(AGGRESSIVEJUMPBOUNDS[0], AGGRESSIVEJUMPBOUNDS[1])
+				serveTarget.translation.z = rand_range(AGGRESSIVEJUMPBOUNDS[2], AGGRESSIVEJUMPBOUNDS[3])
+			else:
+				serveTarget.translation.x = rand_range(FLOATANDSOFTJUMPBOUNDS[0], FLOATANDSOFTJUMPBOUNDS[1])
+				serveTarget.translation.z = rand_range(FLOATANDSOFTJUMPBOUNDS[2], FLOATANDSOFTJUMPBOUNDS[3])
+
+		ServeType.Float:
+				serveTarget.translation.x = rand_range(FLOATANDSOFTJUMPBOUNDS[0], FLOATANDSOFTJUMPBOUNDS[1])
+				serveTarget.translation.z = rand_range(FLOATANDSOFTJUMPBOUNDS[2], FLOATANDSOFTJUMPBOUNDS[3])
+
+		ServeType.Underarm:
+				serveTarget.translation.x = rand_range(UNDERARMBOUNDS[0], UNDERARMBOUNDS[1])
+				serveTarget.translation.z = rand_range(UNDERARMBOUNDS[2], UNDERARMBOUNDS[3])
 	
 func Exit(athlete:Athlete):
 	pass

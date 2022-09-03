@@ -9,15 +9,10 @@ enum UIState{
 var humanServeState
 var uiState = UIState.UNDEFINED
 
-#const FLOATSERVEBOUNDS = [1,2,3,4]
-#const AGGRESSIVEJUMPSERVEBOUNDS = [1,2,3,4]
-
-
 func ShowServeChoice():
 	$ServeTypeButtons.show()
 	$ServerInfo.show()
 	uiState = UIState.ServeType
-	pass
 
 func HideServeChoice():
 	$ServeTypeButtons.hide()
@@ -31,10 +26,6 @@ func ShowServeAggressionChoice():
 func HideServeAggressionChoice():
 	$ServeAggressionButtons.hide()
 	uiState = UIState.UNDEFINED
-#func _on_Button_pressed():
-#	HideServeChoice()
-#	pass # Replace with function body.
-
 
 func _on_UnderArmButton_pressed():
 	humanServeState.ChooseServeType(humanServeState.ServeType.Underarm)
@@ -53,16 +44,16 @@ func _on_FloatButton_pressed():
 
 
 func _on_AggressiveServe_pressed() -> void:
-	humanServeState.serveAggression = humanServeState.ServeAggression.Aggressive
+	
+	humanServeState.ChooseServeAggression(humanServeState.ServeAggression.Aggressive)
 	HideServeAggressionChoice()
 
-
 func _on_ControlledServe_pressed() -> void:
-	humanServeState.serveAggression = humanServeState.ServeAggression.Controlled
+	humanServeState.ChooseServeAggression(humanServeState.ServeAggression.Controlled)
 	HideServeAggressionChoice()
 
 func _on_ModerateServe_pressed() -> void:
-	humanServeState.serveAggression = humanServeState.ServeAggression.Moderate
+	humanServeState.ChooseServeAggression(humanServeState.ServeAggression.Moderate)
 	HideServeAggressionChoice()
 
 func _process(delta: float) -> void:
