@@ -5,7 +5,7 @@ var players = []
 func _init():
 	pass
 func SelectNationalTeam():
+	var orderedPlayers = players.duplicate(false)
+	orderedPlayers.sort_custom(Athlete, "SortSkill")
 	for i in range(12):
-		var orderedPlayers = players.duplicate(false)
-		orderedPlayers.sort_custom(Athlete, "SortSkill")
 		allPlayers.append(orderedPlayers[i])

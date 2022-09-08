@@ -10,10 +10,10 @@ var nationsText = []
 var continents = []
 
 
-func GenerateDefaultWorld():
+func GenerateDefaultWorld(generateAllPlayers:bool):
 	LoadText()
 	var r = RandomNumberGenerator.new()
-	r.randomize()
+	randomize()
 
 	for i in range(1,nationsText.size()):
 		if (nationsText[i - 1].length() == 0 && nationsText[i + 1].length() == 0):
@@ -35,9 +35,10 @@ func GenerateDefaultWorld():
 			pop =  int(split[split.size() - 3])
 
 			continents[continents.size() - 1].nations.append(Nation.new(finalName, pop))
+			
 			var currentNation = continents[continents.size() - 1].nations[continents[continents.size() - 1].nations.size() - 1]
 
-			currentNation.Populate(firstNames, lastNames, r)
+			currentNation.Populate(firstNames, lastNames, r, generateAllPlayers)
 
 func GetTeam(choiceState, mode):
 	if (mode == Enums.ClubOrInternational.Club):

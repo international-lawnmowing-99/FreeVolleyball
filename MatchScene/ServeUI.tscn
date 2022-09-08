@@ -117,7 +117,7 @@ margin_bottom = 58.0
 custom_fonts/font = SubResource( 14 )
 text = "Aggressive Serve (1)"
 
-[node name="ModerateServe2" type="Button" parent="ServeAggressionButtons/VBoxContainer"]
+[node name="ModerateServe" type="Button" parent="ServeAggressionButtons/VBoxContainer"]
 margin_top = 62.0
 margin_right = 430.0
 margin_bottom = 120.0
@@ -135,5 +135,5 @@ text = "Safety Serve (3)"
 [connection signal="pressed" from="ServeTypeButtons/VBoxContainer/FloatButton" to="." method="_on_FloatButton_pressed"]
 [connection signal="pressed" from="ServeTypeButtons/VBoxContainer/UnderArmButton" to="." method="_on_UnderArmButton_pressed"]
 [connection signal="pressed" from="ServeAggressionButtons/VBoxContainer/AggressiveServe" to="." method="_on_AggressiveServe_pressed"]
-[connection signal="pressed" from="ServeAggressionButtons/VBoxContainer/ModerateServe2" to="." method="_on_ControlledServe_pressed"]
-[connection signal="pressed" from="ServeAggressionButtons/VBoxContainer/SafetyServe" to="." method="_on_ModerateServe_pressed"]
+[connection signal="pressed" from="ServeAggressionButtons/VBoxContainer/ModerateServe" to="." method="_on_ModerateServe_pressed"]
+[connection signal="pressed" from="ServeAggressionButtons/VBoxContainer/SafetyServe" to="." method="_on_SafetyServe_pressed"]

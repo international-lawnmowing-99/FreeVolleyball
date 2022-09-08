@@ -117,6 +117,7 @@ func _ready():
 	customPose02 = skel.get_bone_custom_pose(spineBone02Id)
 	customPoseNeck01 = skel.get_bone_custom_pose((neckBone01Id))
 	customPoseNeck02 = skel.get_bone_custom_pose((neckBone02Id))
+	
 
 func _process(_delta):
 	myDelta = _delta

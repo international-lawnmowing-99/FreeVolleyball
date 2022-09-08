@@ -44,12 +44,11 @@ func _on_FloatButton_pressed():
 
 
 func _on_AggressiveServe_pressed() -> void:
-	
 	humanServeState.ChooseServeAggression(humanServeState.ServeAggression.Aggressive)
 	HideServeAggressionChoice()
 
-func _on_ControlledServe_pressed() -> void:
-	humanServeState.ChooseServeAggression(humanServeState.ServeAggression.Controlled)
+func _on_SafetyServe_pressed() -> void:
+	humanServeState.ChooseServeAggression(humanServeState.ServeAggression.Safety)
 	HideServeAggressionChoice()
 
 func _on_ModerateServe_pressed() -> void:
@@ -69,6 +68,6 @@ func _process(delta: float) -> void:
 			if Input.is_action_just_pressed("Key1"):
 				_on_AggressiveServe_pressed()
 			elif Input.is_action_just_pressed("Key2"):
-				_on_ControlledServe_pressed()
-			elif Input.is_action_just_pressed("Key3"):
 				_on_ModerateServe_pressed()
+			elif Input.is_action_just_pressed("Key3"):
+				_on_SafetyServe_pressed()

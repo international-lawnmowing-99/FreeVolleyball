@@ -18,7 +18,10 @@ onready var preMatchUI = $PreMatchUI
 var isTeamAServing:bool
 
 func _ready():
-	gameWorld.GenerateDefaultWorld()
+	var now = OS.get_ticks_msec()
+	gameWorld.GenerateDefaultWorld(false)
+	var later = OS.get_ticks_msec()
+	print(str(later - now) + " generate world")
 	newMatch.ChooseRandom(gameWorld)
 	
 	ball.mManager = self

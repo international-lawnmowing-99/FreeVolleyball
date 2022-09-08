@@ -5,6 +5,7 @@ const Enums = preload("res://Scripts/World/Enums.gd")
 var AthleteScene = preload("res://Scenes/Athlete.tscn")
 
 var teamName:String
+var nation
 var mManager
 var isHuman:bool = false
 
@@ -500,3 +501,36 @@ func AttemptBlock(spiker:Athlete):
 	ball.blockResolver.AddUpcomingBlock(isHuman, blockers, spiker)
 	
 	pass
+
+func Populate(firstNames, lastNames, r):
+	for _j in range(12):
+		var stats = Stats.new()
+		var skill = rand_range(0,10) + rand_range(0,10) + rand_range(0,10) + rand_range(0,10) + rand_range(0,10)
+		stats.firstName = firstNames[r.randi_range(0, firstNames.size() - 1)]
+		stats.lastName = lastNames[r.randi_range(0, lastNames.size() - 1)]
+		stats.nation = nation.countryName
+		stats.serve = skill + rand_range(0,25) + rand_range(0,25)
+		stats.reception = skill + rand_range(0,25) + rand_range(0,25)
+		stats.block = skill + rand_range(0,25) + rand_range(0,25)
+		stats.set = skill + rand_range(0,25) + rand_range(0,25)
+		stats.spike = skill + rand_range(0,25) + rand_range(0,25)
+		stats.verticalJump = rand_range(0,.5) + rand_range(.1,.5) + rand_range(.1,.5)
+		stats.height = rand_range(.3,.8) + rand_range(.5,.8) + rand_range(.5,.8)
+		stats.speed = rand_range(5.5,7.5)
+		#1.25 is the arm factor of newWoman
+		stats.spikeHeight = stats.height * (1.33) + stats.verticalJump
+		stats.blockHeight = stats.height * (1.25) + stats.verticalJump
+		stats.setHeight = stats.height + 0.15
+		#stats.shirtNumber = shirtNumbers[j];
+		#stats.image = images[j];
+		var athlete = Athlete.new()
+		athlete.stats = stats
+		allPlayers.append(athlete)
+		
+		
+		#DateTime oldest = new DateTime(1975, 1, 1);
+
+		#int daysRange = (DateTime.Today.AddYears(-17) - oldest).Days;
+		#stats.dob = oldest.AddDays( r.Next(daysRange));
+
+		#team.CalculateMacroStats();

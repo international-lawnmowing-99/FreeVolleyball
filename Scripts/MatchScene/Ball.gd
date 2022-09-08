@@ -15,6 +15,9 @@ var blockResolver = load("res://BlockResolver.gd").new(self)
 var floating:bool = false
 var floatDisplacement:Vector3 = Vector3.ZERO
 onready var mesh = $CollisionShape/ballv2
+
+const MAX_SERVE_SPEED = 140
+var difficultyOfReception:float = 0
 #var lads = Vector3(-0.5,2.5,0)
 
 func _process(_delta):
@@ -173,7 +176,7 @@ func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, ai
 	var determinant = pow(speed, 4) - g * (g * xzDist * xzDist + 2 * yDist * speed * speed)
 	if determinant < 0:
 		print("Can't make that parabola work mate, giving you the best we've got")
-		idealAngle = 45
+		idealAngle = PI/4
 	else:
 		angle1 = atan((speed * speed + sqrt(determinant)) / (g * xzDist))
 		angle2 = atan((speed * speed - sqrt(determinant)) / (g * xzDist))
@@ -204,7 +207,21 @@ func Serve(startPos, _attackTarget, topspin):
 		linear_velocity = Vector3.ZERO
 		
 		var impulse = CalculateBallOverNetVelocity(startPos, _attackTarget, 2.6)
-		impulse *= mass
+		
+		# :( no fun!
+		if impulse.length() * 3.6 > MAX_SERVE_SPEED:
+			print(str(impulse.length() * 3.6))
+			impulse = FindParabolaForGivenSpeed(startPos, _attackTarget, (MAX_SERVE_SPEED - rand_range(0,10))/3.6, false)
+			linear_velocity = impulse
+			attackTarget = _attackTarget
+			print("SERVE TOO FAST, New net pass: " + str(FindNetPass()))
+			if FindNetPass().y< 2.5:
+				print("serve hits net")
+				Console.AddNewLine("Serve hits net!!!!!!!", Color.blueviolet)
+			print(str(impulse.length() * 3.6))
+			
+		
+		#impulse *= mass
 		linear_velocity = impulse
 		
 		attackTarget = _attackTarget

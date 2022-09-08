@@ -2,8 +2,11 @@ extends "res://Scripts/State/AthleteState.gd"
 const Enums = preload("res://Scripts/World/Enums.gd")
 
 var ball:Ball
-var timeTillBallReachesMe
+#var timeTillBallReachesMe
 var isBallAlreadyPassed:bool = false
+
+var intersectionPointX
+var intersectionPointZ
 
 func Enter(athlete:Athlete):
 	isBallAlreadyPassed = false
@@ -16,13 +19,13 @@ func Enter(athlete:Athlete):
 	# 2: confidence that it's my ball to take
 	
 	if athlete.team.isHuman:
-		if ball.attackTarget.x > 9 || ball.attackTarget.x < 0 ||\
-		ball.attackTarget.z < -4.5 || ball.attackTarget.z > 4.5:
+		if ball.attackTarget.x > 9.2 || ball.attackTarget.x < 0 ||\
+		ball.attackTarget.z < -4.7 || ball.attackTarget.z > 4.7:
 			athlete.stateMachine.SetCurrentState(athlete.chillState)
 			return
 	else: 
-		if ball.attackTarget.x < -9 || ball.attackTarget.x > 0 ||\
-		ball.attackTarget.z < -4.5 || ball.attackTarget.z > 4.5:
+		if ball.attackTarget.x < -9.2 || ball.attackTarget.x > 0 ||\
+		ball.attackTarget.z < -4.7 || ball.attackTarget.z > 4.7:
 			athlete.stateMachine.SetCurrentState(athlete.chillState)
 			return
 
@@ -34,8 +37,8 @@ func Enter(athlete:Athlete):
 	
 	#point where a circle will intersect with the xz vector of the ball's motion
 	#circle is (x-h)^2 + (y-k)^2 = r^2
-	var h = athlete.translation.x
-	var k = athlete.translation.z
+	var h = athlete.moveTarget.x
+	var k = athlete.moveTarget.z
 	var r = .66 #Dig radius is this much?
 	#line is ...
 	var xPart = ball.linear_velocity.x
@@ -66,7 +69,7 @@ func Enter(athlete:Athlete):
 	
 	var determinate = bDet * bDet - 4 *aDet * cDet
 	
-	var intersectionPointX
+	
 	
 	if determinate == 0:
 		#Congrats, you have a tangent
@@ -81,25 +84,26 @@ func Enter(athlete:Athlete):
 		intersectionPointX = h +1
 		#print("can't make that work chap")
 		
-	var intersectionPointZ = m*intersectionPointX + b
+	intersectionPointZ = m*intersectionPointX + b
 	
 	
-	athlete.digAngle = rad2deg(ball.SignedAngle(athlete.transform.basis.z, -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
+	athlete.digAngle = rad2deg(ball.SignedAngle(athlete.transform.basis.z , -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
 
 	#athlete.anglewanted = -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ)
 
 
 func Update(athlete:Athlete):
-
+	athlete.get_node("Debug").global_transform.origin = Vector3(intersectionPointX, .5, intersectionPointZ)
 	athlete.timeTillBallReachesMe = Vector3(ball.translation.x, 0, ball.translation.z).distance_to(Vector3(athlete.translation.x, 0, athlete.translation.z))\
 				/max(Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length(), 0.001)
 				
+
 	if athlete.timeTillBallReachesMe <1.5:
 		athlete.animTree.set("parameters/state/current", 1)
 		var animFactor = 1.5-  athlete.timeTillBallReachesMe 
 		athlete.animTree.set("parameters/Dig/blend_amount", animFactor)
 
-		athlete.RotateDigPlatform(lerp_angle(0,athlete.digAngle,(min(1,1/athlete.timeTillBallReachesMe - 2))))
+		athlete.RotateDigPlatform(athlete.digAngle)#( lerp(0,athlete.digAngle,(max(1,1/athlete.timeTillBallReachesMe)))))
 	#else:
 		#var a = athlete.animTree.get("parameters/BlendSpace1D/blend_position")
 		#athlete.animTree.set("parameters/BlendSpace1D/blend_position", lerp(a, 0, 5*athlete.myDelta))
@@ -113,27 +117,32 @@ func Exit(athlete:Athlete):
 	athlete.animTree.set("parameters/state/current", 0)
 	pass
 	
-func PassBall(athlete):
+func PassBall(athlete:Athlete):
 	isBallAlreadyPassed = true
 	ball.floating = false
 	ball.floatDisplacement = Vector3.ZERO
 	#Engine.time_scale = 0.25
 	var receptionTarget
-	#perfect pass, 2-pass, 1-pass, shank, some sort of uncontrolled ball that hits the floor near your feet
-	var passQuality = randi()% 100#5
+	#perfect pass, 2-pass, 1-pass, shank, some sort of unSafety ball that hits the floor near your feet
+	var passRoll = rand_range(0, athlete.stats.reception)
+	Console.AddNewLine("PASSING || PASS ROLL: " + str(int(passRoll)) + " Difficulty: " + str(int(ball.difficultyOfReception)))
+	var rollOffDifference = passRoll - ball.difficultyOfReception
+	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.aqua)
+	Console.AddNewLine( str(int(rollOffDifference)) + " roll off differece ", Color.red)
+
 	
-	if passQuality <= 20:
+	if rollOffDifference >= 10:
 		# what is the ideal height for the setter to jump set??
 		if athlete.role == Enums.Role.Setter:
-			receptionTarget = Vector3(athlete.team.flip * 3.13, 2.5, 0)
+			receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.chosenSetter.stats.setHeight, 0)
 		else:
-			receptionTarget = Vector3(athlete.team.flip * 0.5, 2.5, 0)
+			receptionTarget = Vector3(athlete.team.flip * 0.5, athlete.team.setter.stats.setHeight, 0)
 		Console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")
-	elif passQuality <= 40:
+	elif rollOffDifference >= -10:
 		receptionTarget = Vector3(athlete.team.flip * rand_range(0.5, 1.5), 2.5, rand_range(-2, 2))
 		Console.AddNewLine(athlete.stats.lastName + " 2-point pass")
 		pass
-	elif passQuality <= 90:
+	elif rollOffDifference >= -50:
 		receptionTarget = Vector3(athlete.translation.x + rand_range(-3,3), 2.4, athlete.translation.z + rand_range(-3,3))
 		
 		#prevent the setter chasing overpasses... by removing them! (for now)
@@ -145,7 +154,7 @@ func PassBall(athlete):
 		
 		Console.AddNewLine(athlete.stats.lastName + " 1-point pass")
 		pass	
-	elif passQuality <= 999:
+	else:
 		ball.linear_velocity.y *= -1
 
 		
@@ -156,8 +165,7 @@ func PassBall(athlete):
 
 		Console.AddNewLine(athlete.stats.lastName + " - Shit pass mate")
 		pass	
-	elif passQuality == 4:
-		pass
+
 
 
 	ball.gravity_scale = 1
@@ -178,6 +186,7 @@ func PassBall(athlete):
 	athlete.get_tree().get_root().get_node("MatchScene").BallReceived(athlete.team.isHuman)
 
 	yield(athlete.get_tree().create_timer(.5), "timeout")
+	athlete.RotateDigPlatform(0)
 	if athlete.role == Enums.Role.Setter:
 		athlete.stateMachine.SetCurrentState(athlete.defendState)
 	else:

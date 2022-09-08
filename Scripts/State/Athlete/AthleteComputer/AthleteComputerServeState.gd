@@ -145,6 +145,10 @@ func Update(athlete:Athlete):
 						ball.Serve(ball.translation, attackTarget, topspin)
 						Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 						athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(false)
+						
+						
+						
+						
 					
 					ball.TouchedByB()
 					serveState = ServeState.Landing
