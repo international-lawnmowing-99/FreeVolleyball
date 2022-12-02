@@ -110,6 +110,7 @@ normal_texture = ExtResource( 8 )
 
 [sub_resource type="CylinderMesh" id=15]
 height = 0.1
+radial_segments = 32
 
 [sub_resource type="SpatialMaterial" id=12]
 flags_transparent = true

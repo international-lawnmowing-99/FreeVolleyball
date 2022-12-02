@@ -68,7 +68,7 @@ var defaultReceiveRotations =  [
 	[#setter 3
 		Vector3(5.5, 0, -2.75),
 		Vector3(2.75, 0, -1),
-		Vector3(5, 0, 0),
+		Vector3(0.5, 0, 0),
 		Vector3(4.5, 0, 2.5),
 		Vector3(6.5, 0, 0),
 		Vector3(7.5, 0, -1.75)

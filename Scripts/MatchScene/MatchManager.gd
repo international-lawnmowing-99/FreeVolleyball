@@ -135,7 +135,6 @@ func PointToTeamB():
 	isTeamAServing = false
 	
 	#teamB celebrate, watch the ball bounce
-	teamA.Chill()
 	teamB.Chill()
 	yield(get_tree().create_timer(1), "timeout")
 	
@@ -183,5 +182,5 @@ func RotateAroundOrigin(node3D, angle):
 	# the translation moves the object away from the
 	# centre of the pivot_transform. 
 	node3D.transform = pivot_transform.rotated(Vector3.UP, node3D.transform.basis.get_euler().y + angle).translated(pivot_radius)
-	print(str(node3D.transform.basis.get_euler()))
+	print(str(node3D.transform.basis.get_euler()) + "  rotating around origin")
 	

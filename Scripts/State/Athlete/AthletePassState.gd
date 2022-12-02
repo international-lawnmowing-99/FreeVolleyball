@@ -78,7 +78,10 @@ func Enter(athlete:Athlete):
 		# Choose t
 		var point1x =  (-bDet + sqrt(determinate))/(2*aDet)
 		var point2x = (-bDet - sqrt(determinate))/(2*aDet)
-		intersectionPointX = max(point1x, point2x)
+		if athlete.team.isHuman:
+			intersectionPointX = min(point1x, point2x)
+		else:
+			intersectionPointX = max(point1x, point2x)
 	else:
 		# No intersections
 		intersectionPointX = h +1
@@ -88,6 +91,10 @@ func Enter(athlete:Athlete):
 	
 	
 	athlete.digAngle = rad2deg(ball.SignedAngle(athlete.transform.basis.z , -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
+	#other team is rotated -90, we're 90
+	#var angle = atan2(athlete.translation.z - intersectionPointZ, athlete.translation.x - intersectionPointX) 
+	
+	print(str(rad2deg(athlete.transform.basis.z[0])))
 
 	#athlete.anglewanted = -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ)
 
@@ -134,7 +141,10 @@ func PassBall(athlete:Athlete):
 	if rollOffDifference >= 10:
 		# what is the ideal height for the setter to jump set??
 		if athlete.role == Enums.Role.Setter:
-			receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.chosenSetter.stats.setHeight, 0)
+			if athlete.team.isLiberoOnCourt:
+				receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.libero.stats.setHeight, 0)
+			else:
+				receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.middleBack.stats.setHeight, 0)
 		else:
 			receptionTarget = Vector3(athlete.team.flip * 0.5, athlete.team.setter.stats.setHeight, 0)
 		Console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")

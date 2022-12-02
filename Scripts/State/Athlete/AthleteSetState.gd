@@ -4,7 +4,10 @@ var hasSet:bool = false
 var interpolationSpeed = 5
 func Enter(athlete:Athlete):
 	nameOfState="Set"
-	athlete.moveTarget = athlete.team.receptionTarget
+	
+	#Can we get there in time to jump set?
+	if TimeToBallAtReceptionTarget(athlete.team.ball) >= 1:
+		athlete.moveTarget = athlete.team.receptionTarget
 	athlete.moveTarget.y = 0
 	athlete.leftIK.start()
 	athlete.rightIK.start()
@@ -20,7 +23,10 @@ func Update(athlete:Athlete):
 	athlete.rightIKTarget.global_transform.origin = lerp (athlete.rightIKTarget.global_transform.origin, athlete.ball.translation, athlete.myDelta * interpolationSpeed)
 	athlete.leftIK.interpolation = lerp(athlete.leftIK.interpolation, (1 - timeTillSet), athlete.myDelta * interpolationSpeed)
 	athlete.rightIK.interpolation = lerp(athlete.rightIK.interpolation, (1 - timeTillSet), athlete.myDelta * interpolationSpeed)
-	#$athlete.rotate_x(0.4)
+	if athlete.team.flip > 0:
+		athlete.rotation.y = lerp_angle(athlete.rotation.y, 0, athlete.myDelta * 5)
+	else:
+		athlete.rotation.y = lerp_angle(athlete.rotation.y, PI, athlete.myDelta * 5)
 	pass
 func Exit(athlete:Athlete):
 	athlete.leftIK.stop()
@@ -31,3 +37,6 @@ func WaitThenDefend(athlete:Athlete, time:float):
 	yield(athlete.get_tree().create_timer(time), "timeout")
 	
 	athlete.stateMachine.SetCurrentState(athlete.defendState)
+
+func TimeToBallAtReceptionTarget(ball:Ball):
+	return 1.0
