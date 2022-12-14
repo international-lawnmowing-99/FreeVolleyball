@@ -520,7 +520,8 @@ func Populate(firstNames, lastNames, r):
 		#1.25 is the arm factor of newWoman
 		stats.spikeHeight = stats.height * (1.33) + stats.verticalJump
 		stats.blockHeight = stats.height * (1.25) + stats.verticalJump
-		stats.setHeight = stats.height + 0.15
+		stats.standingSetHeight = stats.height + 0.15
+		stats.jumpSetHeight = stats.standingSetHeight + stats.verticalJump
 		#stats.shirtNumber = shirtNumbers[j];
 		#stats.image = images[j];
 		var athlete = Athlete.new()

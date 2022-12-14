@@ -24,9 +24,10 @@ func Exit(team:Team):
 
 func SpikeBall(team:Team):
 	var ball:Ball = team.ball
-	
-	ball.attackTarget = team.CheckIfFlipped(Vector3(-rng.randf_range(1, 9), 0, -4.5 + rng.randf_range(0, 9)))
-
+	if team.chosenSpiker.FrontCourt():
+		ball.attackTarget = team.CheckIfFlipped(Vector3(-rng.randf_range(1, 9), 0, -4.5 + rng.randf_range(0, 9)))
+	else:
+		ball.attackTarget = team.CheckIfFlipped(Vector3(-rng.randf_range(6, 9), 0, -4.5 + rng.randf_range(0, 9)))
 	if team.setTarget.height > 2.43:
 		#Draw a line from the ball to the target. If the point where it crosses the 
 		#net is higher than said net, it can be hit, otherwise roll

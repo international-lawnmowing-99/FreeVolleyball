@@ -21,7 +21,8 @@ var verticalJump:float
 var power:float
 var spikeHeight:float
 
-var setHeight:float
+var standingSetHeight:float
+var jumpSetHeight:float
 var blockHeight:float
 
 var nation

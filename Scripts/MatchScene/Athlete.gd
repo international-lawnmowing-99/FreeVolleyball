@@ -26,7 +26,7 @@ onready var spikeState = load("res://Scripts/State/Athlete/AthleteSpikeState.gd"
 onready var blockState = load("res://Scripts/State/Athlete/AthleteBlockState.gd").new()
 onready var chillState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
 
-#var blockingTarget:Athlete
+const MoveDistanceDelta:float = 0.1
 
 var ball:Ball
 onready var skel:Skeleton = $"new new woman import/godette volleyball/Skeleton"
@@ -235,7 +235,7 @@ func CalculateTimeTillJumpPeak(takeOffXZ):
 	return timeTillJumpPeak
 
 func BaseMove(_delta):
-	if rb.mode == RigidBody.MODE_KINEMATIC && translation.distance_to(moveTarget) > .1:
+	if rb.mode == RigidBody.MODE_KINEMATIC && translation.distance_to(moveTarget) > MoveDistanceDelta:
 		var dir = (moveTarget - translation).normalized()
 		translation += dir * stats.speed * _delta
 		animTree.set("parameters/MoveTree/blend_position", Vector2(dir.x, dir.z))
@@ -253,7 +253,9 @@ func ReEvaluateState():
 			else:
 				stateMachine.SetCurrentState(transitionState)
 		team.spikeState:
-			if stateMachine.currentState.nameOfState == "Spike":
+			if stateMachine.currentState.nameOfState == "Set":
+				stateMachine.SetCurrentState(defendState)
+			elif stateMachine.currentState.nameOfState == "Spike":
 				#stateMachine.SetCurrentState(coverState)
 				pass
 			else:

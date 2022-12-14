@@ -66,7 +66,7 @@ func Update(team:Team):
 	
 	#Is the ball close enough
 	if team.ball.translation.y <= team.receptionTarget.y && team.ball.linear_velocity.y < 0 && \
-		Vector3(team.chosenSetter.translation.x, team.chosenSetter.stats.setHeight, team.chosenSetter.translation.z).distance_squared_to(team.ball.translation) < 1:
+		Vector3(team.chosenSetter.translation.x, team.chosenSetter.stats.standingSetHeight, team.chosenSetter.translation.z).distance_squared_to(team.ball.translation) < 1:
 			SetBall(team)
 	#CheckForSpikeDistance(team)
 	pass
