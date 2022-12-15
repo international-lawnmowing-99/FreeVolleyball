@@ -70,6 +70,7 @@ func ResolveBlock():
 	
 	if attackRoll>blockRoll:
 		ball.blockWillBeAttempted = false
+		spiker.get_tree().get_root().get_node("MatchScene").BallOverNet(spiker.team.isHuman)
 		return
 	elif blockRoll > attackRoll:
 		KillBlock()

@@ -254,6 +254,7 @@ func ReEvaluateState():
 				stateMachine.SetCurrentState(transitionState)
 		team.spikeState:
 			if stateMachine.currentState.nameOfState == "Set":
+				rotation.y = -team.flip*PI/2
 				stateMachine.SetCurrentState(defendState)
 			elif stateMachine.currentState.nameOfState == "Spike":
 				#stateMachine.SetCurrentState(coverState)
