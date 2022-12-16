@@ -193,7 +193,8 @@ func PassBall(athlete:Athlete):
 	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, rand_range(4,8)))
 	yield(athlete.get_tree(),"idle_frame")
 	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, rand_range(4,8)))
-
+	print(athlete.team.receptionTarget)
+	print(athlete.team.isHuman)
 	athlete.get_tree().get_root().get_node("MatchScene").BallReceived(athlete.team.isHuman)
 
 	yield(athlete.get_tree().create_timer(.5), "timeout")

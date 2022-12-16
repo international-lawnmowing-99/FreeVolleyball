@@ -100,3 +100,8 @@ func TripleBlockPipe(team:Team):
 	rightSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
 	leftSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
 	team.middleFront.blockState.blockingTarget = otherTeam.outsideBack
+
+
+func EvaluateOppositionPass():
+	print(otherTeam.receptionTarget)
+	var dumpProbability = 0

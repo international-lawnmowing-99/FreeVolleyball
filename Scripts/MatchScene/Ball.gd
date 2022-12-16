@@ -10,7 +10,7 @@ var attackTarget
 var mManager
 var inPlay:bool = true
 var blockWillBeAttempted = false
-var blockResolver = load("res://BlockResolver.gd").new(self)
+var blockResolver = load("res://Scripts/MatchScene/BlockResolver.gd").new(self)
 
 var floating:bool = false
 var floatDisplacement:Vector3 = Vector3.ZERO

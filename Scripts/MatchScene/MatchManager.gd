@@ -82,8 +82,10 @@ func BallOverNet(hitByTeamA:bool):
 func BallReceived(receivedByTeamA:bool):
 	if receivedByTeamA:
 		teamA.stateMachine.SetCurrentState(teamA.setState)
+		teamB.defendState.EvaluateOppositionPass()
 	else:
 		teamB.stateMachine.SetCurrentState(teamB.setState)
+		teamA.defendState.EvaluateOppositionPass()
 
 func BallSet(setByTeamA:bool):
 	if setByTeamA:
