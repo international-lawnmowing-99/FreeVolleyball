@@ -132,12 +132,12 @@ custom_fonts/font = ExtResource( 4 )
 text = "Accept"
 
 [node name="CancelSubButton" type="Button" parent="."]
-margin_left = 1490.36
-margin_top = 947.916
-margin_right = 1920.36
-margin_bottom = 1079.92
+margin_left = 1059.87
+margin_top = 945.024
+margin_right = 1489.87
+margin_bottom = 1077.03
 custom_fonts/font = ExtResource( 4 )
-text = "Accept"
+text = "Cancel Sub"
 
 [node name="HumanTeam" type="Control" parent="."]
 

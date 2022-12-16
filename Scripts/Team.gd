@@ -321,6 +321,8 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	outgoing.rotation = tempRot
 	
 	outgoing.stateMachine.SetCurrentState(outgoing.chillState)
+	incoming.ReEvaluateState()
+	
 func CachePlayers():
 	for player in courtPlayers:
 		if player.role == Enums.Role.Setter:

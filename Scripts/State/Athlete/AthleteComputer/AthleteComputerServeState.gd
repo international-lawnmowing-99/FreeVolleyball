@@ -11,17 +11,31 @@ Jump,
 Landing
 }
 
+enum ServeType{
+	UNDEFINED,
+	Jump,
+	Float,
+	Underarm
+}
+
+enum ServeAggression{
+	UNDEFINED,
+	Safety,
+	Moderate,
+	Aggressive
+	}
 const MAXTOPSPIN = 1.8
 const MINTOPSPIN = 0.4
 
 var serveState
+var serveAggression = ServeAggression.UNDEFINED
+var serveType = ServeType.UNDEFINED
+
 var ball:Ball
 var takeOffTarget
 var attackTarget
 var outputString:String
 
-var serveType
-var serveAggression
 
 func Enter(athlete:Athlete):
 	randomize()
@@ -42,22 +56,28 @@ func Update(athlete:Athlete):
 			
 		ServeState.Aiming:
 			#Decide what to do...
-			serveType = randi()%3
-			if serveType == 0:
+			var randServeType = randi()%3
+			if randServeType == 0:
+				serveType = ServeType.Underarm
 				outputString += "Underarm serve, the lad!"
-			elif serveType == 1:
+			elif randServeType == 1:
+				serveType = ServeType.Float
 				outputString += "Float serve"
-			elif serveType == 2:
+			elif randServeType == 2:
+				serveType = ServeType.Jump
 				outputString += "Jump serve"
 
 			#Choose aggression
-			serveAggression = randi()%3
+			var randServeAggression = randi()%3
 			
-			if serveAggression == 0:
+			if randServeAggression == 0:
+				serveAggression = ServeAggression.Safety
 				outputString += " - safety serve"
-			elif serveAggression == 1:
+			elif randServeAggression == 1:
+				serveAggression = ServeAggression.Moderate
 				outputString += " - average aggression"
-			elif serveAggression == 2:
+			elif randServeAggression == 2:
+				serveAggression = ServeAggression.Aggressive
 				outputString += " - going for glory"
 
 			#Choose target
@@ -124,13 +144,20 @@ func Update(athlete:Athlete):
 		ServeState.Jump:
 			#if athlete.rb.linear_velocity.y >0:
 				if ball.linear_velocity.y < 0 && athlete.stats.spikeHeight >= ball.translation.y:
-					var topspin
+					var topspin = 0
 					# did they stuff up the serve?? 
 					# skill ~ 30 - 70 ~.5
 					# expecting 5 - 30% error rate, depending on aggro, avg 10%
 					
 					
 					var fuckupProb = .1#float(serveAggression + 1)/3 * float(1 - (athlete.stats.serve/100))
+
+					match serveAggression:
+						ServeAggression.Aggressive:
+							fuckupProb *= 2
+						ServeAggression.Safety:
+							fuckupProb /= 2
+					
 					var roll = randf()
 					#Console.AddNewLine("fuckup prob: " + str(fuckupProb) + "|| roll: " + str(roll))
 					if roll < fuckupProb:
@@ -141,12 +168,24 @@ func Update(athlete:Athlete):
 						Console.AddNewLine("BAD SERVE. Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 						ball.mManager.PointToTeamA()
 					else:
-						topspin = rand_range(.5,1.8)
+						if serveType == ServeType.Float:
+							ball.floating = true
+						elif serveType == ServeType.Jump:
+							topspin = rand_range(.5, 1.8)
 						ball.Serve(ball.translation, attackTarget, topspin)
 						Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 						athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(false)
 						
+						var difficultyOfReception = 0
+						match serveAggression:
+							ServeAggression.Aggressive:
+								difficultyOfReception = rand_range(athlete.stats.serve * 2/3, athlete.stats.serve)
+							ServeAggression.Moderate:
+								difficultyOfReception = rand_range(athlete.stats.serve/3, athlete.stats.serve * 2/3)
+							ServeAggression.Safety:
+								difficultyOfReception = rand_range(0, athlete.stats.serve/3)
 						
+						ball.difficultyOfReception = difficultyOfReception
 						
 						
 					

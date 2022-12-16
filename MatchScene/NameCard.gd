@@ -16,6 +16,7 @@ func DisplayStats(athlete:Athlete):
 	var skill = (athlete.stats.set + athlete.stats.spike + athlete.stats.block + athlete.stats.reception)/4
 	var skillText = $Skill
 	skillText.text = str("%.0f" % skill)
+	skillText.add_color_override("font_color",lerp(Color.red, Color.green, (skill*3-100)/100.0))
 #	if skill < 50:
 #		skillText.modulate(Color.crimson)
 #	elif skill < 60:
