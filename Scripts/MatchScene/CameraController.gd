@@ -89,7 +89,7 @@ func _ready():
 	set_enabled(enabled)
 
 	if use_gui:
-		_gui = preload("camera_control_gui.gd")
+		_gui = preload("res://Scripts/MatchScene/camera_control_gui.gd")
 		_gui = _gui.new(self, gui_action)
 		add_child(_gui)
 

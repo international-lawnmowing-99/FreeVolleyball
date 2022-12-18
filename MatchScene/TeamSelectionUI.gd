@@ -4,6 +4,7 @@ var nameCards:Array
 var normalColour = Color.chocolate
 var mManager:MatchManager
 var athleteToBeSubbed
+const Enums = preload("res://Scripts/World/Enums.gd")
 
 func _ready() -> void:
 	mManager = get_tree().root.get_node("MatchScene")
