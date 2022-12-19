@@ -1,7 +1,11 @@
 extends "res://Scripts/State/Team/TeamState.gd"
 const enums = preload("res://Scripts/World/Enums.gd")
 
+#can also potentially spike, dogshot
+var ballWillBeDumped:bool = false
+
 func Enter(team:Team):
+	ballWillBeDumped = false
 	#ChooseSetter
 	
 	#can the setter/lib get there???
@@ -23,8 +27,11 @@ func Enter(team:Team):
 	# Choose to attack on 2nd??
 	if team.chosenSetter.FrontCourt():
 		var dump = bool(randi()%2)
-		if dump:
-			Console.AddNewLine("Dumping", Color.white)
+		if dump && abs(team.receptionTarget.x) < 2:
+			Console.AddNewLine("!!!!Dumping!!!!!", Color.darkred)
+			ballWillBeDumped = true
+			return
+
 
 	#Can the spiker get back to their runup and if not, how will that affect their spike?
 	var possibleSpikers = []
@@ -49,7 +56,14 @@ func Enter(team:Team):
 	
 	match team.chosenSpiker.role:
 		Enums.Role.Middle:
-			team.setTarget = team.chosenSpiker.middleSpikes[0]
+			var randint:int = randi()%3
+			match randint:
+				0:
+					team.setTarget = team.chosenSpiker.middleSpikes[0]
+				1:
+					team.setTarget = team.chosenSpiker.middleSpikes[1]
+				2:
+					team.setTarget = team.chosenSpiker.middleSpikes[2]
 		Enums.Role.Outside:
 			if team.chosenSpiker.FrontCourt():
 				team.setTarget = team.chosenSpiker.outsideFrontSpikes[0]
@@ -67,13 +81,23 @@ func Update(team:Team):
 	#Is the ball close enough
 	if team.ball.translation.y <= team.receptionTarget.y && team.ball.linear_velocity.y < 0 && \
 		Vector3(team.chosenSetter.translation.x, team.chosenSetter.stats.standingSetHeight, team.chosenSetter.translation.z).distance_squared_to(team.ball.translation) < 1:
-			SetBall(team)
+			if ballWillBeDumped:
+				DumpBall(team)
+			else:
+				SetBall(team)
 	#CheckForSpikeDistance(team)
 	pass
 func Exit(team:Team):
 	pass
 
-
+func DumpBall(team:Team):
+	team.ball.attackTarget = team.CheckIfFlipped(Vector3(rand_range(-1, -4.5), 0, -4.5 + rand_range(0, 9)))
+	team.ball.difficultyOfReception = rand_range(0, team.chosenSetter.stats.dump)
+	team.ball.linear_velocity = team.ball.FindParabolaForGivenSpeed(team.ball.translation, team.ball.attackTarget, rand_range(5,10), false)
+	if team.ball.FindNetPass().y <= 2.5:
+		team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.translation, team.ball.attackTarget, 2.5)
+	team.mManager.BallOverNet(team.isHuman)
+	
 func SetBall(team:Team):
 	
 	# mint set, poor set (short, long, mis-timed, tight, over, or some combo thereof - so many ways to set poorly!), 2 hits/carry ("setting error")

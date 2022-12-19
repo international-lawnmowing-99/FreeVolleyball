@@ -163,7 +163,7 @@ func Update(athlete:Athlete):
 					if roll < fuckupProb:
 						attackTarget = Vector3(rand_range(-1, 8), 0, rand_range(-10, 10))
 						topspin = 0
-						ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.translation, attackTarget, 10 + 30 * randf(), false)
+						ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.translation, attackTarget, 10 + 20 * randf(), false)
 						ball.inPlay = false
 						Console.AddNewLine("BAD SERVE. Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 						ball.mManager.PointToTeamA()

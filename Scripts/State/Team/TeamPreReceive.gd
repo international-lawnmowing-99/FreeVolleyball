@@ -6,6 +6,7 @@ func Enter(team:Team):
 		athlete.translation = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
 		athlete.moveTarget = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
 		athlete.stateMachine.SetCurrentState(athlete.chillState)
+		athlete.rotation.y = -team.flip*PI/2
 		
 	if team.outsideFront.rotationPosition == 2 && team.oppositeHitter.rotationPosition == 4:
 		team.outsideFront.role = Enums.Role.Opposite

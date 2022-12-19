@@ -40,11 +40,18 @@ func Update(_athlete:Athlete):
 			var yVel:float
 			
 			if athlete.setRequest.height > athlete.team.receptionTarget.y:
-				yVel = abs(sqrt(2 * athlete.g * (athlete.setRequest.height - athlete.team.receptionTarget.y)))
+				yVel = sqrt(2 * athlete.g * (athlete.setRequest.height - athlete.team.receptionTarget.y))
 			else:
-				Engine.time_scale = 0
+				yVel = sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.team.receptionTarget.y))
+				#Engine.time_scale = 0
 				print("Setting downwards because you're such a unit")
-			
+				#UNTESTED!!!
+				if athlete.team.stateMachine.currentState == athlete.team.spikeState:
+					var distanceFactor:float = 1 - Vector3(athlete.ball.translation.x, 0, athlete.ball.translation.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
+					setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)
+				else:
+					setTime = yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
+				
 			if athlete.team.stateMachine.currentState == athlete.team.spikeState:
 				var distanceFactor:float = 1 - Vector3(athlete.ball.translation.x, 0, athlete.ball.translation.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
 

@@ -35,7 +35,7 @@ func GenerateDefaultWorld(generateAllPlayers:bool):
 			pop =  int(split[split.size() - 3])
 
 			continents[continents.size() - 1].nations.append(Nation.new(finalName, pop))
-			
+
 			var currentNation = continents[continents.size() - 1].nations[continents[continents.size() - 1].nations.size() - 1]
 
 			currentNation.Populate(firstNames, lastNames, r, generateAllPlayers)

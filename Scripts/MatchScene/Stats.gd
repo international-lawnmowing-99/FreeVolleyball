@@ -7,17 +7,18 @@ var lastName:String
 var serve:float
 var reception:float
 var set:float
+var dump:float
 var spike:float
 var block:float
 var shirtNumber:int
 var imageID:int = 0
 
-#[Header("Physical")]
+
 var speed:float
 var height:float
 var verticalJump:float
 
-#[Header("Attack")]
+
 var power:float
 var spikeHeight:float
 

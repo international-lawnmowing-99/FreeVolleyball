@@ -10,6 +10,8 @@ func Enter(team:Team):
 		team.courtPlayers[i].translation = team.defaultPositions[team.courtPlayers[i].rotationPosition -1] * team.flip 
 		team.courtPlayers[i].moveTarget = team.courtPlayers[i].translation
 		team.courtPlayers[i].stateMachine.SetCurrentState(team.courtPlayers[i].chillState)
+		team.courtPlayers[i].rotation.y = -team.flip*PI/2
+		
 	var server:Athlete = team.courtPlayers[team.server]
 #	if team.isHuman:
 #		print (team.teamName + " choosing server. Server = " + str(team.server))

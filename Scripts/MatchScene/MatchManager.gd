@@ -37,7 +37,7 @@ func _ready():
 	var rand = RandomNumberGenerator.new()
 	rand.randomize()
 
-	if rand.randi_range(1,2) == 0:
+	if rand.randi_range(1,2) == 1:
 		isTeamAServing = false
 		teamA.isNextToSpike = false
 		teamB.isNextToSpike = true
