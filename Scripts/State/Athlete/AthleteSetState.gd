@@ -17,18 +17,7 @@ var jumpSetState = JumpSetState.Undefined
 var interpolationSpeed = 5
 func Enter(athlete:Athlete):
 	nameOfState="Set"
-	#Probably belongs in team function ChooseSetter()###
-	#Can we get there in time to jump set?
-	if TimeToBallAtReceptionTarget(athlete.team.ball, athlete.team.receptionTarget) >= TimeToJumpSet(athlete, athlete.team.receptionTarget):
-		athlete.moveTarget = athlete.team.receptionTarget
-		setState = SetState.JumpSet
-		jumpSetState = JumpSetState.PreSet
-	elif TimeToBallAtReceptionTarget(athlete.team.ball, athlete.team.receptionTarget) >= TimeToStandingSet(athlete, athlete.team.receptionTarget):
-		setState = SetState.StandingSet
-		athlete.moveTarget = athlete.team.receptionTarget
-	else:
-		print("Setter couldn't reach ball to set")
-	####################################################
+
 	athlete.moveTarget.y = 0
 	athlete.leftIK.start()
 	athlete.rightIK.start()
@@ -90,16 +79,6 @@ func WaitThenDefend(athlete:Athlete, time:float):
 	
 	athlete.stateMachine.SetCurrentState(athlete.defendState)
 
-func TimeToBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3):
-	var ballXZVel = Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length()
-	var ballXZDist = Vector3(ball.translation.x - receptionTarget.x, 0, ball.translation.z - receptionTarget.z).length()
-	
-	var time = ballXZDist/ ballXZVel
-	
-	print("Time till ball at reception target: " + str(time))
-	
-	return time
-
 func TimeToJumpSet(athlete:Athlete, receptionTarget:Vector3):
 	var g = ProjectSettings.get_setting("physics/3d/default_gravity")
 	
@@ -109,7 +88,7 @@ func TimeToJumpSet(athlete:Athlete, receptionTarget:Vector3):
 	var jumpYVel = sqrt(2 * g * athlete.stats.verticalJump)
 	var jumpTime = jumpYVel / g
 	
-	print("Time to execute jump set: " + str(timeToMoveIntoPosition + jumpTime))
+	#print("Time to execute jump set: " + str(timeToMoveIntoPosition + jumpTime))
 	
 	return timeToMoveIntoPosition + jumpTime
 

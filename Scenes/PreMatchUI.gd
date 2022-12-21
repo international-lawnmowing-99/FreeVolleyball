@@ -41,7 +41,7 @@ func PopulateUI(team:Team, otherTeam:Team):
 	
 	var humanTeam = $TeamLineUpsUI/HumanTeam
 	for i in range(team.allPlayers.size()):
-		if team.allPlayers[i]:
+		if team.allPlayers[i] && humanTeam.get_child(i):
 			humanTeam.get_child(i).DisplayStats(team.allPlayers[i])
 			$TeamLineUpsUI/OppositionTeam.get_child(i).DisplayStats(otherTeam.allPlayers[i])
 	

@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://DynamicFontData_Roboto.tres" type="DynamicFontData" id=1]
 [ext_resource path="res://MatchScene/NameCard.gd" type="Script" id=2]
 [ext_resource path="res://Textures/Captain.png" type="Texture" id=3]
 [ext_resource path="res://Textures/LiberoIcon.png" type="Texture" id=4]

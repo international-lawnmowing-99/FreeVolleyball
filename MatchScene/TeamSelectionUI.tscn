@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://MatchScene/TeamSelectionUI.gd" type="Script" id=1]
 [ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://MatchScene/PlayerStatsViewer.gd" type="Script" id=5]
 [ext_resource path="res://Textures/AntiClockwiseArrow.png" type="Texture" id=6]
 [ext_resource path="res://Textures/ClockwiseArrow.png" type="Texture" id=7]
+[ext_resource path="res://DynamicFontData_Roboto.tres" type="DynamicFontData" id=8]
 
 [sub_resource type="Theme" id=15]
 GridContainer/constants/hseparation = 50
@@ -17,7 +18,7 @@ VBoxContainer/constants/separation = 20
 size = 100
 outline_size = 3
 outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 2 )
+font_data = ExtResource( 8 )
 
 [sub_resource type="StyleBoxFlat" id=19]
 bg_color = Color( 0.839216, 0.623529, 0.207843, 1 )
@@ -30,7 +31,7 @@ corner_radius_bottom_left = 50
 size = 27
 outline_size = 3
 outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 2 )
+font_data = ExtResource( 8 )
 
 [sub_resource type="DynamicFont" id=21]
 size = 70

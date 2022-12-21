@@ -6,26 +6,28 @@ var ballWillBeDumped:bool = false
 
 func Enter(team:Team):
 	ballWillBeDumped = false
-	#ChooseSetter
 	
-	#can the setter/lib get there???
+	ChooseSetter(team)
+
 	
-	if team.chosenReceiver.role == enums.Role.Setter:
-		if team.isLiberoOnCourt:
-			team.libero.stateMachine.SetCurrentState(team.libero.setState)
-			team.chosenSetter = team.libero
-		else:
-			team.middleBack.stateMachine.SetCurrentState(team.middleBack.setState)
-			team.chosenSetter = team.middleBack
-	else:
-		if team.setter.rb.mode == RigidBody.MODE_KINEMATIC:
-			team.setter.stateMachine.SetCurrentState(team.setter.setState)
-		team.chosenSetter = team.setter
+
+	
+#	if team.chosenReceiver.role == enums.Role.Setter:
+#		if team.isLiberoOnCourt:
+#			team.libero.stateMachine.SetCurrentState(team.libero.setState)
+#			team.chosenSetter = team.libero
+#		else:
+#			team.middleBack.stateMachine.SetCurrentState(team.middleBack.setState)
+#			team.chosenSetter = team.middleBack
+#	else:
+#		if team.setter.rb.mode == RigidBody.MODE_KINEMATIC:
+#			team.setter.stateMachine.SetCurrentState(team.setter.setState)
+#		team.chosenSetter = team.setter
 	
 	
 	
 	# Choose to attack on 2nd??
-	if team.chosenSetter.FrontCourt():
+	if team.chosenSetter && team.chosenSetter.FrontCourt():
 		var dump = bool(randi()%2)
 		if dump && abs(team.receptionTarget.x) < 2:
 			Console.AddNewLine("!!!!Dumping!!!!!", Color.darkred)
@@ -153,3 +155,77 @@ func CheckForSpikeDistance(team:Team):
 	if team.ball.translation.y <= team.setTarget.y \
 	&& abs(team.ball.translation.z) >= abs(team.setTarget.z) && team.ball.linear_velocity.y <= 0:
 		team.stateMachine.SetCurrentState(team.spikeState)
+
+func ChooseSetter(team:Team):
+	var timeTillBallAtReceptionTarget = TimeToBallAtReceptionTarget(team.ball, team.receptionTarget)
+	# Who will set?
+	# Who will hit?
+	# Who is out of the picture and will sit around looking pretty?
+	
+	#Can the setter get there in time to jump set?
+	if team.chosenReceiver!=team.setter: # and the team is using a dedicated setter!
+		if SetterCanJumpSet(team, timeTillBallAtReceptionTarget):
+			#Setter sets
+			pass
+		elif SetterCanStandingSet(team, timeTillBallAtReceptionTarget):
+			#Setter sets
+			pass
+		elif AttemptToFindSetterOutOfSystem(team, timeTillBallAtReceptionTarget):
+			#another setter is used
+			pass
+		elif DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team, timeTillBallAtReceptionTarget):
+			#Someone digs or dives for the ball
+			team.SendMultipleChasersAfterBall()
+		
+		else:
+			team.GiveUpThePoint()
+			
+	
+
+func SetterCanJumpSet(team:Team, timeTillBallAtReceptionTarget:float)->bool:
+	if timeTillBallAtReceptionTarget >= team.setter.setState.TimeToJumpSet(team.setter, team.receptionTarget):
+		team.setter.stateMachine.SetCurrentState(team.setter.setState)
+		team.chosenSetter = team.setter
+		team.receptionTarget = team.ball.BallPositionAtGivenHeight(team.setter.stats.jumpSetHeight)
+		team.setter.moveTarget = team.receptionTarget
+		team.setter.moveTarget.y = 0
+		team.setter.setState.setState = team.setter.setState.SetState.JumpSet
+		team.setter.setState.jumpSetState = team.setter.setState.JumpSetState.PreSet
+
+		return true
+	return false
+func SetterCanStandingSet(team:Team, timeTillBallAtReceptionTarget:float)->bool:
+	if timeTillBallAtReceptionTarget >= team.setter.setState.TimeToStandingSet(team.setter, team.receptionTarget):
+		team.setter.stateMachine.SetCurrentState(team.setter.setState)
+		team.chosenSetter = team.setter
+		team.setter.moveTarget = team.receptionTarget
+		team.setter.moveTarget.y = 0
+		team.setter.setState.setState = team.setter.setState.SetState.StandingSet
+		return true
+	return false
+
+func AttemptToFindSetterOutOfSystem(team:Team, timeTillBallAtReceptionTarget:float)->bool:
+	# Has the person chosen a dedicated reserve setter? 
+	# Defaulting to standard 2022 play style
+	
+	var xzReceptionTarget = team.xzVector(team.receptionTarget)
+	for lad in team.courtPlayers:
+		lad.distanceHack = lad.translation.distance_to(xzReceptionTarget)/lad.stats.speed
+		
+	var orderedList = team.courtPlayers.duplicate(false)
+	orderedList.sort_custom(Athlete, "SortDistance")
+	
+	print(str(orderedList[0].distanceHack) + " time for quickest option to set ball")
+	
+	return true
+
+func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:Team, timeTillBallAtReceptionTarget:float)->bool:
+	return true
+
+func TimeToBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3):
+	var ballXZVel = Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length()
+	var ballXZDist = Vector3(ball.translation.x - receptionTarget.x, 0, ball.translation.z - receptionTarget.z).length()
+	
+	var time = ballXZDist/ ballXZVel
+	#print("Time till ball at reception target: " + str(time))
+	return time
