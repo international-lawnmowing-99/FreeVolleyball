@@ -1,0 +1,77 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://MatchScene/ScoreFontSetScore.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Textures/Scorecard.png" type="Texture" id=2]
+[ext_resource path="res://Scenes/Score.gd" type="Script" id=3]
+[ext_resource path="res://Scenes/teamNameFont.tres" type="DynamicFont" id=4]
+[ext_resource path="res://MatchScene/ScoreFontPointScore.tres" type="DynamicFont" id=5]
+
+[node name="Score" type="TextureRect"]
+anchor_left = 0.025
+anchor_top = 0.025
+anchor_right = 1.0
+anchor_bottom = 0.025
+margin_right = -1561.0
+margin_bottom = 108.0
+texture = ExtResource( 2 )
+script = ExtResource( 3 )
+
+[node name="ScoreTeamAText" type="Label" parent="."]
+margin_left = 108.0
+margin_top = 6.0
+margin_right = 252.0
+margin_bottom = 50.0
+custom_fonts/font = ExtResource( 4 )
+text = "AUS"
+
+[node name="ScoreTeamBText" type="Label" parent="."]
+margin_left = 109.89
+margin_top = 57.6568
+margin_right = 253.89
+margin_bottom = 101.657
+custom_fonts/font = ExtResource( 4 )
+text = "FRA"
+
+[node name="ScoreTeamASetScore" type="Label" parent="."]
+margin_left = 239.0
+margin_top = 24.0
+margin_right = 260.0
+margin_bottom = 51.0
+custom_colors/font_color = Color( 0.929688, 0.52349, 0.330475, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreTeamBSetScore" type="Label" parent="."]
+margin_left = 239.0
+margin_top = 75.5466
+margin_right = 260.0
+margin_bottom = 102.547
+custom_colors/font_color = Color( 0.929688, 0.52349, 0.330475, 1 )
+custom_fonts/font = ExtResource( 1 )
+text = "0"
+
+[node name="ScoreTeamAPointScore" type="Label" parent="."]
+margin_left = 258.0
+margin_top = 3.0
+margin_right = 308.0
+margin_bottom = 53.0
+custom_fonts/font = ExtResource( 5 )
+text = "13"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreTeamBPointScore" type="Label" parent="."]
+margin_left = 258.0
+margin_top = 55.0
+margin_right = 308.0
+margin_bottom = 105.0
+custom_fonts/font = ExtResource( 5 )
+text = "13"
+align = 1
+valign = 1

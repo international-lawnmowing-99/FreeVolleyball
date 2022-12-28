@@ -122,6 +122,7 @@ var spikeState:State = load("res://Scripts/State/Team/TeamSpike.gd").new()
 var preserviceState:State = load("res://Scripts/State/Team/TeamPreService.gd").new()
 var defendState:State = load("res://Scripts/State/Team/TeamDefend.gd").new()
 var prereceiveState:State = load("res://Scripts/State/Team/TeamPreReceive.gd").new()
+var chillState = load("res://Scripts/State/Team/TeamState.gd").new()
 
 func init(_ball, choiceState, gameWorld, clubOrInternational, matchManager):
 	mManager = matchManager
@@ -464,6 +465,7 @@ func CheckIfFlipped(vectorToBeChecked:Vector3):
 	return Vector3(flip * vectorToBeChecked.x, vectorToBeChecked.y, flip * vectorToBeChecked.z)
 
 func Chill():
+	stateMachine.SetCurrentState(chillState)
 	for player in courtPlayers:
 		player.stateMachine.SetCurrentState(player.chillState)
 

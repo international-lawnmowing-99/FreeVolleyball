@@ -111,7 +111,7 @@ func Update(athlete:Athlete):
 		var animFactor = 1.5-  athlete.timeTillBallReachesMe 
 		athlete.animTree.set("parameters/Dig/blend_amount", animFactor)
 
-		athlete.RotateDigPlatform(athlete.digAngle)#( lerp(0,athlete.digAngle,(max(1,1/athlete.timeTillBallReachesMe)))))
+		#athlete.RotateDigPlatform(athlete.digAngle)#( lerp(0,athlete.digAngle,(max(1,1/athlete.timeTillBallReachesMe)))))
 	#else:
 		#var a = athlete.animTree.get("parameters/BlendSpace1D/blend_position")
 		#athlete.animTree.set("parameters/BlendSpace1D/blend_position", lerp(a, 0, 5*athlete.myDelta))

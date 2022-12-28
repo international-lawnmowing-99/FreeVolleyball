@@ -63,11 +63,11 @@ func Update(athlete:Athlete):
 	athlete.rightIKTarget.global_transform.origin = lerp (athlete.rightIKTarget.global_transform.origin, athlete.ball.translation, athlete.myDelta * interpolationSpeed)
 	athlete.leftIK.interpolation = lerp(athlete.leftIK.interpolation, (1 - timeTillSet), athlete.myDelta * interpolationSpeed)
 	athlete.rightIK.interpolation = lerp(athlete.rightIK.interpolation, (1 - timeTillSet), athlete.myDelta * interpolationSpeed)
-	if athlete.team.flip > 0:
-		athlete.rotation.y = lerp_angle(athlete.rotation.y, 0, athlete.myDelta * 5)
-	else:
-		athlete.rotation.y = lerp_angle(athlete.rotation.y, PI, athlete.myDelta * 5)
-	
+#	if athlete.team.flip > 0:
+#		athlete.rotation.y = lerp_angle(athlete.rotation.y, 0, athlete.myDelta * 5)
+#	else:
+#		athlete.rotation.y = lerp_angle(athlete.rotation.y, PI, athlete.myDelta * 5)
+#
 	
 func Exit(athlete:Athlete):
 	athlete.leftIK.stop()

@@ -12,19 +12,6 @@ func Enter(team:Team):
 	
 
 	
-#	if team.chosenReceiver.role == enums.Role.Setter:
-#		if team.isLiberoOnCourt:
-#			team.libero.stateMachine.SetCurrentState(team.libero.setState)
-#			team.chosenSetter = team.libero
-#		else:
-#			team.middleBack.stateMachine.SetCurrentState(team.middleBack.setState)
-#			team.chosenSetter = team.middleBack
-#	else:
-#		if team.setter.rb.mode == RigidBody.MODE_KINEMATIC:
-#			team.setter.stateMachine.SetCurrentState(team.setter.setState)
-#		team.chosenSetter = team.setter
-	
-	
 	
 	# Choose to attack on 2nd??
 	if team.chosenSetter && team.chosenSetter.FrontCourt():
@@ -162,14 +149,46 @@ func ChooseSetter(team:Team):
 	# Who will hit?
 	# Who is out of the picture and will sit around looking pretty?
 	
-	#Can the setter get there in time to jump set?
-	if team.chosenReceiver!=team.setter: # and the team is using a dedicated setter!
-		if SetterCanJumpSet(team, timeTillBallAtReceptionTarget):
-			#Setter sets
+	
+	
+	
+#	if team.chosenReceiver.role == enums.Role.Setter:
+#		if team.isLiberoOnCourt:
+#			team.libero.stateMachine.SetCurrentState(team.libero.setState)
+#			team.chosenSetter = team.libero
+#		else:
+#			team.middleBack.stateMachine.SetCurrentState(team.middleBack.setState)
+#			team.chosenSetter = team.middleBack
+#	else:
+#		if team.setter.rb.mode == RigidBody.MODE_KINEMATIC:
+#			team.setter.stateMachine.SetCurrentState(team.setter.setState)
+#		team.chosenSetter = team.setter
+	
+	if team.chosenReceiver == team.setter:
+		if team.isLiberoOnCourt:
+			if AthleteCanStandingSet(team.libero, team, timeTillBallAtReceptionTarget):
+				AssignSetter(team.libero, team, false)
+				#libero sets (if that's the plan)
+				pass
+			elif AttemptToFindSetterOutOfSystem(team, timeTillBallAtReceptionTarget):
+				
+				
+				pass
+			elif DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team, timeTillBallAtReceptionTarget):
+			#Someone digs or dives for the ball
+				team.SendMultipleChasersAfterBall()
+			else:
+				team.GiveUpThePoint()
+		else:
 			pass
-		elif SetterCanStandingSet(team, timeTillBallAtReceptionTarget):
-			#Setter sets
-			pass
+			#can someone else do it?
+	else: # setter preferred - and the team is using a dedicated setter!
+		if AthleteCanJumpSet(team.setter, team, timeTillBallAtReceptionTarget):
+			AssignSetter(team.setter, team, true)
+
+		elif AthleteCanStandingSet(team.setter, team, timeTillBallAtReceptionTarget):
+			AssignSetter(team.setter, team, false)#Setter sets
+
 		elif AttemptToFindSetterOutOfSystem(team, timeTillBallAtReceptionTarget):
 			#another setter is used
 			pass
@@ -178,31 +197,28 @@ func ChooseSetter(team:Team):
 			team.SendMultipleChasersAfterBall()
 		
 		else:
-			team.GiveUpThePoint()
+			team.Chill()
 			
+func AssignSetter(athlete:Athlete, team:Team, isJumpSetting:bool):
+	athlete.stateMachine.SetCurrentState(athlete.setState)
+	team.chosenSetter = athlete
+	team.receptionTarget = team.ball.BallPositionAtGivenHeight(athlete.stats.jumpSetHeight)
+	athlete.moveTarget = team.receptionTarget
+	athlete.moveTarget.y = 0
+	
+	if isJumpSetting:
+		athlete.setState.setState = athlete.setState.SetState.JumpSet
+		athlete.setState.jumpSetState = athlete.setState.JumpSetState.PreSet
+	else:
+		athlete.setState.setState = athlete.setState.SetState.StandingSet
 	
 
-func SetterCanJumpSet(team:Team, timeTillBallAtReceptionTarget:float)->bool:
-	if timeTillBallAtReceptionTarget >= team.setter.setState.TimeToJumpSet(team.setter, team.receptionTarget):
-		team.setter.stateMachine.SetCurrentState(team.setter.setState)
-		team.chosenSetter = team.setter
-		team.receptionTarget = team.ball.BallPositionAtGivenHeight(team.setter.stats.jumpSetHeight)
-		team.setter.moveTarget = team.receptionTarget
-		team.setter.moveTarget.y = 0
-		team.setter.setState.setState = team.setter.setState.SetState.JumpSet
-		team.setter.setState.jumpSetState = team.setter.setState.JumpSetState.PreSet
+func AthleteCanJumpSet(athlete:Athlete, team:Team, timeTillBallAtReceptionTarget:float)->bool:
+	return timeTillBallAtReceptionTarget >= athlete.setState.TimeToJumpSet(athlete, team.receptionTarget)
 
-		return true
-	return false
-func SetterCanStandingSet(team:Team, timeTillBallAtReceptionTarget:float)->bool:
-	if timeTillBallAtReceptionTarget >= team.setter.setState.TimeToStandingSet(team.setter, team.receptionTarget):
-		team.setter.stateMachine.SetCurrentState(team.setter.setState)
-		team.chosenSetter = team.setter
-		team.setter.moveTarget = team.receptionTarget
-		team.setter.moveTarget.y = 0
-		team.setter.setState.setState = team.setter.setState.SetState.StandingSet
-		return true
-	return false
+
+func AthleteCanStandingSet(athlete:Athlete, team:Team, timeTillBallAtReceptionTarget:float)->bool:
+	return timeTillBallAtReceptionTarget >= team.setter.setState.TimeToStandingSet(team.setter, team.receptionTarget)
 
 func AttemptToFindSetterOutOfSystem(team:Team, timeTillBallAtReceptionTarget:float)->bool:
 	# Has the person chosen a dedicated reserve setter? 
@@ -211,16 +227,36 @@ func AttemptToFindSetterOutOfSystem(team:Team, timeTillBallAtReceptionTarget:flo
 	var xzReceptionTarget = team.xzVector(team.receptionTarget)
 	for lad in team.courtPlayers:
 		lad.distanceHack = lad.translation.distance_to(xzReceptionTarget)/lad.stats.speed
+		if lad == team.chosenReceiver:
+			lad.distanceHack = 99999
 		
 	var orderedList = team.courtPlayers.duplicate(false)
 	orderedList.sort_custom(Athlete, "SortDistance")
 	
 	print(str(orderedList[0].distanceHack) + " time for quickest option to set ball")
+	if orderedList[0].distanceHack < timeTillBallAtReceptionTarget:
+		AssignSetter(orderedList[0], team, false)
+		return true
 	
-	return true
+	return false
 
 func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:Team, timeTillBallAtReceptionTarget:float)->bool:
-	return true
+	
+	var xzReceptionTarget = team.xzVector(team.receptionTarget)
+	
+	for lad in team.courtPlayers:
+		lad.distanceHack = lad.translation.distance_to(xzReceptionTarget) - lad.stats.height
+		if lad == team.chosenReceiver:
+			lad.distanceHack = 99999
+
+	var orderedList = team.courtPlayers.duplicate(false)
+	orderedList.sort_custom(Athlete, "SortDistance")
+	AssignSetter(orderedList[0], team, false)
+	
+	if orderedList[0].distanceHack / orderedList[0].stats.speed < timeTillBallAtReceptionTarget:
+		return true
+
+	return false
 
 func TimeToBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3):
 	var ballXZVel = Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length()

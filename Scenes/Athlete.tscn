@@ -2,15 +2,12 @@
 
 [ext_resource path="res://Scripts/MatchScene/Athlete.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/new new woman import.tscn" type="PackedScene" id=2]
+[ext_resource path="res://DynamicFontData_Roboto.tres" type="DynamicFontData" id=3]
 [ext_resource path="res://Scripts/AthleteDebugTextHolder.gd" type="Script" id=8]
-[ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=9]
 
-[sub_resource type="DynamicFont" id=1]
-size = 12
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-extra_spacing_bottom = -6
-font_data = ExtResource( 9 )
+[sub_resource type="DynamicFont" id=4]
+size = 8
+font_data = ExtResource( 3 )
 
 [sub_resource type="SpatialMaterial" id=2]
 albedo_color = Color( 0, 0, 0, 1 )
@@ -36,7 +33,7 @@ script = ExtResource( 8 )
 [node name="RichTextLabel" type="RichTextLabel" parent="new new woman import/TextHolder"]
 margin_right = 301.0
 margin_bottom = 85.0
-custom_fonts/normal_font = SubResource( 1 )
+custom_fonts/normal_font = SubResource( 4 )
 text = "Default 
 Text"
 scroll_active = false

@@ -1,43 +1,19 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://MatchScene/TeamSelectionUI.gd" type="Script" id=1]
-[ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Scenes/teamNameFont.tres" type="DynamicFont" id=2]
 [ext_resource path="res://MatchScene/NameCard.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/a font.tres" type="DynamicFont" id=4]
 [ext_resource path="res://MatchScene/PlayerStatsViewer.gd" type="Script" id=5]
 [ext_resource path="res://Textures/AntiClockwiseArrow.png" type="Texture" id=6]
 [ext_resource path="res://Textures/ClockwiseArrow.png" type="Texture" id=7]
-[ext_resource path="res://DynamicFontData_Roboto.tres" type="DynamicFontData" id=8]
+[ext_resource path="res://MatchScene/TeamSelectionUI_stylebox.tres" type="StyleBox" id=8]
+[ext_resource path="res://Big Red Font.tres" type="DynamicFont" id=9]
 
 [sub_resource type="Theme" id=15]
 GridContainer/constants/hseparation = 50
 GridContainer/constants/vseparation = 20
 VBoxContainer/constants/separation = 20
-
-[sub_resource type="DynamicFont" id=18]
-size = 100
-outline_size = 3
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 8 )
-
-[sub_resource type="StyleBoxFlat" id=19]
-bg_color = Color( 0.839216, 0.623529, 0.207843, 1 )
-corner_radius_top_left = 50
-corner_radius_top_right = 50
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
-
-[sub_resource type="DynamicFont" id=20]
-size = 27
-outline_size = 3
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 8 )
-
-[sub_resource type="DynamicFont" id=21]
-size = 70
-outline_size = 4
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 2 )
 
 [node name="TeamSelectionUI" type="ColorRect"]
 anchor_right = 1.0
@@ -120,7 +96,7 @@ margin_top = 5.0
 margin_right = 1919.0
 margin_bottom = 138.0
 custom_colors/font_color = Color( 0.952941, 0, 0, 1 )
-custom_fonts/font = SubResource( 18 )
+custom_fonts/font = ExtResource( 9 )
 text = "Australia"
 align = 1
 
@@ -183,14 +159,14 @@ margin_left = 57.3008
 margin_top = 623.49
 margin_right = 632.301
 margin_bottom = 1015.49
-custom_styles/panel = SubResource( 19 )
+custom_styles/panel = ExtResource( 8 )
 script = ExtResource( 5 )
 
 [node name="Name" type="Label" parent="PlayerStatsViewer"]
 margin_top = 10.0
 margin_right = 576.0
 margin_bottom = 47.0
-custom_fonts/font = SubResource( 20 )
+custom_fonts/font = ExtResource( 2 )
 text = "Karteez Arminhalf"
 align = 1
 
@@ -199,7 +175,7 @@ margin_left = 36.0
 margin_top = 58.0
 margin_right = 290.0
 margin_bottom = 95.0
-custom_fonts/font = SubResource( 20 )
+custom_fonts/font = ExtResource( 2 )
 text = "Serve: 99"
 
 [node name="Receive" type="Label" parent="PlayerStatsViewer"]
@@ -207,7 +183,7 @@ margin_left = 36.0
 margin_top = 90.0
 margin_right = 288.0
 margin_bottom = 127.0
-custom_fonts/font = SubResource( 20 )
+custom_fonts/font = ExtResource( 2 )
 text = "Receive: 99"
 
 [node name="Set" type="Label" parent="PlayerStatsViewer"]
@@ -215,7 +191,7 @@ margin_left = 36.0
 margin_top = 123.0
 margin_right = 284.0
 margin_bottom = 160.0
-custom_fonts/font = SubResource( 20 )
+custom_fonts/font = ExtResource( 2 )
 text = "Set: 99"
 
 [node name="Block" type="Label" parent="PlayerStatsViewer"]
@@ -223,7 +199,7 @@ margin_left = 36.0
 margin_top = 155.0
 margin_right = 287.0
 margin_bottom = 192.0
-custom_fonts/font = SubResource( 20 )
+custom_fonts/font = ExtResource( 2 )
 text = "Block: 99"
 
 [node name="Spike" type="Label" parent="PlayerStatsViewer"]
@@ -231,7 +207,7 @@ margin_left = 300.0
 margin_top = 58.0
 margin_right = 577.0
 margin_bottom = 95.0
-custom_fonts/font = SubResource( 20 )
+custom_fonts/font = ExtResource( 2 )
 text = "Spike: 99"
 
 [node name="Speed" type="Label" parent="PlayerStatsViewer"]
@@ -239,7 +215,7 @@ margin_left = 300.0
 margin_top = 90.0
 margin_right = 578.0
 margin_bottom = 127.0
-custom_fonts/font = SubResource( 20 )
+custom_fonts/font = ExtResource( 2 )
 text = "Speed: 99"
 
 [node name="SpikeHeight" type="Label" parent="PlayerStatsViewer"]
@@ -247,7 +223,7 @@ margin_left = 300.0
 margin_top = 123.0
 margin_right = 576.0
 margin_bottom = 160.0
-custom_fonts/font = SubResource( 20 )
+custom_fonts/font = ExtResource( 2 )
 text = "Spike Height: 99"
 
 [node name="BlockHeight" type="Label" parent="PlayerStatsViewer"]
@@ -255,7 +231,7 @@ margin_left = 300.0
 margin_top = 155.0
 margin_right = 576.0
 margin_bottom = 192.0
-custom_fonts/font = SubResource( 20 )
+custom_fonts/font = ExtResource( 2 )
 text = "Block Height: 99"
 
 [node name="RotationControl" type="Control" parent="."]
@@ -263,27 +239,27 @@ margin_right = 40.0
 margin_bottom = 40.0
 
 [node name="ClockwiseButton" type="Button" parent="RotationControl"]
-margin_left = 1012.18
-margin_top = 792.45
-margin_right = 1101.18
-margin_bottom = 920.45
+margin_left = 989.731
+margin_top = 783.47
+margin_right = 1078.73
+margin_bottom = 911.47
 icon = ExtResource( 7 )
 expand_icon = true
 
 [node name="AntiClockwiseButton" type="Button" parent="RotationControl"]
-margin_left = 1347.0
-margin_top = 790.0
-margin_right = 1438.0
-margin_bottom = 922.0
+margin_left = 1425.57
+margin_top = 781.02
+margin_right = 1516.57
+margin_bottom = 913.02
 icon = ExtResource( 6 )
 expand_icon = true
 
 [node name="Label" type="Label" parent="RotationControl"]
-margin_left = 1115.98
-margin_top = 810.024
-margin_right = 1324.98
-margin_bottom = 903.024
-custom_fonts/font = SubResource( 21 )
+margin_left = 1100.27
+margin_top = 769.615
+margin_right = 1401.27
+margin_bottom = 902.615
+custom_fonts/font = ExtResource( 9 )
 text = "Rotate"
 
 [connection signal="pressed" from="CancelSubButton" to="." method="_on_CancelSubButton_pressed"]
