@@ -8,68 +8,24 @@ func Enter(team:Team):
 	ballWillBeDumped = false
 	
 	ChooseSetter(team)
-
+	ThinkAboutDumping(team)
 	
-
-	
-	
-	# Choose to attack on 2nd??
-	if team.chosenSetter && team.chosenSetter.FrontCourt():
-		var dump = bool(randi()%2)
-		if dump && abs(team.receptionTarget.x) < 2:
-			Console.AddNewLine("!!!!Dumping!!!!!", Color.darkred)
-			ballWillBeDumped = true
-			return
-
-
+	if !ballWillBeDumped:
+		ChooseSpiker(team)
 	#Can the spiker get back to their runup and if not, how will that affect their spike?
-	var possibleSpikers = []
-	
-	for athlete in team.courtPlayers:
-		if athlete!= team.chosenSetter && athlete != team.chosenReceiver && athlete.rb.mode != RigidBody.MODE_RIGID && athlete.role != enums.Role.Libero:
-			athlete.stateMachine.SetCurrentState(athlete.transitionState)
-			possibleSpikers.append(athlete)
-			
-	Console.AddNewLine("Choosing set option...")
-	if possibleSpikers.size() <= 0:
-		#Got to dump
-		#This happens when everyone's in the air and the back outside receives presumably so intensively that it takes them out of the attack - will eventually test 
-		#if there's enough time for the spiker to do a full runup, and penalise their desirability as an option for the ai if they can't make it all the way back and 
-		#have to hop on the spot. 
-		#The choice of who to set could be moved to the actual point at which the set occurs??
-		pass
 
-	var setChoice = randi()%possibleSpikers.size()
-	
-	team.chosenSpiker = possibleSpikers[setChoice]
-	
-	match team.chosenSpiker.role:
-		Enums.Role.Middle:
-			var randint:int = randi()%3
-			match randint:
-				0:
-					team.setTarget = team.chosenSpiker.middleSpikes[0]
-				1:
-					team.setTarget = team.chosenSpiker.middleSpikes[1]
-				2:
-					team.setTarget = team.chosenSpiker.middleSpikes[2]
-		Enums.Role.Outside:
-			if team.chosenSpiker.FrontCourt():
-				team.setTarget = team.chosenSpiker.outsideFrontSpikes[0]
-			else:
-				team.setTarget = team.chosenSpiker.outsideBackSpikes[0]
-		Enums.Role.Opposite:
-			if team.chosenSpiker.FrontCourt():
-				team.setTarget = team.chosenSpiker.oppositeFrontSpikes[0]
-			else:
-				team.setTarget = team.chosenSpiker.oppositeBackSpikes[0]
-	team.chosenSpiker.setRequest = team.setTarget
 func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
 	
+	var setHeight
+	#will need to add more heights in for diving, bump sets
+	if team.chosenSetter.setState.internalSetState == team.chosenSetter.setState.InternalSetState.JumpSet:
+		setHeight = team.chosenSetter.stats.jumpSetHeight
+	else:
+		setHeight = team.chosenSetter.stats.standingSetHeight
 	#Is the ball close enough
 	if team.ball.translation.y <= team.receptionTarget.y && team.ball.linear_velocity.y < 0 && \
-		Vector3(team.chosenSetter.translation.x, team.chosenSetter.stats.standingSetHeight, team.chosenSetter.translation.z).distance_squared_to(team.ball.translation) < 1:
+		Vector3(team.chosenSetter.translation.x, setHeight, team.chosenSetter.translation.z).distance_squared_to(team.ball.translation) < 1:
 			if ballWillBeDumped:
 				DumpBall(team)
 			else:
@@ -82,9 +38,15 @@ func Exit(team:Team):
 func DumpBall(team:Team):
 	team.ball.attackTarget = team.CheckIfFlipped(Vector3(rand_range(-1, -4.5), 0, -4.5 + rand_range(0, 9)))
 	team.ball.difficultyOfReception = rand_range(0, team.chosenSetter.stats.dump)
-	team.ball.linear_velocity = team.ball.FindParabolaForGivenSpeed(team.ball.translation, team.ball.attackTarget, rand_range(5,10), false)
-	if team.ball.FindNetPass().y <= 2.5:
-		team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.translation, team.ball.attackTarget, 2.5)
+	
+	# Here's a note about a weird error. If the ball is dumped with a well behaved parabola with 
+	# a max height of 0.1 above the current height, hundreds of errors appear somewhere during 
+	# physics process, using both physics engines. Not for +0.2 height though
+	
+	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.translation, team.ball.attackTarget, team.ball.translation.y + .2)
+#	team.ball.linear_velocity = team.ball.FindParabolaForGivenSpeed(team.ball.translation, team.ball.attackTarget, rand_range(5,10), false)
+#	if team.ball.FindNetPass().y <= 2.5:
+#		team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.translation, team.ball.attackTarget, 2.5)
 	team.mManager.BallOverNet(team.isHuman)
 	
 func SetBall(team:Team):
@@ -148,10 +110,7 @@ func ChooseSetter(team:Team):
 	# Who will set?
 	# Who will hit?
 	# Who is out of the picture and will sit around looking pretty?
-	
-	
-	
-	
+
 #	if team.chosenReceiver.role == enums.Role.Setter:
 #		if team.isLiberoOnCourt:
 #			team.libero.stateMachine.SetCurrentState(team.libero.setState)
@@ -194,6 +153,7 @@ func ChooseSetter(team:Team):
 			pass
 		elif DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team, timeTillBallAtReceptionTarget):
 			#Someone digs or dives for the ball
+			pass
 			team.SendMultipleChasersAfterBall()
 		
 		else:
@@ -202,15 +162,17 @@ func ChooseSetter(team:Team):
 func AssignSetter(athlete:Athlete, team:Team, isJumpSetting:bool):
 	athlete.stateMachine.SetCurrentState(athlete.setState)
 	team.chosenSetter = athlete
-	team.receptionTarget = team.ball.BallPositionAtGivenHeight(athlete.stats.jumpSetHeight)
+
 	athlete.moveTarget = team.receptionTarget
 	athlete.moveTarget.y = 0
 	
 	if isJumpSetting:
-		athlete.setState.setState = athlete.setState.SetState.JumpSet
+		athlete.setState.internalSetState = athlete.setState.InternalSetState.JumpSet
 		athlete.setState.jumpSetState = athlete.setState.JumpSetState.PreSet
+		team.receptionTarget = team.ball.BallPositionAtGivenHeight(athlete.stats.jumpSetHeight)
 	else:
-		athlete.setState.setState = athlete.setState.SetState.StandingSet
+		athlete.setState.internalSetState = athlete.setState.InternalSetState.StandingSet
+		team.receptionTarget = team.ball.BallPositionAtGivenHeight(athlete.stats.standingSetHeight)
 	
 
 func AthleteCanJumpSet(athlete:Athlete, team:Team, timeTillBallAtReceptionTarget:float)->bool:
@@ -247,7 +209,7 @@ func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:Team, timeTillBallA
 	for lad in team.courtPlayers:
 		lad.distanceHack = lad.translation.distance_to(xzReceptionTarget) - lad.stats.height
 		if lad == team.chosenReceiver:
-			lad.distanceHack = 99999
+			lad.distanceHack = 9999
 
 	var orderedList = team.courtPlayers.duplicate(false)
 	orderedList.sort_custom(Athlete, "SortDistance")
@@ -265,3 +227,54 @@ func TimeToBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3):
 	var time = ballXZDist/ ballXZVel
 	#print("Time till ball at reception target: " + str(time))
 	return time
+
+func ThinkAboutDumping(team:Team):
+	if team.chosenSetter && team.chosenSetter.FrontCourt():
+		var dump = true #bool(randi()%2)
+		if dump && abs(team.receptionTarget.x) < 2:
+			Console.AddNewLine("!!!!Dumping!!!!!", Color.darkred)
+			ballWillBeDumped = true
+			return
+			
+func ChooseSpiker(team:Team):
+	var possibleSpikers = []
+	
+	for athlete in team.courtPlayers:
+		if athlete!= team.chosenSetter && athlete != team.chosenReceiver && athlete.rb.mode != RigidBody.MODE_RIGID && athlete.role != enums.Role.Libero:
+			athlete.stateMachine.SetCurrentState(athlete.transitionState)
+			possibleSpikers.append(athlete)
+			
+	Console.AddNewLine("Choosing set option...")
+	if possibleSpikers.size() <= 0:
+		#Got to dump
+		#This happens when everyone's in the air and the back outside receives presumably so intensively that it takes them out of the attack - will eventually test 
+		#if there's enough time for the spiker to do a full runup, and penalise their desirability as an option for the ai if they can't make it all the way back and 
+		#have to hop on the spot. 
+		#The choice of who to set could be moved to the actual point at which the set occurs??
+		pass
+
+	var setChoice = randi()%possibleSpikers.size()
+	
+	team.chosenSpiker = possibleSpikers[setChoice]
+	
+	match team.chosenSpiker.role:
+		Enums.Role.Middle:
+			var randint:int = randi()%3
+			match randint:
+				0:
+					team.setTarget = team.chosenSpiker.middleSpikes[0]
+				1:
+					team.setTarget = team.chosenSpiker.middleSpikes[1]
+				2:
+					team.setTarget = team.chosenSpiker.middleSpikes[2]
+		Enums.Role.Outside:
+			if team.chosenSpiker.FrontCourt():
+				team.setTarget = team.chosenSpiker.outsideFrontSpikes[0]
+			else:
+				team.setTarget = team.chosenSpiker.outsideBackSpikes[0]
+		Enums.Role.Opposite:
+			if team.chosenSpiker.FrontCourt():
+				team.setTarget = team.chosenSpiker.oppositeFrontSpikes[0]
+			else:
+				team.setTarget = team.chosenSpiker.oppositeBackSpikes[0]
+	team.chosenSpiker.setRequest = team.setTarget

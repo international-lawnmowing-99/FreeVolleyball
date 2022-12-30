@@ -62,9 +62,10 @@ func _ready():
 	preMatchUI.skipUI()
 
 func _physics_process(delta: float) -> void:
-	if ball.blockWillBeAttempted:
-		if teamA.isNextToSpike:
-			pass
+#	if ball.blockWillBeAttempted:
+#		if teamA.isNextToSpike:
+#			pass
+	pass
 	
 func BallOverNet(hitByTeamA:bool):
 	teamA.isNextToSpike = !teamA.isNextToSpike
@@ -144,13 +145,13 @@ func PointToTeamB():
 	teamB.stateMachine.SetCurrentState(teamB.preserviceState)
 	
 func SetToTeamA():
-	$TeamInfoUI/Control/TeamSelectionUI.EnableRotate()
+	$TeamInfoUI/TeamSelectionUI/TeamSelectionUI.EnableRotate()
 	RotateTheBoard()
 	#reset everyone and allow lineup changes
 	pass
 
 func SetToTeamB():
-	$TeamInfoUI/Control/TeamSelectionUI.EnableRotate()	
+	$TeamInfoUI/TeamSelectionUI/TeamSelectionUI.EnableRotate()
 	RotateTheBoard()
 	pass
 

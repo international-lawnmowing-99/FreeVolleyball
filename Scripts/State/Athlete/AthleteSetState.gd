@@ -1,5 +1,5 @@
 extends "res://Scripts/State/AthleteState.gd"
-enum SetState{ 
+enum InternalSetState{ 
 	Undefined,
 	JumpSet,
 	StandingSet
@@ -10,7 +10,7 @@ enum JumpSetState{
 	Jump
 	}
 	
-var setState = SetState.Undefined
+var internalSetState = InternalSetState.Undefined
 var jumpSetState = JumpSetState.Undefined
 
 #var hasSet:bool = false
@@ -30,12 +30,12 @@ func Update(athlete:Athlete):
 #	var ballXZVel = Vector2(athlete.ball.linear_velocity.x, athlete.ball.linear_velocity.z).length()
 	var timeTillSet 
 	
-	match setState:
-		SetState.Undefined:
+	match internalSetState:
+		InternalSetState.Undefined:
 			timeTillSet = 99999
-		SetState.StandingSet:
+		InternalSetState.StandingSet:
 			timeTillSet = athlete.ball.TimeTillBallReachesHeight(athlete.stats.standingSetHeight)
-		SetState.JumpSet:
+		InternalSetState.JumpSet:
 			timeTillSet = athlete.ball.TimeTillBallReachesHeight(athlete.stats.jumpSetHeight)
 			if jumpSetState != JumpSetState.Jump && athlete.translation.distance_to(athlete.moveTarget) <= athlete.MoveDistanceDelta:
 				var g = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -52,15 +52,15 @@ func Update(athlete:Athlete):
 			elif jumpSetState == JumpSetState.Jump:
 				if athlete.translation.y < 0.1 && athlete.rb.linear_velocity.y < 0:
 					jumpSetState = JumpSetState.Undefined
-					setState = SetState.Undefined
+					internalSetState = InternalSetState.Undefined
 					athlete.rb.mode = RigidBody.MODE_KINEMATIC
 					athlete.translation.y = 0
 					athlete.rb.gravity_scale = 0
 					athlete.ReEvaluateState()
 	
 		
-	athlete.leftIKTarget.global_transform.origin = lerp (athlete.leftIKTarget.global_transform.origin, athlete.ball.translation, athlete.myDelta * interpolationSpeed)
-	athlete.rightIKTarget.global_transform.origin = lerp (athlete.rightIKTarget.global_transform.origin, athlete.ball.translation, athlete.myDelta * interpolationSpeed)
+	#athlete.leftIKTarget.global_transform.origin = lerp (athlete.leftIKTarget.global_transform.origin, athlete.ball.translation, athlete.myDelta * interpolationSpeed)
+	#athlete.rightIKTarget.global_transform.origin = lerp (athlete.rightIKTarget.global_transform.origin, athlete.ball.translation, athlete.myDelta * interpolationSpeed)
 	athlete.leftIK.interpolation = lerp(athlete.leftIK.interpolation, (1 - timeTillSet), athlete.myDelta * interpolationSpeed)
 	athlete.rightIK.interpolation = lerp(athlete.rightIK.interpolation, (1 - timeTillSet), athlete.myDelta * interpolationSpeed)
 #	if athlete.team.flip > 0:

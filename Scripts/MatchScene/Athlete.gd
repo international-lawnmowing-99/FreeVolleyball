@@ -121,6 +121,7 @@ func _ready():
 
 func _process(_delta):
 	myDelta = _delta
+#	print(stats.lastName + " :: " + str(rotationPosition))
 	if stateMachine.currentState:
 		stateMachine.currentState.Update(self)
 	BaseMove(_delta)
@@ -254,7 +255,7 @@ func ReEvaluateState():
 				stateMachine.SetCurrentState(transitionState)
 		team.spikeState:
 			if stateMachine.currentState.nameOfState == "Set":
-				rotation.y = -team.flip*PI/2
+				#rotation.y = -team.flip*PI/2
 				stateMachine.SetCurrentState(defendState)
 			elif stateMachine.currentState.nameOfState == "Spike":
 				#stateMachine.SetCurrentState(coverState)

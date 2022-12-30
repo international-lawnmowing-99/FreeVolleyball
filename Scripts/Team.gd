@@ -339,6 +339,7 @@ func CachePlayers():
 		elif player.role == Enums.Role.Opposite:
 			oppositeHitter = player
 
+
 func AutoSelectTeamLineup():
 	allPlayers.sort_custom(Athlete, "SortSet")
 	var orderedSetterList =  allPlayers.duplicate(false)

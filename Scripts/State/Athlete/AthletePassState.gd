@@ -90,12 +90,12 @@ func Enter(athlete:Athlete):
 	intersectionPointZ = m*intersectionPointX + b
 	
 	
-	athlete.digAngle = rad2deg(ball.SignedAngle(athlete.transform.basis.z , -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
-	print("digAngle = " + str(athlete.digAngle))
+	#athlete.digAngle = rad2deg(ball.SignedAngle(athlete.transform.basis.z , -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
+	#print("digAngle = " + str(athlete.digAngle))
 	#other team is rotated -90, we're 90
 	#var angle = atan2(athlete.translation.z - intersectionPointZ, athlete.translation.x - intersectionPointX) 
 	
-	print(str(rad2deg(athlete.transform.basis.z[0])))
+	#print(str(rad2deg(athlete.transform.basis.z[0])))
 
 	#athlete.anglewanted = -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ)
 
