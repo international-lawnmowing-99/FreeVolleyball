@@ -11,6 +11,8 @@ var takeOffXZ:Vector3
 var timeTillJumpPeak
 var spikeState = SpikeState.NotSpiking
 var athlete:Athlete
+var spikeValue:float = 0
+var runupStartPosition:Vector3
 
 func Enter(_athlete:Athlete):
 	nameOfState="Spike"
@@ -20,7 +22,7 @@ func Enter(_athlete:Athlete):
 	takeOffXZ = Vector3(athlete.setRequest.target.x\
 	 - athlete.team.flip * athlete.stats.verticalJump / 2, \
 	0, athlete.setRequest.target.z)
-	athlete.CalculateTimeTillJumpPeak(takeOffXZ)
+#	athlete.CalculateTimeTillJumpPeak(takeOffXZ)
 	spikeState = SpikeState.ChoiceConfirmed
 	pass
 func Update(_athlete:Athlete):
@@ -33,35 +35,36 @@ func Update(_athlete:Athlete):
 		SpikeState.ChoiceConfirmed:
 			takeOffXZ = Vector3(athlete.setRequest.target.x + athlete.team.flip * athlete.stats.verticalJump / 2, \
 			0, athlete.setRequest.target.z)
-			athlete.CalculateTimeTillJumpPeak(takeOffXZ)
+#			athlete.CalculateTimeTillJumpPeak(takeOffXZ)
 	
 			var timeTillBallReachesSetTarget:float 
 			var setTime:float
 			var yVel:float
 			
-			if athlete.setRequest.height > athlete.team.receptionTarget.y:
-				yVel = sqrt(2 * athlete.g * (athlete.setRequest.height - athlete.team.receptionTarget.y))
-			else:
-				yVel = sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.team.receptionTarget.y))
+			yVel = sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.team.receptionTarget.y))
+			
+			if athlete.setRequest.height < athlete.team.receptionTarget.y:
+				#yVel *= -1
+				#UNTESTED!!!
+				#yVel = sqrt(2 * athlete.g * (athlete.setRequest.height - athlete.team.receptionTarget.y))
 				#Engine.time_scale = 0
 				print("Setting downwards because you're such a unit")
-				#UNTESTED!!!
+				print("Errors inbound(?)")
+				if athlete.team.stateMachine.currentState == athlete.team.spikeState:
+					var distanceFactor:float = 1 - Vector3(athlete.ball.translation.x, 0, athlete.ball.translation.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
+					setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)
+				else:
+					setTime = yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
+			else:
+				# Standard set
 				if athlete.team.stateMachine.currentState == athlete.team.spikeState:
 					var distanceFactor:float = 1 - Vector3(athlete.ball.translation.x, 0, athlete.ball.translation.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
 					setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)
 				else:
 					setTime = yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
 				
-			if athlete.team.stateMachine.currentState == athlete.team.spikeState:
-				var distanceFactor:float = 1 - Vector3(athlete.ball.translation.x, 0, athlete.ball.translation.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
-
-				setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * (athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)
-			
-			else:
-				setTime = yVel / athlete.g + sqrt(2 * athlete.g * (athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
-			
-
 			timeTillBallReachesSetTarget = athlete.team.timeTillDigTarget + setTime
+			
 			if timeTillBallReachesSetTarget <= athlete.CalculateTimeTillJumpPeak(takeOffXZ) && athlete.team.stateMachine.currentState != athlete.team.receiveState:
 				spikeState = SpikeState.Runup
 				athlete.moveTarget = takeOffXZ
@@ -91,3 +94,8 @@ func Update(_athlete:Athlete):
 	pass
 func Exit(_athlete:Athlete):
 	pass
+
+#func TimeToSpikeWithFullRunup() -> float:
+#	var timeToGetToRunup = athlete.distance_to(athlete.spikeState.runupStartPosition)/athlete.stats.speed 
+#	var timeToRunup = runupStartPosition.distance_to(takeOffXZ)/athlete.stats.speed
+#	var timeToReach

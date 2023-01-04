@@ -43,7 +43,7 @@ func DumpBall(team:Team):
 	# a max height of 0.1 above the current height, hundreds of errors appear somewhere during 
 	# physics process, using both physics engines. Not for +0.2 height though
 	
-	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.translation, team.ball.attackTarget, team.ball.translation.y + .2)
+	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.translation, team.ball.attackTarget, max(team.ball.translation.y + .2, 2.9))
 #	team.ball.linear_velocity = team.ball.FindParabolaForGivenSpeed(team.ball.translation, team.ball.attackTarget, rand_range(5,10), false)
 #	if team.ball.FindNetPass().y <= 2.5:
 #		team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.translation, team.ball.attackTarget, 2.5)
@@ -88,7 +88,7 @@ func SetBall(team:Team):
 	yield(team.get_tree(), "idle_frame")
 	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.translation, team.setTarget.target, team.setTarget.height)
 	
-	
+	Console.AddNewLine("Ball vel ----------------------------------- " + str(3.6 * team.ball.linear_velocity.length()))
 	
 	#team.setTarget = null
 	
@@ -130,16 +130,24 @@ func ChooseSetter(team:Team):
 				#libero sets (if that's the plan)
 				pass
 			elif AttemptToFindSetterOutOfSystem(team, timeTillBallAtReceptionTarget):
-				
-				
 				pass
 			elif DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team, timeTillBallAtReceptionTarget):
 			#Someone digs or dives for the ball
-				team.SendMultipleChasersAfterBall()
+				#team.SendMultipleChasersAfterBall()
+				pass
 			else:
-				team.GiveUpThePoint()
+				team.chosenSetter = team.courtPlayers[1]
+				team.Chill()
 		else:
-			pass
+			if AttemptToFindSetterOutOfSystem(team, timeTillBallAtReceptionTarget):
+				pass
+			elif DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team, timeTillBallAtReceptionTarget):
+				#team.SendMultipleChasersAfterBall()
+				pass
+			else:
+				team.chosenSetter = team.courtPlayers[1]
+				team.Chill()
+			
 			#can someone else do it?
 	else: # setter preferred - and the team is using a dedicated setter!
 		if AthleteCanJumpSet(team.setter, team, timeTillBallAtReceptionTarget):
@@ -154,9 +162,10 @@ func ChooseSetter(team:Team):
 		elif DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team, timeTillBallAtReceptionTarget):
 			#Someone digs or dives for the ball
 			pass
-			team.SendMultipleChasersAfterBall()
+			#team.SendMultipleChasersAfterBall()
 		
 		else:
+			team.chosenSetter = team.courtPlayers[1]
 			team.Chill()
 			
 func AssignSetter(athlete:Athlete, team:Team, isJumpSetting:bool):
@@ -173,7 +182,6 @@ func AssignSetter(athlete:Athlete, team:Team, isJumpSetting:bool):
 	else:
 		athlete.setState.internalSetState = athlete.setState.InternalSetState.StandingSet
 		team.receptionTarget = team.ball.BallPositionAtGivenHeight(athlete.stats.standingSetHeight)
-	
 
 func AthleteCanJumpSet(athlete:Athlete, team:Team, timeTillBallAtReceptionTarget:float)->bool:
 	return timeTillBallAtReceptionTarget >= athlete.setState.TimeToJumpSet(athlete, team.receptionTarget)
@@ -220,7 +228,7 @@ func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:Team, timeTillBallA
 
 	return false
 
-func TimeToBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3):
+func TimeToBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3) -> float:
 	var ballXZVel = Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length()
 	var ballXZDist = Vector3(ball.translation.x - receptionTarget.x, 0, ball.translation.z - receptionTarget.z).length()
 	
@@ -230,51 +238,110 @@ func TimeToBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3):
 
 func ThinkAboutDumping(team:Team):
 	if team.chosenSetter && team.chosenSetter.FrontCourt():
-		var dump = true #bool(randi()%2)
+		var dump = !bool(randi()%10)
 		if dump && abs(team.receptionTarget.x) < 2:
 			Console.AddNewLine("!!!!Dumping!!!!!", Color.darkred)
 			ballWillBeDumped = true
 			return
 			
 func ChooseSpiker(team:Team):
+	# can the potential spiker get back to their runup location?
+	# if not, can they still get to planned spike contact location by running on an angle?
+	# does the setter know that they aren't in the play? 
+	# is the set feasible given a max velocity out of the hand of somewhere around 10 to 11 mps?
+	
 	var possibleSpikers = []
 	
 	for athlete in team.courtPlayers:
-		if athlete!= team.chosenSetter && athlete != team.chosenReceiver && athlete.rb.mode != RigidBody.MODE_RIGID && athlete.role != enums.Role.Libero:
-			athlete.stateMachine.SetCurrentState(athlete.transitionState)
-			possibleSpikers.append(athlete)
+		if athlete!= team.chosenSetter && athlete.role != enums.Role.Libero && athlete != team.middleBack:
+			var setSpeed = team.ball.FindWellBehavedParabola(team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height).length()
+			if setSpeed > 10:
+				athlete.stateMachine.SetCurrentState(athlete.coverState)
+				continue
+			
+			if AthleteCanFullyTransition(athlete):
+				athlete.spikeState.spikeValue = 1
+				
+				# to solve this we need the time for the set to occur
+				# and the time for the athlete to get to the transition position, 
+				# then run up, then reach max jump height
+				if athlete.rb.mode == RigidBody.MODE_KINEMATIC:
+					athlete.stateMachine.SetCurrentState(athlete.transitionState)
+				possibleSpikers.append(athlete)
+				
+			# elif they can run diagonally to the take off point - 
+			# this needs set time, diagonal motion, and jump time
+			elif AthleteCanDiagonallyTransition(athlete):
+				athlete.spikeState.spikeValue = 0.5
+				if athlete.rb.mode == RigidBody.MODE_KINEMATIC:
+					athlete.stateMachine.SetCurrentState(athlete.transitionState)
+				possibleSpikers.append(athlete)
+			else:
+				athlete.stateMachine.SetCurrentState(athlete.coverState)
+
 			
 	Console.AddNewLine("Choosing set option...")
 	if possibleSpikers.size() <= 0:
+		ballWillBeDumped = true
+		
+		Console.AddNewLine("^^^___^^^  No possible spikers, dumping", Color.crimson)
 		#Got to dump
 		#This happens when everyone's in the air and the back outside receives presumably so intensively that it takes them out of the attack - will eventually test 
 		#if there's enough time for the spiker to do a full runup, and penalise their desirability as an option for the ai if they can't make it all the way back and 
 		#have to hop on the spot. 
 		#The choice of who to set could be moved to the actual point at which the set occurs??
-		pass
+		return
 
 	var setChoice = randi()%possibleSpikers.size()
 	
 	team.chosenSpiker = possibleSpikers[setChoice]
-	
-	match team.chosenSpiker.role:
-		Enums.Role.Middle:
-			var randint:int = randi()%3
-			match randint:
-				0:
-					team.setTarget = team.chosenSpiker.middleSpikes[0]
-				1:
-					team.setTarget = team.chosenSpiker.middleSpikes[1]
-				2:
-					team.setTarget = team.chosenSpiker.middleSpikes[2]
-		Enums.Role.Outside:
-			if team.chosenSpiker.FrontCourt():
-				team.setTarget = team.chosenSpiker.outsideFrontSpikes[0]
-			else:
-				team.setTarget = team.chosenSpiker.outsideBackSpikes[0]
-		Enums.Role.Opposite:
-			if team.chosenSpiker.FrontCourt():
-				team.setTarget = team.chosenSpiker.oppositeFrontSpikes[0]
-			else:
-				team.setTarget = team.chosenSpiker.oppositeBackSpikes[0]
+	team.setTarget = team.chosenSpiker.setRequest
+#	match team.chosenSpiker.role:
+#		Enums.Role.Middle:
+#
+#		Enums.Role.Outside:
+#			if team.chosenSpiker.FrontCourt():
+#				team.setTarget = team.chosenSpiker.outsideFrontSpikes[0]
+#			else:
+#				team.setTarget = team.chosenSpiker.outsideBackSpikes[0]
+#		Enums.Role.Opposite:
+#			if team.chosenSpiker.FrontCourt():
+#				team.setTarget = team.chosenSpiker.oppositeFrontSpikes[0]
+#			else:
+#				team.setTarget = team.chosenSpiker.oppositeBackSpikes[0]
 	team.chosenSpiker.setRequest = team.setTarget
+
+func AthleteCanFullyTransition(athlete) -> bool:
+	var timeToReachGround = 0
+	if athlete.rb.mode == RigidBody.MODE_RIGID:
+		if athlete.rb.linear_velocity.y < 0:
+			#they're going up
+			timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 + athlete.g * athlete.stats.verticalJump)/athlete.g
+		else:
+			#they're falling
+			timeToReachGround = sqrt(2 * athlete.g * athlete.translation.y)
+	
+	var timeToTransition = athlete.translation.distance_to(athlete.spikeState.runupStartPosition)/athlete.stats.speed
+	var timeToRunup = athlete.spikeState.runupStartPosition.distance_to(athlete.spikeState.takeOffXZ)/athlete.stats.speed
+	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
+	var jumpTime = jumpYVel / athlete.g
+	var timeToJumpPeak = timeToReachGround + timeToTransition + timeToRunup + jumpTime
+	
+	var timeTillBallReachesSetTarget = TimeToBallAtReceptionTarget(athlete.team.ball, athlete.team.receptionTarget) \
+	+ athlete.team.ball.SetTime(athlete.team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
+	
+	return timeToJumpPeak < timeTillBallReachesSetTarget
+	
+func AthleteCanDiagonallyTransition(athlete)-> bool:
+	if athlete.rb.mode != RigidBody.MODE_KINEMATIC:
+		# It would be ridiculous (and a more effort to make work!) if they ran backwards to the takeoffpoint then jumped forwards!
+		return false
+	var timeToTakeOffXZ = athlete.translation.distance_to(athlete.spikeState.takeOffXZ)/athlete.stats.speed
+	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
+	var jumpTime = jumpYVel / -athlete.g
+	var timeToJumpPeak = timeToTakeOffXZ + jumpTime
+	
+	var timeTillBallReachesSetTarget = TimeToBallAtReceptionTarget(athlete.team.ball, athlete.team.receptionTarget) \
+	+ athlete.team.ball.SetTime(athlete.team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
+	
+	return timeToJumpPeak < timeTillBallReachesSetTarget

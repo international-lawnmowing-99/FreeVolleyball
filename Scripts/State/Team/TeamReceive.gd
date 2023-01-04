@@ -15,9 +15,19 @@ func Enter(team:Team):
 	
 	team.chosenReceiver = orderedList[0]
 
-	team.middleFront.setRequest = team.middleFront.middleSpikes[0]
+	# Begin transitions
+	var middleChoice:int = randi()%3
+	match middleChoice:
+		0:
+			team.middleFront.setRequest = team.middleFront.middleSpikes[0]
+		1:
+			team.middleFront.setRequest = team.middleFront.middleSpikes[1]
+		2:
+			team.middleFront.setRequest = team.middleFront.middleSpikes[2]
+
 	team.outsideBack.setRequest =  team.outsideBack.outsideBackSpikes[0]
 	if team.oppositeHitter.FrontCourt():
+		team.setter.setRequest = team.setter.oppositeBackSpikes[0]
 		if team.markUndoChangesToRoles:
 			team.oppositeHitter.setRequest = team.oppositeHitter.outsideFrontSpikes[0]
 			team.outsideFront.setRequest = team.outsideFront.oppositeFrontSpikes[0]
@@ -28,6 +38,7 @@ func Enter(team:Team):
 	else:
 		team.oppositeHitter.setRequest =  team.oppositeHitter.oppositeBackSpikes[0]
 		team.outsideFront.setRequest = team.outsideFront.outsideFrontSpikes[0]
+		team.setter.setRequest = team.setter.oppositeFrontSpikes[0]
 
 	for i in range(1, team.courtPlayers.size()):
 		#print(team.courtPlayers[i].stats.lastName)

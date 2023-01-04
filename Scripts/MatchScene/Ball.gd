@@ -100,7 +100,7 @@ func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float)
 	
 	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x,0, endPos.z))
-	var yVel = abs(sqrt(2 * gravity * (maxHeight - startPos.y)))
+	var yVel = sqrt(2 * gravity * (maxHeight - startPos.y))
 	
 	var time = yVel / gravity + sqrt(2 * gravity * (maxHeight - endPos.y)) / gravity
 	var xzVel = xzDist / time
@@ -109,6 +109,24 @@ func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float)
 	
 	return Vector3(xzVel * cos(-xzTheta), yVel, xzVel * sin(-xzTheta))
 
+func FindDownwardsParabola(startPos:Vector3, endPos:Vector3, velocityInMPS):
+	var maxSetVelocity = 10
+	var yDist = startPos.y - endPos.y
+	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.y))
+	
+	# Can the xzDistance be traversed by a ball set horizontally at the maximum allowable speed?
+	# Can the set get down fast enough if you're setting from 10 metres in the air? 
+	# for every angle there's a corresponding velocity, should we find the most aggressive?
+	
+	
+func SetTime(startPos:Vector3, endPos:Vector3, maxHeight:float):
+	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+	var setVelocity = FindWellBehavedParabola(startPos, endPos, maxHeight)
+	if setVelocity.length() == 0:
+		return 0
+	var timeToPeak = setVelocity.y * gravity
+	var timeDown = sqrt(2 * gravity * abs(maxHeight - endPos.y))/gravity
+	return timeToPeak + timeDown
 
 func SignedAngle(from:Vector3, to:Vector3, up:Vector3):
 	if from == to or from == up or up == to:

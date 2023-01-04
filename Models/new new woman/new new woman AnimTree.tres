@@ -60,4 +60,4 @@ nodes/MoveTree/node = SubResource( 10 )
 nodes/MoveTree/position = Vector2( -400, -60 )
 nodes/state/node = SubResource( 11 )
 nodes/state/position = Vector2( -20, 100 )
-node_connections = [ "state", 0, "Animation 3", "state", 1, "Dig", "output", 0, "state", "Dig", 0, "Animation 2", "Dig", 1, "Animation" ]
+node_connections = [ "Dig", 0, "Animation 2", "Dig", 1, "Animation", "state", 0, "Animation 3", "state", 1, "Dig", "output", 0, "state" ]

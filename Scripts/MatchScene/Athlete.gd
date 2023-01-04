@@ -25,6 +25,7 @@ onready var setState = load("res://Scripts/State/Athlete/AthleteSetState.gd").ne
 onready var spikeState = load("res://Scripts/State/Athlete/AthleteSpikeState.gd").new()
 onready var blockState = load("res://Scripts/State/Athlete/AthleteBlockState.gd").new()
 onready var chillState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
+onready var coverState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
 
 const MoveDistanceDelta:float = 0.1
 
@@ -217,7 +218,7 @@ func FrontCourt()->bool:
 func CalculateTimeTillJumpPeak(takeOffXZ):
 	var timeTillJumpPeak
 	if rb.mode == RigidBody.MODE_KINEMATIC:
-	
+		
 		var runupTime
 		var jumpTime
 		var runupDist
@@ -230,9 +231,11 @@ func CalculateTimeTillJumpPeak(takeOffXZ):
 
 		timeTillJumpPeak = runupTime + jumpTime
 	
-	else:
+	elif rb.linear_velocity.y < 0:
 		timeTillJumpPeak = -rb.linear_velocity.y / g
-	
+	else:
+		timeTillJumpPeak = 0
+		
 	return timeTillJumpPeak
 
 func BaseMove(_delta):
@@ -255,7 +258,7 @@ func ReEvaluateState():
 				stateMachine.SetCurrentState(transitionState)
 		team.spikeState:
 			if stateMachine.currentState.nameOfState == "Set":
-				#rotation.y = -team.flip*PI/2
+				rotation.y = -team.flip*PI/2
 				stateMachine.SetCurrentState(defendState)
 			elif stateMachine.currentState.nameOfState == "Spike":
 				#stateMachine.SetCurrentState(coverState)
