@@ -17,6 +17,19 @@ func Enter(team:Team):
 	
 	CacheBlockers(team)
 	
+	# What is the blocking strategy? 
+	# Can go standard spread, tight for pipe, don't rate the opposite so 2 on setter/middle...
+	# Can go even more extravagant - triple stack on outside
+	# In general we can have - triple on each opposing player ~ 5 or 6 depending on whether
+	# Triple block on libero!
+	# Then we can have all the different configurations of double blocking
+	# Blocking behaviour involves: where to stand initially
+	# - whether to commit to any spiker (mostly middles, but theoretically could anyone could
+	# commit to anyone)
+	# - Where to set the block ie taking out line or cross court primarily
+	# - Also whether to remove hands to avoid being tooled
+	
+	
 	if team.setter.FrontCourt():
 		team.setter.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, -3))
 #		team.oppositeHitter.moveTarget = team.CheckIfFlipped(Vector3(5.5, 0, -2.2))

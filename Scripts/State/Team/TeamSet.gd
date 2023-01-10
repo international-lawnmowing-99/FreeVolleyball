@@ -282,14 +282,12 @@ func ChooseSpiker(team:Team):
 			
 	Console.AddNewLine("Choosing set option...")
 	if possibleSpikers.size() <= 0:
+		# Is there the opportunity to dump? Or should we do a release ball?
+#		if abs(team.receptionTarget.x) > 
 		ballWillBeDumped = true
 		
-		Console.AddNewLine("^^^___^^^  No possible spikers, dumping", Color.crimson)
-		#Got to dump
-		#This happens when everyone's in the air and the back outside receives presumably so intensively that it takes them out of the attack - will eventually test 
-		#if there's enough time for the spiker to do a full runup, and penalise their desirability as an option for the ai if they can't make it all the way back and 
-		#have to hop on the spot. 
-		#The choice of who to set could be moved to the actual point at which the set occurs??
+		Console.AddNewLine("^^^___^^^  No possible spikers, release ball", Color.crimson)
+
 		return
 
 	var setChoice = randi()%possibleSpikers.size()

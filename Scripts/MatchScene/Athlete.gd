@@ -253,7 +253,8 @@ func ReEvaluateState():
 			stateMachine.SetCurrentState(transitionState)
 		team.setState:
 			if team.chosenSetter == self:
-				stateMachine.SetCurrentState(setState)
+				if rb.mode == RigidBody.MODE_KINEMATIC:
+					stateMachine.SetCurrentState(setState)
 			else:
 				stateMachine.SetCurrentState(transitionState)
 		team.spikeState:

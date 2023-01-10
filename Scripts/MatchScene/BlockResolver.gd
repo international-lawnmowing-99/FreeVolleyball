@@ -58,6 +58,11 @@ func ResolveBlock():
 	var blockerCount = 0
 	for blocker in blockers:
 		blockStatsString += str(round(blocker.stats.block)) + " "
+		
+		# What if they're not in position? 
+#		if blockers.length() > 1:
+#			if blocker = middle
+		
 		blockerCount += 1
 		totalBlockStrength += blocker.stats.block/blockerCount
 	Console.AddNewLine("Spiker stat: " + str(round(spiker.stats.spike)) + " || Blocker stat(s): " + blockStatsString + " ::" + str(totalBlockStrength), Color.yellowgreen)
