@@ -82,6 +82,15 @@ func WaitThenDefend(athlete:Athlete, time:float):
 func TimeToJumpSet(athlete:Athlete, receptionTarget:Vector3):
 	var g = ProjectSettings.get_setting("physics/3d/default_gravity")
 	
+	var timeToReachGround = 0
+	if athlete.rb.mode == RigidBody.MODE_RIGID:
+		if athlete.rb.linear_velocity.y < 0:
+			#they're going up
+			timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 + athlete.g * athlete.stats.verticalJump)/athlete.g
+		else:
+			#they're falling
+			timeToReachGround = sqrt(2 * athlete.g * athlete.translation.y)
+	
 	var distanceToRecetionTarget = athlete.translation.distance_to(Vector3(receptionTarget.x, 0, receptionTarget.z))
 	var timeToMoveIntoPosition =  distanceToRecetionTarget / athlete.stats.speed
 	
@@ -90,9 +99,17 @@ func TimeToJumpSet(athlete:Athlete, receptionTarget:Vector3):
 	
 	#print("Time to execute jump set: " + str(timeToMoveIntoPosition + jumpTime))
 	
-	return timeToMoveIntoPosition + jumpTime
+	return timeToReachGround + timeToMoveIntoPosition + jumpTime
 
 func TimeToStandingSet(athlete:Athlete, receptionTarget:Vector3):
+	var timeToReachGround = 0
+	if athlete.rb.mode == RigidBody.MODE_RIGID:
+		if athlete.rb.linear_velocity.y < 0:
+			#they're going up
+			timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 + athlete.g * athlete.stats.verticalJump)/athlete.g
+		else:
+			#they're falling
+			timeToReachGround = sqrt(2 * athlete.g * athlete.translation.y)
 	var distanceToRecetionTarget = athlete.translation.distance_to(Vector3(receptionTarget.x, 0, receptionTarget.z))
-	return  distanceToRecetionTarget / athlete.stats.speed
+	return timeToReachGround + distanceToRecetionTarget / athlete.stats.speed
 	

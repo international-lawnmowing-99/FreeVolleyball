@@ -13,6 +13,7 @@ func ShowServeChoice():
 	$ServeTypeButtons.show()
 	$ServerInfo.show()
 	uiState = UIState.ServeType
+	$ServeTypeButtons/VBoxContainer/CheckBox.pressed = humanServeState.rememberSettings
 
 func HideServeChoice():
 	$ServeTypeButtons.hide()
@@ -71,3 +72,15 @@ func _process(delta: float) -> void:
 				_on_ModerateServe_pressed()
 			elif Input.is_action_just_pressed("Key3"):
 				_on_SafetyServe_pressed()
+
+
+func _on_CheckBox_toggled(button_pressed: bool) -> void:
+	if button_pressed:
+		# Settings will be remembered
+		humanServeState.rememberSettings = true
+		
+	else:
+		humanServeState.rememberSettings = false
+	pass # Replace with function body.
+
+

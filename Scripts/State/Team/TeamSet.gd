@@ -196,7 +196,15 @@ func AttemptToFindSetterOutOfSystem(team:Team, timeTillBallAtReceptionTarget:flo
 	
 	var xzReceptionTarget = team.xzVector(team.receptionTarget)
 	for lad in team.courtPlayers:
-		lad.distanceHack = lad.translation.distance_to(xzReceptionTarget)/lad.stats.speed
+		var timeToReachGround = 0
+		if lad.rb.mode == RigidBody.MODE_RIGID:
+			if lad.rb.linear_velocity.y < 0:
+				#they're going up
+				timeToReachGround = lad.linear_velocity.y/-lad.g + sqrt(2 + lad.g * lad.stats.verticalJump)/lad.g
+			else:
+				#they're falling
+				timeToReachGround = sqrt(2 * lad.g * lad.translation.y)
+		lad.distanceHack = timeToReachGround + lad.translation.distance_to(xzReceptionTarget)/lad.stats.speed
 		if lad == team.chosenReceiver:
 			lad.distanceHack = 99999
 		
@@ -215,7 +223,17 @@ func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:Team, timeTillBallA
 	var xzReceptionTarget = team.xzVector(team.receptionTarget)
 	
 	for lad in team.courtPlayers:
-		lad.distanceHack = lad.translation.distance_to(xzReceptionTarget) - lad.stats.height
+		var timeToReachGround = 0
+		
+		if lad.rb.mode == RigidBody.MODE_RIGID:
+			if lad.rb.linear_velocity.y < 0:
+				#they're going up
+				timeToReachGround = lad.linear_velocity.y/-lad.g + sqrt(2 + lad.g * lad.stats.verticalJump)/lad.g
+			else:
+				#they're falling
+				timeToReachGround = sqrt(2 * lad.g * lad.translation.y)
+		lad.distanceHack = timeToReachGround + lad.translation.distance_to(xzReceptionTarget)/lad.stats.speed
+		
 		if lad == team.chosenReceiver:
 			lad.distanceHack = 9999
 

@@ -38,6 +38,11 @@ var serveUI
 var attackTarget
 var takeOffTarget
 var ball:Ball
+var rememberSettings:bool = true
+var rememberedServeTarget:Vector3
+var rememberedWalkPosition:Vector3
+var rememberedServeType
+var rememberedServeAggression
 
 # -x, x, -z, z
 const AGGRESSIVEJUMPBOUNDS = [-10, -6.25, -5, 5]
@@ -48,7 +53,6 @@ const WALKBOUNDS = [9.25, 15.5, -4.25, 4.25]
 
 const SERVETARGETSPEED = 6
 
-var rememberingServeDetails:bool = false
 	
 func Enter(athlete:Athlete):
 	nameOfState="HumanServe"
@@ -62,17 +66,25 @@ func Enter(athlete:Athlete):
 	_athlete = athlete
 	
 	
-	if rememberingServeDetails:
-		pass
+	if rememberSettings:
+		if rememberedServeTarget:
+			serveTarget.translation = rememberedServeTarget
+		if rememberedServeAggression:
+			serveAggression = rememberedServeAggression
+		if rememberedServeType:
+			serveType = rememberedServeType
+		if rememberedWalkPosition:
+			athlete.translation = rememberedWalkPosition
 	else:
 		serveAggression = ServeAggression.UNDEFINED
 		serveType = ServeType.UNDEFINED
-		serveUI.ShowServeChoice()
 		
-	if randi()%2 == 1:
-		serveType = ServeType.Float
-	else:
-		serveType = ServeType.Jump
+	serveUI.ShowServeChoice()
+		
+#	if randi()%2 == 1:
+#		serveType = ServeType.Float
+#	else:
+#		serveType = ServeType.Jump
 	serveTarget.visible = false
 	
 func Update(athlete:Athlete):
@@ -145,26 +157,53 @@ func Update(athlete:Athlete):
 				serveTarget.visible = false
 
 		ServeState.Tossing:
-				var runupLength = 2.75
-				var runup = Vector2(attackTarget.x - athlete.translation.x, attackTarget.z - athlete.translation.z).normalized() * runupLength
+			
+			match serveType:
+				ServeType.Jump:
+					var runupLength = 2.75
+					var runup = Vector2(attackTarget.x - athlete.translation.x, attackTarget.z - athlete.translation.z).normalized() * runupLength
 
-				var jumpDistance = runup.normalized() * athlete.stats.verticalJump / 2
+					var jumpDistance = runup.normalized() * athlete.stats.verticalJump / 2
 
 
-				#ball.Unparent()
+					#ball.Unparent()
 
-				var tossTarget = Vector3(athlete.translation.x + runup.x + jumpDistance.x, athlete.stats.spikeHeight, athlete.translation.z + runup.y + jumpDistance.y)
-				takeOffTarget = Vector3(athlete.translation.x + runup.x, 0, athlete.translation.z + runup.y)
+					var tossTarget = Vector3(athlete.translation.x + runup.x + jumpDistance.x, athlete.stats.spikeHeight, athlete.translation.z + runup.y + jumpDistance.y)
+					takeOffTarget = Vector3(athlete.translation.x + runup.x, 0, athlete.translation.z + runup.y)
 
-				ball.mode = RigidBody.MODE_RIGID
-				ball.translation = Vector3(athlete.translation.x, ball.translation.y, athlete.translation.z)
-				ball.linear_velocity = ball.FindWellBehavedParabola(ball.translation, tossTarget, athlete.stats.spikeHeight + 5)
+					ball.mode = RigidBody.MODE_RIGID
+					ball.translation = Vector3(athlete.translation.x, ball.translation.y, athlete.translation.z)
+					ball.linear_velocity = ball.FindWellBehavedParabola(ball.translation, tossTarget, athlete.stats.spikeHeight + 5)
+					
+					ball.rotation = Vector3.ZERO
+					ball.angular_velocity = Vector3 ( rand_range(-.5,.5),rand_range(-.5,.5), rand_range(10,30))
+					
+					serveState = ServeState.WatchingTheBallInTheAir
 				
-				ball.rotation = Vector3.ZERO
-				ball.angular_velocity = Vector3 ( rand_range(-.5,.5),rand_range(-.5,.5), rand_range(10,30))
+				ServeType.Float:
+					var runupLength = 1.25
+					var runup = Vector2(attackTarget.x - athlete.translation.x, attackTarget.z - athlete.translation.z).normalized() * runupLength
+
+					var jumpDistance = runup.normalized() * athlete.stats.verticalJump / 2
+					#ball.Unparent()
+
+					var tossTarget = Vector3(athlete.translation.x + runup.x + jumpDistance.x, athlete.stats.spikeHeight, athlete.translation.z + runup.y + jumpDistance.y)
+					takeOffTarget = Vector3(athlete.translation.x + runup.x, 0, athlete.translation.z + runup.y)
+
+					ball.mode = RigidBody.MODE_RIGID
+					ball.translation = Vector3(athlete.translation.x, ball.translation.y, athlete.translation.z)
+					ball.linear_velocity = ball.FindWellBehavedParabola(ball.translation, tossTarget, athlete.stats.spikeHeight + 5)
+					
+					ball.rotation = Vector3.ZERO
+					ball.angular_velocity = Vector3 ( rand_range(-.5,.5),rand_range(-.5,.5), rand_range(10,30))
+					
+					serveState = ServeState.WatchingTheBallInTheAir
 				
-				serveState = ServeState.WatchingTheBallInTheAir
-				#anim.SetTrigger("startRunup");
+				ServeType.Underarm:
+					ball.mode = RigidBody.MODE_RIGID
+					
+					HitBall(athlete)
+					serveState = ServeState.NotServing
 
 
 
@@ -198,52 +237,7 @@ func Update(athlete:Athlete):
 		ServeState.Jump:
 			#if athlete.rb.linear_velocity.y >0:
 				if ball.linear_velocity.y < 0 && athlete.stats.spikeHeight >= ball.translation.y:
-					var serveRoll = rand_range(0, athlete.stats.serve)
-					
-					var topspin = 0
-					# did they stuff up the serve?? 
-					# skill ~ 30 - 70 ~.5
-					# expecting 5 - 30% error rate, depending on aggro, avg 10%
-					
-					var fuckupProb = .1
-					match serveAggression:
-						ServeAggression.Aggressive:
-							fuckupProb *= 2
-						ServeAggression.Safety:
-							fuckupProb /= 2
-
-					var roll = randf()
-					Console.AddNewLine("fuckup prob: " + str(fuckupProb) + "|| roll: " + str(roll))
-					if roll < fuckupProb:
-						attackTarget = Vector3(rand_range(1, -8), 0, rand_range(10, 10))
-						topspin = 0
-						ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.translation, attackTarget, 10 + 20 * randf(), false)
-						ball.inPlay = false
-						Console.AddNewLine("BAD SERVE. Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
-						ball.mManager.PointToTeamB()
-					else:
-						if serveType == ServeType.Float:
-							ball.floating = true
-						elif serveType == ServeType.Jump:
-							topspin = rand_range(.5, 1.8)
-
-						ball.Serve(ball.translation, attackTarget, topspin)
-						Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
-						athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(true)
-						
-						var difficultyOfReception = 0
-						match serveAggression:
-							ServeAggression.Aggressive:
-								difficultyOfReception = rand_range(athlete.stats.serve * 2/3, athlete.stats.serve)
-							ServeAggression.Moderate:
-								difficultyOfReception = rand_range(athlete.stats.serve/3, athlete.stats.serve * 2/3)
-							ServeAggression.Safety:
-								difficultyOfReception = rand_range(0, athlete.stats.serve/3)
-						
-						ball.difficultyOfReception = difficultyOfReception
-						Console.AddNewLine("Difficulty of serve: " + str(int(difficultyOfReception)), Color.darksalmon)
-					ball.TouchedByA()
-					serveState = ServeState.Landing
+					HitBall(athlete)
 
 		ServeState.Landing:
 			if (athlete.translation.y <= 0.01 && athlete.rb.linear_velocity.y < 0):
@@ -254,8 +248,61 @@ func Update(athlete:Athlete):
 				serveState = ServeState.Walking
 				athlete.stateMachine.SetCurrentState(athlete.defendState)
 
+func HitBall(athlete:Athlete):
+	var serveRoll = rand_range(0, athlete.stats.serve)
+	
+	var topspin = 0
+	# did they stuff up the serve?? 
+	# skill ~ 30 - 70 ~.5
+	# expecting 5 - 30% error rate, depending on aggro, avg 10%
+	
+	var fuckupProb = .075
+	match serveAggression:
+		ServeAggression.Aggressive:
+			fuckupProb *= 2
+		ServeAggression.Safety:
+			fuckupProb /= 2
+
+	var roll = randf()
+	Console.AddNewLine("fuckup prob: " + str(fuckupProb) + "|| roll: " + str(roll))
+	if roll < fuckupProb:
+		attackTarget = Vector3(rand_range(1, -8), 0, rand_range(10, 10))
+		topspin = 0
+		ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.translation, attackTarget, 10 + 20 * randf(), false)
+		ball.inPlay = false
+		Console.AddNewLine("BAD SERVE. Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
+		ball.mManager.PointToTeamB()
+	else:
+		if serveType == ServeType.Float:
+			ball.floating = true
+		elif serveType == ServeType.Jump:
+			topspin = rand_range(.5, 1.8)
+		
+		if serveType == ServeType.Underarm:
+			ball.Serve(ball.translation, attackTarget, 3.6, topspin)
+		else:
+			ball.Serve(ball.translation, attackTarget, 2.6, topspin)
+		Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
+		athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(true)
+		
+		var difficultyOfReception = 0
+		match serveAggression:
+			ServeAggression.Aggressive:
+				difficultyOfReception = rand_range(athlete.stats.serve * 2/3, athlete.stats.serve)
+			ServeAggression.Moderate:
+				difficultyOfReception = rand_range(athlete.stats.serve/3, athlete.stats.serve * 2/3)
+			ServeAggression.Safety:
+				difficultyOfReception = rand_range(0, athlete.stats.serve/3)
+		
+		ball.difficultyOfReception = difficultyOfReception
+		Console.AddNewLine("Difficulty of serve: " + str(int(difficultyOfReception)), Color.darksalmon)
+	ball.TouchedByA()
+	serveState = ServeState.Landing
 func ChooseServeType(type):
 	serveType = type
+	if rememberSettings:
+		rememberedServeType = type
+		
 	serveState = ServeState.ChoosingServeAggression
 	
 
@@ -265,6 +312,8 @@ func ChooseServeType(type):
 
 func ChooseServeAggression(aggression):
 	serveAggression = aggression
+	if rememberSettings:
+		rememberedServeAggression = aggression
 
 	serveTarget.visible = true
 	serveTarget.mesh.top_radius = (100.0 - _athlete.stats.serve)/25

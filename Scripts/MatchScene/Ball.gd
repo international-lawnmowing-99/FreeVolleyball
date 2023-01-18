@@ -222,7 +222,7 @@ func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, ai
 
 	return projectileVelocity
 
-func Serve(startPos, _attackTarget, topspin):
+func Serve(startPos, _attackTarget, serveHeight, topspin):
 		gravity_scale = 1 + topspin
 		
 		rotation = Vector3.ZERO
@@ -231,7 +231,7 @@ func Serve(startPos, _attackTarget, topspin):
 		angular_velocity = Vector3 ( rand_range(-.5,.5),rand_range(-.5,.5), topspin * 80)
 		linear_velocity = Vector3.ZERO
 		
-		var impulse = CalculateBallOverNetVelocity(startPos, _attackTarget, 2.6)
+		var impulse = CalculateBallOverNetVelocity(startPos, _attackTarget, serveHeight)
 		
 		# :( no fun!
 		if impulse.length() * 3.6 > MAX_SERVE_SPEED:

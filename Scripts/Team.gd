@@ -519,8 +519,8 @@ func Populate(firstNames, lastNames, r):
 		stats.block = skill + rand_range(0,25) + rand_range(0,25)
 		stats.set = skill + rand_range(0,25) + rand_range(0,25)
 		stats.spike = skill + rand_range(0,25) + rand_range(0,25)
-		stats.verticalJump = rand_range(0,.5) + rand_range(.1,.5) + rand_range(.1,.5)
-		stats.height = rand_range(.3,.8) + rand_range(.5,.8) + rand_range(.5,.8)
+		stats.verticalJump = rand_range(0,.5) + rand_range(.1,.5) + rand_range(.1,.5) + 1.5
+		stats.height = rand_range(.25,.6) + rand_range(.25,.6) #+ rand_range(.35,.6) + rand_range(.35,.6)
 		stats.speed = rand_range(5.5,7.5)
 		stats.dump = skill + rand_range(0,25) + rand_range(0,25)
 		#1.25 is the arm factor of newWoman
