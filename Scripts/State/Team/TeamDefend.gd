@@ -107,13 +107,27 @@ func TripleBlockRight(team:Team):
 	
 func DoubleBlockLeft(team:Team):
 	team.middleFront.blockState.blockingTarget = otherTeam.outsideFront
+	team.middleFront.moveTarget = leftSideBlocker.moveTarget + team.flip * Vector3(0,0,-0.8)
+	
 func DoubleBlockRight(team:Team):
 	team.middleFront.blockState.blockingTarget = otherTeam.oppositeHitter
+	team.middleFront.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0,0,0.8)
+	
 func TripleBlockPipe(team:Team):
 	rightSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
 	leftSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
 	team.middleFront.blockState.blockingTarget = otherTeam.outsideBack
+	
+	leftSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,0.8)
+	rightSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,-0.8)
 
 func EvaluateOppositionPass():
-	print(otherTeam.receptionTarget)
+	# make a list of available options for the other team's attack
+	# ie, bad pass means no middle, so stack on actually possible hitters
+#	print("other team reception target: " + str(otherTeam.receptionTarget))
 	var dumpProbability = 0
+
+func ReactToSet():
+	# React blockers move to new blocking position, perhaps after a delay given by a "reaction time" stat
+	
+	var timeTillSpike = 0

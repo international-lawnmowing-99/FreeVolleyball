@@ -3,6 +3,7 @@ const enums = preload("res://Scripts/World/Enums.gd")
 
 #can also potentially spike, dogshot
 var ballWillBeDumped:bool = false
+var possibleSpikers = []
 
 func Enter(team:Team):
 	ballWillBeDumped = false
@@ -81,7 +82,9 @@ func SetBall(team:Team):
 		team.chosenSpiker = team.middleFront
 		team.setTarget = team.middleFront.middleSpikes[0]
 		
-
+	for athlete in possibleSpikers:
+		if athlete != team.chosenSpiker:
+			athlete.stateMachine.SetCurrentState(athlete.coverState)
 		#CalculateSetDifficulty()
 
 	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.translation, team.setTarget.target, team.setTarget.height)
@@ -268,12 +271,13 @@ func ChooseSpiker(team:Team):
 	# does the setter know that they aren't in the play? 
 	# is the set feasible given a max velocity out of the hand of somewhere around 10 to 11 mps?
 	
-	var possibleSpikers = []
+	possibleSpikers = []
 	
 	for athlete in team.courtPlayers:
 		if athlete!= team.chosenSetter && athlete.role != enums.Role.Libero && athlete != team.middleBack:
 			var setSpeed = team.ball.FindWellBehavedParabola(team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height).length()
-			if setSpeed > 10:
+			# Very hacky, but if no parabola is found then vector3.zero will be returned
+			if setSpeed > 10 || setSpeed < 0.01:
 				athlete.stateMachine.SetCurrentState(athlete.coverState)
 				continue
 			
@@ -325,7 +329,7 @@ func ChooseSpiker(team:Team):
 #				team.setTarget = team.chosenSpiker.oppositeFrontSpikes[0]
 #			else:
 #				team.setTarget = team.chosenSpiker.oppositeBackSpikes[0]
-	team.chosenSpiker.setRequest = team.setTarget
+#	team.chosenSpiker.setRequest = team.setTarget
 
 func AthleteCanFullyTransition(athlete) -> bool:
 	var timeToReachGround = 0

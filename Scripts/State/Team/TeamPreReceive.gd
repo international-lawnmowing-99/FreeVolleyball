@@ -15,6 +15,7 @@ func Enter(team:Team):
 
 	team.isNextToSpike = true
 	team.CheckForLiberoChange()
+	team.chosenSetter = null
 	
 func Update(team:Team):
 	#Is the ball close enough

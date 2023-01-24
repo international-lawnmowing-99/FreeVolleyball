@@ -96,7 +96,8 @@ func TimeTillBallReachesHeight(height:float):
 func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float):
 	if maxHeight <= startPos.y || maxHeight < endPos.y:
 		print("impossible parabola|| maxHeight = " + str(maxHeight) + ", startPos = " + str(startPos) + ", endPos = " + str(endPos))
-		return Vector3.ZERO
+		# This will spawn thousands of axis not normalized errors if used to directly assign the ball linear velocity
+		return Vector3(0,.01,0)
 	
 	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x,0, endPos.z))
@@ -267,7 +268,5 @@ func FindNetPass()->Vector3:
 	var netPass:Vector3 = translation + (attackTarget - translation) * distanceFactor
 	var timeTillNet = abs(translation.x/linear_velocity.x)
 	netPass.y = translation.y + linear_velocity.y * timeTillNet + .5 * - g * timeTillNet * timeTillNet
-	
-	#print(netPass)
 	
 	return netPass

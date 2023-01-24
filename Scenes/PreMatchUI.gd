@@ -60,7 +60,7 @@ func PopulateUI(team:Team, otherTeam:Team):
 
 func DoToss(choseHeads:bool):
 	var coin:bool = randi() % 1
-	print(coin)
+	print("coin is heads?: " + str(coin))
 	if coin == true:
 		$Toss/WonToss/CoinResultText.text = "Coin is Heads!"
 		$Toss/LostToss/CoinResultText.text = "Coin is Heads!"

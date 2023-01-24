@@ -21,7 +21,7 @@ func _ready():
 	var now = OS.get_ticks_msec()
 	gameWorld.GenerateDefaultWorld(false)
 	var later = OS.get_ticks_msec()
-	print(str(later - now) + " generate world")
+	print(str(later - now) + "ms generate world")
 	newMatch.ChooseRandom(gameWorld)
 	
 	ball.mManager = self
@@ -91,8 +91,10 @@ func BallReceived(receivedByTeamA:bool):
 func BallSet(setByTeamA:bool):
 	if setByTeamA:
 		teamA.stateMachine.SetCurrentState(teamA.spikeState)
+		teamB.defendState.ReactToSet()
 	else:
 		teamB.stateMachine.SetCurrentState(teamB.spikeState)
+		teamA.defendState.ReactToSet()
 
 func BallSpiked(spikedByTeamA:bool):
 	if spikedByTeamA:

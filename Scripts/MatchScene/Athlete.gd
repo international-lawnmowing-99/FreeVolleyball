@@ -25,7 +25,7 @@ onready var setState = load("res://Scripts/State/Athlete/AthleteSetState.gd").ne
 onready var spikeState = load("res://Scripts/State/Athlete/AthleteSpikeState.gd").new()
 onready var blockState = load("res://Scripts/State/Athlete/AthleteBlockState.gd").new()
 onready var chillState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
-onready var coverState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
+onready var coverState = load("res://Scripts/State/Athlete/AthleteCoverState.gd").new()
 
 const MoveDistanceDelta:float = 0.1
 
@@ -132,6 +132,15 @@ func _process(_delta):
 #	if transform.origin.y < -0.2:
 #		print(stateMachine.currentState.nameOfState)
 	
+func DontFallThroughFloor():
+	if rb.mode != RigidBody.MODE_KINEMATIC && translation.y < 0.05 && rb.linear_velocity.y < 0:
+		rb.mode = RigidBody.MODE_KINEMATIC
+		rb.gravity_scale = 0
+		rb.linear_velocity = Vector3.ZERO
+		translation.y = 0
+		#athlete.rotation = Vector3.ZERO
+		rb.angular_velocity = Vector3.ZERO
+
 func Move(delta):
 	# For the future - measure the length, use it to determine if you should strafe or turn
 	

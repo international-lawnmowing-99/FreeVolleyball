@@ -27,7 +27,8 @@ func Enter(team:Team):
 	
 	server.stateMachine.SetCurrentState(server.serveState)
 	
-	pass
+	team.chosenSetter = null
+
 func Update(team:Team):
 	team.stateMachine.SetCurrentState(team.serveState)
 	pass

@@ -11,7 +11,7 @@ func KillBlock():
 	randomize()
 	ball.linear_velocity *= rand_range(.5,.9)
 	ball.attackTarget = ball.BallPositionAtGivenHeight(0)
-#	print(ball.attackTarget)
+	
 	ball.blockWillBeAttempted = false
 	if spikedByA:
 		ball.TouchedByB()

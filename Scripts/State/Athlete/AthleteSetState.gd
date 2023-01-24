@@ -24,8 +24,12 @@ func Enter(athlete:Athlete):
 	athlete.leftIK.interpolation = 0
 	athlete.rightIK.interpolation = 0
 	
+	if athlete.team.setter != athlete:
+		print("who am I? " + athlete.stats.lastName)
+	
 	pass
 func Update(athlete:Athlete):
+	athlete.DontFallThroughFloor()
 #	var ballDistance = athlete.translation.distance_to(athlete.ball.translation)
 #	var ballXZVel = Vector2(athlete.ball.linear_velocity.x, athlete.ball.linear_velocity.z).length()
 	var timeTillSet 
