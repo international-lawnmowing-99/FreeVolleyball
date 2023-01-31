@@ -60,6 +60,7 @@ func _ready():
 	
 	preMatchUI.PopulateUI(teamA, teamB)
 	preMatchUI.skipUI()
+	$TeamInfoUI.InitialiseOnCourtPlayerUI()
 
 func _physics_process(delta: float) -> void:
 #	if ball.blockWillBeAttempted:

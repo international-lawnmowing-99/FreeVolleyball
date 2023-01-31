@@ -1,0 +1,316 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Scenes/a font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://MatchScene/TeamTacticsUI.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/teamNameFont.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Textures/Captain.png" type="Texture" id=4]
+[ext_resource path="res://Textures/Court-Markings.png" type="Texture" id=5]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+light_mode = 1
+
+[node name="TeamTacticsUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+margin_bottom = 234.0
+alignment = 1
+
+[node name="ServeUIButton" type="Button" parent="HBoxContainer"]
+margin_right = 316.0
+margin_bottom = 234.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 1 )
+text = "Serve"
+
+[node name="ReceiveButton" type="Button" parent="HBoxContainer"]
+margin_left = 320.0
+margin_right = 637.0
+margin_bottom = 234.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 1 )
+text = "Receive"
+
+[node name="Button2" type="Button" parent="HBoxContainer"]
+margin_left = 641.0
+margin_right = 957.0
+margin_bottom = 234.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 1 )
+text = "Set"
+
+[node name="Button3" type="Button" parent="HBoxContainer"]
+margin_left = 961.0
+margin_right = 1278.0
+margin_bottom = 234.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 1 )
+text = "Block"
+
+[node name="Button4" type="Button" parent="HBoxContainer"]
+margin_left = 1282.0
+margin_right = 1599.0
+margin_bottom = 234.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 1 )
+
+[node name="Button5" type="Button" parent="HBoxContainer"]
+margin_left = 1603.0
+margin_right = 1920.0
+margin_bottom = 234.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 1 )
+
+[node name="ReceiveOptionsUI" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="ReceiveOptionsUI"]
+margin_left = 8.0
+margin_top = 236.0
+margin_right = 1926.0
+margin_bottom = 1084.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ReceiveOptionsUI"]
+anchor_right = 1.0
+margin_top = 258.0
+margin_right = 1883.0
+margin_bottom = 354.0
+alignment = 1
+
+[node name="Rot1Button" type="Button" parent="ReceiveOptionsUI/HBoxContainer2"]
+margin_right = 317.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 3 )
+text = "Rotation 1"
+
+[node name="Rot2Button" type="Button" parent="ReceiveOptionsUI/HBoxContainer2"]
+margin_left = 321.0
+margin_right = 638.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 3 )
+text = "Rotation 2"
+
+[node name="Rot3Button" type="Button" parent="ReceiveOptionsUI/HBoxContainer2"]
+margin_left = 642.0
+margin_right = 959.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 3 )
+text = "Rotation 3"
+
+[node name="Rot4Button" type="Button" parent="ReceiveOptionsUI/HBoxContainer2"]
+margin_left = 963.0
+margin_right = 1280.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 3 )
+text = "Rotation 4"
+
+[node name="Rot5Button" type="Button" parent="ReceiveOptionsUI/HBoxContainer2"]
+margin_left = 1284.0
+margin_right = 1601.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 3 )
+text = "Rotation 5"
+
+[node name="Rot6Button" type="Button" parent="ReceiveOptionsUI/HBoxContainer2"]
+margin_left = 1605.0
+margin_right = 1923.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 3 )
+text = "Rotation 6"
+
+[node name="ServeOptionsUI" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ServeOptionsUI"]
+margin_left = 36.0
+margin_top = 371.0
+margin_right = 378.0
+margin_bottom = 1051.0
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ServeOptionsUI/ScrollContainer"]
+margin_right = 300.0
+margin_bottom = 1000.0
+rect_min_size = Vector2( 300, 1000 )
+custom_constants/separation = 24
+
+[node name="Button" type="Button" parent="ServeOptionsUI/ScrollContainer/VBoxContainer"]
+margin_right = 300.0
+margin_bottom = 69.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button2" type="Button" parent="ServeOptionsUI/ScrollContainer/VBoxContainer"]
+margin_top = 93.0
+margin_right = 300.0
+margin_bottom = 162.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button3" type="Button" parent="ServeOptionsUI/ScrollContainer/VBoxContainer"]
+margin_top = 186.0
+margin_right = 300.0
+margin_bottom = 255.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button4" type="Button" parent="ServeOptionsUI/ScrollContainer/VBoxContainer"]
+margin_top = 279.0
+margin_right = 300.0
+margin_bottom = 348.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button5" type="Button" parent="ServeOptionsUI/ScrollContainer/VBoxContainer"]
+margin_top = 372.0
+margin_right = 300.0
+margin_bottom = 441.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button6" type="Button" parent="ServeOptionsUI/ScrollContainer/VBoxContainer"]
+margin_top = 465.0
+margin_right = 300.0
+margin_bottom = 534.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button7" type="Button" parent="ServeOptionsUI/ScrollContainer/VBoxContainer"]
+margin_top = 558.0
+margin_right = 300.0
+margin_bottom = 627.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button8" type="Button" parent="ServeOptionsUI/ScrollContainer/VBoxContainer"]
+margin_top = 651.0
+margin_right = 300.0
+margin_bottom = 720.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button9" type="Button" parent="ServeOptionsUI/ScrollContainer/VBoxContainer"]
+margin_top = 744.0
+margin_right = 300.0
+margin_bottom = 813.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button10" type="Button" parent="ServeOptionsUI/ScrollContainer/VBoxContainer"]
+margin_top = 837.0
+margin_right = 300.0
+margin_bottom = 906.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button11" type="Button" parent="ServeOptionsUI/ScrollContainer/VBoxContainer"]
+margin_top = 930.0
+margin_right = 300.0
+margin_bottom = 1000.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Athlete1ServeOptionsUI" type="Control" parent="ServeOptionsUI"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="CourtRepresentationUI" type="TextureRect" parent="ServeOptionsUI/Athlete1ServeOptionsUI"]
+margin_left = 1897.44
+margin_top = 433.413
+margin_right = 3697.44
+margin_bottom = 1533.41
+rect_rotation = 89.9999
+rect_scale = Vector2( 0.4746, 0.4746 )
+texture = ExtResource( 5 )
+expand = true
+
+[node name="ServeTarget" type="TextureRect" parent="ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI"]
+material = SubResource( 1 )
+margin_left = 116.806
+margin_top = 530.94
+margin_right = 516.806
+margin_bottom = 930.94
+rect_rotation = -89.9999
+rect_scale = Vector2( 0.303373, 0.303373 )
+texture = ExtResource( 4 )
+expand = true
+
+[node name="Net" type="Line2D" parent="ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI"]
+position = Vector2( 2.10706, 0 )
+points = PoolVector2Array( 898.285, 1115.8, 898.039, -17.1353 )
+width = 20.0
+default_color = Color( 0, 0, 0, 1 )
+
+[node name="ServeDir" type="Line2D" parent="ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI"]
+position = Vector2( 1426.96, 417.9 )
+rotation = 1.5708
+points = PoolVector2Array( 0, 340, 30, 385, 60, 340, 30, 385, 30, 0 )
+width = 20.0
+
+[node name="ColourRect" type="ColorRect" parent="ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI"]
+margin_left = 1319.0
+margin_top = 80.0
+margin_right = 1378.0
+margin_bottom = 1015.0
+
+[node name="GridContainer" type="GridContainer" parent="ServeOptionsUI/Athlete1ServeOptionsUI"]
+margin_left = 460.0
+margin_top = 410.0
+margin_right = 1043.0
+margin_bottom = 669.0
+custom_constants/vseparation = 10
+custom_constants/hseparation = 10
+columns = 2
+
+[node name="Button2" type="Button" parent="ServeOptionsUI/Athlete1ServeOptionsUI/GridContainer"]
+margin_right = 287.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Weakest Receiver"
+
+[node name="Button5" type="Button" parent="ServeOptionsUI/Athlete1ServeOptionsUI/GridContainer"]
+margin_left = 297.0
+margin_right = 583.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Strongest Receiving Attacker"
+
+[node name="Button3" type="Button" parent="ServeOptionsUI/Athlete1ServeOptionsUI/GridContainer"]
+margin_top = 90.0
+margin_right = 287.0
+margin_bottom = 170.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Player"
+
+[node name="Button4" type="Button" parent="ServeOptionsUI/Athlete1ServeOptionsUI/GridContainer"]
+margin_left = 297.0
+margin_top = 90.0
+margin_right = 583.0
+margin_bottom = 170.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Location"
+
+[node name="Button" type="Button" parent="ServeOptionsUI/Athlete1ServeOptionsUI/GridContainer"]
+margin_top = 180.0
+margin_right = 287.0
+margin_bottom = 259.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Libero"
+
+[connection signal="pressed" from="HBoxContainer/ServeUIButton" to="." method="_on_ServeUIButton_pressed"]

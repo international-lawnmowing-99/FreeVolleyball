@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://MatchScene/TirednessBar.gd" type="Script" id=1]
+
+[node name="TirednessBar" type="ColorRect"]
+margin_right = 150.0
+margin_bottom = 6.0
+rect_min_size = Vector2( 0, 6 )
+color = Color( 1, 0, 0, 1 )
+script = ExtResource( 1 )
+
+[node name="GreenBar" type="ColorRect" parent="."]
+margin_right = 150.0
+margin_bottom = 6.0
+rect_min_size = Vector2( 0, 6 )
+color = Color( 0.254902, 0.556863, 0, 1 )
