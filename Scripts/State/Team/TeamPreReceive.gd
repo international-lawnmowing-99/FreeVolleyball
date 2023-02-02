@@ -17,6 +17,10 @@ func Enter(team:Team):
 	team.CheckForLiberoChange()
 	team.chosenSetter = null
 	
+	if !team.isHuman:
+		team.mManager.TESTteamRepresentation.AssignCourtPlayers(team)
+		team.mManager.TESTteamRepresentation.UpdateRepresentation()
+	
 func Update(team:Team):
 	#Is the ball close enough
 	pass

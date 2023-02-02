@@ -227,6 +227,8 @@ func CacheBlockers():
 
 func _process(_delta):
 	stateMachine.Update()
+	if !isHuman:
+		mManager.TESTteamRepresentation.UpdateRepresentation()
 
 func Rotate():
 #	if isHuman:
@@ -526,7 +528,7 @@ func Populate(firstNames, lastNames, r):
 		#1.25 is the arm factor of newWoman
 		stats.spikeHeight = stats.height * (1.33) + stats.verticalJump
 		stats.blockHeight = stats.height * (1.25) + stats.verticalJump
-		stats.standingSetHeight = stats.height + 0.15
+		stats.standingSetHeight = stats.height + 0.005
 		stats.jumpSetHeight = stats.standingSetHeight + stats.verticalJump
 		#stats.shirtNumber = shirtNumbers[j];
 		#stats.image = images[j];

@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://Addons/DebugDraw3D.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/MatchScene/MatchManager.gd" type="Script" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://MatchScene/OnCourtPlayer.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Scenes/FrameStepper.gd" type="Script" id=15]
 [ext_resource path="res://Textures/antenna-uv.png" type="Texture" id=16]
+[ext_resource path="res://MatchScene/TeamTacticsUI.tscn" type="PackedScene" id=17]
 [ext_resource path="res://Scenes/a font.tres" type="DynamicFont" id=18]
 [ext_resource path="res://MatchScene/PreMatchUI.tscn" type="PackedScene" id=19]
 [ext_resource path="res://MatchScene/ServeUI.tscn" type="PackedScene" id=20]
@@ -942,3 +943,7 @@ margin_bottom = 665.0
 [node name="OnCourtPlayer7" parent="TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource( 14 )]
 margin_top = 684.0
 margin_bottom = 779.0
+
+[node name="TeamTacticsUICanvas" type="CanvasLayer" parent="."]
+
+[node name="TeamTacticsUI" parent="TeamTacticsUICanvas" instance=ExtResource( 17 )]

@@ -1,13 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scenes/a font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://MatchScene/TeamTacticsUI.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/teamNameFont.tres" type="DynamicFont" id=3]
-[ext_resource path="res://Textures/Captain.png" type="Texture" id=4]
-[ext_resource path="res://Textures/Court-Markings.png" type="Texture" id=5]
-
-[sub_resource type="CanvasItemMaterial" id=1]
-light_mode = 1
+[ext_resource path="res://MatchScene/CourtRepresentationUI.tscn" type="PackedScene" id=4]
 
 [node name="TeamTacticsUI" type="Control"]
 anchor_right = 1.0
@@ -225,92 +221,64 @@ size_flags_vertical = 3
 margin_right = 40.0
 margin_bottom = 40.0
 
-[node name="CourtRepresentationUI" type="TextureRect" parent="ServeOptionsUI/Athlete1ServeOptionsUI"]
-margin_left = 1897.44
-margin_top = 433.413
-margin_right = 3697.44
-margin_bottom = 1533.41
-rect_rotation = 89.9999
-rect_scale = Vector2( 0.4746, 0.4746 )
-texture = ExtResource( 5 )
-expand = true
-
-[node name="ServeTarget" type="TextureRect" parent="ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI"]
-material = SubResource( 1 )
-margin_left = 116.806
-margin_top = 530.94
-margin_right = 516.806
-margin_bottom = 930.94
-rect_rotation = -89.9999
-rect_scale = Vector2( 0.303373, 0.303373 )
-texture = ExtResource( 4 )
-expand = true
-
-[node name="Net" type="Line2D" parent="ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI"]
-position = Vector2( 2.10706, 0 )
-points = PoolVector2Array( 898.285, 1115.8, 898.039, -17.1353 )
-width = 20.0
-default_color = Color( 0, 0, 0, 1 )
-
-[node name="ServeDir" type="Line2D" parent="ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI"]
-position = Vector2( 1426.96, 417.9 )
-rotation = 1.5708
-points = PoolVector2Array( 0, 340, 30, 385, 60, 340, 30, 385, 30, 0 )
-width = 20.0
-
-[node name="ColourRect" type="ColorRect" parent="ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI"]
-margin_left = 1319.0
-margin_top = 80.0
-margin_right = 1378.0
-margin_bottom = 1015.0
+[node name="CourtRepresentationUI" parent="ServeOptionsUI/Athlete1ServeOptionsUI" instance=ExtResource( 4 )]
+margin_left = 1392.7
+margin_top = 94.3874
+margin_right = 3192.7
+margin_bottom = 1194.38
 
 [node name="GridContainer" type="GridContainer" parent="ServeOptionsUI/Athlete1ServeOptionsUI"]
 margin_left = 460.0
 margin_top = 410.0
-margin_right = 1043.0
-margin_bottom = 669.0
+margin_right = 796.0
+margin_bottom = 1008.0
 custom_constants/vseparation = 10
 custom_constants/hseparation = 10
-columns = 2
 
 [node name="Button2" type="Button" parent="ServeOptionsUI/Athlete1ServeOptionsUI/GridContainer"]
-margin_right = 287.0
-margin_bottom = 80.0
+margin_right = 336.0
+margin_bottom = 112.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Target Weakest Receiver"
 
 [node name="Button5" type="Button" parent="ServeOptionsUI/Athlete1ServeOptionsUI/GridContainer"]
-margin_left = 297.0
-margin_right = 583.0
-margin_bottom = 80.0
+margin_top = 122.0
+margin_right = 336.0
+margin_bottom = 234.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Target Strongest Receiving Attacker"
 
 [node name="Button3" type="Button" parent="ServeOptionsUI/Athlete1ServeOptionsUI/GridContainer"]
-margin_top = 90.0
-margin_right = 287.0
-margin_bottom = 170.0
+margin_top = 244.0
+margin_right = 336.0
+margin_bottom = 356.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Target Player"
 
 [node name="Button4" type="Button" parent="ServeOptionsUI/Athlete1ServeOptionsUI/GridContainer"]
-margin_left = 297.0
-margin_top = 90.0
-margin_right = 583.0
-margin_bottom = 170.0
+margin_top = 366.0
+margin_right = 336.0
+margin_bottom = 477.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Target Location"
 
 [node name="Button" type="Button" parent="ServeOptionsUI/Athlete1ServeOptionsUI/GridContainer"]
-margin_top = 180.0
-margin_right = 287.0
-margin_bottom = 259.0
+margin_top = 487.0
+margin_right = 336.0
+margin_bottom = 598.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Target Libero"
+
+[node name="ServeDir" type="Line2D" parent="ServeOptionsUI/Athlete1ServeOptionsUI"]
+position = Vector2( 1555.11, 1110.65 )
+rotation = -3.14159
+scale = Vector2( 0.4746, 0.4746 )
+points = PoolVector2Array( 0, 340, 30, 385, 60, 340, 30, 385, 30, 0 )
+width = 20.0
 
 [connection signal="pressed" from="HBoxContainer/ServeUIButton" to="." method="_on_ServeUIButton_pressed"]

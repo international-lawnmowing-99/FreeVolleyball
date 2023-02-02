@@ -28,6 +28,9 @@ func Enter(team:Team):
 	server.stateMachine.SetCurrentState(server.serveState)
 	
 	team.chosenSetter = null
+	
+	if team.isHuman:
+		team.mManager.teamInfoUI.InitialiseOnCourtPlayerUI()
 
 func Update(team:Team):
 	team.stateMachine.SetCurrentState(team.serveState)

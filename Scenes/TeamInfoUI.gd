@@ -2,6 +2,7 @@ extends CanvasLayer
 
 onready var controlNode = $TeamSelectionUI
 onready var camera = $"/root/MatchScene/Camera"
+
 var mManager:MatchManager
 
 func _ready() -> void:
@@ -31,7 +32,7 @@ func ToggleTeamInfo():
 			
 		
 func InitialiseOnCourtPlayerUI():
-	for i in range(7):
+	for i in range(6):
 		var onCourtPlayer = $OnCourtPlayers/VBoxContainer.get_child(i)
-		onCourtPlayer.athlete = mManager.teamA.allPlayers[i]
+		onCourtPlayer.athlete = mManager.teamA.courtPlayers[i]
 		onCourtPlayer.UpdateFields()

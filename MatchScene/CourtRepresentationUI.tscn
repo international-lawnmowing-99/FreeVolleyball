@@ -1,0 +1,98 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Textures/Court-Markings.png" type="Texture" id=1]
+[ext_resource path="res://Textures/Captain.png" type="Texture" id=2]
+[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://MatchScene/CourtRepresentationUI.gd" type="Script" id=4]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+light_mode = 1
+
+[node name="CourtRepresentationUI" type="TextureRect"]
+margin_left = 530.0
+margin_right = 2330.0
+margin_bottom = 1100.0
+rect_rotation = 89.9999
+rect_scale = Vector2( 0.4746, 0.4746 )
+texture = ExtResource( 1 )
+expand = true
+script = ExtResource( 4 )
+
+[node name="ServeTarget" type="TextureRect" parent="."]
+material = SubResource( 1 )
+margin_left = 116.806
+margin_top = 530.94
+margin_right = 516.806
+margin_bottom = 930.94
+rect_rotation = -89.9999
+rect_scale = Vector2( 0.303373, 0.303373 )
+texture = ExtResource( 2 )
+expand = true
+
+[node name="Net" type="Line2D" parent="."]
+position = Vector2( 2.10706, 0 )
+points = PoolVector2Array( 898, 1115, 898, -15 )
+width = 20.0
+default_color = Color( 0, 0, 0, 1 )
+
+[node name="ColourRect" type="ColorRect" parent="."]
+margin_left = 1319.0
+margin_top = 80.0
+margin_right = 1867.0
+margin_bottom = 1015.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = 1319.0
+margin_top = 80.0
+margin_right = 1359.0
+margin_bottom = 120.0
+
+[node name="OppositionTeam" type="Control" parent="."]
+margin_left = 900.94
+margin_top = 551.0
+margin_right = 940.94
+margin_bottom = 591.0
+rect_rotation = -90.0
+rect_scale = Vector2( 2.105, 2.105 )
+
+[node name="UnscaledOppositionTeam" type="Control" parent="OppositionTeam"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="PlayerIn1" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
+margin_left = -7.32483
+margin_top = -114.662
+margin_right = 206.675
+margin_bottom = 202.338
+rect_scale = Vector2( 0.2, 0.15 )
+texture = ExtResource( 3 )
+
+[node name="PlayerIn2" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
+margin_right = 214.0
+margin_bottom = 317.0
+rect_scale = Vector2( 0.2, 0.15 )
+texture = ExtResource( 3 )
+
+[node name="PlayerIn3" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
+margin_right = 214.0
+margin_bottom = 317.0
+rect_scale = Vector2( 0.2, 0.15 )
+texture = ExtResource( 3 )
+
+[node name="PlayerIn4" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
+margin_right = 214.0
+margin_bottom = 317.0
+rect_scale = Vector2( 0.2, 0.15 )
+texture = ExtResource( 3 )
+
+[node name="PlayerIn5" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
+margin_right = 214.0
+margin_bottom = 317.0
+rect_scale = Vector2( 0.2, 0.15 )
+texture = ExtResource( 3 )
+
+[node name="PlayerIn6" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
+margin_right = 214.0
+margin_bottom = 317.0
+rect_scale = Vector2( 0.2, 0.15 )
+texture = ExtResource( 3 )

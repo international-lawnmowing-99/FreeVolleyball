@@ -13,7 +13,8 @@ onready var ball = $ball
 
 onready var score = $ScoreCanvasLayer/Score
 onready var preMatchUI = $PreMatchUI
-#onready var teamInfoUI = 
+onready var teamInfoUI = $TeamInfoUI
+onready var TESTteamRepresentation = $TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
 
 var isTeamAServing:bool
 
