@@ -54,7 +54,7 @@ func Enter(team:Team):
 		rightSideBlocker.blockState.blockingTarget = otherTeam.outsideFront
 
 
-	team.middleFront.blockState.blockingTarget = otherTeam.middleFront
+#	team.middleFront.blockState.blockingTarget = otherTeam.middleFront
 	
 func Update(team:Team):
 	if team.isHuman:
@@ -121,13 +121,18 @@ func TripleBlockPipe(team:Team):
 	leftSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,0.8)
 	rightSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,-0.8)
 
-func EvaluateOppositionPass():
+func EvaluateOppositionPass(team:Team):
 	# make a list of available options for the other team's attack
 	# ie, bad pass means no middle, so stack on actually possible hitters
 #	print("other team reception target: " + str(otherTeam.receptionTarget))
 	var dumpProbability = 0
 
-func ReactToSet():
+func ReactToSet(team:Team):
 	# React blockers move to new blocking position, perhaps after a delay given by a "reaction time" stat
-	
+	if !team.middleFront.blockState.isCommitBlocking:
+		team.middleFront.blockState.blockingTarget = otherTeam.chosenSpiker
+		if team.isHuman:
+			team.middleFront.moveTarget = Vector3(0.5, 0, clamp(otherTeam.setTarget.target.z, rightSideBlocker.moveTarget.z + 0.8, leftSideBlocker.moveTarget.z - 0.8))
+		else:
+			team.middleFront.moveTarget = Vector3(-0.5, 0, clamp(otherTeam.setTarget.target.z, leftSideBlocker.moveTarget.z + 0.8, rightSideBlocker.moveTarget.z - 0.8))
 	var timeTillSpike = 0

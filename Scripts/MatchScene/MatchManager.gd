@@ -85,18 +85,18 @@ func BallOverNet(hitByTeamA:bool):
 func BallReceived(receivedByTeamA:bool):
 	if receivedByTeamA:
 		teamA.stateMachine.SetCurrentState(teamA.setState)
-		teamB.defendState.EvaluateOppositionPass()
+		teamB.defendState.EvaluateOppositionPass(teamA)
 	else:
 		teamB.stateMachine.SetCurrentState(teamB.setState)
-		teamA.defendState.EvaluateOppositionPass()
+		teamA.defendState.EvaluateOppositionPass(teamA)
 
 func BallSet(setByTeamA:bool):
 	if setByTeamA:
 		teamA.stateMachine.SetCurrentState(teamA.spikeState)
-		teamB.defendState.ReactToSet()
+		teamB.defendState.ReactToSet(teamB)
 	else:
 		teamB.stateMachine.SetCurrentState(teamB.spikeState)
-		teamA.defendState.ReactToSet()
+		teamA.defendState.ReactToSet(teamA)
 
 func BallSpiked(spikedByTeamA:bool):
 	if spikedByTeamA:

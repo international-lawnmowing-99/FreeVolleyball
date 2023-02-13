@@ -13,7 +13,7 @@ func ShowServeChoice():
 	$ServeTypeButtons.show()
 	$ServerInfo.show()
 	uiState = UIState.ServeType
-	$ServeTypeButtons/VBoxContainer/CheckBox.pressed = humanServeState.rememberSettings
+	$RememberServeOptions/CheckBox.pressed = humanServeState.rememberSettings
 
 func HideServeChoice():
 	$ServeTypeButtons.hide()
@@ -57,6 +57,8 @@ func _on_ModerateServe_pressed() -> void:
 	HideServeAggressionChoice()
 
 func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("Key4"):
+		_on_RepeatLastServe_pressed()
 	match uiState:
 		UIState.ServeType:
 			if Input.is_action_just_pressed("Key1"):
@@ -81,6 +83,7 @@ func _on_CheckBox_toggled(button_pressed: bool) -> void:
 		
 	else:
 		humanServeState.rememberSettings = false
+
+
+func _on_RepeatLastServe_pressed() -> void:
 	pass # Replace with function body.
-
-

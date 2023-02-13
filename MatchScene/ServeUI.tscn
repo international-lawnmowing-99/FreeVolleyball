@@ -60,7 +60,6 @@ custom_fonts/font = ExtResource( 4 )
 text = "Float: "
 
 [node name="ServeTypeButtons" type="Control" parent="."]
-visible = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ServeTypeButtons"]
 margin_left = 1497.0
@@ -89,14 +88,6 @@ margin_bottom = 140.0
 custom_fonts/font = ExtResource( 4 )
 text = "Underarm Serve (3)"
 
-[node name="CheckBox" type="CheckBox" parent="ServeTypeButtons/VBoxContainer"]
-margin_top = 150.0
-margin_right = 430.0
-margin_bottom = 201.0
-custom_fonts/font = ExtResource( 2 )
-text = "Remember Settings"
-expand_icon = true
-
 [node name="ServeAggressionButtons" type="Control" parent="."]
 visible = false
 
@@ -108,28 +99,50 @@ margin_bottom = 1082.0
 
 [node name="AggressiveServe" type="Button" parent="ServeAggressionButtons/VBoxContainer"]
 margin_right = 430.0
-margin_bottom = 58.0
+margin_bottom = 40.0
 custom_fonts/font = ExtResource( 4 )
 text = "Aggressive Serve (1)"
 
 [node name="ModerateServe" type="Button" parent="ServeAggressionButtons/VBoxContainer"]
-margin_top = 62.0
+margin_top = 44.0
 margin_right = 430.0
-margin_bottom = 120.0
+margin_bottom = 84.0
 custom_fonts/font = ExtResource( 4 )
 text = "Moderate Serve (2)"
 
 [node name="SafetyServe" type="Button" parent="ServeAggressionButtons/VBoxContainer"]
-margin_top = 124.0
+margin_top = 88.0
 margin_right = 430.0
-margin_bottom = 182.0
+margin_bottom = 128.0
 custom_fonts/font = ExtResource( 4 )
 text = "Safety Serve (3)"
+
+[node name="RememberServeOptions" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="CheckBox" type="CheckBox" parent="RememberServeOptions"]
+margin_left = 1497.0
+margin_top = 928.0
+margin_right = 1927.0
+margin_bottom = 979.0
+custom_fonts/font = ExtResource( 2 )
+text = "Remember Settings"
+expand_icon = true
+
+[node name="RepeatLastServe" type="Button" parent="RememberServeOptions"]
+margin_left = 1490.0
+margin_top = 1023.0
+margin_right = 1920.0
+margin_bottom = 1081.0
+custom_fonts/font = ExtResource( 4 )
+text = "Repeat Last Serve (4)"
 
 [connection signal="pressed" from="ServeTypeButtons/VBoxContainer/JumpServeButton" to="." method="_on_JumpServeButton_pressed"]
 [connection signal="pressed" from="ServeTypeButtons/VBoxContainer/FloatButton" to="." method="_on_FloatButton_pressed"]
 [connection signal="pressed" from="ServeTypeButtons/VBoxContainer/UnderArmButton" to="." method="_on_UnderArmButton_pressed"]
-[connection signal="toggled" from="ServeTypeButtons/VBoxContainer/CheckBox" to="." method="_on_CheckBox_toggled"]
 [connection signal="pressed" from="ServeAggressionButtons/VBoxContainer/AggressiveServe" to="." method="_on_AggressiveServe_pressed"]
 [connection signal="pressed" from="ServeAggressionButtons/VBoxContainer/ModerateServe" to="." method="_on_ModerateServe_pressed"]
 [connection signal="pressed" from="ServeAggressionButtons/VBoxContainer/SafetyServe" to="." method="_on_SafetyServe_pressed"]
+[connection signal="toggled" from="RememberServeOptions/CheckBox" to="." method="_on_CheckBox_toggled"]
+[connection signal="pressed" from="RememberServeOptions/RepeatLastServe" to="." method="_on_RepeatLastServe_pressed"]

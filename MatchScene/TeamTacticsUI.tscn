@@ -6,6 +6,7 @@
 [ext_resource path="res://MatchScene/CourtRepresentationUI.tscn" type="PackedScene" id=4]
 
 [node name="TeamTacticsUI" type="Control"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 2 )
@@ -222,10 +223,10 @@ margin_right = 40.0
 margin_bottom = 40.0
 
 [node name="CourtRepresentationUI" parent="ServeOptionsUI/Athlete1ServeOptionsUI" instance=ExtResource( 4 )]
-margin_left = 1392.7
-margin_top = 94.3874
-margin_right = 3192.7
-margin_bottom = 1194.38
+margin_left = 1760.81
+margin_top = 430.407
+margin_right = 3560.81
+margin_bottom = 1530.4
 
 [node name="GridContainer" type="GridContainer" parent="ServeOptionsUI/Athlete1ServeOptionsUI"]
 margin_left = 460.0

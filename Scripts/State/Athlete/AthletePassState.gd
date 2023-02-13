@@ -190,9 +190,9 @@ func PassBall(athlete:Athlete):
 	athlete.team.receptionTarget = receptionTarget
 		
 	#Bizzare physics hack needed
-	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, rand_range(4,8)))
+	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)))
 	yield(athlete.get_tree(),"idle_frame")
-	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, rand_range(4,8)))
+	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)))
 
 	athlete.get_tree().get_root().get_node("MatchScene").BallReceived(athlete.team.isHuman)
 

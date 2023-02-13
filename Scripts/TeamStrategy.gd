@@ -8,5 +8,6 @@ var defaultReceptionRotations
 var servingTargets
 var substitutionTirednessThresholds
 
-
 var setOptionWeights
+
+# Blocking options

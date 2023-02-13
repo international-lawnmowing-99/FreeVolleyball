@@ -60,39 +60,43 @@ margin_right = 40.0
 margin_bottom = 40.0
 
 [node name="PlayerIn1" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
-margin_left = -7.32483
-margin_top = -114.662
-margin_right = 206.675
-margin_bottom = 202.338
+margin_right = 214.0
+margin_bottom = 317.0
 rect_scale = Vector2( 0.2, 0.15 )
+rect_pivot_offset = Vector2( -21.4, -23.7 )
 texture = ExtResource( 3 )
 
 [node name="PlayerIn2" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
 margin_right = 214.0
 margin_bottom = 317.0
 rect_scale = Vector2( 0.2, 0.15 )
+rect_pivot_offset = Vector2( -21.4, -23.7 )
 texture = ExtResource( 3 )
 
 [node name="PlayerIn3" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
 margin_right = 214.0
 margin_bottom = 317.0
 rect_scale = Vector2( 0.2, 0.15 )
+rect_pivot_offset = Vector2( -21.4, -23.7 )
 texture = ExtResource( 3 )
 
 [node name="PlayerIn4" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
 margin_right = 214.0
 margin_bottom = 317.0
 rect_scale = Vector2( 0.2, 0.15 )
+rect_pivot_offset = Vector2( -21.4, -23.7 )
 texture = ExtResource( 3 )
 
 [node name="PlayerIn5" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
 margin_right = 214.0
 margin_bottom = 317.0
 rect_scale = Vector2( 0.2, 0.15 )
+rect_pivot_offset = Vector2( -21.4, -23.7 )
 texture = ExtResource( 3 )
 
 [node name="PlayerIn6" type="TextureRect" parent="OppositionTeam/UnscaledOppositionTeam"]
 margin_right = 214.0
 margin_bottom = 317.0
 rect_scale = Vector2( 0.2, 0.15 )
+rect_pivot_offset = Vector2( -21.4, -23.7 )
 texture = ExtResource( 3 )

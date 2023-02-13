@@ -39,8 +39,8 @@ var attackTarget
 var takeOffTarget
 var ball:Ball
 var rememberSettings:bool = true
-var rememberedServeTarget:Vector3
-var rememberedWalkPosition:Vector3
+var rememberedServeTarget
+var rememberedWalkPosition
 var rememberedServeType
 var rememberedServeAggression
 
@@ -69,10 +69,12 @@ func Enter(athlete:Athlete):
 	if rememberSettings:
 		if rememberedServeTarget:
 			serveTarget.translation = rememberedServeTarget
-		if rememberedServeAggression:
-			serveAggression = rememberedServeAggression
 		if rememberedServeType:
 			serveType = rememberedServeType
+			ChooseServeType(rememberedServeType)
+		if rememberedServeAggression:
+			serveAggression = rememberedServeAggression
+			ChooseServeAggression(rememberedServeAggression)
 		if rememberedWalkPosition:
 			athlete.translation = rememberedWalkPosition
 	else:
@@ -320,23 +322,25 @@ func ChooseServeAggression(aggression):
 	serveTarget.mesh.bottom_radius = serveTarget.mesh.top_radius
 	
 	serveState = ServeState.Aiming
-	
-	match serveType:
-		ServeType.Jump:
-			if serveAggression == ServeAggression.Aggressive:
-				serveTarget.translation.x = rand_range(AGGRESSIVEJUMPBOUNDS[0], AGGRESSIVEJUMPBOUNDS[1])
-				serveTarget.translation.z = rand_range(AGGRESSIVEJUMPBOUNDS[2], AGGRESSIVEJUMPBOUNDS[3])
-			else:
-				serveTarget.translation.x = rand_range(FLOATANDSOFTJUMPBOUNDS[0], FLOATANDSOFTJUMPBOUNDS[1])
-				serveTarget.translation.z = rand_range(FLOATANDSOFTJUMPBOUNDS[2], FLOATANDSOFTJUMPBOUNDS[3])
+	if !rememberSettings || !rememberedServeTarget:
+		match serveType:
+			ServeType.Jump:
+				if serveAggression == ServeAggression.Aggressive:
+					serveTarget.translation.x = rand_range(AGGRESSIVEJUMPBOUNDS[0], AGGRESSIVEJUMPBOUNDS[1])
+					serveTarget.translation.z = rand_range(AGGRESSIVEJUMPBOUNDS[2], AGGRESSIVEJUMPBOUNDS[3])
+				else:
+					serveTarget.translation.x = rand_range(FLOATANDSOFTJUMPBOUNDS[0], FLOATANDSOFTJUMPBOUNDS[1])
+					serveTarget.translation.z = rand_range(FLOATANDSOFTJUMPBOUNDS[2], FLOATANDSOFTJUMPBOUNDS[3])
 
-		ServeType.Float:
-				serveTarget.translation.x = rand_range(FLOATANDSOFTJUMPBOUNDS[0], FLOATANDSOFTJUMPBOUNDS[1])
-				serveTarget.translation.z = rand_range(FLOATANDSOFTJUMPBOUNDS[2], FLOATANDSOFTJUMPBOUNDS[3])
+			ServeType.Float:
+					serveTarget.translation.x = rand_range(FLOATANDSOFTJUMPBOUNDS[0], FLOATANDSOFTJUMPBOUNDS[1])
+					serveTarget.translation.z = rand_range(FLOATANDSOFTJUMPBOUNDS[2], FLOATANDSOFTJUMPBOUNDS[3])
 
-		ServeType.Underarm:
-				serveTarget.translation.x = rand_range(UNDERARMBOUNDS[0], UNDERARMBOUNDS[1])
-				serveTarget.translation.z = rand_range(UNDERARMBOUNDS[2], UNDERARMBOUNDS[3])
+			ServeType.Underarm:
+					serveTarget.translation.x = rand_range(UNDERARMBOUNDS[0], UNDERARMBOUNDS[1])
+					serveTarget.translation.z = rand_range(UNDERARMBOUNDS[2], UNDERARMBOUNDS[3])
+	else:
+		serveTarget.translation = rememberedServeTarget
 	
 func Exit(athlete:Athlete):
 	pass

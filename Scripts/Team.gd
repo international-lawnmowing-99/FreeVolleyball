@@ -227,7 +227,7 @@ func CacheBlockers():
 
 func _process(_delta):
 	stateMachine.Update()
-	if !isHuman:
+	if !isHuman && mManager.TESTteamRepresentation.courtPlayers:
 		mManager.TESTteamRepresentation.UpdateRepresentation()
 
 func Rotate():
