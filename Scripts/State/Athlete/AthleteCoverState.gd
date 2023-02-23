@@ -8,7 +8,8 @@ func Enter(athlete:Athlete):
 		athlete.moveTarget = (athlete.team.setTarget.target + athlete.translation) /2
 		athlete.moveTarget.y = 0
 	else:
-		print("no set target")
+		pass
+#		print("no set target")
 	
 func Update(athlete:Athlete):
 	athlete.DontFallThroughFloor()

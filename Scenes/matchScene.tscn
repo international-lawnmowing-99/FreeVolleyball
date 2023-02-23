@@ -911,54 +911,59 @@ text = "Stats"
 [node name="OnCourtPlayers" type="Control" parent="TeamInfoUI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 1920.0
+margin_bottom = -1080.0
+mouse_filter = 1
+mouse_default_cursor_shape = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TeamInfoUI/OnCourtPlayers"]
 anchor_bottom = 1.0
-margin_left = 1750.0
-margin_top = 20.0
-margin_right = 1920.0
-margin_bottom = -281.0
+margin_left = -200.0
+margin_top = 10.0
+margin_right = -30.0
+margin_bottom = 810.0
 custom_constants/separation = 19
 
 [node name="OnCourtPlayer1" parent="TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource( 14 )]
 margin_left = 20.0
 margin_right = 170.0
+margin_bottom = 98.0
 
 [node name="OnCourtPlayer2" parent="TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource( 14 )]
 margin_left = 20.0
-margin_top = 114.0
+margin_top = 117.0
 margin_right = 170.0
-margin_bottom = 209.0
+margin_bottom = 215.0
 
 [node name="OnCourtPlayer3" parent="TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource( 14 )]
 margin_left = 20.0
-margin_top = 228.0
+margin_top = 234.0
 margin_right = 170.0
-margin_bottom = 323.0
+margin_bottom = 332.0
 
 [node name="OnCourtPlayer4" parent="TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource( 14 )]
 margin_left = 20.0
-margin_top = 342.0
+margin_top = 351.0
 margin_right = 170.0
-margin_bottom = 437.0
+margin_bottom = 449.0
 
 [node name="OnCourtPlayer5" parent="TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource( 14 )]
 margin_left = 20.0
-margin_top = 456.0
+margin_top = 468.0
 margin_right = 170.0
-margin_bottom = 551.0
+margin_bottom = 566.0
 
 [node name="OnCourtPlayer6" parent="TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource( 14 )]
 margin_left = 20.0
-margin_top = 570.0
+margin_top = 585.0
 margin_right = 170.0
-margin_bottom = 665.0
+margin_bottom = 683.0
 
 [node name="OnCourtPlayer7" parent="TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource( 14 )]
 margin_left = 20.0
-margin_top = 684.0
+margin_top = 702.0
 margin_right = 170.0
-margin_bottom = 779.0
+margin_bottom = 800.0
 
 [node name="TeamTacticsUICanvas" type="CanvasLayer" parent="."]
 

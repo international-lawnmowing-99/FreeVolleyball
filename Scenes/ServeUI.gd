@@ -57,7 +57,7 @@ func _on_ModerateServe_pressed() -> void:
 	HideServeAggressionChoice()
 
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("Key4"):
+	if Input.is_action_just_pressed("Key4") && humanServeState.rememberSettings:
 		_on_RepeatLastServe_pressed()
 	match uiState:
 		UIState.ServeType:

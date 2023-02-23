@@ -5,6 +5,9 @@ const Enums = preload("res://Scripts/World/Enums.gd")
 var AthleteScene = preload("res://Scenes/Athlete.tscn")
 
 var teamName:String
+
+var teamStrategy = preload("res://Scripts/TeamStrategy.gd").new()
+
 var nation
 var mManager
 var isHuman:bool = false
@@ -271,8 +274,8 @@ func CheckForLiberoChange():
 		if !isNextToSpike:
 #			print(teamName + " current server: " + courtPlayers[server].stats.lastName)
 			if middleBack != courtPlayers[server]:
-				print("\nMiddleBack: " + middleBack.stats.lastName)
-				print("courtPlayers[server]: " + courtPlayers[server].stats.lastName + "\n")
+#				print("\nMiddleBack: " + middleBack.stats.lastName)
+#				print("courtPlayers[server]: " + courtPlayers[server].stats.lastName + "\n")
 				InstantaneouslySwapPlayers(middleBack, libero)
 				isLiberoOnCourt = true
 
@@ -405,7 +408,9 @@ func AutoSelectTeamLineup():
 	for athlete in orderedLiberoList:
 		athlete.role = Enums.Role.UNDEFINED
 
-
+	nsetter.stats.verticalJump += 2
+	nsetter.stats.jumpSetHeight += 2
+	nsetter.stats.spikeHeight += 2
 
 func SwapPlayer(player,newPostion):
 	#print("-----------")
@@ -430,7 +435,7 @@ func SwapPlayer(player,newPostion):
 func GetTransitionPosition(athlete):
 	if (setter.FrontCourt()):
 		if athlete == setter:
-			return CheckIfFlipped(transitionPositionsSetterFront[3])
+			return CheckIfFlipped(transitionPositionsSetterBack[1])
 		if athlete == outsideFront:
 			return CheckIfFlipped(transitionPositionsSetterFront[4])
 		if athlete == oppositeHitter:
@@ -449,7 +454,7 @@ func GetTransitionPosition(athlete):
 			if (athlete == oppositeHitter):
 				return CheckIfFlipped(transitionPositionsSetterBack[1])
 		if athlete == setter:
-			return CheckIfFlipped(transitionPositionsSetterBack[0])
+			return CheckIfFlipped(transitionPositionsSetterFront[0])
 		else:
 			return CheckUnchangingTransitionPositions(athlete)
 

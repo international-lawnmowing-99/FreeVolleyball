@@ -97,7 +97,7 @@ func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float)
 	if maxHeight <= startPos.y || maxHeight < endPos.y:
 		print("impossible parabola|| maxHeight = " + str(maxHeight) + ", startPos = " + str(startPos) + ", endPos = " + str(endPos))
 		# This will spawn thousands of axis not normalized errors if used to directly assign the ball linear velocity
-		return Vector3(0,.01,0)
+		return Vector3.ZERO
 	
 	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x,0, endPos.z))
@@ -108,24 +108,40 @@ func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float)
 	
 	var xzTheta = SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
 	
+#	print("\"Well-behaved\" parabola: " + str( Vector3(xzVel * cos(-xzTheta), yVel, xzVel * sin(-xzTheta))))
 	return Vector3(xzVel * cos(-xzTheta), yVel, xzVel * sin(-xzTheta))
 
 func FindDownwardsParabola(startPos:Vector3, endPos:Vector3, velocityInMPS):
+	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	var maxSetVelocity = 10
+	
 	var yDist = startPos.y - endPos.y
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.y))
+	var xzTheta = SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
+		
 	
 	# Can the xzDistance be traversed by a ball set horizontally at the maximum allowable speed?
 	# Can the set get down fast enough if you're setting from 10 metres in the air? 
 	# for every angle there's a corresponding velocity, should we find the most aggressive?
 	
+	# attempt to set horizontally, zero yVel
+	var yTravelTime = sqrt(yDist/gravity)
+	var maxXZTravelTime = xzDist/maxSetVelocity
+	
+	if yTravelTime < maxXZTravelTime:
+		var xzVel = xzDist/ yTravelTime
+		return Vector3(xzVel * cos(-xzTheta), 0, xzVel * sin(-xzTheta))
+		
+	else:
+		print("downwards parabola with yVel, not sure if that's possible, yet")
+		return Vector3.ZERO
 	
 func SetTime(startPos:Vector3, endPos:Vector3, maxHeight:float):
 	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	var setVelocity = FindWellBehavedParabola(startPos, endPos, maxHeight)
 	if setVelocity.length() == 0:
 		return 0
-	var timeToPeak = setVelocity.y * gravity
+	var timeToPeak = setVelocity.y / gravity
 	var timeDown = sqrt(2 * gravity * abs(maxHeight - endPos.y))/gravity
 	return timeToPeak + timeDown
 

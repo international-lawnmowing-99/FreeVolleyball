@@ -48,8 +48,8 @@ func Update(_athlete:Athlete):
 				#UNTESTED!!!
 				#yVel = sqrt(2 * athlete.g * (athlete.setRequest.height - athlete.team.receptionTarget.y))
 				#Engine.time_scale = 0
-				print("Setting downwards because you're such a unit")
-				print("Errors inbound(?)")
+#				print("Setting downwards because you're such a unit")
+#				print("Errors inbound(?)")
 				if athlete.team.stateMachine.currentState == athlete.team.spikeState:
 					var distanceFactor:float = 1 - Vector3(athlete.ball.translation.x, 0, athlete.ball.translation.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
 					setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)

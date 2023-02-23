@@ -6,6 +6,7 @@ var consoleLine = preload("res://MatchScene/ConsoleLine.tscn")
 #func _input(_event):
 
 func AddNewLine(text:String, colour:Color = Color.white):
+	print(text)
 	var lineOfSuspiciousPowder = consoleLine.instance()
 	lineOfSuspiciousPowder.rect_position = Vector2(50,841)
 	lineOfSuspiciousPowder.text = text

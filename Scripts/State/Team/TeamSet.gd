@@ -25,8 +25,8 @@ func Update(team:Team):
 	else:
 		setHeight = team.chosenSetter.stats.standingSetHeight
 	#Is the ball close enough
-	if team.ball.translation.y <= team.receptionTarget.y && team.ball.linear_velocity.y < 0 && \
-		Vector3(team.chosenSetter.translation.x, setHeight, team.chosenSetter.translation.z).distance_squared_to(team.ball.translation) < 1:
+	if team.ball.translation.y <= team.receptionTarget.y && team.ball.linear_velocity.y < 0: #&& \
+#		Vector3(team.chosenSetter.translation.x, setHeight, team.chosenSetter.translation.z).distance_squared_to(team.ball.translation) < 1:
 			if ballWillBeDumped:
 				DumpBall(team)
 			else:
@@ -44,7 +44,9 @@ func DumpBall(team:Team):
 	# a max height of 0.1 above the current height, hundreds of errors appear somewhere during 
 	# physics process, using both physics engines. Not for +0.2 height though
 	
-	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.translation, team.ball.attackTarget, max(team.ball.translation.y + .2, 2.9))
+	team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.translation, team.ball.attackTarget, max(team.ball.translation.y + 2, 2.9))
+#	FindWellBehavedParabola(team.ball.translation, team.ball.attackTarget, max(team.ball.translation.y + 2, 2.9))
+	print("ball.linear_vel: " + str(team.ball.linear_velocity))
 #	team.ball.linear_velocity = team.ball.FindParabolaForGivenSpeed(team.ball.translation, team.ball.attackTarget, rand_range(5,10), false)
 #	if team.ball.FindNetPass().y <= 2.5:
 #		team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.translation, team.ball.attackTarget, 2.5)
@@ -251,6 +253,10 @@ func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:Team, timeTillBallA
 
 func TimeToBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3) -> float:
 	var ballXZVel = Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length()
+	
+	if ballXZVel == 0:
+		return 0.0
+	
 	var ballXZDist = Vector3(ball.translation.x - receptionTarget.x, 0, ball.translation.z - receptionTarget.z).length()
 	
 	var time = ballXZDist/ ballXZVel
@@ -259,7 +265,7 @@ func TimeToBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3) -> float:
 
 func ThinkAboutDumping(team:Team):
 	if team.chosenSetter && team.chosenSetter.FrontCourt():
-		var dump = !bool(randi()%10)
+		var dump = true#!bool(randi()%10)
 		if dump && abs(team.receptionTarget.x) < 2:
 			Console.AddNewLine("!!!!Dumping!!!!!", Color.darkred)
 			ballWillBeDumped = true
@@ -275,6 +281,8 @@ func ChooseSpiker(team:Team):
 	
 	for athlete in team.courtPlayers:
 		if athlete!= team.chosenSetter && athlete.role != enums.Role.Libero && athlete != team.middleBack:
+			if team.receptionTarget.x == NAN:
+				var dfsdfds = 1
 			var setSpeed = team.ball.FindWellBehavedParabola(team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height).length()
 			# Very hacky, but if no parabola is found then vector3.zero will be returned
 			if setSpeed > 10 || setSpeed < 0.01:

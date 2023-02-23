@@ -131,6 +131,7 @@ func PassBall(athlete:Athlete):
 	ball.floatDisplacement = Vector3.ZERO
 	#Engine.time_scale = 0.25
 	var receptionTarget
+	var ballMaxHeight
 	#perfect pass, 2-pass, 1-pass, shank, some sort of unSafety ball that hits the floor near your feet
 	var passRoll = rand_range(0, athlete.stats.reception)
 	Console.AddNewLine("PASSING || PASS ROLL: " + str(int(passRoll)) + " Difficulty: " + str(int(ball.difficultyOfReception)))
@@ -139,7 +140,7 @@ func PassBall(athlete:Athlete):
 	Console.AddNewLine( str(int(rollOffDifference)) + " roll off differece ", Color.red)
 
 	
-	if rollOffDifference >= 10:
+	if rollOffDifference >= -999:
 		# what is the ideal height for the setter to jump set??
 		if athlete.role == Enums.Role.Setter:
 			if athlete.team.isLiberoOnCourt:
@@ -148,9 +149,30 @@ func PassBall(athlete:Athlete):
 				receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.middleBack.stats.jumpSetHeight, 0)
 		else:
 			receptionTarget = Vector3(athlete.team.flip * 0.5, athlete.team.setter.stats.jumpSetHeight, 0)
+		
+		# for a perfect reception, this needs to be sufficient to give the setter time to jump set
+		# even in the unrealistic setup (setter vertical jump >3 metres) we've got now
+		
+		var setterJumpSetTime = athlete.team.setter.setState.TimeToJumpSet(athlete.team.setter, receptionTarget) + 1.0
+		var heightDifferenceToReceptionTarget = receptionTarget.y - ball.translation.y
+		var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+		
+#		initialYVel = (s - 1/2 a t^2)/t
+		var initialYVel = (heightDifferenceToReceptionTarget + .5 * gravity * setterJumpSetTime * setterJumpSetTime)/setterJumpSetTime
+		
+#		time for ball to peak:
+#		0 = u + at, t = u/g
+		
+		var timeForBallPeak = initialYVel/gravity
+		ballMaxHeight = initialYVel * initialYVel /(2 * gravity)
+
+#		ballMaxHeight = rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
+		
 		Console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")
+
 	elif rollOffDifference >= -10:
 		receptionTarget = Vector3(athlete.team.flip * rand_range(0.5, 1.5), 2.5, rand_range(-2, 2))
+		ballMaxHeight = rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		Console.AddNewLine(athlete.stats.lastName + " 2-point pass")
 		pass
 	elif rollOffDifference >= -50:
@@ -163,6 +185,7 @@ func PassBall(athlete:Athlete):
 			receptionTarget.x = min(receptionTarget.x, -0.1)
 		######################################################################
 		
+		ballMaxHeight = rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		Console.AddNewLine(athlete.stats.lastName + " 1-point pass")
 		pass	
 	else:
@@ -173,7 +196,8 @@ func PassBall(athlete:Athlete):
 			receptionTarget = ball.BallPositionAtGivenHeight(2.5)
 		else:
 			receptionTarget = ball.BallPositionAtGivenHeight(0)
-
+		
+		ballMaxHeight = rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		Console.AddNewLine(athlete.stats.lastName + " - Shit pass mate")
 		pass	
 
@@ -188,11 +212,18 @@ func PassBall(athlete:Athlete):
 		ball.TouchedByB()
 	
 	athlete.team.receptionTarget = receptionTarget
-		
+	
+
+	
+	
 	#Bizzare physics hack needed
-	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)))
+	ball.linear_velocity = ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
 	yield(athlete.get_tree(),"idle_frame")
-	ball.linear_velocity = (ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)))
+	if ball.linear_velocity.length_squared()<0.1:
+		var x
+	ball.linear_velocity = ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
+	var receptionTime = athlete.team.ball.SetTime(ball.transform.origin, receptionTarget, ballMaxHeight)
+	Console.AddNewLine("Time till ball at reception target: " + str(receptionTime))
 
 	athlete.get_tree().get_root().get_node("MatchScene").BallReceived(athlete.team.isHuman)
 
