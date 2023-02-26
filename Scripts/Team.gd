@@ -229,6 +229,8 @@ func CacheBlockers():
 			leftSideBlocker = outsideFront
 
 func _process(_delta):
+	if isHuman:
+		stateMachine.Update()
 	stateMachine.Update()
 	if !isHuman && mManager.TESTteamRepresentation.courtPlayers:
 		mManager.TESTteamRepresentation.UpdateRepresentation()
@@ -291,7 +293,7 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 			print ("court: " + lad.name + " " + str(lad.rotationPosition))
 		for lad in benchPlayers:
 			print ("bench: " + lad.name)
-	courtPlayers.erase(outgoingIndex)
+	courtPlayers.erase(outgoing)
 	
 	var incomingIndex = benchPlayers.find(incoming)
 	if incomingIndex == -1:
@@ -300,7 +302,7 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 			print ("court: " + lad.name)
 		for lad in benchPlayers:
 			print ("bench: " + lad.name)
-	benchPlayers.erase(incomingIndex)
+	benchPlayers.erase(incoming)
 
 	var tempPos = Vector3(incoming.position.x, 0, incoming.position.z)
 	incoming.position = outgoing.position

@@ -82,7 +82,7 @@ func Update(_athlete:Athlete):
 				athlete.rb.linear_velocity = athlete.team.ball.FindWellBehavedParabola(athlete.position, Vector3(athlete.setRequest.target.x, 0, athlete.setRequest.target.z), athlete.stats.verticalJump)
 
 			if athlete.position.y <= 0.05 && athlete.rb.linear_velocity.y < 0:
-				athlete.rb.feeze = true
+				athlete.rb.freeze = true
 				athlete.rb.gravity_scale = 0
 				athlete.position.y = 0
 				athlete.moveTarget = athlete.position

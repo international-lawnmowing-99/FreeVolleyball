@@ -52,22 +52,22 @@ func SpikeBall(team:Team):
 			ball.difficultyOfReception = u/37.0*team.chosenSpiker.stats.spike*2
 			
 			ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false)
-			await team.get_tree().idle_frame
-			ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false)
+#			await team.get_tree().idle_frame
+#			ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false)
 			
 		else:
 			#yet again, somehow necessary
 			ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
-			await team.get_tree().idle_frame
-			ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+#			await team.get_tree().idle_frame
+#			ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 			ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 			#team.setTarget = null
 			#print(ball.attackTarget)
 	else:
 		#yet again, somehow necessary
 		ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
-		await team.get_tree().idle_frame
-		ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+#		await team.get_tree().idle_frame
+#		ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 		ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 		team.setTarget = null
 		
