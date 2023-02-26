@@ -30,8 +30,8 @@ func Enter(athlete:Athlete):
 			return
 
 	
-	var servePos = ball.translation
-	athlete.moveTarget = ball.BallPositionAtGivenHeight(0.9) + Vector3(0,-.9, rand_range(-.5,.51))
+	var servePos = ball.position
+	athlete.moveTarget = ball.BallPositionAtGivenHeight(0.9) + Vector3(0,-.9, randf_range(-.5,.51))
 	athlete.moveTarget += (athlete.moveTarget - Vector3(servePos.x, 0, servePos.z)).normalized()/2
 	#look_at(Vector3(servePos.x,0, servePos.z), Vector3.UP)
 	
@@ -90,19 +90,19 @@ func Enter(athlete:Athlete):
 	intersectionPointZ = m*intersectionPointX + b
 	
 	
-	#athlete.digAngle = rad2deg(ball.SignedAngle(athlete.transform.basis.z , -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
+	#athlete.digAngle = rad_to_deg(ball.SignedAngle(athlete.transform.basis.z , -athlete.position + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
 	#print("digAngle = " + str(athlete.digAngle))
 	#other team is rotated -90, we're 90
-	#var angle = atan2(athlete.translation.z - intersectionPointZ, athlete.translation.x - intersectionPointX) 
+	#var angle = atan2(athlete.position.z - intersectionPointZ, athlete.position.x - intersectionPointX) 
 	
-	#print(str(rad2deg(athlete.transform.basis.z[0])))
+	#print(str(rad_to_deg(athlete.transform.basis.z[0])))
 
-	#athlete.anglewanted = -athlete.translation + Vector3(intersectionPointX,0,intersectionPointZ)
+	#athlete.anglewanted = -athlete.position + Vector3(intersectionPointX,0,intersectionPointZ)
 
 
 func Update(athlete:Athlete):
 	athlete.get_node("Debug").global_transform.origin = Vector3(intersectionPointX, .5, intersectionPointZ)
-	athlete.timeTillBallReachesMe = Vector3(ball.translation.x, 0, ball.translation.z).distance_to(Vector3(athlete.translation.x, 0, athlete.translation.z))\
+	athlete.timeTillBallReachesMe = Vector3(ball.position.x, 0, ball.position.z).distance_to(Vector3(athlete.position.x, 0, athlete.position.z))\
 				/max(Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length(), 0.001)
 				
 
@@ -117,8 +117,8 @@ func Update(athlete:Athlete):
 		#athlete.animTree.set("parameters/BlendSpace1D/blend_position", lerp(a, 0, 5*athlete.myDelta))
 		#athlete.digAngle = lerp(athlete.digAngle,0,3*athlete.myDelta)
 		#athlete.RotateDigPlatform(athlete.digAngle)
-	if !isBallAlreadyPassed && ball.inPlay && ball.translation.y < 1 && \
-		(Vector3(ball.translation.x,0, ball.translation.z)).distance_to(athlete.translation) < 1:
+	if !isBallAlreadyPassed && ball.inPlay && ball.position.y < 1 && \
+		(Vector3(ball.position.x,0, ball.position.z)).distance_to(athlete.position) < 1:
 			PassBall(athlete)
 			
 func Exit(athlete:Athlete):
@@ -133,11 +133,11 @@ func PassBall(athlete:Athlete):
 	var receptionTarget
 	var ballMaxHeight
 	#perfect pass, 2-pass, 1-pass, shank, some sort of unSafety ball that hits the floor near your feet
-	var passRoll = rand_range(0, athlete.stats.reception)
+	var passRoll = randf_range(0, athlete.stats.reception)
 	Console.AddNewLine("PASSING || PASS ROLL: " + str(int(passRoll)) + " Difficulty: " + str(int(ball.difficultyOfReception)))
 	var rollOffDifference = passRoll - ball.difficultyOfReception
-	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.aqua)
-	Console.AddNewLine( str(int(rollOffDifference)) + " roll off differece ", Color.red)
+	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.AQUA)
+	Console.AddNewLine( str(int(rollOffDifference)) + " roll unchecked differece ", Color.RED)
 
 	
 	if rollOffDifference >= -999:
@@ -154,7 +154,7 @@ func PassBall(athlete:Athlete):
 		# even in the unrealistic setup (setter vertical jump >3 metres) we've got now
 		
 		var setterJumpSetTime = athlete.team.setter.setState.TimeToJumpSet(athlete.team.setter, receptionTarget) + 1.0
-		var heightDifferenceToReceptionTarget = receptionTarget.y - ball.translation.y
+		var heightDifferenceToReceptionTarget = receptionTarget.y - ball.position.y
 		var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 		
 #		initialYVel = (s - 1/2 a t^2)/t
@@ -166,17 +166,17 @@ func PassBall(athlete:Athlete):
 		var timeForBallPeak = initialYVel/gravity
 		ballMaxHeight = initialYVel * initialYVel /(2 * gravity)
 
-#		ballMaxHeight = rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
+#		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		
 		Console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")
 
 	elif rollOffDifference >= -10:
-		receptionTarget = Vector3(athlete.team.flip * rand_range(0.5, 1.5), 2.5, rand_range(-2, 2))
-		ballMaxHeight = rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
+		receptionTarget = Vector3(athlete.team.flip * randf_range(0.5, 1.5), 2.5, randf_range(-2, 2))
+		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		Console.AddNewLine(athlete.stats.lastName + " 2-point pass")
 		pass
 	elif rollOffDifference >= -50:
-		receptionTarget = Vector3(athlete.translation.x + rand_range(-3,3), 2.4, athlete.translation.z + rand_range(-3,3))
+		receptionTarget = Vector3(athlete.position.x + randf_range(-3,3), 2.4, athlete.position.z + randf_range(-3,3))
 		
 		#prevent the setter chasing overpasses... by removing them! (for now)
 		if athlete.team.isHuman:
@@ -185,7 +185,7 @@ func PassBall(athlete:Athlete):
 			receptionTarget.x = min(receptionTarget.x, -0.1)
 		######################################################################
 		
-		ballMaxHeight = rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
+		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		Console.AddNewLine(athlete.stats.lastName + " 1-point pass")
 		pass	
 	else:
@@ -197,14 +197,14 @@ func PassBall(athlete:Athlete):
 		else:
 			receptionTarget = ball.BallPositionAtGivenHeight(0)
 		
-		ballMaxHeight = rand_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
+		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		Console.AddNewLine(athlete.stats.lastName + " - Shit pass mate")
 		pass	
 
 
 
 	ball.gravity_scale = 1
-	ball.angular_velocity += Vector3 ( rand_range(-5,5),rand_range(-5,5), rand_range(-5,5))
+	ball.angular_velocity += Vector3 ( randf_range(-5,5),randf_range(-5,5), randf_range(-5,5))
 	
 	if athlete.team.isHuman:
 		ball.TouchedByA()
@@ -218,16 +218,13 @@ func PassBall(athlete:Athlete):
 	
 	#Bizzare physics hack needed
 	ball.linear_velocity = ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
-	yield(athlete.get_tree(),"idle_frame")
-	if ball.linear_velocity.length_squared()<0.1:
-		var x
-	ball.linear_velocity = ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
+#	await athlete.get_tree().idle_frame
 	var receptionTime = athlete.team.ball.SetTime(ball.transform.origin, receptionTarget, ballMaxHeight)
 	Console.AddNewLine("Time till ball at reception target: " + str(receptionTime))
 
 	athlete.get_tree().get_root().get_node("MatchScene").BallReceived(athlete.team.isHuman)
 
-	yield(athlete.get_tree().create_timer(.5), "timeout")
+	await athlete.get_tree().create_timer(.5).timeout
 	athlete.RotateDigPlatform(0)
 	if athlete.role == Enums.Role.Setter:
 		athlete.stateMachine.SetCurrentState(athlete.defendState)

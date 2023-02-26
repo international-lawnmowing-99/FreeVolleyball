@@ -1,6 +1,6 @@
 extends Label
 
-export var fadeSpeed:float = .13
+@export var fadeSpeed:float = .13
 
 func _ready():
 	self_modulate.a = 1

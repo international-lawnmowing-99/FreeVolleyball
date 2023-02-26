@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 class_name Athlete
 
 var g = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -8,29 +8,29 @@ var stats:Stats = Stats.new()
 var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(self)
 
 
-onready var animTree = $"new new woman import/AnimationTree"
-onready var rb:RigidBody = $"."
-onready var leftIK:SkeletonIK = $"new new woman import/godette volleyball/Skeleton/LeftHandSkeletonIK"
-onready var rightIK:SkeletonIK = $"new new woman import/godette volleyball/Skeleton/RightHandSkeletonIK"
-onready var leftIKTarget:Position3D = $"new new woman import/LeftHandTarget"
-onready var rightIKTarget:Position3D = $"new new woman import/RightHandTarget"
+@onready var animTree = $"new new woman import/AnimationTree"
+@onready var rb:RigidBody3D = $"."
+@onready var leftIK:SkeletonIK3D = $"new new woman import/godette volleyball/Skeleton3D/LeftHandSkeletonIK"
+@onready var rightIK:SkeletonIK3D = $"new new woman import/godette volleyball/Skeleton3D/RightHandSkeletonIK"
+@onready var leftIKTarget:Marker3D = $"new new woman import/LeftHandTarget"
+@onready var rightIKTarget:Marker3D = $"new new woman import/RightHandTarget"
 
 var team
 var myDelta
 var serveState
-onready var defendState = load("res://Scripts/State/Athlete/AthleteDefendState.gd").new()
-onready var passState = load("res://Scripts/State/Athlete/AthletePassState.gd").new()
-onready var transitionState = load("res://Scripts/State/Athlete/AthleteTransitionState.gd").new()
-onready var setState = load("res://Scripts/State/Athlete/AthleteSetState.gd").new()
-onready var spikeState = load("res://Scripts/State/Athlete/AthleteSpikeState.gd").new()
-onready var blockState = load("res://Scripts/State/Athlete/AthleteBlockState.gd").new()
-onready var chillState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
-onready var coverState = load("res://Scripts/State/Athlete/AthleteCoverState.gd").new()
+@onready var defendState = load("res://Scripts/State/Athlete/AthleteDefendState.gd").new()
+@onready var passState = load("res://Scripts/State/Athlete/AthletePassState.gd").new()
+@onready var transitionState = load("res://Scripts/State/Athlete/AthleteTransitionState.gd").new()
+@onready var setState = load("res://Scripts/State/Athlete/AthleteSetState.gd").new()
+@onready var spikeState = load("res://Scripts/State/Athlete/AthleteSpikeState.gd").new()
+@onready var blockState = load("res://Scripts/State/Athlete/AthleteBlockState.gd").new()
+@onready var chillState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
+@onready var coverState = load("res://Scripts/State/Athlete/AthleteCoverState.gd").new()
 
 const MoveDistanceDelta:float = 0.1
 
 var ball:Ball
-onready var skel:Skeleton = $"new new woman import/godette volleyball/Skeleton"
+@onready var skel:Skeleton3D = $"new new woman import/godette volleyball/Skeleton3D"
 
 var spineBone01Id
 var spineBone02Id
@@ -90,20 +90,20 @@ Set.new(.4, stats.spikeHeight, 4.2, 13.8)]
 	oppositeBackSpikes = [ Set.new(3.1-stats.verticalJump/2, stats.spikeHeight, -4.2, max(3, stats.spikeHeight + 1)),
 Set.new(3.1-stats.verticalJump/2, stats.spikeHeight, 1, max(3, stats.spikeHeight + 1))]
 
-	for set in middleSpikes:
-		set.CheckFlipped(team)
+	for _set in middleSpikes:
+		_set.CheckFlipped(team)
 		
-	for set in outsideBackSpikes:
-		set.CheckFlipped(team)
+	for _set in outsideBackSpikes:
+		_set.CheckFlipped(team)
 		
-	for set in outsideFrontSpikes:
-		set.CheckFlipped(team)
+	for _set in outsideFrontSpikes:
+		_set.CheckFlipped(team)
 		
-	for set in oppositeBackSpikes:
-		set.CheckFlipped(team)
+	for _set in oppositeBackSpikes:
+		_set.CheckFlipped(team)
 		
-	for set in oppositeFrontSpikes:
-		set.CheckFlipped(team)
+	for _set in oppositeFrontSpikes:
+		_set.CheckFlipped(team)
 		
 func _ready():
 	#DebugOverlay.draw.add_vector(self, "basisz", 1, 4, Color(0,1,0, 0.5))
@@ -114,10 +114,11 @@ func _ready():
 	neckBone01Id = skel.find_bone("neck01")
 	neckBone02Id = skel.find_bone("neck02")
 	
-	customPose01 = skel.get_bone_custom_pose(spineBone01Id)
-	customPose02 = skel.get_bone_custom_pose(spineBone02Id)
-	customPoseNeck01 = skel.get_bone_custom_pose((neckBone01Id))
-	customPoseNeck02 = skel.get_bone_custom_pose((neckBone02Id))
+	
+	customPose01 = skel.get_bone_pose(spineBone01Id)
+	customPose02 = skel.get_bone_pose(spineBone02Id)
+	customPoseNeck01 = skel.get_bone_pose((neckBone01Id))
+	customPoseNeck02 = skel.get_bone_pose((neckBone02Id))
 	
 
 func _process(_delta):
@@ -133,11 +134,11 @@ func _process(_delta):
 #		print(stateMachine.currentState.nameOfState)
 	
 func DontFallThroughFloor():
-	if rb.mode != RigidBody.MODE_KINEMATIC && translation.y < 0.05 && rb.linear_velocity.y < 0:
-		rb.mode = RigidBody.MODE_KINEMATIC
+	if !rb.freeze && position.y < 0.05 && rb.linear_velocity.y < 0:
+		rb.freeze = true
 		rb.gravity_scale = 0
 		rb.linear_velocity = Vector3.ZERO
-		translation.y = 0
+		position.y = 0
 		#athlete.rotation = Vector3.ZERO
 		rb.angular_velocity = Vector3.ZERO
 
@@ -145,48 +146,48 @@ func Move(delta):
 	# For the future - measure the length, use it to determine if you should strafe or turn
 	
 	
-	var distanceToTarget = translation.distance_to(moveTarget)
+	var distanceToTarget = position.distance_to(moveTarget)
 	var stoppingDistance = (speed * speed) / (2*acceleration)
 	
 	if stoppingDistance >= distanceToTarget && speed > acceleration * delta:
 		speed -= acceleration * delta
-		#rotation.y = lerp_angle(rotation.y, atan2(servePos.x - translation.x,servePos.z - translation.z), delta * rotationSpeed)
+		#rotation.y = lerp_angle(rotation.y, atan2(servePos.x - position.x,servePos.z - position.z), delta * rotationSpeed)
 		
 	
 	elif(speed < MAXSPEED):
 		#print ("accelerating " + "%10.2f" % speed + " | " + "%10.2f" %distanceToTarget +" | " + "%4.2f" %stoppingDistance)
 		speed += acceleration * delta
-		#rotation.y = lerp_angle(rotation.y, atan2(moveTarget.x - translation.x,moveTarget.z - translation.z), delta * rotationSpeed)
+		#rotation.y = lerp_angle(rotation.y, atan2(moveTarget.x - position.x,moveTarget.z - position.z), delta * rotationSpeed)
 	
 	#rotation_degrees += rotationSpeed * delta
 	
 	
-	var moveVector = (moveTarget - translation).normalized()
-	translation += moveVector * speed * delta
+	var moveVector = (moveTarget - position).normalized()
+	position += moveVector * speed * delta
 	
 
 	
-	#rotate_y(deg2rad(rotationSpeed))
+	#rotate_y(deg_to_rad(rotationSpeed))
 	pass
 	
 func RotateDigPlatform(angle):
 	
-	var acustomPose01 = customPose01.rotated(Vector3.UP, deg2rad(angle/2))
-	var acustomPose02 = customPose02.rotated(Vector3.UP, deg2rad(angle/2))
-	var acustomPoseNeck01 = customPoseNeck01.rotated(Vector3.UP, deg2rad(-angle/2))
-	var acustomPoseNeck02 = customPoseNeck02.rotated(Vector3.UP, deg2rad(-angle/2))
+	var acustomPose01 = customPose01.rotated(Vector3.UP, deg_to_rad(angle/2))
+	var acustomPose02 = customPose02.rotated(Vector3.UP, deg_to_rad(angle/2))
+	var acustomPoseNeck01 = customPoseNeck01.rotated(Vector3.UP, deg_to_rad(-angle/2))
+	var acustomPoseNeck02 = customPoseNeck02.rotated(Vector3.UP, deg_to_rad(-angle/2))
 	
-	skel.set_bone_custom_pose(spineBone01Id, acustomPose01)
-	skel.set_bone_custom_pose(spineBone02Id, acustomPose02)
-	skel.set_bone_custom_pose(neckBone01Id, acustomPoseNeck01)
-	skel.set_bone_custom_pose(neckBone02Id, acustomPoseNeck02)
+	skel.set_bone_global_pose_override(spineBone01Id, acustomPose01,1.0)
+	skel.set_bone_global_pose_override(spineBone02Id, acustomPose02,1.0)
+	skel.set_bone_global_pose_override(neckBone01Id, acustomPoseNeck01,1.0)
+	skel.set_bone_global_pose_override(neckBone02Id, acustomPoseNeck02,1.0)
 
 static func SortSet(a,b):
 	if a.stats.SetterEvaluation() > b.stats.SetterEvaluation():
 		return true
 	return false
 
-static func SortLib(a,b):
+static func SortLibero(a,b):
 	if a.stats.LiberoEvaluation() > b.stats.LiberoEvaluation():
 		return true
 	return false
@@ -226,13 +227,13 @@ func FrontCourt()->bool:
 
 func CalculateTimeTillJumpPeak(takeOffXZ):
 	var timeTillJumpPeak
-	if rb.mode == RigidBody.MODE_KINEMATIC:
+	if rb.freeze:
 		
 		var runupTime
 		var jumpTime
 		var runupDist
 
-		runupDist = Vector3(translation.x, 0, translation.z).distance_to(takeOffXZ)
+		runupDist = Vector3(position.x, 0, position.z).distance_to(takeOffXZ)
 		runupTime = runupDist / stats.speed
 
 		var jumpYVel = sqrt(2 * g * stats.verticalJump)
@@ -248,12 +249,12 @@ func CalculateTimeTillJumpPeak(takeOffXZ):
 	return timeTillJumpPeak
 
 func BaseMove(_delta):
-	if rb.mode == RigidBody.MODE_KINEMATIC && translation.distance_to(moveTarget) > MoveDistanceDelta:
-		var dir = (moveTarget - translation).normalized()
-		translation += dir * stats.speed * _delta
+	if rb.freeze && position.distance_to(moveTarget) > MoveDistanceDelta:
+		var dir = (moveTarget - position).normalized()
+		position += dir * stats.speed * _delta
 		animTree.set("parameters/MoveTree/blend_position", Vector2(dir.x, dir.z))
-		#if abs(translation.x - moveTarget.x) > .3 && abs(translation.z - moveTarget.z) > .3:
-			#look_at_from_position(translation, moveTarget, Vector3.UP)
+		#if abs(position.x - moveTarget.x) > .3 && abs(position.z - moveTarget.z) > .3:
+			#look_at_from_position(position, moveTarget, Vector3.UP)
 			#rotate_y(PI)
 			
 func ReEvaluateState():
@@ -262,7 +263,7 @@ func ReEvaluateState():
 			stateMachine.SetCurrentState(transitionState)
 		team.setState:
 			if team.chosenSetter == self:
-				if rb.mode == RigidBody.MODE_KINEMATIC:
+				if rb.freeze:
 					stateMachine.SetCurrentState(setState)
 			else:
 				stateMachine.SetCurrentState(transitionState)

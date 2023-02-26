@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 
 class_name MatchManager
 
@@ -6,22 +6,22 @@ var gameWorld = load("res://Scripts/World/GameWorld.gd").new()
 var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 
 
-onready var teamA:Team = $TeamA
-onready var teamB:Team = $TeamB
+@onready var teamA:Team = $TeamA
+@onready var teamB:Team = $TeamB
 
-onready var ball = $ball
+@onready var ball = $ball
 
-onready var score = $ScoreCanvasLayer/Score
-onready var preMatchUI = $PreMatchUI
-onready var teamInfoUI = $TeamInfoUI
-onready var TESTteamRepresentation = $TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
+@onready var score = $ScoreCanvasLayer/Score
+@onready var preMatchUI = $PreMatchUI
+@onready var teamInfoUI = $TeamInfoUI
+@onready var TESTteamRepresentation = $TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
 
 var isTeamAServing:bool
 
 func _ready():
-	var now = OS.get_ticks_msec()
+	var now = Time.get_ticks_msec()
 	gameWorld.GenerateDefaultWorld(false)
-	var later = OS.get_ticks_msec()
+	var later = Time.get_ticks_msec()
 	print(str(later - now) + "ms generate world")
 	newMatch.ChooseRandom(gameWorld)
 	
@@ -63,7 +63,7 @@ func _ready():
 	preMatchUI.skipUI()
 	$TeamInfoUI.InitialiseOnCourtPlayerUI()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 #	if ball.blockWillBeAttempted:
 #		if teamA.isNextToSpike:
 #			pass
@@ -128,7 +128,7 @@ func PointToTeamA():
 	#teamA celebrate, watch the ball bounce
 	teamA.Chill()
 	teamB.Chill()
-	yield(get_tree().create_timer(1), "timeout")
+	await get_tree().create_timer(1).timeout
 	
 	teamA.stateMachine.SetCurrentState(teamA.preserviceState)
 	teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
@@ -142,8 +142,9 @@ func PointToTeamB():
 	isTeamAServing = false
 	
 	#teamB celebrate, watch the ball bounce
+	teamA.Chill()
 	teamB.Chill()
-	yield(get_tree().create_timer(1), "timeout")
+	await get_tree().create_timer(1).timeout
 	
 	teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
 	teamB.stateMachine.SetCurrentState(teamB.preserviceState)
@@ -179,14 +180,14 @@ func RotateAroundOrigin(node3D, angle):
 	# to the starting position of the object being rotated.
 	# this is where the object is relative to the pivot before
 	# rotation has been applied.
-	var pivot_radius = node3D.translation - pivot_point
+	var pivot_radius = node3D.position - pivot_point
 	# create a transform centred at the pivot
-	var pivot_transform = Transform(transform.basis, pivot_point)
+	var pivot_transform = Transform3D(transform.basis, pivot_point)
 	# first we rotate our transform.
 	# Because the axes are rotated, 
 	# translations will happen along those rotated axes.
 	# so we can translate it using pivot_radius.
-	# the translation moves the object away from the
+	# the position moves the object away from the
 	# centre of the pivot_transform. 
 	node3D.transform = pivot_transform.rotated(Vector3.UP, node3D.transform.basis.get_euler().y + angle).translated(pivot_radius)
 	print(str(node3D.transform.basis.get_euler()) + "  rotating around origin")

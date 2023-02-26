@@ -2,12 +2,12 @@ extends TextureRect
 
 var mManager:MatchManager
 
-onready var teamANameText = $ScoreTeamAText
-onready var teamBNameText = $ScoreTeamBText
-onready var teamAScoreText = $ScoreTeamAPointScore
-onready var teamBScoreText = $ScoreTeamBPointScore
-onready var teamASetsText = $ScoreTeamASetScore
-onready var teamBSetsText = $ScoreTeamBSetScore
+@onready var teamANameText = $ScoreTeamAText
+@onready var teamBNameText = $ScoreTeamBText
+@onready var teamAScoreText = $ScoreTeamAPointScore
+@onready var teamBScoreText = $ScoreTeamBPointScore
+@onready var teamASetsText = $ScoreTeamASetScore
+@onready var teamBSetsText = $ScoreTeamBSetScore
 
 var teamAScore:int = 0
 var teamBScore:int = 0

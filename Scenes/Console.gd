@@ -5,15 +5,15 @@ var consoleLine = preload("res://MatchScene/ConsoleLine.tscn")
 
 #func _input(_event):
 
-func AddNewLine(text:String, colour:Color = Color.white):
+func AddNewLine(text:String, colour:Color = Color.WHITE):
 	print(text)
-	var lineOfSuspiciousPowder = consoleLine.instance()
-	lineOfSuspiciousPowder.rect_position = Vector2(50,841)
+	var lineOfSuspiciousPowder = consoleLine.instantiate()
+	lineOfSuspiciousPowder.position = Vector2(50,841)
 	lineOfSuspiciousPowder.text = text
 	lineOfSuspiciousPowder.modulate = colour
 	
 	for line in get_children():
-		line.rect_position = Vector2(line.rect_position.x, line.rect_position.y - 20)
+		line.position = Vector2(line.position.x, line.position.y - 20)
 	add_child(lineOfSuspiciousPowder)
 
 func Clear():

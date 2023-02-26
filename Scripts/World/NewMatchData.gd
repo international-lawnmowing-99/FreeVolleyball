@@ -42,19 +42,19 @@ func ChooseRandom(gameWorld:GameWorld):
 	var teamB:Team = gameWorld.GetTeam(bChoiceState, clubOrInternational)
 
 	if teamA.allPlayers.size() != 12:
-		var now = OS.get_ticks_msec()
+		var now = Time.get_ticks_msec()
 		for team in teamA.nation.league:
 			team.Populate(gameWorld.firstNames, gameWorld.lastNames, r)
 			teamA.nation.nationalTeam.players += team.allPlayers
 		for team in teamB.nation.league:
 			team.Populate(gameWorld.firstNames, gameWorld.lastNames, r)
 			teamB.nation.nationalTeam.players += team.allPlayers
-		var later = OS.get_ticks_msec()
+		var later = Time.get_ticks_msec()
 		print(str((later-now)) + " make teams")
 		
 	if clubOrInternational == Enums.ClubOrInternational.International:
-		var now = OS.get_ticks_msec()
+		var now = Time.get_ticks_msec()
 		teamA.SelectNationalTeam()
 		teamB.SelectNationalTeam()
-		var later = OS.get_ticks_msec()
+		var later = Time.get_ticks_msec()
 		print(str((later-now)) + " select national team")

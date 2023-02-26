@@ -8,8 +8,8 @@ func Enter(athlete:Athlete):
 	athlete.spikeState.runupStartPosition = athlete.moveTarget
 	pass
 func Update(athlete:Athlete):
-	if athlete.translation.distance_squared_to(athlete.moveTarget) < 0.1\
-	&& athlete.rb.mode != RigidBody.MODE_RIGID:
+	if athlete.position.distance_squared_to(athlete.moveTarget) < 0.1\
+	&& athlete.rb.freeze:
 		if athlete == athlete.team.libero || athlete == athlete.team.middleBack:
 			pass
 		else:
@@ -18,8 +18,8 @@ func Update(athlete:Athlete):
 			else:
 				athlete.stateMachine.SetCurrentState(athlete.spikeState)
 	pass
-func Exit(athlete:Athlete):
+func Exit(_athlete:Athlete):
 	pass
 
-func CanFullyTransition(athlete) -> bool:
+func CanFullyTransition(_athlete) -> bool:
 	return true

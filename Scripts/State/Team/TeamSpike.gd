@@ -2,7 +2,8 @@ extends "res://Scripts/State/Team/TeamState.gd"
 var rng = RandomNumberGenerator.new()
 var hit = false
 
-func Enter(team:Team):
+func Enter(_team:Team):
+	nameOfState = "Spike"
 	rng.randomize()
 	hit = false
 	pass
@@ -10,16 +11,16 @@ func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
 	if !hit:
 		if team.ball.linear_velocity.z > 0:
-			if (team.ball.translation.z > team.chosenSpiker.setRequest.target.z && \
+			if (team.ball.position.z > team.chosenSpiker.setRequest.target.z && \
 			team.ball.linear_velocity.y <= 0 && \
-			(team.ball.translation - team.chosenSpiker.setRequest.target).length() < 0.5):
+			(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5):
 				SpikeBall(team)
-		elif (team.ball.translation.z < team.chosenSpiker.setRequest.target.z &&\
-			 team.ball.linear_velocity.y <= 0 && \
-			(team.ball.translation - team.chosenSpiker.setRequest.target).length() < 0.5):
+		elif (team.ball.position.z < team.chosenSpiker.setRequest.target.z &&\
+				team.ball.linear_velocity.y <= 0 && \
+			(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5):
 				SpikeBall(team)
 
-func Exit(team:Team):
+func Exit(_team:Team):
 	pass
 
 func SpikeBall(team:Team):
@@ -33,15 +34,15 @@ func SpikeBall(team:Team):
 		#net is higher than said net, it can be hit, otherwise roll
 		var netPass:Vector3
 
-		var distanceFactor:float = ball.translation.x / (abs(ball.translation.x) + abs(ball.attackTarget.x))
-		if ball.translation.x < 0:
+		var distanceFactor:float = ball.position.x / (abs(ball.position.x) + abs(ball.attackTarget.x))
+		if ball.position.x < 0:
 			distanceFactor *= -1;
 
-		netPass = ball.translation + (ball.attackTarget - ball.translation) * distanceFactor
+		netPass = ball.position + (ball.attackTarget - ball.position) * distanceFactor
 		
 		if netPass.y > 2.43:
-			#var xzDistToTarget:float = (Vector3(ball.translation.x, 0, ball.translation.z) - Vector3(ball.attackTarget.x, 0, ball.attackTarget.z)).length()
-			#var y = ball.translation.y
+			#var xzDistToTarget:float = (Vector3(ball.position.x, 0, ball.position.z) - Vector3(ball.attackTarget.x, 0, ball.attackTarget.z)).length()
+			#var y = ball.position.y
 			#var g = team.chosenSpiker.g
 			
 			#initial velocity of spike in mps
@@ -50,23 +51,23 @@ func SpikeBall(team:Team):
 			
 			ball.difficultyOfReception = u/37.0*team.chosenSpiker.stats.spike*2
 			
-			ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.translation, ball.attackTarget, u, false)
-			yield(team.get_tree(),"idle_frame")
-			ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.translation, ball.attackTarget, u, false)
+			ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false)
+			await team.get_tree().idle_frame
+			ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false)
 			
 		else:
 			#yet again, somehow necessary
-			ball.linear_velocity = ball.FindWellBehavedParabola(ball.translation, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
-			yield(team.get_tree(),"idle_frame")
-			ball.linear_velocity = ball.FindWellBehavedParabola(ball.translation, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+			ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+			await team.get_tree().idle_frame
+			ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 			ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 			#team.setTarget = null
 			#print(ball.attackTarget)
 	else:
 		#yet again, somehow necessary
-		ball.linear_velocity = ball.FindWellBehavedParabola(ball.translation, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
-		yield(team.get_tree(),"idle_frame")
-		ball.linear_velocity = ball.FindWellBehavedParabola(ball.translation, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+		ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+		await team.get_tree().idle_frame
+		ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 		ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 		team.setTarget = null
 		
@@ -74,7 +75,7 @@ func SpikeBall(team:Team):
 	team.get_tree().get_root().get_node("MatchScene").BallSpiked(team.isHuman)
 	hit = true
 	# 9 court target segments
-	# standard aggressive spike, tool off block, tip, 
+	# standard aggressive spike, tool unchecked block, tip, 
 	
 	Console.AddNewLine(team.chosenSpiker.stats.lastName + " cranks the ball at " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 	

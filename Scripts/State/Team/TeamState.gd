@@ -1,12 +1,15 @@
 extends "res://Scripts/State/State.gd"
-const Enums = preload("res://Scripts/World/Enums.gd")
-
 class_name TeamState
 
+var nameOfState = "Base State"
+const Enums = preload("res://Scripts/World/Enums.gd")
 
-func Enter(team:Team):
+
+
+
+func Enter(_team:Team):
 	pass
-func Update(team:Team):
+func Update(_team:Team):
 	pass
-func Exit(team:Team):
+func Exit(_team:Team):
 	pass

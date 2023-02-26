@@ -1,9 +1,10 @@
-extends "res://Scripts/State/Team/TeamState.gd"
+extends "res://Scripts/State/Team/TeamState.gd" 
 
 func Enter(team:Team):
+	nameOfState = "Pre Receive"
 	#ChooseReceiver
 	for athlete in team.courtPlayers:
-		athlete.translation = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
+		athlete.position = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
 		athlete.moveTarget = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
 		athlete.stateMachine.SetCurrentState(athlete.chillState)
 		athlete.rotation.y = -team.flip*PI/2
@@ -21,9 +22,9 @@ func Enter(team:Team):
 		team.mManager.TESTteamRepresentation.AssignCourtPlayers(team)
 		team.mManager.TESTteamRepresentation.UpdateRepresentation()
 	
-func Update(team:Team):
+func Update(_team:Team):
 	#Is the ball close enough
 	pass
-func Exit(team:Team):
+func Exit(_team:Team):
 	#Discard receiver info?
 	pass

@@ -1,4 +1,4 @@
-extends RigidBody
+extends RigidBody3D
 
 class_name Ball
 
@@ -14,7 +14,7 @@ var blockResolver = load("res://Scripts/MatchScene/BlockResolver.gd").new(self)
 
 var floating:bool = false
 var floatDisplacement:Vector3 = Vector3.ZERO
-onready var mesh = $CollisionShape/ballv2
+@onready var mesh = $CollisionShape3D/ballv2
 
 const MAX_SERVE_SPEED = 140
 var difficultyOfReception:float = 0
@@ -22,14 +22,14 @@ var difficultyOfReception:float = 0
 
 func _process(_delta):
 	if floating:
-		if mesh.translation.distance_to(floatDisplacement) < 0.1:
-			floatDisplacement = Vector3(0, rand_range(-.3,.3), rand_range(-.3,.3))
+		if mesh.position.distance_to(floatDisplacement) < 0.1:
+			floatDisplacement = Vector3(0, randf_range(-.3,.3), randf_range(-.3,.3))
 			#ball will be passed at 0.5 metres high for now...
-		floatDisplacement = lerp(floatDisplacement, Vector3.ZERO, _delta /min(.1,abs(translation.y - 0.5)))
-	mesh.translation = lerp(mesh.translation, floatDisplacement, _delta * 4.5)
+		floatDisplacement = lerp(floatDisplacement, Vector3.ZERO, _delta /min(.1,abs(position.y - 0.5)))
+	mesh.position = lerp(mesh.position, floatDisplacement, _delta * 4.5)
 		
 #	if is_inside_tree() && _parented && _pseudoParent:
-#		translation = _pseudoParent.global_transform.origin
+#		position = _pseudoParent.global_transform.origin
 	#lads = Vector3(-0.5,2.5,0) - transform.origin
 	pass
 	
@@ -68,7 +68,7 @@ func _on_ball_body_entered(body):
 			floatDisplacement = Vector3.ZERO
 			inPlay = false
 			mManager.PointToTeamB()
-			Console.AddNewLine("Ball in, point to b", Color.bisque)
+			Console.AddNewLine("Ball in, point to b", Color.BISQUE)
 func PretendToBeParented(node):
 	_parented = true
 	_pseudoParent = node
@@ -78,7 +78,7 @@ func PretendToBeParented(node):
 func BallPositionAtGivenHeight(height:float):
 
 	var timeOfFlight = TimeTillBallReachesHeight(height)
-	var xzPos = Vector2(translation.x, translation.z)
+	var xzPos = Vector2(position.x, position.z)
 	var xzVel = Vector2(linear_velocity.x, linear_velocity.z)
 	var newXZPos = xzPos + xzVel * timeOfFlight
 
@@ -87,7 +87,7 @@ func BallPositionAtGivenHeight(height:float):
 func TimeTillBallReachesHeight(height:float):
 	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
 
-	var finalV = sqrt(linear_velocity.y * linear_velocity.y + 2 * g * (translation.y - height))
+	var finalV = sqrt(linear_velocity.y * linear_velocity.y + 2 * g * (position.y - height))
 	var remainingTime = (finalV + linear_velocity.y) / g
 
 	return remainingTime
@@ -111,7 +111,7 @@ func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float)
 #	print("\"Well-behaved\" parabola: " + str( Vector3(xzVel * cos(-xzTheta), yVel, xzVel * sin(-xzTheta))))
 	return Vector3(xzVel * cos(-xzTheta), yVel, xzVel * sin(-xzTheta))
 
-func FindDownwardsParabola(startPos:Vector3, endPos:Vector3, velocityInMPS):
+func FindDownwardsParabola(startPos:Vector3, endPos:Vector3, _velocityInMPS):
 	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	var maxSetVelocity = 10
 	
@@ -177,7 +177,7 @@ func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNe
 	var xzDistToNet = Vector3(target.x, 0, target.z).distance_to(Vector3(netPass.x, 0, netPass.z))
 
 
-#angle the ball wil be received on. I now have no idea how this formula was derived
+#angle the ball wil be received checked. I now have no idea how this formula was derived
 	var theta = atan((netPass.y * xzDistToTarget * xzDistToTarget - startPos.y * xzDistToNet * xzDistToNet) / (xzDistToNet * xzDistToTarget * xzDistToTarget - xzDistToTarget * xzDistToNet * xzDistToNet))
 
 #final vel(in reverse)
@@ -245,7 +245,7 @@ func Serve(startPos, _attackTarget, serveHeight, topspin):
 		rotation = Vector3.ZERO
 		if (_attackTarget - startPos).x > 0:
 			topspin *= -1
-		angular_velocity = Vector3 ( rand_range(-.5,.5),rand_range(-.5,.5), topspin * 80)
+		angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), topspin * 80)
 		linear_velocity = Vector3.ZERO
 		
 		var impulse = CalculateBallOverNetVelocity(startPos, _attackTarget, serveHeight)
@@ -253,13 +253,13 @@ func Serve(startPos, _attackTarget, serveHeight, topspin):
 		# :( no fun!
 		if impulse.length() * 3.6 > MAX_SERVE_SPEED:
 			print(str(impulse.length() * 3.6))
-			impulse = FindParabolaForGivenSpeed(startPos, _attackTarget, (MAX_SERVE_SPEED - rand_range(0,10))/3.6, false)
+			impulse = FindParabolaForGivenSpeed(startPos, _attackTarget, (MAX_SERVE_SPEED - randf_range(0,10))/3.6, false)
 			linear_velocity = impulse
 			attackTarget = _attackTarget
 			print("SERVE TOO FAST, New net pass: " + str(FindNetPass()))
 			if FindNetPass().y< 2.5:
 				print("serve hits net")
-				Console.AddNewLine("Serve hits net!!!!!!!", Color.blueviolet)
+				Console.AddNewLine("Serve hits net!!!!!!!", Color.BLUE_VIOLET)
 			print(str(impulse.length() * 3.6))
 			
 		
@@ -277,12 +277,12 @@ func TouchedByA():
 
 func FindNetPass()->Vector3:
 	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
-	var distanceFactor = translation.x / (abs(translation.x) + abs(attackTarget.x))
-	if translation.x < 0:
+	var distanceFactor = position.x / (abs(position.x) + abs(attackTarget.x))
+	if position.x < 0:
 		distanceFactor *= -1
 
-	var netPass:Vector3 = translation + (attackTarget - translation) * distanceFactor
-	var timeTillNet = abs(translation.x/linear_velocity.x)
-	netPass.y = translation.y + linear_velocity.y * timeTillNet + .5 * - g * timeTillNet * timeTillNet
+	var netPass:Vector3 = position + (attackTarget - position) * distanceFactor
+	var timeTillNet = abs(position.x/linear_velocity.x)
+	netPass.y = position.y + linear_velocity.y * timeTillNet + .5 * - g * timeTillNet * timeTillNet
 	
 	return netPass

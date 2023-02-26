@@ -30,7 +30,7 @@ func _on_CareerButton_pressed() -> void:
 
 
 func _on_QuickMatchButton_pressed() -> void:
-	get_tree().change_scene("res://Scenes/matchScene.tscn")
+	get_tree().change_scene_to_file("res://Scenes/matchScene.tscn")
 	pass # Replace with function body.
 
 

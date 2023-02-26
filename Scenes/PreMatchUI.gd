@@ -1,11 +1,11 @@
 extends CanvasLayer
 
-onready var matchIntro = $ColourRectIntro
-onready var teamSelection = $TeamSelectionUI
-onready var teamLineups = $TeamLineUpsUI
-onready var toss = $Toss
-onready var wonToss = $Toss/WonToss
-onready var lostToss = $Toss/LostToss
+@onready var matchIntro = $ColourRectIntro
+@onready var teamSelection = $TeamSelectionUI
+@onready var teamLineups = $TeamLineUpsUI
+@onready var toss = $Toss
+@onready var wonToss = $Toss/WonToss
+@onready var lostToss = $Toss/LostToss
 
 func skipUI():
 	matchIntro.hide()
@@ -15,7 +15,7 @@ func _ready():
 	
 	teamSelection.hide()
 	teamLineups.hide()
-	$TeamSelectionUI/AcceptButton.connect("pressed", self, "TeamSelectionAcceptButton_pressed")
+	$TeamSelectionUI/AcceptButton.connect("pressed",Callable(self,"TeamSelectionAcceptButton_pressed"))
 	toss.hide()
 	wonToss.hide()
 	lostToss.hide()
@@ -122,7 +122,7 @@ func _on_ChooseReceive_pressed():
 func _on_ChooseCurrentSide_pressed():
 	toss.hide()
 	lostToss.hide()
-	Console.AddNewLine("Staying on same side")
+	Console.AddNewLine("Staying checked same side")
 	pass # Replace with function body.
 
 

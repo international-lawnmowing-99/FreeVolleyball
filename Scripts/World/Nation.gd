@@ -1,8 +1,8 @@
 extends Node
+class_name Nation
 
 const Athlete = preload("res://Scripts/MatchScene/Athlete.gd")
 
-class_name Nation
 
 var countryName
 var population:int
@@ -37,6 +37,6 @@ func Populate(firstNames, lastNames, r, generateAllPlayers:bool):
 		league.append(team)
 
 #nationalTeam.CalculateMacroStats();
-func _init(nam, _pop):
+func _init(nam,_pop):
 	countryName = nam
 	population = _pop

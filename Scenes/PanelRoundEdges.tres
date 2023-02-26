@@ -1,7 +1,7 @@
-[gd_resource type="Theme" load_steps=2 format=2]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bgukpjan5jpl6"]
 
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.0823529, 0.117647, 0.254902, 0.623529 )
+[sub_resource type="StyleBoxFlat" id="1"]
+bg_color = Color(0.0823529, 0.117647, 0.254902, 0.623529)
 corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
@@ -9,4 +9,4 @@ corner_radius_bottom_left = 50
 corner_detail = 20
 
 [resource]
-Panel/styles/panel = SubResource( 1 )
+Panel/styles/panel = SubResource("1")

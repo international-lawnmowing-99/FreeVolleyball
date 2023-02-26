@@ -20,19 +20,19 @@ func GenerateDefaultWorld(generateAllPlayers:bool):
 			continents.append(Continent.new(nationsText[i]))
 			
 		elif nationsText[i].length() > 0 && nationsText[i] != '/end':
-			var split = split(nationsText[i], [" ", '\t'])
+			var _split = split(nationsText[i], [" ", '\t'])
 			
-			if split[split.size() - 2] == "-----":
-				split[split.size() - 2] = split[split.size() - 1]
+			if _split[_split.size() - 2] == "-----":
+				_split[_split.size() - 2] = _split[_split.size() - 1]
 
 			var finalName = ""
 
-			for j in range(split.size()-3):
-				finalName += split[j] + " "
+			for j in range(_split.size()-3):
+				finalName += _split[j] + " "
 
 			var pop:int = 0
 			
-			pop =  int(split[split.size() - 3])
+			pop =  int(_split[_split.size() - 3])
 
 			continents[continents.size() - 1].nations.append(Nation.new(finalName, pop))
 
@@ -49,15 +49,9 @@ func GetTeam(choiceState, mode):
 		return continents[choiceState.continentIndex].nations[choiceState.nationIndices[choiceState.continentIndex]].nationalTeam
 
 func LoadText():
-	var f = File.new()
-	var g = File.new()
-	var n = File.new()
-	
-	f.open("res://Data/firstNames.txt", File.READ)
-	g.open("res://Data/lastNames.txt", File.READ)
-	n.open("res://Data/nationsAndPop.txt", File.READ)
-	
-	#var a = 0
+	var f = FileAccess.open("res://Data/firstNames.txt", FileAccess.READ)
+	var g = FileAccess.open("res://Data/lastNames.txt", FileAccess.READ)
+	var n = FileAccess.open("res://Data/nationsAndPop.txt", FileAccess.READ)
 	
 	while not f.eof_reached():
 		firstNames.append(f.get_line())

@@ -29,7 +29,7 @@ var blockHeight:float
 var nation
 #var role
 
-var dob = OS.get_datetime(true) 
+var dob = Time.get_datetime_dict_from_system(true) 
 var floatServe:float
 
 #public int age(System.DateTime timeNow)

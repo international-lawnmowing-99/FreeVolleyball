@@ -5,7 +5,7 @@ func Enter(athlete:Athlete):
 		
 	# just for starters, move half way towards the set target
 	if athlete.team.setTarget:
-		athlete.moveTarget = (athlete.team.setTarget.target + athlete.translation) /2
+		athlete.moveTarget = (athlete.team.setTarget.target + athlete.position) /2
 		athlete.moveTarget.y = 0
 	else:
 		pass
@@ -16,5 +16,5 @@ func Update(athlete:Athlete):
 		
 
 
-func Exit(athlete:Athlete):
+func Exit(_athlete:Athlete):
 	pass

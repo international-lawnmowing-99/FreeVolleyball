@@ -20,7 +20,7 @@ func Enter(_athlete:Athlete):
 		print(athlete.stats.lastName + ": " + Enums.Role.keys()[athlete.role])
 		athlete.setRequest = athlete.middleSpikes[0]
 	takeOffXZ = Vector3(athlete.setRequest.target.x\
-	 - athlete.team.flip * athlete.stats.verticalJump / 2, \
+		- athlete.team.flip * athlete.stats.verticalJump / 2,\
 	0, athlete.setRequest.target.z)
 #	athlete.CalculateTimeTillJumpPeak(takeOffXZ)
 	spikeState = SpikeState.ChoiceConfirmed
@@ -51,14 +51,14 @@ func Update(_athlete:Athlete):
 #				print("Setting downwards because you're such a unit")
 #				print("Errors inbound(?)")
 				if athlete.team.stateMachine.currentState == athlete.team.spikeState:
-					var distanceFactor:float = 1 - Vector3(athlete.ball.translation.x, 0, athlete.ball.translation.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
+					var distanceFactor:float = 1 - Vector3(athlete.ball.position.x, 0, athlete.ball.position.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
 					setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)
 				else:
 					setTime = yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
 			else:
 				# Standard set
 				if athlete.team.stateMachine.currentState == athlete.team.spikeState:
-					var distanceFactor:float = 1 - Vector3(athlete.ball.translation.x, 0, athlete.ball.translation.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
+					var distanceFactor:float = 1 - Vector3(athlete.ball.position.x, 0, athlete.ball.position.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
 					setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)
 				else:
 					setTime = yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
@@ -72,20 +72,20 @@ func Update(_athlete:Athlete):
 #				print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState))
 
 		SpikeState.Runup:
-			if athlete.team.xzVector(takeOffXZ - athlete.translation).length() < 0.1:
+			if athlete.team.xzVector(takeOffXZ - athlete.position).length() < 0.1:
 				spikeState = SpikeState.Jump
 
 		SpikeState.Jump:
-			if athlete.rb.mode == RigidBody.MODE_KINEMATIC:
-				athlete.rb.mode = RigidBody.MODE_RIGID
+			if athlete.rb.freeze:
+				athlete.rb.freeze = false
 				athlete.rb.gravity_scale = 1
-				athlete.rb.linear_velocity = athlete.team.ball.FindWellBehavedParabola(athlete.translation, Vector3(athlete.setRequest.target.x, 0, athlete.setRequest.target.z), athlete.stats.verticalJump)
+				athlete.rb.linear_velocity = athlete.team.ball.FindWellBehavedParabola(athlete.position, Vector3(athlete.setRequest.target.x, 0, athlete.setRequest.target.z), athlete.stats.verticalJump)
 
-			if athlete.translation.y <= 0.05 && athlete.rb.linear_velocity.y < 0:
-				athlete.rb.mode = RigidBody.MODE_KINEMATIC
+			if athlete.position.y <= 0.05 && athlete.rb.linear_velocity.y < 0:
+				athlete.rb.feeze = true
 				athlete.rb.gravity_scale = 0
-				athlete.translation.y = 0
-				athlete.moveTarget = athlete.translation
+				athlete.position.y = 0
+				athlete.moveTarget = athlete.position
 				#athlete.PrepareToDefend()
 				spikeState = SpikeState.NotSpiking
 				athlete.ReEvaluateState()

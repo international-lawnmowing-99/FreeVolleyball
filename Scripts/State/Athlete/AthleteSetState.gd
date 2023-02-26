@@ -30,7 +30,7 @@ func Enter(athlete:Athlete):
 	pass
 func Update(athlete:Athlete):
 	athlete.DontFallThroughFloor()
-#	var ballDistance = athlete.translation.distance_to(athlete.ball.translation)
+#	var ballDistance = athlete.position.distance_to(athlete.ball.position)
 #	var ballXZVel = Vector2(athlete.ball.linear_velocity.x, athlete.ball.linear_velocity.z).length()
 	var timeTillSet 
 	
@@ -41,30 +41,30 @@ func Update(athlete:Athlete):
 			timeTillSet = athlete.ball.TimeTillBallReachesHeight(athlete.stats.standingSetHeight)
 		InternalSetState.JumpSet:
 			timeTillSet = athlete.ball.TimeTillBallReachesHeight(athlete.stats.jumpSetHeight)
-			if jumpSetState != JumpSetState.Jump && athlete.translation.distance_to(athlete.moveTarget) <= athlete.MoveDistanceDelta:
+			if jumpSetState != JumpSetState.Jump && athlete.position.distance_to(athlete.moveTarget) <= athlete.MoveDistanceDelta:
 				var g = ProjectSettings.get_setting("physics/3d/default_gravity")
 				var jumpYVel = sqrt(2 * g * athlete.stats.verticalJump)
 				var jumpTime = jumpYVel / g
 				
 				if jumpTime >= timeTillSet:
 					jumpSetState = JumpSetState.Jump
-					if athlete.rb.mode !=  RigidBody.MODE_RIGID:
-						athlete.rb.mode = RigidBody.MODE_RIGID
+					if athlete.rb.freeze:
+						athlete.rb.freeze = false
 						athlete.rb.gravity_scale = 1
-						athlete.rb.linear_velocity = athlete.ball.FindWellBehavedParabola(athlete.translation, athlete.translation, athlete.stats.verticalJump)
+						athlete.rb.linear_velocity = athlete.ball.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
 			
 			elif jumpSetState == JumpSetState.Jump:
-				if athlete.translation.y < 0.1 && athlete.rb.linear_velocity.y < 0:
+				if athlete.position.y < 0.1 && athlete.rb.linear_velocity.y < 0:
 					jumpSetState = JumpSetState.Undefined
 					internalSetState = InternalSetState.Undefined
-					athlete.rb.mode = RigidBody.MODE_KINEMATIC
-					athlete.translation.y = 0
+					athlete.rb.freeze = true
+					athlete.position.y = 0
 					athlete.rb.gravity_scale = 0
 					athlete.ReEvaluateState()
 	
 		
-	athlete.leftIKTarget.global_transform.origin = lerp (athlete.leftIKTarget.global_transform.origin, athlete.ball.translation, athlete.myDelta * interpolationSpeed)
-	athlete.rightIKTarget.global_transform.origin = lerp (athlete.rightIKTarget.global_transform.origin, athlete.ball.translation, athlete.myDelta * interpolationSpeed)
+	athlete.leftIKTarget.global_transform.origin = lerp (athlete.leftIKTarget.global_transform.origin, athlete.ball.position, athlete.myDelta * interpolationSpeed)
+	athlete.rightIKTarget.global_transform.origin = lerp (athlete.rightIKTarget.global_transform.origin, athlete.ball.position, athlete.myDelta * interpolationSpeed)
 	athlete.leftIK.interpolation = lerp(athlete.leftIK.interpolation, (1 - timeTillSet), athlete.myDelta * interpolationSpeed)
 	athlete.rightIK.interpolation = lerp(athlete.rightIK.interpolation, (1 - timeTillSet), athlete.myDelta * interpolationSpeed)
 #	if athlete.team.flip > 0:
@@ -79,7 +79,7 @@ func Exit(athlete:Athlete):
 	pass
 
 func WaitThenDefend(athlete:Athlete, time:float):
-	yield(athlete.get_tree().create_timer(time), "timeout")
+	await athlete.get_tree().create_timer(time).timeout
 	
 	athlete.stateMachine.SetCurrentState(athlete.defendState)
 
@@ -87,15 +87,15 @@ func TimeToJumpSet(athlete:Athlete, receptionTarget:Vector3):
 	var g = ProjectSettings.get_setting("physics/3d/default_gravity")
 	
 	var timeToReachGround = 0
-	if athlete.rb.mode == RigidBody.MODE_RIGID:
+	if !athlete.rb.freeze:
 		if athlete.rb.linear_velocity.y < 0:
 			#they're going up
 			timeToReachGround = athlete.linear_velocity.y/-g + sqrt(2 * g * athlete.stats.verticalJump)/athlete.g
 		else:
 			#they're falling
-			timeToReachGround = sqrt(2 * g * athlete.translation.y)
+			timeToReachGround = sqrt(2 * g * athlete.position.y)
 	
-	var distanceToRecetionTarget = athlete.translation.distance_to(Vector3(receptionTarget.x, 0, receptionTarget.z))
+	var distanceToRecetionTarget = athlete.position.distance_to(Vector3(receptionTarget.x, 0, receptionTarget.z))
 	var timeToMoveIntoPosition =  distanceToRecetionTarget / athlete.stats.speed
 	
 	var jumpYVel = sqrt(2 * g * athlete.stats.verticalJump)
@@ -107,13 +107,13 @@ func TimeToJumpSet(athlete:Athlete, receptionTarget:Vector3):
 
 func TimeToStandingSet(athlete:Athlete, receptionTarget:Vector3):
 	var timeToReachGround = 0
-	if athlete.rb.mode == RigidBody.MODE_RIGID:
+	if !athlete.rb.freeze:
 		if athlete.rb.linear_velocity.y < 0:
 			#they're going up
 			timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 * athlete.g * athlete.stats.verticalJump)/athlete.g
 		else:
 			#they're falling
-			timeToReachGround = sqrt(2 * athlete.g * athlete.translation.y)
-	var distanceToRecetionTarget = athlete.translation.distance_to(Vector3(receptionTarget.x, 0, receptionTarget.z))
+			timeToReachGround = sqrt(2 * athlete.g * athlete.position.y)
+	var distanceToRecetionTarget = athlete.position.distance_to(Vector3(receptionTarget.x, 0, receptionTarget.z))
 	return timeToReachGround + distanceToRecetionTarget / athlete.stats.speed
 	

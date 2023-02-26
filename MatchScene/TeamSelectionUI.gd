@@ -1,7 +1,7 @@
 extends ColorRect
 
 var nameCards:Array
-var normalColour = Color.chocolate
+var normalColour = Color.CHOCOLATE
 var mManager:MatchManager
 var athleteToBeSubbed
 const Enums = preload("res://Scripts/World/Enums.gd")
@@ -29,10 +29,10 @@ func RequestSub(athlete:Athlete):
 	athleteToBeSubbed = athlete
 	
 	for card in nameCards:
-		card.ChangeColour(Color.red)
+		card.ChangeColour(Color.RED)
 	for card in $HumanTeamBench.get_children():
 		card.state = Enums.NameCardState.Substitutable
-		card.ChangeColour(Color.chartreuse)
+		card.ChangeColour(Color.CHARTREUSE)
 
 func ExecuteSub(incoming:Athlete):
 	

@@ -6,9 +6,10 @@ var leftSideBlocker:Athlete
 var rightSideBlocker:Athlete
 
 func Enter(team:Team):
+	nameOfState = "Defend"
 	for player in team.courtPlayers:
 #		print(player.stats.lastName)
-		if player.rb.mode != RigidBody.MODE_RIGID:
+		if player.rb.freeze:
 #			print(player.stats.lastName + "Changing")
 			if player.FrontCourt():
 				player.stateMachine.SetCurrentState(player.blockState)
@@ -18,10 +19,10 @@ func Enter(team:Team):
 	CacheBlockers(team)
 	
 	# What is the blocking strategy? 
-	# Can go standard spread, tight for pipe, don't rate the opposite so 2 on setter/middle...
-	# Can go even more extravagant - triple stack on outside
-	# In general we can have - triple on each opposing player ~ 5 or 6 depending on whether
-	# Triple block on libero!
+	# Can go standard spread, tight for pipe, don't rate the opposite so 2 checked setter/middle...
+	# Can go even more extravagant - triple stack checked outside
+	# In general we can have - triple checked each opposing player ~ 5 or 6 depending checked whether
+	# Triple block checked libero!
 	# Then we can have all the different configurations of double blocking
 	# Blocking behaviour involves: where to stand initially
 	# - whether to commit to any spiker (mostly middles, but theoretically could anyone could
@@ -74,7 +75,7 @@ func Update(team:Team):
 		elif Input.is_key_pressed(KEY_DOWN):
 			TripleBlockPipe(team)
 	pass
-func Exit(team:Team):
+func Exit(_team:Team):
 	pass
 
 func CacheBlockers(team:Team):
@@ -121,9 +122,9 @@ func TripleBlockPipe(team:Team):
 	leftSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,0.8)
 	rightSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,-0.8)
 
-func EvaluateOppositionPass(team:Team):
+func EvaluateOppositionPass(_team:Team):
 	# make a list of available options for the other team's attack
-	# ie, bad pass means no middle, so stack on actually possible hitters
+	# ie, bad pass means no middle, so stack checked actually possible hitters
 #	print("other team reception target: " + str(otherTeam.receptionTarget))
 	var dumpProbability = 0
 

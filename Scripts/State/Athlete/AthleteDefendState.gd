@@ -15,7 +15,7 @@ func Enter(athlete:Athlete):
 		Enums.Role.Libero:
 			athlete.moveTarget = athlete.team.flip * Vector3(5.5, 0, 4)
 
-func Update(athlete:Athlete):
+func Update(_athlete:Athlete):
 	pass
-func Exit(athlete:Athlete):
+func Exit(_athlete:Athlete):
 	pass

@@ -4,9 +4,9 @@ class_name AthleteState
 
 var nameOfState:String = "base"
 
-func Enter(athlete:Athlete):
+func Enter(_athlete:Athlete):
 	pass
-func Update(athlete:Athlete):
+func Update(_athlete:Athlete):
 	pass
-func Exit(athlete:Athlete):
+func Exit(_athlete:Athlete):
 	pass

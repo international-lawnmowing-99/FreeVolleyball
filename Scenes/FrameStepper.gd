@@ -2,13 +2,13 @@ extends Node
 var next_frame = false
 var process_slowmo = false
 
-func _process(delta):
+func _process(_delta):
 	if get_tree().paused == false and next_frame == true:
 		get_tree().paused = true
 	
 	if get_tree().paused == false and process_slowmo == true:
 		get_tree().paused = true
-		yield(get_tree().create_timer(1), "timeout")
+		await get_tree().create_timer(1).timeout
 		get_tree().paused = false
 		
 	if get_tree().paused == true and Input.is_action_just_pressed("LMB"):

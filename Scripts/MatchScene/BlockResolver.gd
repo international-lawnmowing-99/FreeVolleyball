@@ -9,7 +9,7 @@ var spiker:Athlete
 func KillBlock():
 	ball.linear_velocity.x *= -1
 	randomize()
-	ball.linear_velocity *= rand_range(.5,.9)
+	ball.linear_velocity *= randf_range(.5,.9)
 	ball.attackTarget = ball.BallPositionAtGivenHeight(0)
 	
 	ball.blockWillBeAttempted = false
@@ -31,24 +31,24 @@ func SnickBlock():
 func BlockFault():
 	pass
 	
-func _init(_ball:Ball) -> void:
+func _init(_ball:Ball):
 
 
 	ball = _ball
 	pass
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if ball.blockWillBeAttempted:
 		if spikedByA:
-			if ball.translation.x >= 0:
+			if ball.position.x >= 0:
 				ResolveBlock()
 		else:
-			if ball.translation.x <= 0:
+			if ball.position.x <= 0:
 				ResolveBlock()
 	pass
 
 func ResolveBlock():
-	Console.AddNewLine("Resolving block, " + str(len(blockers)) + " blockers", Color.yellowgreen)
+	Console.AddNewLine("Resolving block, " + str(len(blockers)) + " blockers", Color.YELLOW_GREEN)
 
 	
 	
@@ -65,13 +65,13 @@ func ResolveBlock():
 		
 		blockerCount += 1
 		totalBlockStrength += blocker.stats.block/blockerCount
-	Console.AddNewLine("Spiker stat: " + str(round(spiker.stats.spike)) + " || Blocker stat(s): " + blockStatsString + " ::" + str(totalBlockStrength), Color.yellowgreen)
+	Console.AddNewLine("Spiker stat: " + str(round(spiker.stats.spike)) + " || Blocker stat(s): " + blockStatsString + " ::" + str(totalBlockStrength), Color.YELLOW_GREEN)
 
 
-	var attackRoll = rand_range(1, spiker.stats.spike)
-	var blockRoll = rand_range(1, totalBlockStrength)
+	var attackRoll = randf_range(1, spiker.stats.spike)
+	var blockRoll = randf_range(1, totalBlockStrength)
 	
-	Console.AddNewLine("Spike Roll: : " + str(int(attackRoll)) + " || Block Roll: " + str(int(blockRoll)), Color.yellowgreen)
+	Console.AddNewLine("Spike Roll: : " + str(int(attackRoll)) + " || Block Roll: " + str(int(blockRoll)), Color.YELLOW_GREEN)
 	
 	if attackRoll>blockRoll:
 		ball.blockWillBeAttempted = false

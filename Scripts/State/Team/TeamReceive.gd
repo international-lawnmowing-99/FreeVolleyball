@@ -1,17 +1,18 @@
 extends "res://Scripts/State/Team/TeamState.gd"
 
 func Enter(team:Team):
+	nameOfState = "Receive"
 	#ChooseReceiver
 		
 	for lad in team.courtPlayers:
-		lad.distanceHack = team.ball.attackTarget.distance_squared_to(lad.translation)
-		if lad.rb.mode == RigidBody.MODE_RIGID:
+		lad.distanceHack = team.ball.attackTarget.distance_squared_to(lad.position)
+		if !lad.rb.freeze:
 			lad.distanceHack = 9999
 		if lad == team.setter:
 			lad.distanceHack*=3
 
 	var orderedList = team.courtPlayers.duplicate(false)
-	orderedList.sort_custom(Athlete, "SortDistance")
+	orderedList.sort_custom(Callable(Athlete,"SortDistance"))
 	
 	team.chosenReceiver = orderedList[0]
 
@@ -42,14 +43,14 @@ func Enter(team:Team):
 
 	for i in range(1, team.courtPlayers.size()):
 		#print(team.courtPlayers[i].stats.lastName)
-		if team.courtPlayers[i].rb.mode != RigidBody.MODE_RIGID:
+		if !team.courtPlayers[i].rb.freeze:
 			#print(team.courtPlayers[i].stats.lastName + " transitnio")
 			team.courtPlayers[i].stateMachine.SetCurrentState(team.courtPlayers[i].transitionState)
 		
 	team.chosenReceiver.stateMachine.SetCurrentState(team.chosenReceiver.passState)
 
 	
-func Update(team:Team):
+func Update(_team:Team):
 	#Is the ball close enough
 	pass
 func Exit(team:Team):
@@ -57,6 +58,6 @@ func Exit(team:Team):
 	team.UpdateTimeTillDigTarget()
 	pass
 
-func CheckForFlip(set:Set, team:Team):
-		var s = Set.new(team.flip* set.target.x, set.target.y, team.flip * set.target.z, set.height)
+func CheckForFlip(_set:Set, team:Team):
+		var s = Set.new(team.flip* _set.target.x, _set.target.y, team.flip * _set.target.z, _set.height)
 		return s

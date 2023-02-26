@@ -1,7 +1,7 @@
 extends Node
 
 class_name Team
-const Enums = preload("res://Scripts/World/Enums.gd")
+var Enums = preload("res://Scripts/World/Enums.gd")
 var AthleteScene = preload("res://Scenes/Athlete.tscn")
 
 var teamName:String
@@ -158,7 +158,7 @@ func PlaceTeam():
 			pos = Vector3(flip * (i + 3), 0, 10)
 			rot = Vector3(0,flip*PI,0)
 
-		var lad = AthleteScene.instance()
+		var lad = AthleteScene.instantiate()
 		
 		lad.stats = allPlayers[i].stats
 		lad.role = allPlayers[i].role
@@ -170,7 +170,7 @@ func PlaceTeam():
 		lad.scale = Vector3(ladscale, ladscale, ladscale)
 		
 		lad.name = lad.stats.firstName + " " + lad.stats.lastName 
-		lad.translation = pos
+		lad.position = pos
 		lad.rotation = rot
 		lad.team = self
 		lad.spikeState.athlete = lad
@@ -204,7 +204,7 @@ func xzVector(vec:Vector3):
 func UpdateTimeTillDigTarget():
 	
 	if (stateMachine.currentState == setState):
-		timeTillDigTarget = xzVector(ball.translation).distance_to(xzVector(receptionTarget)) / max(xzVector(ball.linear_velocity).length(),.0001) 
+		timeTillDigTarget = xzVector(ball.position).distance_to(xzVector(receptionTarget)) / max(xzVector(ball.linear_velocity).length(),.0001) 
 
 	elif stateMachine.currentState == spikeState:
 		timeTillDigTarget = 0
@@ -258,9 +258,6 @@ func Rotate():
 	CheckForLiberoChange()
 	CachePlayers()
 
-func BallHitOverNet():
-	stateMachine.SetCurrentState(receiveState)
-
 func CheckForLiberoChange():
 #	if isHuman:
 #		print("\nChecking for libero change \nisNextToSpike? " + str(isNextToSpike))
@@ -294,7 +291,7 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 			print ("court: " + lad.name + " " + str(lad.rotationPosition))
 		for lad in benchPlayers:
 			print ("bench: " + lad.name)
-	courtPlayers.remove(outgoingIndex)
+	courtPlayers.erase(outgoingIndex)
 	
 	var incomingIndex = benchPlayers.find(incoming)
 	if incomingIndex == -1:
@@ -303,11 +300,11 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 			print ("court: " + lad.name)
 		for lad in benchPlayers:
 			print ("bench: " + lad.name)
-	benchPlayers.remove(incomingIndex)
+	benchPlayers.erase(incomingIndex)
 
-	var tempPos = Vector3(incoming.translation.x, 0, incoming.translation.z)
-	incoming.translation = outgoing.translation
-	outgoing.translation = tempPos
+	var tempPos = Vector3(incoming.position.x, 0, incoming.position.z)
+	incoming.position = outgoing.position
+	outgoing.position = tempPos
 
 	incoming.rotationPosition = outgoing.rotationPosition
 	outgoing.rotationPosition = -1
@@ -319,8 +316,8 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	if (incoming.role != Enums.Role.Libero && outgoing.role != Enums.Role.Libero):
 		incoming.role = outgoing.role
 
-	incoming.moveTarget = incoming.translation
-	outgoing.moveTarget = outgoing.translation
+	incoming.moveTarget = incoming.position
+	outgoing.moveTarget = outgoing.position
 
 	var tempRot = incoming.rotation
 	incoming.rotation = outgoing.rotation
@@ -346,19 +343,19 @@ func CachePlayers():
 
 
 func AutoSelectTeamLineup():
-	allPlayers.sort_custom(Athlete, "SortSet")
+	allPlayers.sort_custom(Callable(Athlete,"SortSet"))
 	var orderedSetterList =  allPlayers.duplicate(false)
 	
-	allPlayers.sort_custom(Athlete, "SortOutside")
+	allPlayers.sort_custom(Callable(Athlete,"SortOutside"))
 	var orderedOutsideList = allPlayers.duplicate(false)
 	
-	allPlayers.sort_custom(Athlete, "SortLibero")
+	allPlayers.sort_custom(Callable(Athlete,"SortLibero"))
 	var orderedLiberoList = allPlayers.duplicate(false)
 	
-	allPlayers.sort_custom(Athlete, "SortOpposite")
+	allPlayers.sort_custom(Callable(Athlete,"SortOpposite"))
 	var orderedOppositeList = allPlayers.duplicate(false) 
 	
-	allPlayers.sort_custom(Athlete, "SortMiddle")
+	allPlayers.sort_custom(Callable(Athlete,"SortMiddle"))
 	var orderedMiddleList = allPlayers.duplicate(false)
 
 	var aptitudeLists = [orderedSetterList,orderedLiberoList,orderedOutsideList,orderedOppositeList,orderedMiddleList]
@@ -504,9 +501,9 @@ func AttemptBlock(spiker:Athlete):
 	var netPass = ball.FindNetPass()
 	
 	if netPass.y - highestBlockHeight > 0.3:
-		Console.AddNewLine("OTT!!!", Color.azure)
-		Console.AddNewLine("Spike height: " + str(spiker.stats.spikeHeight), Color.azure)
-		Console.AddNewLine("Block height: " + str(highestBlockHeight), Color.azure)
+		Console.AddNewLine("OTT!!!", Color.AZURE)
+		Console.AddNewLine("Spike height: " + str(spiker.stats.spikeHeight), Color.AZURE)
+		Console.AddNewLine("Block height: " + str(highestBlockHeight), Color.AZURE)
 		mManager.BallOverNet(!isHuman)
 		return
 	
@@ -517,19 +514,19 @@ func AttemptBlock(spiker:Athlete):
 func Populate(firstNames, lastNames, r):
 	for _j in range(12):
 		var stats = Stats.new()
-		var skill = rand_range(0,10) + rand_range(0,10) + rand_range(0,10) + rand_range(0,10) + rand_range(0,10)
+		var skill = randf_range(0,10) + randf_range(0,10) + randf_range(0,10) + randf_range(0,10) + randf_range(0,10)
 		stats.firstName = firstNames[r.randi_range(0, firstNames.size() - 1)]
 		stats.lastName = lastNames[r.randi_range(0, lastNames.size() - 1)]
 		stats.nation = nation.countryName
-		stats.serve = skill + rand_range(0,25) + rand_range(0,25)
-		stats.reception = skill + rand_range(0,25) + rand_range(0,25)
-		stats.block = skill + rand_range(0,25) + rand_range(0,25)
-		stats.set = skill + rand_range(0,25) + rand_range(0,25)
-		stats.spike = skill + rand_range(0,25) + rand_range(0,25)
-		stats.verticalJump = rand_range(0,.5) + rand_range(.1,.5) + rand_range(.1,.5) + 1.5
-		stats.height = rand_range(.25,.6) + rand_range(.25,.6) #+ rand_range(.35,.6) + rand_range(.35,.6)
-		stats.speed = rand_range(5.5,7.5)
-		stats.dump = skill + rand_range(0,25) + rand_range(0,25)
+		stats.serve = skill + randf_range(0,25) + randf_range(0,25)
+		stats.reception = skill + randf_range(0,25) + randf_range(0,25)
+		stats.block = skill + randf_range(0,25) + randf_range(0,25)
+		stats.set = skill + randf_range(0,25) + randf_range(0,25)
+		stats.spike = skill + randf_range(0,25) + randf_range(0,25)
+		stats.verticalJump = randf_range(0,.5) + randf_range(.1,.5) + randf_range(.1,.5) + 1.5
+		stats.height = randf_range(.25,.6) + randf_range(.25,.6) #+ randf_range(.35,.6) + randf_range(.35,.6)
+		stats.speed = randf_range(5.5,7.5)
+		stats.dump = skill + randf_range(0,25) + randf_range(0,25)
 		#1.25 is the arm factor of newWoman
 		stats.spikeHeight = stats.height * (1.33) + stats.verticalJump
 		stats.blockHeight = stats.height * (1.25) + stats.verticalJump

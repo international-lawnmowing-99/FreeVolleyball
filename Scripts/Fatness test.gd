@@ -1,11 +1,11 @@
-extends Spatial
+extends Node3D
 
 
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-onready var model = $fatcylinder/Cylinder
-onready var slider = $UI/HSlider
+@onready var model = $fatcylinder/Cylinder
+@onready var slider = $UI/HSlider
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

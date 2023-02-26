@@ -1,8 +1,10 @@
 extends "res://Scripts/State/Team/TeamState.gd"
 
+
+
 func Enter(team:Team):
-	.Enter(team)
-	
+	super.Enter(team)
+	nameOfState = "Serve"
 	
 	
 	pass
@@ -10,5 +12,5 @@ func Update(team:Team):
 	if team.ball.get_parent():
 		# Reparenting just doesn't work yet, come back in 4.0
 		pass
-func Exit(team:Team):
+func Exit(_team:Team):
 	pass

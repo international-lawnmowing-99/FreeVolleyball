@@ -2,7 +2,7 @@ extends "res://Scripts/Team.gd"
 class_name HumanTeam
 
 
-func _process(delta):
+func _process(_delta):
 	return
 
 func GetBlockInput():

@@ -1,17 +1,17 @@
-extends Spatial
+extends Node3D
 const Enums = preload("res://Scripts/World/Enums.gd")
 
 var camera
 var text:RichTextLabel
 var athlete:Athlete
 func _ready():
-	camera = get_node("/root/MatchScene/Camera")
+	camera = get_node("/root/MatchScene/Camera3D")
 	text = $RichTextLabel
 	athlete = $"../../"
 	text.text = athlete.stats.lastName
 
 
-func _process(delta):
+func _process(_delta):
 	var screen_pos = camera.unproject_position(global_transform.origin)
 	text.set_position(screen_pos+Vector2.ONE)
 	if !athlete.team.isHuman:

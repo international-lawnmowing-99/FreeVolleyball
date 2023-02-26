@@ -1,9 +1,9 @@
 extends ColorRect
 
 var athlete:Athlete
-onready var nameTextHolder = $VBoxContainer/Name
-onready var roleTextHolder = $VBoxContainer/Role
-onready var rotationPositionTextHolder = $VBoxContainer/RotationPosition
+@onready var nameTextHolder = $VBoxContainer/Name
+@onready var roleTextHolder = $VBoxContainer/Role
+@onready var rotationPositionTextHolder = $VBoxContainer/RotationPosition
 
 
 func UpdateFields():

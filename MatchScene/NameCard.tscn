@@ -1,102 +1,102 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://DynamicFontData_Roboto.tres" type="DynamicFontData" id=1]
+[ext_resource path="res://DynamicFontData_Roboto.tres" type="FontFile" id=1]
 [ext_resource path="res://MatchScene/NameCard.gd" type="Script" id=2]
-[ext_resource path="res://Textures/Captain.png" type="Texture" id=3]
-[ext_resource path="res://Textures/LiberoIcon.png" type="Texture" id=4]
+[ext_resource path="res://Textures/Captain.png" type="Texture2D" id=3]
+[ext_resource path="res://Textures/LiberoIcon.png" type="Texture2D" id=4]
 
-[sub_resource type="DynamicFont" id=16]
+[sub_resource type="FontFile" id=16]
 size = 20
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=17]
+[sub_resource type="FontFile" id=17]
 size = 30
 outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=15]
+[sub_resource type="FontFile" id=15]
 size = 18
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 1 )
 
 [node name="NameCard" type="ColorRect"]
-margin_right = 250.0
-margin_bottom = 80.0
-rect_min_size = Vector2( 250, 100 )
+offset_right = 250.0
+offset_bottom = 80.0
+custom_minimum_size = Vector2( 250, 100 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
 script = ExtResource( 2 )
 
 [node name="FirstName" type="Label" parent="."]
-margin_left = 22.0
-margin_top = 32.0
-margin_right = 248.0
-margin_bottom = 73.0
+offset_left = 22.0
+offset_top = 32.0
+offset_right = 248.0
+offset_bottom = 73.0
 custom_fonts/font = SubResource( 16 )
 text = "Karteez"
 
 [node name="LastName" type="Label" parent="."]
-margin_left = 22.0
-margin_top = 52.0
-margin_right = 248.0
-margin_bottom = 100.0
+offset_left = 22.0
+offset_top = 52.0
+offset_right = 248.0
+offset_bottom = 100.0
 custom_fonts/font = SubResource( 17 )
 text = "Arminhalf"
 
 [node name="Skill" type="Label" parent="."]
-margin_left = 23.0
-margin_right = 273.0
-margin_bottom = 27.0
+offset_left = 23.0
+offset_right = 273.0
+offset_bottom = 27.0
 custom_fonts/font = SubResource( 15 )
 text = "84"
 
 [node name="Role" type="Label" parent="."]
-margin_left = -16.0
-margin_right = 234.0
-margin_bottom = 27.0
+offset_left = -16.0
+offset_right = 234.0
+offset_bottom = 27.0
 custom_fonts/font = SubResource( 15 )
 text = "Opposite"
 align = 1
 
 [node name="Height" type="Label" parent="."]
-margin_left = -16.0
-margin_right = 234.0
-margin_bottom = 27.0
+offset_left = -16.0
+offset_right = 234.0
+offset_bottom = 27.0
 custom_fonts/font = SubResource( 15 )
 text = "199.9cm"
 align = 2
 
 [node name="CaptainIcon" type="TextureRect" parent="."]
-margin_left = 222.499
-margin_top = 66.9187
-margin_right = 262.499
-margin_bottom = 106.919
+offset_left = 222.499
+offset_top = 66.9187
+offset_right = 262.499
+offset_bottom = 106.919
 texture = ExtResource( 3 )
 expand = true
 
 [node name="LiberoIcon" type="TextureRect" parent="."]
 modulate = Color( 0.898039, 1, 0, 1 )
-margin_left = 222.499
-margin_top = 21.9187
-margin_right = 262.499
-margin_bottom = 61.9187
+offset_left = 222.499
+offset_top = 21.9187
+offset_right = 262.499
+offset_bottom = 61.9187
 texture = ExtResource( 4 )
 expand = true
 
 [node name="SubstituteButton" type="Button" parent="."]
-margin_left = 6.0
-margin_top = 89.0
-margin_right = 94.0
-margin_bottom = 109.0
+offset_left = 6.0
+offset_top = 89.0
+offset_right = 94.0
+offset_bottom = 109.0
 text = "Substitute"
 
 [node name="CaptainButton" type="Button" parent="."]
-margin_left = 104.0
-margin_top = 89.0
-margin_right = 192.0
-margin_bottom = 109.0
+offset_left = 104.0
+offset_top = 89.0
+offset_right = 192.0
+offset_bottom = 109.0
 text = "Captain"
 
 [connection signal="mouse_entered" from="." to="." method="_on_NameCard_mouse_entered"]

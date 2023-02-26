@@ -7,7 +7,7 @@ var state = Enums.NameCardState.UNDEFINED
 var previousColour:Color
 
 func _ready() -> void:
-	ChangeColour(Color.chocolate)
+	ChangeColour(Color.CHOCOLATE)
 
 func DisplayStats(athlete:Athlete):
 	cardAthlete = athlete
@@ -16,13 +16,13 @@ func DisplayStats(athlete:Athlete):
 	var skill = (athlete.stats.set + athlete.stats.spike + athlete.stats.block + athlete.stats.reception)/4
 	var skillText = $Skill
 	skillText.text = str("%.0f" % skill)
-	skillText.add_color_override("font_color",lerp(Color.red, Color.green, (skill*3-100)/100.0))
+	skillText.add_theme_color_override("font_color",lerp(Color.RED, Color.GREEN, (skill*3-100)/100.0))
 #	if skill < 50:
-#		skillText.modulate(Color.crimson)
+#		skillText.modulate(Color.CRIMSON)
 #	elif skill < 60:
-#		skillText.modulate(Color.aquamarine)
+#		skillText.modulate(Color.AQUAMARINE)
 #	else:
-#		skillText.modulate(Color.chartreuse)
+#		skillText.modulate(Color.CHARTREUSE)
 	$Height.text = str("%.0f" % (athlete.stats.height *100)) + "cm"
 	$Role.text = Enums.Role.keys()[athlete.role]
 
@@ -57,7 +57,7 @@ func _on_SubstituteButton_pressed() -> void:
 	if teamSelectionUI:
 		
 		teamSelectionUI.RequestSub(cardAthlete)
-		ChangeColour(Color.purple)
+		ChangeColour(Color.PURPLE)
 	pass # Replace with function body.
 
 func Benched():
@@ -68,7 +68,7 @@ func Benched():
 
 
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("LMB"):
 		if state == Enums.NameCardState.Substitutable && isMouseHovering:
 			teamSelectionUI.ExecuteSub(cardAthlete)
