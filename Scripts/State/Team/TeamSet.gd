@@ -25,7 +25,7 @@ func Update(team:Team):
 	else:
 		setHeight = team.chosenSetter.stats.standingSetHeight
 	#Is the ball close enough
-	if team.ball.position.y <= team.receptionTarget.y && team.ball.linear_velocity.y < 0: #&& \
+	if team.ball.position.y <= setHeight && team.ball.linear_velocity.y < 0: #&& \
 #		Vector3(team.chosenSetter.position.x, setHeight, team.chosenSetter.position.z).distance_squared_to(team.ball.position) < 1:
 			if ballWillBeDumped:
 				DumpBall(team)
@@ -265,7 +265,7 @@ func TimeToBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3) -> float:
 
 func ThinkAboutDumping(team:Team):
 	if team.chosenSetter && team.chosenSetter.FrontCourt():
-		var dump = true#!bool(randi()%10)
+		var dump = bool(randi()%20)
 		if dump && abs(team.receptionTarget.x) < 2:
 			Console.AddNewLine("!!!!Dumping!!!!!", Color.DARK_RED)
 			ballWillBeDumped = true
@@ -308,7 +308,7 @@ func ChooseSpiker(team:Team):
 			# this needs set time, diagonal motion, and jump time
 			elif AthleteCanDiagonallyTransition(athlete):
 				athlete.spikeState.spikeValue = 0.5
-				if athlete.rb.mode == RigidBody3D.FREEZE_MODE_KINEMATIC:
+				if athlete.rb.freeze:
 					athlete.stateMachine.SetCurrentState(athlete.transitionState)
 				possibleSpikers.append(athlete)
 			else:

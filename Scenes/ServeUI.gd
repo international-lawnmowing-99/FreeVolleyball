@@ -6,18 +6,24 @@ enum UIState{
 	ServeAggression
 }
 
-var humanServeState
+var humanServeState:AthleteHumanServeState
 var uiState = UIState.UNDEFINED
 
 func ShowServeChoice():
 	$ServeTypeButtons.show()
 	$ServerInfo.show()
 	uiState = UIState.ServeType
+	$RememberServeOptions.show()
 	$RememberServeOptions/CheckBox.button_pressed = humanServeState.rememberSettings
+	if !ValidLastServeOption():
+		$RememberServeOptions/RepeatLastServe.hide()
+	else:
+		$RememberServeOptions/RepeatLastServe.show()
 
 func HideServeChoice():
 	$ServeTypeButtons.hide()
 	$ServerInfo.hide()
+	$RememberServeOptions.hide()
 	uiState = UIState.UNDEFINED
 	
 func ShowServeAggressionChoice():
@@ -57,7 +63,7 @@ func _on_ModerateServe_pressed() -> void:
 	HideServeAggressionChoice()
 
 func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("Key4") && humanServeState.rememberSettings:
+	if Input.is_action_just_pressed("Key4"):
 		_on_RepeatLastServe_pressed()
 	match uiState:
 		UIState.ServeType:
@@ -86,4 +92,18 @@ func _on_CheckBox_toggled(button_pressed: bool) -> void:
 
 
 func _on_RepeatLastServe_pressed() -> void:
-	pass # Replace with function body.
+	if ValidLastServeOption():
+		humanServeState.serveTarget.position = humanServeState.rememberedServeTarget
+		humanServeState.serveType = humanServeState.rememberedServeType
+		humanServeState.ChooseServeType(humanServeState.rememberedServeType)
+		humanServeState.serveAggression = humanServeState.rememberedServeAggression
+		humanServeState.ChooseServeAggression(humanServeState.rememberedServeAggression)
+		humanServeState._athlete.position = humanServeState.rememberedWalkPosition
+		humanServeState.CommenceServe()
+
+func ValidLastServeOption():
+	if !humanServeState.rememberSettings || humanServeState.rememberedServeTarget == null || humanServeState.rememberedServeType == null || humanServeState.rememberedServeAggression == null || humanServeState.rememberedWalkPosition == null:
+		return false
+	return true
+
+	

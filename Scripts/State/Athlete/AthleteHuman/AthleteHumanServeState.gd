@@ -139,24 +139,8 @@ func Update(athlete:Athlete):
 			
 
 			if Input.is_action_just_pressed("ui_accept"):
-				#Add some variation based checked the lack of skill of the server
-				#print("what if... : " + str(Vector2.ZERO.normalized()))
-				var inaccuracy = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
-				var inaccuracyLength = randf_range(0, serveTarget.mesh.top_radius)
-				inaccuracy *= inaccuracyLength
 				
-				attackTarget = Vector3(serveTarget.position.x, 0, serveTarget.position.z)
-				attackTarget.x += inaccuracy[0]
-				attackTarget.z += inaccuracy[1]
-				
-				#If the ball is landing checked our side of the court? 
-				#Players will expect it to occur given the target shows it as a possibility
-				#For now just stop it happening
-				
-				attackTarget.x = clamp(attackTarget.x, -9999, -0.25)
-
-				serveState = ServeState.Tossing
-				serveTarget.visible = false
+				CommenceServe()
 
 		ServeState.Tossing:
 			
@@ -304,7 +288,8 @@ func ChooseServeType(type):
 	serveType = type
 	if rememberSettings:
 		rememberedServeType = type
-		
+		rememberedWalkPosition = _athlete.moveTarget
+	
 	serveState = ServeState.ChoosingServeAggression
 	
 
@@ -322,7 +307,7 @@ func ChooseServeAggression(aggression):
 	serveTarget.mesh.bottom_radius = serveTarget.mesh.top_radius
 	
 	serveState = ServeState.Aiming
-	if !rememberSettings || !rememberedServeTarget:
+	if !rememberSettings || rememberedServeTarget == null:
 		match serveType:
 			ServeType.Jump:
 				if serveAggression == ServeAggression.Aggressive:
@@ -341,6 +326,28 @@ func ChooseServeAggression(aggression):
 					serveTarget.position.z = randf_range(UNDERARMBOUNDS[2], UNDERARMBOUNDS[3])
 	else:
 		serveTarget.position = rememberedServeTarget
+	
+func CommenceServe():
+	if rememberSettings:
+		rememberedServeTarget = serveTarget.position
+	#Add some variation based checked the lack of skill of the server
+	#print("what if... : " + str(Vector2.ZERO.normalized()))
+	var inaccuracy = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+	var inaccuracyLength = randf_range(0, serveTarget.mesh.top_radius)
+	inaccuracy *= inaccuracyLength
+	
+	attackTarget = Vector3(serveTarget.position.x, 0, serveTarget.position.z)
+	attackTarget.x += inaccuracy[0]
+	attackTarget.z += inaccuracy[1]
+	
+	#If the ball is landing checked our side of the court? 
+	#Players will expect it to occur given the target shows it as a possibility
+	#For now just stop it happening
+	
+	attackTarget.x = clamp(attackTarget.x, -9999, -0.25)
+
+	serveState = ServeState.Tossing
+	serveTarget.visible = false
 	
 func Exit(__athlete:Athlete):
 	pass

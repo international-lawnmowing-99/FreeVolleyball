@@ -33,6 +33,8 @@ func Enter(team:Team):
 	
 	if team.isHuman:
 		team.mManager.teamInfoUI.InitialiseOnCourtPlayerUI()
+	else: 
+		team.mManager.serveUI.HideServeChoice()
 
 func Update(team:Team):
 	team.stateMachine.SetCurrentState(team.serveState)

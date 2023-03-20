@@ -15,7 +15,7 @@ var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 @onready var preMatchUI = $PreMatchUI
 @onready var teamInfoUI = $TeamInfoUI
 @onready var TESTteamRepresentation = $TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
-
+@onready var serveUI = $ServeUI
 var isTeamAServing:bool
 
 func _ready():
