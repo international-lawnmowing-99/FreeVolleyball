@@ -15,7 +15,7 @@ var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(
 @onready var leftIKTarget:Marker3D = $"new new woman import/LeftHandTarget"
 @onready var rightIKTarget:Marker3D = $"new new woman import/RightHandTarget"
 
-var team
+var team: Team
 var myDelta
 var serveState
 @onready var defendState = load("res://Scripts/State/Athlete/AthleteDefendState.gd").new()

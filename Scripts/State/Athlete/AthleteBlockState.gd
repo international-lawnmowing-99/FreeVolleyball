@@ -49,10 +49,7 @@ func Update(athlete:Athlete):
 					if athlete.rb.freeze:
 						athlete.rb.freeze = false
 						athlete.rb.gravity_scale = 1
-						#Again, don't ask me why this is needed
 						athlete.rb.linear_velocity = athlete.ball.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
-#						await athlete.get_tree().idle_frame
-#						athlete.rb.linear_velocity = athlete.ball.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
 			BlockState.Jump:
 				athlete.leftIKTarget.global_transform.origin = lerp(athlete.leftIKTarget.global_transform.origin, blockingTarget.setRequest.target, athlete.myDelta)
 				athlete.rightIKTarget.global_transform.origin = lerp(athlete.rightIKTarget.global_transform.origin, blockingTarget.setRequest.target, athlete.myDelta)

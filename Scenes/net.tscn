@@ -3,3 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://c37jvh8bwhbif" path="res://Models/net.glb" id="1"]
 
 [node name="net" instance=ExtResource("1")]
+
+[node name="net2" parent="." index="4"]
+lod_bias = 19.193
+visibility_range_end = 1000.0

@@ -41,22 +41,18 @@ func Update(_athlete:Athlete):
 			var setTime:float
 			var yVel:float
 			
-			yVel = sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.team.receptionTarget.y))
-			
-			if athlete.setRequest.height < athlete.team.receptionTarget.y:
-				#yVel *= -1
-				#UNTESTED!!!
-				#yVel = sqrt(2 * athlete.g * (athlete.setRequest.height - athlete.team.receptionTarget.y))
-				#Engine.time_scale = 0
-#				print("Setting downwards because you're such a unit")
-#				print("Errors inbound(?)")
+
+			# Setting downwards
+			if athlete.setRequest.height <= athlete.team.receptionTarget.y:
 				if athlete.team.stateMachine.currentState == athlete.team.spikeState:
 					var distanceFactor:float = 1 - Vector3(athlete.ball.position.x, 0, athlete.ball.position.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
-					setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)
+					setTime = distanceFactor * athlete.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target) 
 				else:
-					setTime = yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
+					setTime = athlete.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
+				
 			else:
 				# Standard set
+				yVel = sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.team.receptionTarget.y))
 				if athlete.team.stateMachine.currentState == athlete.team.spikeState:
 					var distanceFactor:float = 1 - Vector3(athlete.ball.position.x, 0, athlete.ball.position.z).distance_to(athlete.team.xzVector(athlete.team.receptionTarget))/ (athlete.team.xzVector(athlete.team.receptionTarget).distance_to(athlete.team.xzVector(athlete.setRequest.target)))
 					setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)

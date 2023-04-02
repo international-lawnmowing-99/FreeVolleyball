@@ -96,7 +96,6 @@ func TimeTillBallReachesHeight(height:float):
 func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float):
 	if maxHeight <= startPos.y || maxHeight < endPos.y:
 		print("impossible parabola|| maxHeight = " + str(maxHeight) + ", startPos = " + str(startPos) + ", endPos = " + str(endPos))
-		# This will spawn thousands of axis not normalized errors if used to directly assign the ball linear velocity
 		return Vector3.ZERO
 	
 	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -111,12 +110,12 @@ func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float)
 #	print("\"Well-behaved\" parabola: " + str( Vector3(xzVel * cos(-xzTheta), yVel, xzVel * sin(-xzTheta))))
 	return Vector3(xzVel * cos(-xzTheta), yVel, xzVel * sin(-xzTheta))
 
-func FindDownwardsParabola(startPos:Vector3, endPos:Vector3, _velocityInMPS):
+func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	var maxSetVelocity = 10
 	
 	var yDist = startPos.y - endPos.y
-	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.y))
+	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.z))
 	var xzTheta = SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
 		
 	
@@ -128,15 +127,19 @@ func FindDownwardsParabola(startPos:Vector3, endPos:Vector3, _velocityInMPS):
 	var yTravelTime = sqrt(yDist/gravity)
 	var maxXZTravelTime = xzDist/maxSetVelocity
 	
-	if yTravelTime < maxXZTravelTime:
+	if yTravelTime <= maxXZTravelTime:
 		var xzVel = xzDist/ yTravelTime
 		return Vector3(xzVel * cos(-xzTheta), 0, xzVel * sin(-xzTheta))
 		
 	else:
+		# use max set speed
+		return FindParabolaForGivenSpeed(startPos, endPos, maxSetVelocity, false)
+		
+		
 		print("downwards parabola with yVel, not sure if that's possible, yet")
-		return Vector3.ZERO
+
 	
-func SetTime(startPos:Vector3, endPos:Vector3, maxHeight:float):
+func SetTimeWellBehavedParabola(startPos:Vector3, endPos:Vector3, maxHeight:float):
 	var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 	var setVelocity = FindWellBehavedParabola(startPos, endPos, maxHeight)
 	if setVelocity.length() == 0:
@@ -144,6 +147,15 @@ func SetTime(startPos:Vector3, endPos:Vector3, maxHeight:float):
 	var timeToPeak = setVelocity.y / gravity
 	var timeDown = sqrt(2 * gravity * abs(maxHeight - endPos.y))/gravity
 	return timeToPeak + timeDown
+
+func SetTimeDownwardsParabola(startPos:Vector3, endPos:Vector3):
+	var ballVel = FindDownwardsParabola(startPos, endPos)
+	if ballVel == Vector3.ZERO:
+		return 0.0
+		
+	var ballXZDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.z))
+	var ballXZVel = Vector3(ballVel.x, 0, ballVel.z).length()
+	return ballXZDist/ballXZVel
 
 func SignedAngle(from:Vector3, to:Vector3, up:Vector3):
 	if from == to or from == up or up == to:

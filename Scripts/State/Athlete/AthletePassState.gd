@@ -216,10 +216,9 @@ func PassBall(athlete:Athlete):
 
 	
 	
-	#Bizzare physics hack needed
+
 	ball.linear_velocity = ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
-#	await athlete.get_tree().idle_frame
-	var receptionTime = athlete.team.ball.SetTime(ball.transform.origin, receptionTarget, ballMaxHeight)
+	var receptionTime = athlete.team.ball.SetTimeWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
 	Console.AddNewLine("Time till ball at reception target: " + str(receptionTime))
 
 	athlete.get_tree().get_root().get_node("MatchScene").BallReceived(athlete.team.isHuman)

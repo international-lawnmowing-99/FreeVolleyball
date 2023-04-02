@@ -25,7 +25,7 @@ func Update(team:Team):
 	else:
 		setHeight = team.chosenSetter.stats.standingSetHeight
 	#Is the ball close enough
-	if team.ball.position.y <= setHeight && team.ball.linear_velocity.y < 0: #&& \
+	if team.ball.position.y <= setHeight && team.ball.position.y <= team.receptionTarget.y && team.ball.linear_velocity.y < 0: #&& \
 #		Vector3(team.chosenSetter.position.x, setHeight, team.chosenSetter.position.z).distance_squared_to(team.ball.position) < 1:
 			if ballWillBeDumped:
 				DumpBall(team)
@@ -90,9 +90,9 @@ func SetBall(team:Team):
 		#CalculateSetDifficulty()
 
 	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
-#	await team.get_tree().idle_frame
-#	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
-	
+	if team.ball.linear_velocity == Vector3.ZERO:
+		team.ball.linear_velocity = team.ball.FindDownwardsParabola(team.ball.position, team.setTarget.target)
+#	
 	Console.AddNewLine("Ball vel ----------------------------------- " + str(3.6 * team.ball.linear_velocity.length()))
 	
 	#team.setTarget = null
@@ -111,7 +111,7 @@ func CheckForSpikeDistance(team:Team):
 		team.stateMachine.SetCurrentState(team.spikeState)
 
 func ChooseSetter(team:Team):
-	var timeTillBallAtReceptionTarget = TimeToBallAtReceptionTarget(team.ball, team.receptionTarget)
+	var timeTillBallAtReceptionTarget = TimeTillBallAtReceptionTarget(team.ball, team.receptionTarget)
 	# Who will set?
 	# Who will hit?
 	# Who is out of the picture and will sit around looking pretty?
@@ -251,7 +251,7 @@ func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:Team, timeTillBallA
 
 	return false
 
-func TimeToBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3) -> float:
+func TimeTillBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3) -> float:
 	var ballXZVel = Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length()
 	
 	if ballXZVel == 0:
@@ -287,7 +287,7 @@ func ChooseSpiker(team:Team):
 			# Very hacky, but if no parabola is found then vector3.zero will be returned
 			if setSpeed > 10 || setSpeed < 0.01:
 				# Attempt downwards parabola
-				setSpeed = team.ball.FindDownwardsParabola(team.receptionTarget, athlete.setRequest.target, 9999).length()
+				setSpeed = team.ball.FindDownwardsParabola(team.receptionTarget, athlete.setRequest.target).length()
 				if setSpeed > 10 || setSpeed < 0.01:
 					athlete.stateMachine.SetCurrentState(athlete.coverState)
 					continue
@@ -360,21 +360,37 @@ func AthleteCanFullyTransition(athlete) -> bool:
 	var jumpTime = jumpYVel / athlete.g
 	var timeToJumpPeak = timeToReachGround + timeToTransition + timeToRunup + jumpTime
 	
-	var timeTillBallReachesSetTarget = TimeToBallAtReceptionTarget(athlete.team.ball, athlete.team.receptionTarget) \
-	+ athlete.team.ball.SetTime(athlete.team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
+	var timeTillBallReachesSetTarget 
 	
+	if athlete.setRequest.target.y > athlete.team.receptionTarget.y:
+	#normal set
+		timeTillBallReachesSetTarget = TimeTillBallAtReceptionTarget(athlete.team.ball, athlete.team.receptionTarget) \
+		+ athlete.team.ball.SetTimeWellBehavedParabola(athlete.team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
+	
+	else:
+		# setting downwards
+		timeTillBallReachesSetTarget = TimeTillBallAtReceptionTarget(athlete.team.ball, athlete.team.receptionTarget) \
+		+ athlete.team.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
 	return timeToJumpPeak < timeTillBallReachesSetTarget
 	
 func AthleteCanDiagonallyTransition(athlete)-> bool:
 	if !athlete.rb.freeze:
-		# It would be ridiculous (and a more effort to make work!) if they ran backwards to the takeoffpoint then jumped forwards!
+		# It would be ridiculous (and more effort to make work!) if they ran backwards to the takeoffpoint then jumped forwards!
 		return false
 	var timeToTakeOffXZ = athlete.position.distance_to(athlete.spikeState.takeOffXZ)/athlete.stats.speed
 	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
 	var jumpTime = jumpYVel / -athlete.g
 	var timeToJumpPeak = timeToTakeOffXZ + jumpTime
 	
-	var timeTillBallReachesSetTarget = TimeToBallAtReceptionTarget(athlete.team.ball, athlete.team.receptionTarget) \
-	+ athlete.team.ball.SetTime(athlete.team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
 	
+	var timeTillBallReachesSetTarget
+	
+	if athlete.setRequest.target.y > athlete.team.receptionTarget.y:
+		#normal set
+		timeTillBallReachesSetTarget = TimeTillBallAtReceptionTarget(athlete.team.ball, athlete.team.receptionTarget) \
+		+ athlete.team.ball.SetTimeWellBehavedParabola(athlete.team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
+	else:
+		# setting downwards
+		timeTillBallReachesSetTarget = TimeTillBallAtReceptionTarget(athlete.team.ball, athlete.team.receptionTarget) \
+		+ athlete.team.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
 	return timeToJumpPeak < timeTillBallReachesSetTarget

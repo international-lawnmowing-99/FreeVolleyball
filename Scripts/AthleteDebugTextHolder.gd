@@ -24,3 +24,5 @@ func _process(_delta):
 			text.text += "\n" + athlete.spikeState.SpikeState.keys()[athlete.spikeState.spikeState]
 		if athlete.stateMachine.currentState == athlete.blockState:
 			text.text += "\n" + athlete.blockState.BlockState.keys()[athlete.blockState.blockState]
+#			if athlete.blockState.blockingTarget:
+#				text.text += "\n" + athlete.blockState.blockingTarget.stats.lastName + " target"
