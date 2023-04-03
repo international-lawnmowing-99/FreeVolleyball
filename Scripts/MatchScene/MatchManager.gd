@@ -11,11 +11,11 @@ var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 
 @onready var ball = $ball
 
-@onready var score = $ScoreCanvasLayer/Score
-@onready var preMatchUI = $PreMatchUI
-@onready var teamInfoUI = $TeamInfoUI
-@onready var TESTteamRepresentation = $TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
-@onready var serveUI = $ServeUI
+@onready var score = $UI/ScoreCanvasLayer/Score
+@onready var preMatchUI = $UI/PreMatchUI
+@onready var teamInfoUI = $UI/TeamInfoUI
+@onready var TESTteamRepresentation = $UI/TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
+@onready var serveUI = $UI/ServeUI
 var isTeamAServing:bool
 
 func _ready():
@@ -61,7 +61,7 @@ func _ready():
 	
 	preMatchUI.PopulateUI(teamA, teamB)
 	preMatchUI.skipUI()
-	$TeamInfoUI.InitialiseOnCourtPlayerUI()
+	$UI/TeamInfoUI.InitialiseOnCourtPlayerUI()
 
 func _physics_process(_delta: float) -> void:
 #	if ball.blockWillBeAttempted:

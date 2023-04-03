@@ -55,7 +55,7 @@ func Enter(team:Team):
 		rightSideBlocker.blockState.blockingTarget = otherTeam.outsideFront
 
 
-#	team.middleFront.blockState.blockingTarget = otherTeam.middleFront
+	team.middleFront.blockState.blockingTarget = otherTeam.middleFront
 	
 func Update(team:Team):
 	if team.isHuman:

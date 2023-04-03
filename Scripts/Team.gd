@@ -233,7 +233,7 @@ func _process(_delta):
 		stateMachine.Update()
 	stateMachine.Update()
 	if !isHuman && mManager.TESTteamRepresentation.courtPlayers:
-		mManager.TESTteamRepresentation.UpdateRepresentation()
+		mManager.TESTteamRepresentation.UpdateRepresentation(get_process_delta_time())
 
 func Rotate():
 #	if isHuman:
@@ -407,9 +407,9 @@ func AutoSelectTeamLineup():
 	for athlete in orderedLiberoList:
 		athlete.role = Enums.Role.UNDEFINED
 
-	nsetter.stats.verticalJump += 2
-	nsetter.stats.jumpSetHeight += 2
-	nsetter.stats.spikeHeight += 2
+#	nsetter.stats.verticalJump += 2
+#	nsetter.stats.jumpSetHeight += 2
+#	nsetter.stats.spikeHeight += 2
 
 func SwapPlayer(player,newPostion):
 	#print("-----------")

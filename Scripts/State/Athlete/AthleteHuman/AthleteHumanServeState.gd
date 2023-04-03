@@ -60,7 +60,7 @@ func Enter(athlete:Athlete):
 	ball = athlete.ball
 	serveState = ServeState.Walking
 	serveTarget = athlete.get_tree().root.get_node("MatchScene").get_node("ServeTarget")
-	serveUI = athlete.get_tree().root.get_node("MatchScene").get_node("ServeUI")
+	serveUI = athlete.get_tree().root.get_node("MatchScene").get_node("UI/ServeUI")
 	
 	serveUI.humanServeState = self
 	_athlete = athlete

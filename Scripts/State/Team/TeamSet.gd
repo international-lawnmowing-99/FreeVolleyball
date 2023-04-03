@@ -25,8 +25,8 @@ func Update(team:Team):
 	else:
 		setHeight = team.chosenSetter.stats.standingSetHeight
 	#Is the ball close enough
-	if team.ball.position.y <= setHeight && team.ball.position.y <= team.receptionTarget.y && team.ball.linear_velocity.y < 0: #&& \
-#		Vector3(team.chosenSetter.position.x, setHeight, team.chosenSetter.position.z).distance_squared_to(team.ball.position) < 1:
+	if team.ball.position.y <= setHeight && team.ball.position.y <= team.receptionTarget.y && team.ball.linear_velocity.y < 0 && \
+		Vector3(team.chosenSetter.position.x, setHeight, team.chosenSetter.position.z).distance_squared_to(team.ball.position) < 1:
 			if ballWillBeDumped:
 				DumpBall(team)
 			else:
@@ -265,7 +265,7 @@ func TimeTillBallAtReceptionTarget(ball:Ball, receptionTarget:Vector3) -> float:
 
 func ThinkAboutDumping(team:Team):
 	if team.chosenSetter && team.chosenSetter.FrontCourt():
-		var dump = bool(randi()%20)
+		var dump = !bool(randi()%30)
 		if dump && abs(team.receptionTarget.x) < 2:
 			Console.AddNewLine("!!!!Dumping!!!!!", Color.DARK_RED)
 			ballWillBeDumped = true

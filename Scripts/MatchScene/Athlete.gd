@@ -258,26 +258,31 @@ func BaseMove(_delta):
 			#rotate_y(PI)
 			
 func ReEvaluateState():
-	match team.stateMachine.currentState:
-		team.receiveState:
-			stateMachine.SetCurrentState(transitionState)
-		team.setState:
-			if team.chosenSetter == self:
-				if rb.freeze:
-					stateMachine.SetCurrentState(setState)
-			else:
+	if rb.freeze:
+		match team.stateMachine.currentState:
+			team.receiveState:
 				stateMachine.SetCurrentState(transitionState)
-		team.spikeState:
-			if stateMachine.currentState.nameOfState == "Set":
-				rotation.y = -team.flip*PI/2
-				stateMachine.SetCurrentState(defendState)
-			elif stateMachine.currentState.nameOfState == "Spike":
-				#stateMachine.SetCurrentState(coverState)
-				pass
-			else:
-				stateMachine.SetCurrentState(spikeState)
-		team.defendState:
-			if FrontCourt():
-				stateMachine.SetCurrentState(blockState)
-			else:
-				stateMachine.SetCurrentState(defendState)
+			team.setState:
+				if team.chosenSetter == self:
+						stateMachine.SetCurrentState(setState)
+				else:
+					stateMachine.SetCurrentState(transitionState)
+			team.spikeState:
+				if stateMachine.currentState.nameOfState == "Set":
+					rotation.y = -team.flip*PI/2
+					stateMachine.SetCurrentState(defendState)
+				elif stateMachine.currentState.nameOfState == "Spike":
+					#stateMachine.SetCurrentState(coverState)
+					pass
+				else:
+					stateMachine.SetCurrentState(spikeState)
+			team.defendState:
+				if FrontCourt():
+					stateMachine.SetCurrentState(blockState)
+				else:
+					stateMachine.SetCurrentState(defendState)
+	else: 
+		if position.y < 0:
+			rb.freeze = true
+			position.y = 0
+			ReEvaluateState()

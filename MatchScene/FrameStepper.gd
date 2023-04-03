@@ -2,7 +2,9 @@ extends Node
 var next_frame = false
 var process_slowmo = false
 
-func _process(_delta):
+
+
+func _process(delta):
 	if get_tree().paused == false and next_frame == true:
 		get_tree().paused = true
 	

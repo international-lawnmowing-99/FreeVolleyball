@@ -20,7 +20,7 @@ func Enter(team:Team):
 	
 	if !team.isHuman:
 		team.mManager.TESTteamRepresentation.AssignCourtPlayers(team)
-		team.mManager.TESTteamRepresentation.UpdateRepresentation()
+		team.mManager.TESTteamRepresentation.UpdateRepresentation(get_process_delta_time())
 	
 func Update(_team:Team):
 	#Is the ball close enough

@@ -35,6 +35,11 @@ func Enter(team:Team):
 		team.mManager.teamInfoUI.InitialiseOnCourtPlayerUI()
 	else: 
 		team.mManager.serveUI.HideServeChoice()
+		
+	if !team.isHuman:
+		team.mManager.TESTteamRepresentation.AssignCourtPlayers(team)
+		team.mManager.TESTteamRepresentation.UpdateRepresentation(get_process_delta_time())
+
 
 func Update(team:Team):
 	team.stateMachine.SetCurrentState(team.serveState)
