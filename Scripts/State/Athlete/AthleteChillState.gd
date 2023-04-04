@@ -10,9 +10,9 @@ func Enter(athlete:Athlete):
 		athlete.rb.angular_velocity = Vector3.ZERO
 		
 func Update(athlete:Athlete):
-	if athlete.position.y < 0.05:
+	if athlete.position.y < 0:
 		athlete.rb.freeze = true
-		athlete.rb.gravity_scale = 0
+#		athlete.rb.gravity_scale = 0
 		athlete.rb.linear_velocity = Vector3.ZERO
 		athlete.position.y = 0
 		#athlete.rotation = Vector3.ZERO

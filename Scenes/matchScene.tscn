@@ -230,6 +230,7 @@ offset_top = 262.36
 offset_right = 344.817
 offset_bottom = 324.36
 rotation = 89.5353
+focus_mode = 0
 text = "Tactics"
 
 [node name="ScoreCanvasLayer" type="CanvasLayer" parent="UI"]

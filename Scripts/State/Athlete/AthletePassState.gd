@@ -153,7 +153,7 @@ func PassBall(athlete:Athlete):
 		# for a perfect reception, this needs to be sufficient to give the setter time to jump set
 		# even in the unrealistic setup (setter vertical jump >3 metres) we've got now
 		
-		var setterJumpSetTime = athlete.team.setter.setState.TimeToJumpSet(athlete.team.setter, receptionTarget) + 1.0
+		var setterJumpSetTime = athlete.team.setter.setState.TimeToJumpSet(athlete.team.setter, receptionTarget) + randf_range(.2, 1.0)
 		var heightDifferenceToReceptionTarget = receptionTarget.y - ball.position.y
 		var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 		
@@ -164,7 +164,7 @@ func PassBall(athlete:Athlete):
 #		0 = u + at, t = u/g
 		
 		var timeForBallPeak = initialYVel/gravity
-		ballMaxHeight = initialYVel * initialYVel /(2 * gravity)
+		ballMaxHeight = initialYVel * initialYVel /(2 * gravity) + ball.position.y
 
 #		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		
@@ -176,7 +176,7 @@ func PassBall(athlete:Athlete):
 		Console.AddNewLine(athlete.stats.lastName + " 2-point pass")
 		pass
 	elif rollOffDifference >= -50:
-		receptionTarget = Vector3(athlete.position.x + randf_range(-3,3), 2.4, athlete.position.z + randf_range(-3,3))
+		receptionTarget = Vector3(athlete.position.x + randf_range(-3,3), 2.5, athlete.position.z + randf_range(-3,3))
 		
 		#prevent the setter chasing overpasses... by removing them! (for now)
 		if athlete.team.isHuman:
@@ -219,7 +219,7 @@ func PassBall(athlete:Athlete):
 
 	ball.linear_velocity = ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
 	var receptionTime = athlete.team.ball.SetTimeWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
-	Console.AddNewLine("Time till ball at reception target: " + str(receptionTime))
+#	Console.AddNewLine("Time till ball at reception target: " + str(receptionTime))
 
 	athlete.get_tree().get_root().get_node("MatchScene").BallReceived(athlete.team.isHuman)
 

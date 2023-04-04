@@ -115,18 +115,6 @@ func ChooseSetter(team:Team):
 	# Who will set?
 	# Who will hit?
 	# Who is out of the picture and will sit around looking pretty?
-
-#	if team.chosenReceiver.role == enums.Role.Setter:
-#		if team.isLiberoOnCourt:
-#			team.libero.stateMachine.SetCurrentState(team.libero.setState)
-#			team.chosenSetter = team.libero
-#		else:
-#			team.middleBack.stateMachine.SetCurrentState(team.middleBack.setState)
-#			team.chosenSetter = team.middleBack
-#	else:
-#		if team.setter.rb.mode == RigidBody3D.FREEZE_MODE_KINEMATIC:
-#			team.setter.stateMachine.SetCurrentState(team.setter.setState)
-#		team.chosenSetter = team.setter
 	
 	if team.chosenReceiver == team.setter:
 		if team.isLiberoOnCourt:

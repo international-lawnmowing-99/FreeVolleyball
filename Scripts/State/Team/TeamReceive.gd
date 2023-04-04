@@ -43,7 +43,7 @@ func Enter(team:Team):
 
 	for i in range(1, team.courtPlayers.size()):
 		#print(team.courtPlayers[i].stats.lastName)
-		if !team.courtPlayers[i].rb.freeze:
+		if team.courtPlayers[i].rb.freeze:
 			#print(team.courtPlayers[i].stats.lastName + " transitnio")
 			team.courtPlayers[i].stateMachine.SetCurrentState(team.courtPlayers[i].transitionState)
 		

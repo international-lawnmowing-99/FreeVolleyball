@@ -8,9 +8,16 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_top = 233.0
+offset_right = 1820.0
+offset_bottom = 1081.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
@@ -23,17 +30,17 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Serve"
 
-[node name="ReceiveButton" type="Button" parent="HBoxContainer"]
+[node name="ReceiveUIButton" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Receive"
 
-[node name="Button2" type="Button" parent="HBoxContainer"]
+[node name="SetUIButton" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Set"
 
-[node name="Button3" type="Button" parent="HBoxContainer"]
+[node name="BlockUIButton" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Block"
@@ -49,19 +56,12 @@ size_flags_horizontal = 3
 [node name="ReceiveOptionsUI" type="Control" parent="."]
 anchors_preset = 0
 
-[node name="ColorRect" type="ColorRect" parent="ReceiveOptionsUI"]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 236.0
-offset_right = 1926.0
-offset_bottom = 1084.0
-
 [node name="HBoxContainer2" type="HBoxContainer" parent="ReceiveOptionsUI"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 258.0
-offset_right = 1883.0
+offset_right = 1820.0
 offset_bottom = 354.0
 grow_horizontal = 2
 alignment = 1
@@ -229,4 +229,17 @@ sharp_limit = 9.0
 round_precision = 13
 antialiased = true
 
+[node name="SetOptionsUI" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BlockOptionsUI" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [connection signal="pressed" from="HBoxContainer/ServeUIButton" to="." method="_on_ServeUIButton_pressed"]
+[connection signal="pressed" from="HBoxContainer/ReceiveUIButton" to="." method="_on_receive_ui_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/SetUIButton" to="." method="_on_set_ui_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/BlockUIButton" to="." method="_on_block_ui_button_pressed"]

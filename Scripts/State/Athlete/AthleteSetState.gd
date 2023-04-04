@@ -95,7 +95,7 @@ func TimeToJumpSet(athlete:Athlete, receptionTarget:Vector3):
 			#they're falling
 			timeToReachGround = sqrt(2 * g * athlete.position.y)
 	
-	var distanceToRecetionTarget = athlete.position.distance_to(Vector3(receptionTarget.x, 0, receptionTarget.z))
+	var distanceToRecetionTarget = Vector3(athlete.position.x, 0, athlete.position.z).distance_to(Vector3(receptionTarget.x, 0, receptionTarget.z))
 	var timeToMoveIntoPosition =  distanceToRecetionTarget / athlete.stats.speed
 	
 	var jumpYVel = sqrt(2 * g * athlete.stats.verticalJump)
@@ -114,6 +114,6 @@ func TimeToStandingSet(athlete:Athlete, receptionTarget:Vector3):
 		else:
 			#they're falling
 			timeToReachGround = sqrt(2 * athlete.g * athlete.position.y)
-	var distanceToRecetionTarget = athlete.position.distance_to(Vector3(receptionTarget.x, 0, receptionTarget.z))
+	var distanceToRecetionTarget = Vector3(athlete.position.x, 0, athlete.position.z).distance_to(Vector3(receptionTarget.x, 0, receptionTarget.z))
 	return timeToReachGround + distanceToRecetionTarget / athlete.stats.speed
 	

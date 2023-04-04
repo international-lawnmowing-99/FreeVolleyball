@@ -4,7 +4,7 @@ var process_slowmo = false
 
 
 
-func _process(delta):
+func _process(_delta):
 	if get_tree().paused == false and next_frame == true:
 		get_tree().paused = true
 	

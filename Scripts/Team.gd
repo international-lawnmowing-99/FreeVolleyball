@@ -407,9 +407,9 @@ func AutoSelectTeamLineup():
 	for athlete in orderedLiberoList:
 		athlete.role = Enums.Role.UNDEFINED
 
-#	nsetter.stats.verticalJump += 2
-#	nsetter.stats.jumpSetHeight += 2
-#	nsetter.stats.spikeHeight += 2
+#	nsetter.stats.verticalJump += 3
+#	nsetter.stats.jumpSetHeight += 3
+#	nsetter.stats.spikeHeight += 3
 
 func SwapPlayer(player,newPostion):
 	#print("-----------")
