@@ -88,7 +88,7 @@ func TimeToJumpSet(athlete:Athlete, receptionTarget:Vector3):
 	
 	var timeToReachGround = 0
 	if !athlete.rb.freeze:
-		if athlete.rb.linear_velocity.y < 0:
+		if athlete.rb.linear_velocity.y > 0:
 			#they're going up
 			timeToReachGround = athlete.linear_velocity.y/-g + sqrt(2 * g * athlete.stats.verticalJump)/athlete.g
 		else:
@@ -108,7 +108,7 @@ func TimeToJumpSet(athlete:Athlete, receptionTarget:Vector3):
 func TimeToStandingSet(athlete:Athlete, receptionTarget:Vector3):
 	var timeToReachGround = 0
 	if !athlete.rb.freeze:
-		if athlete.rb.linear_velocity.y < 0:
+		if athlete.rb.linear_velocity.y > 0:
 			#they're going up
 			timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 * athlete.g * athlete.stats.verticalJump)/athlete.g
 		else:

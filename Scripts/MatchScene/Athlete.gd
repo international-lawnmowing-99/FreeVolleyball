@@ -108,6 +108,7 @@ Set.new(3.1-stats.verticalJump/2, stats.spikeHeight, 1, max(3, stats.spikeHeight
 func _ready():
 	#DebugOverlay.draw.add_vector(self, "basisz", 1, 4, Color(0,1,0, 0.5))
 	#DebugOverlay.draw.add_vector(self, "basisx", 1, 4, Color(1,1,0, 0.5))
+
 	
 	spineBone01Id = skel.find_bone("spine01")
 	spineBone02Id = skel.find_bone("spine02")
@@ -129,7 +130,8 @@ func _process(_delta):
 	BaseMove(_delta)
 	basisz = transform.basis.z
 	basisx = transform.basis.x
-	
+#	rb.linear_velocity = Vector3(0,-1,0)
+#	rb.freeze = false
 #	if transform.origin.y < -0.2:
 #		print(stateMachine.currentState.nameOfState)
 	

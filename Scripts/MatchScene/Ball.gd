@@ -92,6 +92,17 @@ func TimeTillBallReachesHeight(height:float):
 
 	return remainingTime
 
+func TimeTillBallAtPosition(ball:Ball, receptionTarget:Vector3) -> float:
+	var ballXZVel = Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length()
+	
+	if ballXZVel <= 0:
+		return 0.0
+	
+	var ballXZDist = Vector3(ball.position.x - receptionTarget.x, 0, ball.position.z - receptionTarget.z).length()
+	
+	var time = ballXZDist/ ballXZVel
+	#print("Time till ball at reception target: " + str(time))
+	return time
 
 func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float):
 	if maxHeight <= startPos.y || maxHeight < endPos.y:
