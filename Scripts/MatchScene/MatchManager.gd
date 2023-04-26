@@ -150,13 +150,13 @@ func PointToTeamB():
 	teamB.stateMachine.SetCurrentState(teamB.preserviceState)
 	
 func SetToTeamA():
-	$TeamInfoUI/TeamSelectionUI/TeamSelectionUI.EnableRotate()
+	$UI/TeamInfoUI/TeamSelectionUI/TeamSelectionUI.EnableRotate()
 	RotateTheBoard()
 	#reset everyone and allow lineup changes
 	pass
 
 func SetToTeamB():
-	$TeamInfoUI/TeamSelectionUI/TeamSelectionUI.EnableRotate()
+	$UI/TeamInfoUI/TeamSelectionUI/TeamSelectionUI.EnableRotate()
 	RotateTheBoard()
 	pass
 

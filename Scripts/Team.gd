@@ -20,20 +20,17 @@ var allPlayers = []
 var courtPlayers = []
 var benchPlayers = []
 
-var setter
-var middleBack
-var outsideBack
-var oppositeHitter
-var middleFront
-var outsideFront
-var libero
+var setter:Athlete
+var middleBack:Athlete
+var outsideBack:Athlete
+var oppositeHitter:Athlete
+var middleFront:Athlete
+var outsideFront:Athlete
+var libero:Athlete
 
-var chosenSetter
-var chosenSpiker
-var chosenReceiver
-
-var leftSideBlocker
-var rightSideBlocker
+var chosenSetter:Athlete
+var chosenSpiker:Athlete
+var chosenReceiver:Athlete
 
 var defaultReceiveRotations =  [
 	[
@@ -215,18 +212,6 @@ func UpdateTimeTillDigTarget():
 	else:
 		timeTillDigTarget = 54321
 		
-func CacheBlockers():
-	if setter.FrontCourt():	
-		rightSideBlocker = setter
-		leftSideBlocker = outsideFront
-
-	else:
-		if markUndoChangesToRoles:
-			rightSideBlocker = outsideFront
-			leftSideBlocker = oppositeHitter
-		else:
-			rightSideBlocker = oppositeHitter
-			leftSideBlocker = outsideFront
 
 func _process(_delta):
 	if isHuman:

@@ -76,14 +76,14 @@ func CreateSpikes():
 Set.new(0.5, stats.spikeHeight, 1.5, stats.spikeHeight+ 0.05),
 Set.new(0.5, stats.spikeHeight, -0.5, stats.spikeHeight+ 0.05)]
 		
-	outsideFrontSpikes = [ Set.new(.5, stats.spikeHeight, 4.2, max(3, stats.spikeHeight + 1)),
+	outsideFrontSpikes = [ Set.new(.5, stats.spikeHeight, 4.2, max(6, stats.spikeHeight + 1)),
 Set.new(.5, stats.spikeHeight, -2.75, 3.5),
 Set.new(.5, stats.spikeHeight, -1, 3.43)]
 
 	outsideBackSpikes = [ Set.new(3.1-stats.verticalJump/2, stats.spikeHeight, 1, max(3, stats.spikeHeight + .5)),
 Set.new(3.1-stats.verticalJump/2, stats.spikeHeight, -1, max(3, stats.spikeHeight + .5))]
 
-	oppositeFrontSpikes = [ Set.new(.5, stats.spikeHeight, -4.2, max(3, stats.spikeHeight + 1)),
+	oppositeFrontSpikes = [ Set.new(.5, stats.spikeHeight, -4.2, max(6, stats.spikeHeight + 1)),
 Set.new(.4, stats.spikeHeight, 1, 13.43),
 Set.new(.4, stats.spikeHeight, 4.2, 13.8)]
 
@@ -288,3 +288,4 @@ func ReEvaluateState():
 			rb.freeze = true
 			position.y = 0
 			ReEvaluateState()
+			print("recursive reevaluate: " + stats.lastName)

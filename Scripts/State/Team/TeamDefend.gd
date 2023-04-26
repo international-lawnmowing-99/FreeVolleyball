@@ -130,10 +130,48 @@ func EvaluateOppositionPass(_team:Team):
 
 func ReactToSet(team:Team):
 	# React blockers move to new blocking position, perhaps after a delay given by a "reaction time" stat
+	if !leftSideBlocker.blockState.isCommitBlocking:
+		
+		leftSideBlocker.blockState.blockState = leftSideBlocker.blockState.BlockState.Preparing
+		leftSideBlocker.blockState.blockingTarget = otherTeam.chosenSpiker
+		
+		if team.isHuman:
+			if otherTeam.setTarget.target.z >= 0:
+				leftSideBlocker.moveTarget = Vector3(0.5, 0, otherTeam.chosenSpiker.setRequest.target.z)
+			else:
+				leftSideBlocker.moveTarget = Vector3(0.5, 0, otherTeam.chosenSpiker.setRequest.target.z + 1.5)
+		else:
+			if otherTeam.setTarget.target.z <= 0:
+				leftSideBlocker.moveTarget = Vector3(-0.5, 0, otherTeam.chosenSpiker.setRequest.target.z)
+			else:
+				leftSideBlocker.moveTarget = Vector3(-0.5, 0, otherTeam.chosenSpiker.setRequest.target.z - 1.5)
+	
+	
+	if !rightSideBlocker.blockState.isCommitBlocking:
+		
+		rightSideBlocker.blockState.blockingTarget = otherTeam.chosenSpiker
+		rightSideBlocker.blockState.blockState = rightSideBlocker.blockState.BlockState.Preparing
+			
+		if team.isHuman:
+			if otherTeam.setTarget.target.z <= 0:
+				rightSideBlocker.moveTarget = Vector3(0.5, 0, otherTeam.chosenSpiker.setRequest.target.z)
+			else:
+				rightSideBlocker.moveTarget = Vector3(0.5, 0, otherTeam.chosenSpiker.setRequest.target.z - 1.5)
+		else:
+			if otherTeam.setTarget.target.z >= 0:
+				rightSideBlocker.moveTarget = Vector3(-0.5, 0, otherTeam.chosenSpiker.setRequest.target.z)
+			else:
+				rightSideBlocker.moveTarget = Vector3(-0.5, 0, otherTeam.chosenSpiker.setRequest.target.z + 1.5)
+	
 	if !team.middleFront.blockState.isCommitBlocking:
+		
 		team.middleFront.blockState.blockingTarget = otherTeam.chosenSpiker
+		team.middleFront.blockState.blockState = team.middleFront.blockState.BlockState.Preparing
+			
 		if team.isHuman:
 			team.middleFront.moveTarget = Vector3(0.5, 0, clamp(otherTeam.setTarget.target.z, rightSideBlocker.moveTarget.z + 0.8, leftSideBlocker.moveTarget.z - 0.8))
 		else:
 			team.middleFront.moveTarget = Vector3(-0.5, 0, clamp(otherTeam.setTarget.target.z, leftSideBlocker.moveTarget.z + 0.8, rightSideBlocker.moveTarget.z - 0.8))
-	var timeTillSpike = 0
+
+
+

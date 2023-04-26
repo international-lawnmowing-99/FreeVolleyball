@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://ccxj5nay244v5"]
 
-[ext_resource type="Script" path="res://Scripts/MatchScene/Athlete.gd" id="1"]
+[ext_resource type="Script" path="res://Scripts/MatchScene/Athlete.gd" id="1_tmol0"]
 [ext_resource type="PackedScene" path="res://Scenes/new new woman import.tscn" id="2"]
 [ext_resource type="Script" path="res://Scripts/AthleteDebugTextHolder.gd" id="8"]
 
@@ -21,7 +21,7 @@ rings = 3
 sleeping = true
 freeze = true
 angular_damp = 10.0
-script = ExtResource("1")
+script = ExtResource("1_tmol0")
 
 [node name="new new woman import" parent="." instance=ExtResource("2")]
 

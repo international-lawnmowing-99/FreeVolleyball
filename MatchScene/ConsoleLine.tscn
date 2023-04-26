@@ -1,16 +1,18 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://dofruruieltc1"]
 
-[ext_resource path="res://Scenes/ConsoleLine.gd" type="Script" id=1]
-[ext_resource path="res://MatchScene/ConsoleFont.tres" type="FontFile" id=2]
+[ext_resource type="Script" path="res://Scenes/ConsoleLine.gd" id="1"]
+[ext_resource type="FontFile" uid="uid://c3roosme02me5" path="res://MatchScene/ConsoleFont.tres" id="2"]
 
 [node name="ConsoleLine" type="Label"]
 offset_right = 40.0
 offset_bottom = 14.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 2
-custom_constants/shadow_offset_y = 1
-custom_fonts/font = ExtResource( 2 )
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("2")
 text = "Good serve by lad A"
-script = ExtResource( 1 )
+script = ExtResource("1")
 fadeSpeed = 0.033
