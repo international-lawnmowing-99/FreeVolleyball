@@ -155,6 +155,7 @@ common/physics_fps=180
 
 [rendering]
 
+environment/defaults/default_clear_color=Color(0.67069, 0.67069, 0.67069, 1)
 quality/shadow_atlas/cubemap_size=1024
 quality/shadows/filter_mode=2
 quality/filters/msaa=2

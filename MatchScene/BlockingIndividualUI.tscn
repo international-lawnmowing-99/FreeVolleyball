@@ -1,0 +1,228 @@
+[gd_scene load_steps=4 format=3 uid="uid://cykoixxohrpxa"]
+
+[ext_resource type="StyleBox" uid="uid://cno8oj5uhwosx" path="res://MatchScene/TeamSelectionUI_stylebox.tres" id="1_15nnd"]
+[ext_resource type="Script" path="res://MatchScene/BlockingIndividualUI.gd" id="1_sg131"]
+
+[sub_resource type="Theme" id="Theme_sqmpq"]
+Panel/styles/panel = ExtResource("1_15nnd")
+
+[node name="BlockingIndividualUI" type="Control"]
+custom_minimum_size = Vector2(334, 0)
+layout_mode = 3
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 44.0
+offset_bottom = 44.0
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("1_sg131")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 0
+offset_left = -3.0
+offset_top = -4.0
+offset_right = 331.0
+offset_bottom = 778.0
+theme = SubResource("Theme_sqmpq")
+
+[node name="Title" type="Label" parent="Background"]
+custom_minimum_size = Vector2(334, 0)
+layout_mode = 0
+offset_left = 3.0
+offset_top = 4.0
+offset_right = 337.0
+offset_bottom = 35.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Left Blocker"
+horizontal_alignment = 1
+
+[node name="Name" type="Label" parent="Background"]
+custom_minimum_size = Vector2(334, 0)
+layout_mode = 0
+offset_left = 3.0
+offset_top = 38.0
+offset_right = 337.0
+offset_bottom = 69.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Wasim Ranamadruta"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Background"]
+layout_mode = 0
+offset_top = 93.0
+offset_right = 334.0
+offset_bottom = 741.0
+horizontal_scroll_mode = 0
+
+[node name="MainContent" type="VBoxContainer" parent="Background/ScrollContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+
+[node name="InfoLabels" type="VBoxContainer" parent="Background/ScrollContainer/MainContent"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Role" type="Label" parent="Background/ScrollContainer/MainContent/InfoLabels"]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Role: "
+
+[node name="RotationPosition" type="Label" parent="Background/ScrollContainer/MainContent/InfoLabels"]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Rotation Position 2"
+
+[node name="BlockSkill" type="Label" parent="Background/ScrollContainer/MainContent/InfoLabels"]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Block: 85"
+
+[node name="Speed" type="Label" parent="Background/ScrollContainer/MainContent/InfoLabels"]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Speed: 2"
+
+[node name="BlockReach" type="Label" parent="Background/ScrollContainer/MainContent/InfoLabels"]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Block Reach: 334*"
+
+[node name="HSeparator" type="HSeparator" parent="Background/ScrollContainer/MainContent"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="BlockTypeOptionButton" type="OptionButton" parent="Background/ScrollContainer/MainContent"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+item_count = 2
+selected = 0
+popup/item_0/text = "Commit Block"
+popup/item_0/id = 0
+popup/item_1/text = "React Block"
+popup/item_1/id = 1
+
+[node name="HSeparator2" type="HSeparator" parent="Background/ScrollContainer/MainContent"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="CommitBlockOptionsUI" type="VBoxContainer" parent="Background/ScrollContainer/MainContent"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label11" type="Label" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Target: "
+
+[node name="CommitBlockTargetOptionButton" type="OptionButton" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Label12" type="Label" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Ignore target if this
+ unlikely to receive set: "
+
+[node name="HSlider" type="HSlider" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
+layout_mode = 2
+max_value = 4.0
+
+[node name="Label13" type="Label" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Always block - 99% Range"
+
+[node name="HSeparator3" type="HSeparator" parent="Background/ScrollContainer/MainContent"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="StartingPosition" type="VBoxContainer" parent="Background/ScrollContainer/MainContent"]
+layout_mode = 2
+
+[node name="Label11" type="Label" parent="Background/ScrollContainer/MainContent/StartingPosition"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Starting position: "
+
+[node name="HSlider" type="HSlider" parent="Background/ScrollContainer/MainContent/StartingPosition"]
+layout_mode = 2
+min_value = -4.5
+max_value = 4.5
+value = -0.5
+
+[node name="Label12" type="TextEdit" parent="Background/ScrollContainer/MainContent/StartingPosition"]
+clip_contents = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "-0.5m"
+placeholder_text = "-0.5m"
+
+[node name="HSeparator4" type="HSeparator" parent="Background/ScrollContainer/MainContent"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="AnticipateAttacker" type="VBoxContainer" parent="Background/ScrollContainer/MainContent"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label14" type="Label" parent="Background/ScrollContainer/MainContent/AnticipateAttacker"]
+layout_mode = 2
+tooltip_text = "Favour an opposition attacker - at a cost of slower reaction time for other options"
+mouse_filter = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Anticipate Attacker: "
+
+[node name="AnticipateAttackerOptionButton" type="OptionButton" parent="Background/ScrollContainer/MainContent/AnticipateAttacker"]
+layout_mode = 2
+item_count = 1
+selected = 0
+popup/item_0/text = "None"
+popup/item_0/id = 0
+
+[connection signal="item_selected" from="Background/ScrollContainer/MainContent/BlockTypeOptionButton" to="." method="_on_block_type_option_button_item_selected"]

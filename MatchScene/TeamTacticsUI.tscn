@@ -1,6 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://ygtq2dj8v6xm"]
+[gd_scene load_steps=5 format=3 uid="uid://dgn1arb8c8e44"]
 
 [ext_resource type="Script" path="res://MatchScene/TeamTacticsUI.gd" id="2"]
+[ext_resource type="Script" path="res://MatchScene/BlockOptionsUI.gd" id="3_0evvo"]
+[ext_resource type="PackedScene" path="res://MatchScene/BlockingIndividualUI.tscn" id="3_w2daa"]
 [ext_resource type="PackedScene" uid="uid://bpb8ra3kywlo6" path="res://MatchScene/CourtRepresentationUI.tscn" id="4"]
 
 [node name="TeamTacticsUI" type="Control"]
@@ -236,6 +238,7 @@ offset_bottom = 40.0
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("3_0evvo")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="BlockOptionsUI"]
 layout_mode = 1
@@ -279,10 +282,10 @@ text = "Rotation 6"
 
 [node name="Label" type="Label" parent="BlockOptionsUI"]
 layout_mode = 0
-offset_left = 639.0
-offset_top = 200.0
-offset_right = 765.0
-offset_bottom = 231.0
+offset_left = 651.0
+offset_top = 186.0
+offset_right = 777.0
+offset_bottom = 217.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
@@ -290,180 +293,45 @@ text = "Rotation 1"
 
 [node name="Button" type="Button" parent="BlockOptionsUI"]
 layout_mode = 0
-offset_left = 124.0
-offset_top = 928.0
-offset_right = 212.0
-offset_bottom = 959.0
+offset_left = 4.0
+offset_top = 1032.0
+offset_right = 92.0
+offset_bottom = 1063.0
 text = "Substitute"
 
 [node name="CourtRepresentationUI" parent="BlockOptionsUI" instance=ExtResource("4")]
 layout_mode = 0
 offset_left = 1809.0
-offset_top = 209.0
+offset_top = 206.0
 offset_right = 3609.0
-offset_bottom = 1309.0
+offset_bottom = 1306.0
 
-[node name="BlockingIndividualUI" type="Control" parent="BlockOptionsUI"]
-anchors_preset = 0
-offset_left = 120.0
-offset_top = 232.0
-offset_right = 160.0
-offset_bottom = 272.0
-
-[node name="Label4" type="Label" parent="BlockOptionsUI/BlockingIndividualUI"]
+[node name="Blockers" type="GridContainer" parent="BlockOptionsUI"]
+layout_direction = 2
 layout_mode = 0
-offset_left = 9.0
-offset_top = 2.0
-offset_right = 193.0
-offset_bottom = 33.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Position 4 Blocker: "
+offset_left = 16.0
+offset_top = 237.0
+offset_right = 1303.0
+offset_bottom = 927.0
+columns = 3
 
-[node name="Label5" type="Label" parent="BlockOptionsUI/BlockingIndividualUI"]
+[node name="LeftBlockerUI" parent="BlockOptionsUI/Blockers" instance=ExtResource("3_w2daa")]
+layout_direction = 2
+layout_mode = 2
+
+[node name="MiddleBlockerUI" parent="BlockOptionsUI/Blockers" instance=ExtResource("3_w2daa")]
+layout_mode = 2
+
+[node name="RightBlockerUI" parent="BlockOptionsUI/Blockers" instance=ExtResource("3_w2daa")]
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="BlockOptionsUI"]
 layout_mode = 0
-offset_left = 5.0
-offset_top = 68.0
-offset_right = 189.0
-offset_bottom = 99.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Role: "
-
-[node name="Label8" type="Label" parent="BlockOptionsUI/BlockingIndividualUI"]
-layout_mode = 0
-offset_left = 5.0
-offset_top = 101.0
-offset_right = 189.0
-offset_bottom = 132.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Block: 85"
-
-[node name="Label9" type="Label" parent="BlockOptionsUI/BlockingIndividualUI"]
-layout_mode = 0
-offset_left = 5.0
-offset_top = 134.0
-offset_right = 189.0
-offset_bottom = 165.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Speed: 2"
-
-[node name="Label10" type="Label" parent="BlockOptionsUI/BlockingIndividualUI"]
-layout_mode = 0
-offset_left = 5.0
-offset_top = 162.0
-offset_right = 189.0
-offset_bottom = 193.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Block Reach: 334*"
-
-[node name="Label11" type="Label" parent="BlockOptionsUI/BlockingIndividualUI"]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 430.0
-offset_right = 186.0
-offset_bottom = 461.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Starting position: "
-
-[node name="OptionButton2" type="OptionButton" parent="BlockOptionsUI/BlockingIndividualUI"]
-layout_mode = 0
-offset_left = -3.0
-offset_top = 493.0
-offset_right = 118.0
-offset_bottom = 526.0
-item_count = 1
-selected = 0
-popup/item_0/text = "None"
-popup/item_0/id = 0
-
-[node name="Label14" type="Label" parent="BlockOptionsUI/BlockingIndividualUI"]
-layout_mode = 0
-offset_left = -1.0
-offset_top = 467.0
-offset_right = 196.0
-offset_bottom = 498.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Anticipate Attacker: "
-
-[node name="CommitBlockOptionsUI" type="Control" parent="BlockOptionsUI/BlockingIndividualUI"]
-anchors_preset = 0
-offset_top = 256.0
-offset_right = 40.0
-offset_bottom = 296.0
-
-[node name="OptionButton" type="OptionButton" parent="BlockOptionsUI/BlockingIndividualUI/CommitBlockOptionsUI"]
-layout_mode = 0
-offset_left = 5.0
-offset_top = 29.0
-offset_right = 126.0
-offset_bottom = 62.0
-
-[node name="Label11" type="Label" parent="BlockOptionsUI/BlockingIndividualUI/CommitBlockOptionsUI"]
-layout_mode = 0
-offset_left = 7.0
-offset_top = 3.0
-offset_right = 191.0
-offset_bottom = 34.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Target: "
-
-[node name="Label12" type="Label" parent="BlockOptionsUI/BlockingIndividualUI/CommitBlockOptionsUI"]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 82.0
-offset_right = 418.0
-offset_bottom = 113.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Ignore target if this unlikely to receive set: "
-
-[node name="Label13" type="Label" parent="BlockOptionsUI/BlockingIndividualUI/CommitBlockOptionsUI"]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 134.0
-offset_right = 416.0
-offset_bottom = 165.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Always block - 99% Range"
-
-[node name="HSlider" type="HSlider" parent="BlockOptionsUI/BlockingIndividualUI/CommitBlockOptionsUI"]
-layout_mode = 0
-offset_left = 5.0
-offset_top = 106.0
-offset_right = 173.0
-offset_bottom = 145.0
-max_value = 4.0
-
-[node name="OptionButton" type="OptionButton" parent="BlockOptionsUI/BlockingIndividualUI"]
-layout_mode = 0
-offset_left = -1.0
-offset_top = 201.0
-offset_right = 150.0
-offset_bottom = 232.0
-item_count = 2
-selected = 0
-popup/item_0/text = "Commit Block"
-popup/item_0/id = 0
-popup/item_1/text = "React Block"
-popup/item_1/id = 1
+offset_left = 777.0
+offset_top = 183.0
+offset_right = 916.0
+offset_bottom = 214.0
+text = "Go To Current Rotation"
 
 [connection signal="pressed" from="HBoxContainer/ServeUIButton" to="." method="_on_ServeUIButton_pressed"]
 [connection signal="pressed" from="HBoxContainer/ReceiveUIButton" to="." method="_on_receive_ui_button_pressed"]
