@@ -1,4 +1,5 @@
 extends "res://Scripts/State/AthleteState.gd"
+class_name AthleteDefendState
 const Enums = preload("res://Scripts/World/Enums.gd")
 
 func Enter(athlete:Athlete):

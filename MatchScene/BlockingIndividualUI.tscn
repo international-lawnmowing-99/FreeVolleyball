@@ -30,12 +30,12 @@ theme = SubResource("Theme_sqmpq")
 custom_minimum_size = Vector2(334, 0)
 layout_mode = 0
 offset_left = 3.0
-offset_top = 4.0
+offset_top = 8.0
 offset_right = 337.0
-offset_bottom = 35.0
+offset_bottom = 47.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 text = "Left Blocker"
 horizontal_alignment = 1
 
@@ -43,9 +43,9 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(334, 0)
 layout_mode = 0
 offset_left = 3.0
-offset_top = 38.0
+offset_top = 44.0
 offset_right = 337.0
-offset_bottom = 69.0
+offset_bottom = 75.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
@@ -65,10 +65,12 @@ custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
+theme_override_constants/separation = 7
 
 [node name="InfoLabels" type="VBoxContainer" parent="Background/ScrollContainer/MainContent"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = -6
 
 [node name="Role" type="Label" parent="Background/ScrollContainer/MainContent/InfoLabels"]
 layout_mode = 2
@@ -76,7 +78,7 @@ size_flags_horizontal = 5
 size_flags_vertical = 5
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 14
 text = "Role: "
 
 [node name="RotationPosition" type="Label" parent="Background/ScrollContainer/MainContent/InfoLabels"]
@@ -85,8 +87,8 @@ size_flags_horizontal = 5
 size_flags_vertical = 5
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Rotation Position 2"
+theme_override_font_sizes/font_size = 14
+text = "Rotation Position: 2"
 
 [node name="BlockSkill" type="Label" parent="Background/ScrollContainer/MainContent/InfoLabels"]
 layout_mode = 2
@@ -94,7 +96,7 @@ size_flags_horizontal = 5
 size_flags_vertical = 5
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 14
 text = "Block: 85"
 
 [node name="Speed" type="Label" parent="Background/ScrollContainer/MainContent/InfoLabels"]
@@ -103,7 +105,7 @@ size_flags_horizontal = 5
 size_flags_vertical = 5
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 14
 text = "Speed: 2"
 
 [node name="BlockReach" type="Label" parent="Background/ScrollContainer/MainContent/InfoLabels"]
@@ -112,14 +114,37 @@ size_flags_horizontal = 5
 size_flags_vertical = 5
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 14
 text = "Block Reach: 334*"
 
-[node name="HSeparator" type="HSeparator" parent="Background/ScrollContainer/MainContent"]
-custom_minimum_size = Vector2(0, 30)
+[node name="HSeparator" type="HSeparator" parent="Background/ScrollContainer/MainContent/InfoLabels"]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="BlockTypeOptionButton" type="OptionButton" parent="Background/ScrollContainer/MainContent"]
+[node name="ExcludeFromBlockCheckBox" type="CheckBox" parent="Background/ScrollContainer/MainContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "Exclude from block"
+
+[node name="HSeparator2" type="HSeparator" parent="Background/ScrollContainer/MainContent"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="BlockType" type="VBoxContainer" parent="Background/ScrollContainer/MainContent"]
+layout_mode = 2
+
+[node name="BlockReach" type="Label" parent="Background/ScrollContainer/MainContent/BlockType"]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "Block Type:"
+horizontal_alignment = 1
+
+[node name="BlockTypeOptionButton" type="OptionButton" parent="Background/ScrollContainer/MainContent/BlockType"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -130,10 +155,6 @@ popup/item_0/id = 0
 popup/item_1/text = "React Block"
 popup/item_1/id = 1
 
-[node name="HSeparator2" type="HSeparator" parent="Background/ScrollContainer/MainContent"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-
 [node name="CommitBlockOptionsUI" type="VBoxContainer" parent="Background/ScrollContainer/MainContent"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -142,25 +163,30 @@ size_flags_vertical = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
-text = "Target: "
+theme_override_font_sizes/font_size = 14
+text = "Target attacker: "
 
 [node name="CommitBlockTargetOptionButton" type="OptionButton" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 size_flags_horizontal = 0
+item_count = 1
+selected = 0
+popup/item_0/text = "Not selected"
+popup/item_0/id = 0
 
 [node name="Label12" type="Label" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 14
 text = "Ignore target if this
  unlikely to receive set: "
 
 [node name="HSlider" type="HSlider" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
 layout_mode = 2
 max_value = 4.0
+scrollable = false
 
 [node name="Label13" type="Label" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
 layout_mode = 2
@@ -170,27 +196,29 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Always block - 99% Range"
 
-[node name="HSeparator3" type="HSeparator" parent="Background/ScrollContainer/MainContent"]
+[node name="HSeparator3" type="HSeparator" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
 [node name="StartingPosition" type="VBoxContainer" parent="Background/ScrollContainer/MainContent"]
 layout_mode = 2
 
-[node name="Label11" type="Label" parent="Background/ScrollContainer/MainContent/StartingPosition"]
+[node name="StartingPositionTitle" type="Label" parent="Background/ScrollContainer/MainContent/StartingPosition"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
-text = "Starting position: "
+text = "Starting width: "
 
-[node name="HSlider" type="HSlider" parent="Background/ScrollContainer/MainContent/StartingPosition"]
+[node name="StartingPositionHSlider" type="HSlider" parent="Background/ScrollContainer/MainContent/StartingPosition"]
 layout_mode = 2
 min_value = -4.5
 max_value = 4.5
+step = 0.5
 value = -0.5
+scrollable = false
 
-[node name="Label12" type="TextEdit" parent="Background/ScrollContainer/MainContent/StartingPosition"]
+[node name="StartingPositionDistance" type="TextEdit" parent="Background/ScrollContainer/MainContent/StartingPosition"]
 clip_contents = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -225,4 +253,6 @@ selected = 0
 popup/item_0/text = "None"
 popup/item_0/id = 0
 
-[connection signal="item_selected" from="Background/ScrollContainer/MainContent/BlockTypeOptionButton" to="." method="_on_block_type_option_button_item_selected"]
+[connection signal="toggled" from="Background/ScrollContainer/MainContent/ExcludeFromBlockCheckBox" to="." method="_on_exclude_from_block_check_box_toggled"]
+[connection signal="item_selected" from="Background/ScrollContainer/MainContent/BlockType/BlockTypeOptionButton" to="." method="_on_block_type_option_button_item_selected"]
+[connection signal="value_changed" from="Background/ScrollContainer/MainContent/StartingPosition/StartingPositionHSlider" to="." method="_on_starting_position_h_slider_value_changed"]

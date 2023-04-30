@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://MatchScene/TeamTacticsUI.gd" id="2"]
 [ext_resource type="Script" path="res://MatchScene/BlockOptionsUI.gd" id="3_0evvo"]
-[ext_resource type="PackedScene" path="res://MatchScene/BlockingIndividualUI.tscn" id="3_w2daa"]
+[ext_resource type="PackedScene" uid="uid://cykoixxohrpxa" path="res://MatchScene/BlockingIndividualUI.tscn" id="3_w2daa"]
 [ext_resource type="PackedScene" uid="uid://bpb8ra3kywlo6" path="res://MatchScene/CourtRepresentationUI.tscn" id="4"]
 
 [node name="TeamTacticsUI" type="Control"]

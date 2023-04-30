@@ -16,6 +16,7 @@ var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 @onready var teamInfoUI = $UI/TeamInfoUI
 @onready var TESTteamRepresentation = $UI/TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
 @onready var serveUI = $UI/ServeUI
+@onready var teamTacticsUI = $UI/TeamTacticsUICanvas/TeamTacticsUI
 var isTeamAServing:bool
 
 func _ready():
@@ -58,6 +59,9 @@ func _ready():
 	
 	score.teamANameText.text = teamA.teamName
 	score.teamBNameText.text = teamB.teamName
+	
+	teamTacticsUI.teamA = teamA
+	teamTacticsUI.teamB = teamB
 	
 	preMatchUI.PopulateUI(teamA, teamB)
 	preMatchUI.skipUI()

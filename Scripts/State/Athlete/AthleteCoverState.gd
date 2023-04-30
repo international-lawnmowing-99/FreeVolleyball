@@ -1,4 +1,5 @@
 extends "res://Scripts/State/AthleteState.gd"
+class_name AthleteCoverState
 
 func Enter(athlete:Athlete):
 	nameOfState="Cover"

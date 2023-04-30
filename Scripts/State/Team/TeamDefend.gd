@@ -1,5 +1,5 @@
 extends "res://Scripts/State/Team/TeamState.gd"
-
+class_name TeamDefend
 
 var otherTeam:Team
 var leftSideBlocker:Athlete

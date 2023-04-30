@@ -5,7 +5,7 @@ var excludedFromBlock: bool = false
 
 var primaryTarget:Athlete
 var commitBlockPrimary: bool = false
-
+var startingWidth:float
 # blocker has primary target before set 
 # after set they react
 

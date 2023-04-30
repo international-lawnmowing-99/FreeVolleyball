@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" path="res://MatchScene/ScoreUIMatch.tscn" id="13"]
 [ext_resource type="PackedScene" uid="uid://bas6swl121cf5" path="res://MatchScene/OnCourtPlayer.tscn" id="14"]
 [ext_resource type="Texture2D" uid="uid://qyj7idx5broe" path="res://Textures/antenna-uv.png" id="16"]
-[ext_resource type="PackedScene" uid="uid://ygtq2dj8v6xm" path="res://MatchScene/TeamTacticsUI.tscn" id="17"]
+[ext_resource type="PackedScene" uid="uid://dgn1arb8c8e44" path="res://MatchScene/TeamTacticsUI.tscn" id="17"]
 [ext_resource type="PackedScene" path="res://MatchScene/PreMatchUI.tscn" id="19"]
 [ext_resource type="PackedScene" uid="uid://7v1fcf4qi42l" path="res://MatchScene/ServeUI.tscn" id="20"]
 [ext_resource type="PackedScene" path="res://MatchScene/TeamSelectionUI.tscn" id="22"]

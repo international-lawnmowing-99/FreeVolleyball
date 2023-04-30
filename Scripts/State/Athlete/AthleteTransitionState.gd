@@ -1,5 +1,5 @@
 extends "res://Scripts/State/AthleteState.gd"
-
+class_name AthleteTransitionState
 
 
 func Enter(athlete:Athlete):

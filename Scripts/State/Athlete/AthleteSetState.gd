@@ -1,4 +1,7 @@
 extends "res://Scripts/State/AthleteState.gd"
+
+class_name AthleteSetState
+
 enum InternalSetState{ 
 	Undefined,
 	JumpSet,

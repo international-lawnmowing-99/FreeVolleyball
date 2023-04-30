@@ -1,4 +1,5 @@
 extends "res://Scripts/State/AthleteState.gd"
+class_name AthletePassState
 const Enums = preload("res://Scripts/World/Enums.gd")
 
 var ball:Ball
@@ -171,7 +172,7 @@ func PassBall(athlete:Athlete):
 		Console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")
 
 	elif rollOffDifference >= -10:
-		receptionTarget = Vector3(athlete.team.flip * randf_range(0.5, 1.5), 2.5, randf_range(-2, 2))
+		receptionTarget = Vector3(athlete.team.flip * randf_range(1.5, 2.5), 2.5, randf_range(-2, 2))
 		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		Console.AddNewLine(athlete.stats.lastName + " 2-point pass")
 		pass

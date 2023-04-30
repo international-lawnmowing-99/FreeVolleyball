@@ -1,4 +1,5 @@
 extends "res://Scripts/State/AthleteState.gd"
+class_name AthleteChillState
 
 func Enter(athlete:Athlete):
 	nameOfState="Chilling"
@@ -11,7 +12,7 @@ func Enter(athlete:Athlete):
 		athlete.rb.angular_velocity = Vector3.ZERO
 		athlete.rb.freeze = true
 		
-func Update(athlete:Athlete):
+func Update(_athlete:Athlete):
 	pass
 	### !!! Something associated with this causes the athletes to rescale to 1,1,1
 	### Why???

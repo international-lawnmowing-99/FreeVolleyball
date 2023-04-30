@@ -16,16 +16,16 @@ var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(
 @onready var rightIKTarget:Marker3D = $"new new woman import/RightHandTarget"
 
 var team: Team
-var myDelta
+var myDelta:float
 var serveState
-@onready var defendState = load("res://Scripts/State/Athlete/AthleteDefendState.gd").new()
-@onready var passState = load("res://Scripts/State/Athlete/AthletePassState.gd").new()
-@onready var transitionState = load("res://Scripts/State/Athlete/AthleteTransitionState.gd").new()
-@onready var setState = load("res://Scripts/State/Athlete/AthleteSetState.gd").new()
-@onready var spikeState = load("res://Scripts/State/Athlete/AthleteSpikeState.gd").new()
-@onready var blockState = load("res://Scripts/State/Athlete/AthleteBlockState.gd").new()
-@onready var chillState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
-@onready var coverState = load("res://Scripts/State/Athlete/AthleteCoverState.gd").new()
+@onready var defendState:AthleteDefendState = load("res://Scripts/State/Athlete/AthleteDefendState.gd").new()
+@onready var passState:AthletePassState = load("res://Scripts/State/Athlete/AthletePassState.gd").new()
+@onready var transitionState:AthleteTransitionState = load("res://Scripts/State/Athlete/AthleteTransitionState.gd").new()
+@onready var setState:AthleteSetState = load("res://Scripts/State/Athlete/AthleteSetState.gd").new()
+@onready var spikeState:AthleteSpikeState = load("res://Scripts/State/Athlete/AthleteSpikeState.gd").new()
+@onready var blockState:AthleteBlockState = load("res://Scripts/State/Athlete/AthleteBlockState.gd").new()
+@onready var chillState:AthleteChillState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
+@onready var coverState:AthleteCoverState = load("res://Scripts/State/Athlete/AthleteCoverState.gd").new()
 
 const MoveDistanceDelta:float = 0.1
 

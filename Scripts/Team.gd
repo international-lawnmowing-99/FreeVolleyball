@@ -292,6 +292,7 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	var tempPos = Vector3(incoming.position.x, 0, incoming.position.z)
 	incoming.position = outgoing.position
 	outgoing.position = tempPos
+	outgoing.moveTarget = outgoing.position
 
 	incoming.rotationPosition = outgoing.rotationPosition
 	outgoing.rotationPosition = -1
@@ -312,6 +313,7 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	
 	outgoing.stateMachine.SetCurrentState(outgoing.chillState)
 	incoming.ReEvaluateState()
+	CachePlayers()
 	
 func CachePlayers():
 	for player in courtPlayers:
