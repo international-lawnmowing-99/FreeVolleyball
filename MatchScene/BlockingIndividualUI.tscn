@@ -156,10 +156,12 @@ popup/item_1/text = "React Block"
 popup/item_1/id = 1
 
 [node name="CommitBlockOptionsUI" type="VBoxContainer" parent="Background/ScrollContainer/MainContent"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 10
 
-[node name="Label11" type="Label" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
+[node name="CommitTargetLabel" type="Label" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -175,7 +177,7 @@ selected = 0
 popup/item_0/text = "Not selected"
 popup/item_0/id = 0
 
-[node name="Label12" type="Label" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
+[node name="CommitmentExplainerLabel" type="Label" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -183,18 +185,18 @@ theme_override_font_sizes/font_size = 14
 text = "Ignore target if this
  unlikely to receive set: "
 
-[node name="HSlider" type="HSlider" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
+[node name="CommitmentPercentHSlider" type="HSlider" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
 layout_mode = 2
-max_value = 4.0
+step = 5.0
 scrollable = false
 
-[node name="Label13" type="Label" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
+[node name="CommitmentPercentLabel" type="Label" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
-text = "Always block - 99% Range"
+text = "Always commit to target"
 
 [node name="HSeparator3" type="HSeparator" parent="Background/ScrollContainer/MainContent/CommitBlockOptionsUI"]
 custom_minimum_size = Vector2(0, 30)
@@ -202,6 +204,7 @@ layout_mode = 2
 
 [node name="StartingPosition" type="VBoxContainer" parent="Background/ScrollContainer/MainContent"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="StartingPositionTitle" type="Label" parent="Background/ScrollContainer/MainContent/StartingPosition"]
 layout_mode = 2
@@ -253,6 +256,31 @@ selected = 0
 popup/item_0/text = "None"
 popup/item_0/id = 0
 
+[node name="LineCross" type="VBoxContainer" parent="Background/ScrollContainer/MainContent"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LineCrossLabel" type="Label" parent="Background/ScrollContainer/MainContent/LineCross"]
+layout_mode = 2
+tooltip_text = "Favour an opposition attacker - at a cost of slower reaction time for other options"
+mouse_filter = 1
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Line / Cross"
+
+[node name="LineCrossOptionButton" type="OptionButton" parent="Background/ScrollContainer/MainContent/LineCross"]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "None (Balanced)"
+popup/item_0/id = 0
+popup/item_1/text = "Block Line"
+popup/item_1/id = 1
+popup/item_2/text = "Block Cross"
+popup/item_2/id = 2
+
 [connection signal="toggled" from="Background/ScrollContainer/MainContent/ExcludeFromBlockCheckBox" to="." method="_on_exclude_from_block_check_box_toggled"]
 [connection signal="item_selected" from="Background/ScrollContainer/MainContent/BlockType/BlockTypeOptionButton" to="." method="_on_block_type_option_button_item_selected"]
+[connection signal="value_changed" from="Background/ScrollContainer/MainContent/CommitBlockOptionsUI/CommitmentPercentHSlider" to="." method="_on_commitment_percent_h_slider_value_changed"]
 [connection signal="value_changed" from="Background/ScrollContainer/MainContent/StartingPosition/StartingPositionHSlider" to="." method="_on_starting_position_h_slider_value_changed"]

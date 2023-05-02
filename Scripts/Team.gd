@@ -88,6 +88,7 @@ var server:int = 0
 var flip = 1
 
 var receptionTarget:Vector3
+var ballPositionWhenSet:Vector3
 var setTarget:Set
 
 var timeTillDigTarget:float
@@ -313,7 +314,6 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	
 	outgoing.stateMachine.SetCurrentState(outgoing.chillState)
 	incoming.ReEvaluateState()
-	CachePlayers()
 	
 func CachePlayers():
 	for player in courtPlayers:

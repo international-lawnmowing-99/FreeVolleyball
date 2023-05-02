@@ -12,9 +12,14 @@ Preparing,
 Jump
 }
 
-var commitBlockTarget = null
+var excludedFromBlock: bool = false
+
+var commitBlockTarget:Athlete = null
+var anticipateTarget:Athlete = null
+
+var startingWidth:float
+
 var isCommitBlocking:bool = false
-var blockStrategy:BlockingStrategyIndividual = BlockingStrategyIndividual.new()
 
 var blockState = BlockState.NotBlocking
 

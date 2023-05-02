@@ -93,6 +93,7 @@ func SetBall(team:Team):
 	if team.ball.linear_velocity == Vector3.ZERO:
 		team.ball.linear_velocity = team.ball.FindDownwardsParabola(team.ball.position, team.setTarget.target)
 #	
+	team.ballPositionWhenSet = team.ball.position
 	Console.AddNewLine("Ball vel ----------------------------------- " + str(3.6 * team.ball.linear_velocity.length()))
 	
 	#team.setTarget = null
