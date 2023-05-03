@@ -34,7 +34,7 @@ var serveState = ServeState.NotServing
 var serveAggression = ServeAggression.UNDEFINED
 var serveType = ServeType.UNDEFINED
 var serveTarget:CSGMesh3D
-var serveUI
+var serveUI:ServeUI
 var attackTarget
 var takeOffTarget
 var ball:Ball
@@ -299,31 +299,35 @@ func ChooseServeType(type):
 
 func ChooseServeAggression(aggression):
 	serveAggression = aggression
+	
+	var serveInaccuracy = (100.0 - _athlete.stats.serve)/25
+	
 	if rememberSettings:
 		rememberedServeAggression = aggression
 
 	serveTarget.visible = true
-	serveTarget.mesh.top_radius = (100.0 - _athlete.stats.serve)/25
+	serveTarget.mesh.top_radius = serveInaccuracy
 	serveTarget.mesh.bottom_radius = serveTarget.mesh.top_radius
 	
 	serveState = ServeState.Aiming
 	if !rememberSettings || rememberedServeTarget == null:
+
 		match serveType:
 			ServeType.Jump:
 				if serveAggression == ServeAggression.Aggressive:
-					serveTarget.position.x = randf_range(AGGRESSIVEJUMPBOUNDS[0], AGGRESSIVEJUMPBOUNDS[1])
-					serveTarget.position.z = randf_range(AGGRESSIVEJUMPBOUNDS[2], AGGRESSIVEJUMPBOUNDS[3])
+					serveTarget.position.x = randf_range(AGGRESSIVEJUMPBOUNDS[0] + 1 + serveInaccuracy, AGGRESSIVEJUMPBOUNDS[1] - serveInaccuracy)
+					serveTarget.position.z = randf_range(AGGRESSIVEJUMPBOUNDS[2] + 0.5 + serveInaccuracy, AGGRESSIVEJUMPBOUNDS[3] - 0.5 - serveInaccuracy)
 				else:
-					serveTarget.position.x = randf_range(FLOATANDSOFTJUMPBOUNDS[0], FLOATANDSOFTJUMPBOUNDS[1])
-					serveTarget.position.z = randf_range(FLOATANDSOFTJUMPBOUNDS[2], FLOATANDSOFTJUMPBOUNDS[3])
+					serveTarget.position.x = randf_range(FLOATANDSOFTJUMPBOUNDS[0] + 1 + serveInaccuracy, FLOATANDSOFTJUMPBOUNDS[1] - serveInaccuracy)
+					serveTarget.position.z = randf_range(FLOATANDSOFTJUMPBOUNDS[2] + 0.5 + serveInaccuracy, FLOATANDSOFTJUMPBOUNDS[3] - 0.5 - serveInaccuracy)
 
 			ServeType.Float:
-					serveTarget.position.x = randf_range(FLOATANDSOFTJUMPBOUNDS[0], FLOATANDSOFTJUMPBOUNDS[1])
-					serveTarget.position.z = randf_range(FLOATANDSOFTJUMPBOUNDS[2], FLOATANDSOFTJUMPBOUNDS[3])
+					serveTarget.position.x = randf_range(FLOATANDSOFTJUMPBOUNDS[0] + 1 + serveInaccuracy, FLOATANDSOFTJUMPBOUNDS[1] - serveInaccuracy)
+					serveTarget.position.z = randf_range(FLOATANDSOFTJUMPBOUNDS[2] + 0.5 + serveInaccuracy, FLOATANDSOFTJUMPBOUNDS[3] - 0.5 - serveInaccuracy)
 
 			ServeType.Underarm:
-					serveTarget.position.x = randf_range(UNDERARMBOUNDS[0], UNDERARMBOUNDS[1])
-					serveTarget.position.z = randf_range(UNDERARMBOUNDS[2], UNDERARMBOUNDS[3])
+					serveTarget.position.x = randf_range(UNDERARMBOUNDS[0] + 1 + serveInaccuracy, UNDERARMBOUNDS[1] - serveInaccuracy)
+					serveTarget.position.z = randf_range(UNDERARMBOUNDS[2] + 0.5 + serveInaccuracy, UNDERARMBOUNDS[3] - 0.5 - serveInaccuracy)
 	else:
 		serveTarget.position = rememberedServeTarget
 	
@@ -333,7 +337,7 @@ func CommenceServe():
 	#Add some variation based checked the lack of skill of the server
 	#print("what if... : " + str(Vector2.ZERO.normalized()))
 	var inaccuracy = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
-	var inaccuracyLength = randf_range(0, serveTarget.mesh.top_radius)
+	var inaccuracyLength = randf_range(0, serveTarget.mesh.top_radius) # !!This is our nicely stored serveInaccuracy variable hashtag cleancode
 	inaccuracy *= inaccuracyLength
 	
 	attackTarget = Vector3(serveTarget.position.x, 0, serveTarget.position.z)

@@ -15,10 +15,11 @@ func Update(team:Team):
 			team.ball.linear_velocity.y <= 0 && \
 			(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5):
 				SpikeBall(team)
-		elif (team.ball.position.z < team.chosenSpiker.setRequest.target.z &&\
+		elif team.ball.linear_velocity.z < 0:
+			if (team.ball.position.z < team.chosenSpiker.setRequest.target.z &&\
 				team.ball.linear_velocity.y <= 0 && \
-			(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5):
-				SpikeBall(team)
+				(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5):
+					SpikeBall(team)
 		else:
 			Console.AddNewLine("No ball z vel...")
 			if team.ball.position.x <= team.setTarget.target.x &&\

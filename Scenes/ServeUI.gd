@@ -1,4 +1,5 @@
 extends CanvasLayer
+class_name ServeUI
 
 enum UIState{
 	UNDEFINED,

@@ -39,6 +39,8 @@ func Enter(athlete:Athlete):
 	if athlete == athlete.team.defendState.rightSideBlocker:
 		athlete.moveTarget = athlete.team.CheckIfFlipped(Vector3(0.5, 0, -3)) 
 	
+	athlete.blockState.startingWidth = athlete.moveTarget.z
+	# won't show up until after ball served currently as they start in chill state
 	
 	athlete.leftIK.start()
 	athlete.rightIK.start()
