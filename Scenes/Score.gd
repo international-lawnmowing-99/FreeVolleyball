@@ -1,4 +1,5 @@
 extends TextureRect
+class_name Score
 
 var mManager:MatchManager
 

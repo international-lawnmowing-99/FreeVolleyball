@@ -50,7 +50,20 @@ func RotateClockwise(team:Team):
 	team.Rotate()
 	Refresh(team)
 	team.stateMachine.SetCurrentState(team.preserviceState)
-	pass
+	Console.AddNewLine("-")
+	Console.AddNewLine("orig rot 1: " + team.originalRotation1Player.stats.lastName)
+	# remember the original rotaion 1 player for later designation of rotations
+	if team.originalRotation1Player == team.courtPlayers[5]:
+		# I believe that courtPlayers[0] is the original
+		team.originalRotation1Player = team.courtPlayers[0]
+		Console.AddNewLine("Back to start of rotation")
+	else:
+		var origRot1Index = team.courtPlayers.find(team.originalRotation1Player)
+			
+		Console.AddNewLine("team.courtPlayers.find(team.originalRotation1Player) + 1 = " + str(team.courtPlayers.find(team.originalRotation1Player) + 1))
+		team.originalRotation1Player = team.courtPlayers[team.courtPlayers.find(team.originalRotation1Player) + 1]
+	Console.AddNewLine("rotated orig rot 1: " + team.originalRotation1Player.stats.lastName)
+	
 	
 func RotateAntiClockwise(team:Team):
 	for i in range(5):

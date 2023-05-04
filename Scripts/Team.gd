@@ -27,6 +27,7 @@ var oppositeHitter:Athlete
 var middleFront:Athlete
 var outsideFront:Athlete
 var libero:Athlete
+var originalRotation1Player:Athlete
 
 var chosenSetter:Athlete
 var chosenSpiker:Athlete
@@ -194,7 +195,7 @@ func PlaceTeam():
 		else:
 			lad.serveState = load("res://Scripts/State/Athlete/AthleteComputer/AthleteComputerServeState.gd").new()
 
-		
+		originalRotation1Player = courtPlayers[0]
 
 func xzVector(vec:Vector3):
 	return Vector3(vec.x, 0, vec.z)
@@ -253,6 +254,8 @@ func CheckForLiberoChange():
 	if isLiberoOnCourt && libero.FrontCourt():
 		InstantaneouslySwapPlayers(libero, benchPlayers[0])
 		isLiberoOnCourt = false
+		
+		
 # if the back middle isn't serving, get rid of them
 	if !isLiberoOnCourt && middleBack:
 
@@ -271,6 +274,9 @@ func CheckForLiberoChange():
 func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 #	if isHuman:
 #		print("Swapping " + outgoing.name + " for " + incoming.name)
+	
+	if outgoing == originalRotation1Player:
+		originalRotation1Player = incoming
 	
 	var outgoingIndex = courtPlayers.find(outgoing)
 	if outgoingIndex == -1:

@@ -235,7 +235,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="BlockOptionsUI" type="Control" parent="."]
-visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -338,3 +337,9 @@ text = "Go To Current Rotation"
 [connection signal="pressed" from="HBoxContainer/ReceiveUIButton" to="." method="_on_receive_ui_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SetUIButton" to="." method="_on_set_ui_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/BlockUIButton" to="." method="_on_block_ui_button_pressed"]
+[connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot1Button" to="BlockOptionsUI" method="_on_rot_1_button_pressed"]
+[connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot2Button" to="BlockOptionsUI" method="_on_rot_2_button_pressed"]
+[connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot3Button" to="BlockOptionsUI" method="_on_rot_3_button_pressed"]
+[connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot4Button" to="BlockOptionsUI" method="_on_rot_4_button_pressed"]
+[connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot5Button" to="BlockOptionsUI" method="_on_rot_5_button_pressed"]
+[connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot6Button" to="BlockOptionsUI" method="_on_rot_6_button_pressed"]

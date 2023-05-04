@@ -11,7 +11,7 @@ var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 
 @onready var ball = $ball
 
-@onready var score = $UI/ScoreCanvasLayer/Score
+@onready var score:Score = $UI/ScoreCanvasLayer/Score
 @onready var preMatchUI = $UI/PreMatchUI
 @onready var teamInfoUI = $UI/TeamInfoUI
 @onready var TESTteamRepresentation = $UI/TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
