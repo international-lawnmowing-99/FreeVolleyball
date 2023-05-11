@@ -31,8 +31,8 @@ func _ready():
 	teamA.isHuman = true
 	teamB.isHuman = false
 	
-	teamA.init(ball, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational, self)
-	teamB.init(ball, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational, self)
+	teamA.Init(ball, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational, self)
+	teamB.Init(ball, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational, self)
 	teamA.defendState.otherTeam = teamB
 	teamB.defendState.otherTeam = teamA
 
@@ -60,8 +60,7 @@ func _ready():
 	score.teamANameText.text = teamA.teamName
 	score.teamBNameText.text = teamB.teamName
 	
-	teamTacticsUI.teamA = teamA
-	teamTacticsUI.teamB = teamB
+	teamTacticsUI.Init(teamA, teamB)
 	
 	preMatchUI.PopulateUI(teamA, teamB)
 	preMatchUI.skipUI()
@@ -124,6 +123,7 @@ func _input(_event):
 func PointToTeamA():
 	score.PointToTeamA()
 	teamA.isNextToSpike = false
+	teamB.isNextToSpike = true
 	
 	if !isTeamAServing:
 		teamA.Rotate()
@@ -140,6 +140,7 @@ func PointToTeamA():
 func PointToTeamB():
 	score.PointToTeamB()
 	teamB.isNextToSpike = false
+	teamA.isNextToSpike = true
 	
 	if isTeamAServing:
 		teamB.Rotate()

@@ -53,7 +53,8 @@ var acceleration = 10
 
 var rotationSpeed = 8
 
-var rotationPosition
+var rotationPosition:int
+var pseudoRotationPosition:int
 
 var digAngle = 0
 var timeTillBallReachesMe = 9999

@@ -1,4 +1,5 @@
 extends "res://Scripts/State/Team/TeamState.gd"
+class_name TeamSet
 
 #can also potentially spike, dogshot
 var ballWillBeDumped:bool = false

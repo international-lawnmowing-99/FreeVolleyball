@@ -4,67 +4,51 @@ class_name BlockOptionsUI
 var teamA:Team
 var teamB:Team
 
+var servingSelected:bool = true
+
+
 func UpdateBlockers(team:Team, otherTeam:Team):
 	team.defendState.CacheBlockers(team)
-	$Blockers/LeftBlockerUI.Populate("Left Blocker", team.defendState.leftSideBlocker, otherTeam)
-	$Blockers/MiddleBlockerUI.Populate("Middle Blocker", team.middleFront, otherTeam)
-	$Blockers/RightBlockerUI.Populate("Right Blocker", team.defendState.rightSideBlocker, otherTeam)
+	$Blockers/LeftBlockerUI.Populate("Left Blocker", false, team.defendState.leftSideBlocker, otherTeam)
+	$Blockers/MiddleBlockerUI.Populate("Middle Blocker", false, team.middleFront, otherTeam)
+	$Blockers/RightBlockerUI.Populate("Right Blocker", false, team.defendState.rightSideBlocker, otherTeam)
 	pass
 
 
 func _on_rot_1_button_pressed():
-	# need to get the current court playerz
-	# deep copy them so they don't actually rotate on court
-	# then rotate the copy till it aligns to rot 1
-	var duplicateTeam:Team = teamA.duplicate(true)
-	var setterRotationPosition = duplicateTeam.setter.rotationPosition
-	var rotationDifference = setterRotationPosition - 1
-	
-	for i in range(6 - rotationDifference):
-		duplicateTeam.Rotate()
-		pass # Replace with function body.
-	
-	# now, find the original players
-	duplicateTeam.defendState.CacheBlockers(duplicateTeam)
-	var realCopyOfLeftBlocker:Athlete
-	var realCopyOfMiddleBlocker:Athlete
-	var realCopyOfRightBlocker:Athlete
-	
-	for player in teamA.allPlayers:
-		# it's very unlikely that you'd have a collision, but with the ability for players to rename players
-		# so that they have the same names it makes sense to put in a 
-		# UNIQUE ID at some point
-		if duplicateTeam.defendState.leftBlocker.stats.firstName == player.stats.firstName && \
-		duplicateTeam.defendState.leftBlocker.stats.lastName == player.stats.lastName:
-			realCopyOfLeftBlocker = player
-			
-		elif duplicateTeam.middleBlocker.stats.firstName == player.stats.firstName && \
-		duplicateTeam.middleBlocker.stats.lastName == player.stats.lastName:
-			realCopyOfMiddleBlocker = player
-			
-		elif duplicateTeam.defendState.rightBlocker.stats.firstName == player.stats.firstName && \
-		duplicateTeam.defendState.rightBlocker.stats.lastName == player.stats.lastName:
-			realCopyOfRightBlocker = player
-	
-	$Blockers/LeftBlockerUI.Populate("Left Blocker", realCopyOfLeftBlocker, teamB)
-	$Blockers/MiddleBlockerUI.Populate("Middle Blocker", realCopyOfMiddleBlocker, teamB)
-	$Blockers/RightBlockerUI.Populate("Right Blocker", realCopyOfRightBlocker, teamB)
+	DisplayRotaion(1)
+
 
 func _on_rot_2_button_pressed():
-	pass # Replace with function body.
-
+	DisplayRotaion(2)
 
 func _on_rot_3_button_pressed():
-	pass # Replace with function body.
+	DisplayRotaion(3)
 
 
 func _on_rot_4_button_pressed():
-	pass # Replace with function body.
+	DisplayRotaion(4)
 
 
 func _on_rot_5_button_pressed():
-	pass # Replace with function body.
-
+	DisplayRotaion(5)
 
 func _on_rot_6_button_pressed():
-	pass # Replace with function body.
+	DisplayRotaion(6)
+	
+func DisplayRotaion(positionOfOriginalRot1Player:int):
+	var rotationDifference = teamA.originalRotation1Player.rotationPosition - positionOfOriginalRot1Player
+	if rotationDifference < 0:
+		rotationDifference = 6 + rotationDifference
+		
+	var pseudoTeam = PseudoTeam.new()
+	pseudoTeam.CopyTeam(teamA)
+	
+	for i in range(rotationDifference):
+		pseudoTeam.PseudoRotate()
+	
+	pseudoTeam.CachePlayers()
+	pseudoTeam.PseudoCacheBlockers(servingSelected)
+	$Blockers/LeftBlockerUI.Populate("Left Blocker", true, pseudoTeam.pseudoLeftBlocker, teamB)
+	$Blockers/MiddleBlockerUI.Populate("Middle Blocker", true, pseudoTeam.pseudoMiddleBlocker, teamB)
+	$Blockers/RightBlockerUI.Populate("Right Blocker", true, pseudoTeam.pseudoRightBlocker, teamB)

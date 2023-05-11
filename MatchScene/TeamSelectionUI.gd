@@ -1,4 +1,5 @@
 extends ColorRect
+class_name TeamSelectionUI
 
 var nameCards:Array
 var normalColour = Color.CHOCOLATE

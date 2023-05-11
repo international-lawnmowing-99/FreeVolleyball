@@ -3,7 +3,7 @@ class_name BlockingIndividualUI
 
 var athlete:Athlete
 
-func Populate(title:String, _athlete:Athlete, otherTeam:Team):
+func Populate(title:String, isPseudo:bool, _athlete:Athlete, otherTeam:Team):
 	if !_athlete || !otherTeam:
 		Console.AddNewLine("!!! ERROR: blocker does not exist from UI's perspective !!!")
 		return
@@ -13,7 +13,11 @@ func Populate(title:String, _athlete:Athlete, otherTeam:Team):
 	$Background/Name.text = athlete.stats.firstName + " " + athlete.stats.lastName
 	$Background/ScrollContainer/MainContent/InfoLabels/Role.text = "Role: " + Enums.Role.keys()[athlete.role]
 	
-	$Background/ScrollContainer/MainContent/InfoLabels/RotationPosition.text = "Rotation Position: " + str(athlete.rotationPosition)
+	if isPseudo:
+		$Background/ScrollContainer/MainContent/InfoLabels/RotationPosition.text = "Rotation Position: " + str(athlete.pseudoRotationPosition)
+	else:
+		$Background/ScrollContainer/MainContent/InfoLabels/RotationPosition.text = "Rotation Position: " + str(athlete.rotationPosition)
+	
 	$Background/ScrollContainer/MainContent/InfoLabels/BlockSkill.text = "Block: " + str("%.0f" %athlete.stats.block)
 	$Background/ScrollContainer/MainContent/InfoLabels/BlockReach.text = "Block Reach: " + str(roundf(athlete.stats.blockHeight *100))+ "cm"
 	$Background/ScrollContainer/MainContent/InfoLabels/Speed.text = "Speed: " + str("%.0f" %athlete.stats.speed)

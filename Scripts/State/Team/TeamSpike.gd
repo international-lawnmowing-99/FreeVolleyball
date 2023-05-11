@@ -1,4 +1,6 @@
 extends "res://Scripts/State/Team/TeamState.gd"
+class_name TeamSpike
+
 var rng = RandomNumberGenerator.new()
 var hit = false
 

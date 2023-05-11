@@ -10,4 +10,6 @@ var substitutionTirednessThresholds
 
 var setOptionWeights
 
+var scheduledSubstitutions
+
 # Blocking options

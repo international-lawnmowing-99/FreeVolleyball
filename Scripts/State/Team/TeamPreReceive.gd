@@ -1,4 +1,5 @@
 extends "res://Scripts/State/Team/TeamState.gd" 
+class_name TeamPreReceive
 
 func Enter(team:Team):
 	nameOfState = "Pre Receive"

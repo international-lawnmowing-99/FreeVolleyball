@@ -1,6 +1,6 @@
 extends Node
-
 class_name Team
+
 var Enums = preload("res://Scripts/World/Enums.gd")
 var AthleteScene = preload("res://Scenes/Athlete.tscn")
 
@@ -126,7 +126,7 @@ var defendState:State = load("res://Scripts/State/Team/TeamDefend.gd").new()
 var prereceiveState:State = load("res://Scripts/State/Team/TeamPreReceive.gd").new()
 var chillState = load("res://Scripts/State/Team/TeamState.gd").new()
 
-func init(_ball, choiceState, gameWorld, clubOrInternational, matchManager):
+func Init(_ball, choiceState, gameWorld, clubOrInternational, matchManager):
 	mManager = matchManager
 	var team = gameWorld.GetTeam(choiceState, clubOrInternational)
 	teamName = team.teamName

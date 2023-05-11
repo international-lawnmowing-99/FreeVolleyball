@@ -48,6 +48,9 @@ func _on_set_ui_button_pressed():
 func _on_block_ui_button_pressed():
 	ShowBlockOptions()
 	
-func _ready():
+func Init(_teamA, _teamB):
+	teamA = _teamA
+	teamB = _teamB
+	
 	$BlockOptionsUI.teamA = teamA
 	$BlockOptionsUI.teamB = teamB

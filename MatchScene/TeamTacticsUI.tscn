@@ -325,13 +325,27 @@ layout_mode = 2
 [node name="RightBlockerUI" parent="BlockOptionsUI/Blockers" instance=ExtResource("3_w2daa")]
 layout_mode = 2
 
-[node name="Button2" type="Button" parent="BlockOptionsUI"]
+[node name="CurrentRotationButton" type="Button" parent="BlockOptionsUI"]
 layout_mode = 0
 offset_left = 777.0
 offset_top = 183.0
 offset_right = 916.0
 offset_bottom = 214.0
 text = "Go To Current Rotation"
+
+[node name="OptionButton" type="OptionButton" parent="BlockOptionsUI"]
+layout_mode = 0
+offset_left = 417.0
+offset_top = 182.0
+offset_right = 627.0
+offset_bottom = 220.0
+tooltip_text = "Blockers may swap positions from serve to receive depending on if players are remaining on the side they receive the ball"
+item_count = 2
+selected = 0
+popup/item_0/text = "Serve"
+popup/item_0/id = 0
+popup/item_1/text = "Receive"
+popup/item_1/id = 1
 
 [connection signal="pressed" from="HBoxContainer/ServeUIButton" to="." method="_on_ServeUIButton_pressed"]
 [connection signal="pressed" from="HBoxContainer/ReceiveUIButton" to="." method="_on_receive_ui_button_pressed"]
