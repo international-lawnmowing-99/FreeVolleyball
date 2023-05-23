@@ -32,3 +32,7 @@ func UpdateRepresentation(delta):
 			rect.scale.x = lerp(rect.scale.x, xScaleAir, lerpSpeed*delta)
 			rect.scale.y = lerp(rect.scale.y, yScaleAir, lerpSpeed*delta)
 #		print("Mapping position to 2d, pos.x: " + courtPlayers[i].position.x
+
+func DisplayRotation(team:Team, rot):
+
+	pass

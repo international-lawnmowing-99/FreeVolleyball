@@ -18,7 +18,7 @@ var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 @onready var serveUI = $UI/ServeUI
 @onready var teamTacticsUI = $UI/TeamTacticsUICanvas/TeamTacticsUI
 var isTeamAServing:bool
-
+var isPaused:bool = false
 func _ready():
 	var now = Time.get_ticks_msec()
 	gameWorld.GenerateDefaultWorld(false)
@@ -119,6 +119,13 @@ func _input(_event):
 	
 	if Input.is_action_just_pressed("ui_focus_next"):
 		pass
+		
+	if Input.is_key_pressed(KEY_F2):
+		if isPaused:
+			UnPause()
+		else:
+			Pause()
+		
 
 func PointToTeamA():
 	score.PointToTeamA()
@@ -197,3 +204,12 @@ func RotateAroundOrigin(node3D, angle):
 	node3D.transform = pivot_transform.rotated(Vector3.UP, node3D.transform.basis.get_euler().y + angle).translated(pivot_radius)
 	print(str(node3D.transform.basis.get_euler()) + "  rotating around origin")
 	
+func Pause():
+	Engine.time_scale = 0
+	isPaused = true
+	Console.AddNewLine("Game Paused - F2 to unpause")
+
+func UnPause():
+	Engine.time_scale = 1
+	isPaused = false
+	Console.AddNewLine("Game unpaused")

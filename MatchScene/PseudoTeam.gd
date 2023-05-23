@@ -111,15 +111,7 @@ func CheckForLiberoChange():
 		PseudoSub(libero, benchPlayers[0])
 		isLiberoOnCourt = false
 		
-		
-# if the back middle isn't serving, get rid of them
 	if !isLiberoOnCourt && middleBack:
-		if !isNextToSpike:
-			if middleBack != courtPlayers[server]:
-				PseudoSub(middleBack, libero)
-				isLiberoOnCourt = true
-
-		else:
 			PseudoSub(middleBack, libero)
 			isLiberoOnCourt = true
 

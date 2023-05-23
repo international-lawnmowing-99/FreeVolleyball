@@ -52,5 +52,8 @@ func Init(_teamA, _teamB):
 	teamA = _teamA
 	teamB = _teamB
 	
-	$BlockOptionsUI.teamA = teamA
-	$BlockOptionsUI.teamB = teamB
+	blockOptionsUI.teamA = teamA
+	blockOptionsUI.teamB = teamB
+	
+	receiveOptionsUI.teamA = teamA
+	receiveOptionsUI.teamB = teamB

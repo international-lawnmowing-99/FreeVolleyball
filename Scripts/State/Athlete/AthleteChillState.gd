@@ -5,14 +5,17 @@ func Enter(athlete:Athlete):
 	nameOfState="Chilling"
 	
 	athlete.moveTarget = Vector3(athlete.position.x, 0, athlete.position.z)
-	if !athlete.rb.freeze:
-		athlete.rb.linear_velocity = Vector3.ZERO
-		athlete.position.y = 0
-		#athlete.rotation = Vector3.ZERO
-		athlete.rb.angular_velocity = Vector3.ZERO
-		athlete.rb.freeze = true
+
 		
-func Update(_athlete:Athlete):
+func Update(athlete:Athlete):
+	if !athlete.rb.freeze:
+		if athlete.position.y < 0:
+			#athlete.rb.linear_velocity = Vector3.ZERO
+			athlete.position.y = 0.01
+			#athlete.rotation = Vector3.ZERO
+			athlete.rb.angular_velocity = Vector3.ZERO
+			athlete.rb.freeze = true
+	
 	pass
 	### !!! Something associated with this causes the athletes to rescale to 1,1,1
 	### Why???

@@ -1,9 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://dgn1arb8c8e44"]
+[gd_scene load_steps=8 format=3 uid="uid://dgn1arb8c8e44"]
 
 [ext_resource type="Script" path="res://MatchScene/TeamTacticsUI.gd" id="2"]
+[ext_resource type="Script" path="res://MatchScene/ReceiveOptionsUI.gd" id="2_6r5or"]
 [ext_resource type="Script" path="res://MatchScene/BlockOptionsUI.gd" id="3_0evvo"]
 [ext_resource type="PackedScene" uid="uid://cykoixxohrpxa" path="res://MatchScene/BlockingIndividualUI.tscn" id="3_w2daa"]
 [ext_resource type="PackedScene" uid="uid://bpb8ra3kywlo6" path="res://MatchScene/CourtRepresentationUI.tscn" id="4"]
+[ext_resource type="FontFile" uid="uid://c3ryb8bqtv4yu" path="res://DynamicFontData_Roboto.tres" id="4_lcxty"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_8arg1"]
+font = ExtResource("4_lcxty")
+font_size = 17
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
 
 [node name="TeamTacticsUI" type="Control"]
 layout_mode = 3
@@ -51,8 +59,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ReceiveOptionsUI" type="Control" parent="."]
-visible = false
 anchors_preset = 0
+script = ExtResource("2_6r5or")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="ReceiveOptionsUI"]
 layout_mode = 1
@@ -93,6 +101,23 @@ text = "Rotation 5"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Rotation 6"
+
+[node name="CourtRepresentationUI" parent="ReceiveOptionsUI" instance=ExtResource("4")]
+layout_mode = 0
+offset_left = 1815.0
+offset_top = 195.0
+offset_right = 3615.0
+offset_bottom = 1295.0
+
+[node name="Label" type="Label" parent="ReceiveOptionsUI"]
+layout_mode = 0
+offset_left = 1360.0
+offset_top = 210.0
+offset_right = 1603.0
+offset_bottom = 236.0
+text = "Opposition Server: Tibby Cotter
+"
+label_settings = SubResource("LabelSettings_8arg1")
 
 [node name="ServeOptionsUI" type="Control" parent="."]
 visible = false
@@ -280,7 +305,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Rotation 6"
 
-[node name="Label" type="Label" parent="BlockOptionsUI"]
+[node name="DisplayedRotationLabel" type="Label" parent="BlockOptionsUI"]
 layout_mode = 0
 offset_left = 651.0
 offset_top = 186.0
@@ -333,7 +358,7 @@ offset_right = 916.0
 offset_bottom = 214.0
 text = "Go To Current Rotation"
 
-[node name="OptionButton" type="OptionButton" parent="BlockOptionsUI"]
+[node name="ServeReceiveOptionButton" type="OptionButton" parent="BlockOptionsUI"]
 layout_mode = 0
 offset_left = 417.0
 offset_top = 182.0
@@ -342,18 +367,26 @@ offset_bottom = 220.0
 tooltip_text = "Blockers may swap positions from serve to receive depending on if players are remaining on the side they receive the ball"
 item_count = 2
 selected = 0
-popup/item_0/text = "Serve"
+popup/item_0/text = "Receive"
 popup/item_0/id = 0
-popup/item_1/text = "Receive"
+popup/item_1/text = "Serve"
 popup/item_1/id = 1
 
 [connection signal="pressed" from="HBoxContainer/ServeUIButton" to="." method="_on_ServeUIButton_pressed"]
 [connection signal="pressed" from="HBoxContainer/ReceiveUIButton" to="." method="_on_receive_ui_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/SetUIButton" to="." method="_on_set_ui_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/BlockUIButton" to="." method="_on_block_ui_button_pressed"]
+[connection signal="pressed" from="ReceiveOptionsUI/HBoxContainer2/Rot1Button" to="ReceiveOptionsUI" method="_on_rot_1_button_pressed"]
+[connection signal="pressed" from="ReceiveOptionsUI/HBoxContainer2/Rot2Button" to="ReceiveOptionsUI" method="_on_rot_2_button_pressed"]
+[connection signal="pressed" from="ReceiveOptionsUI/HBoxContainer2/Rot3Button" to="ReceiveOptionsUI" method="_on_rot_3_button_pressed"]
+[connection signal="pressed" from="ReceiveOptionsUI/HBoxContainer2/Rot4Button" to="ReceiveOptionsUI" method="_on_rot_4_button_pressed"]
+[connection signal="pressed" from="ReceiveOptionsUI/HBoxContainer2/Rot5Button" to="ReceiveOptionsUI" method="_on_rot_5_button_pressed"]
+[connection signal="pressed" from="ReceiveOptionsUI/HBoxContainer2/Rot6Button" to="ReceiveOptionsUI" method="_on_rot_6_button_pressed"]
 [connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot1Button" to="BlockOptionsUI" method="_on_rot_1_button_pressed"]
 [connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot2Button" to="BlockOptionsUI" method="_on_rot_2_button_pressed"]
 [connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot3Button" to="BlockOptionsUI" method="_on_rot_3_button_pressed"]
 [connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot4Button" to="BlockOptionsUI" method="_on_rot_4_button_pressed"]
 [connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot5Button" to="BlockOptionsUI" method="_on_rot_5_button_pressed"]
 [connection signal="pressed" from="BlockOptionsUI/HBoxContainer2/Rot6Button" to="BlockOptionsUI" method="_on_rot_6_button_pressed"]
+[connection signal="pressed" from="BlockOptionsUI/CurrentRotationButton" to="BlockOptionsUI" method="_on_current_rotation_button_pressed"]
+[connection signal="item_selected" from="BlockOptionsUI/ServeReceiveOptionButton" to="BlockOptionsUI" method="_on_serve_receive_option_button_item_selected"]

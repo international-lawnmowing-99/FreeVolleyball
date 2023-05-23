@@ -4,7 +4,7 @@ extends Node
 
 var preferredSettingWeights
 var preferredReceptionWeights
-var defaultReceptionRotations
+var customReceptionRotations
 var servingTargets
 var substitutionTirednessThresholds
 
