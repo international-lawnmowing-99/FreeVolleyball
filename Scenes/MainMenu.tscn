@@ -1,7 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=8 format=3]
 
-[ext_resource path="res://Scenes/MainMenu.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/a font.tres" type="FontFile" id=2]
+[ext_resource type="Script" path="res://Scenes/MainMenu.gd" id="1"]
+[ext_resource type="FontFile" path="res://Fonts/a font.tres" id="2"]
 
 [sub_resource type="Gradient" id=1]
 offsets = PackedFloat32Array( 0, 0.109244, 0.890756 )

@@ -1,43 +1,100 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://budp0wjekefpk"]
 
-[ext_resource path="res://Models/new new woman/new new woman.glb" type="PackedScene" id=1]
-[ext_resource path="res://Scenes/new new woman import.gd" type="Script" id=2]
-[ext_resource path="res://Models/new new woman/new new woman AnimTree.tres" type="AnimationNodeBlendTree" id=3]
+[ext_resource type="PackedScene" uid="uid://cghu1tykr381r" path="res://Models/new new woman/new new woman.glb" id="1"]
+[ext_resource type="Script" path="res://Scenes/new new woman import.gd" id="2"]
+[ext_resource type="AnimationNodeBlendTree" uid="uid://ow68ywnb7vxl" path="res://Models/new new woman/new new woman AnimTree.tres" id="3"]
 
-[node name="new new woman import" instance=ExtResource( 1 )]
-script = ExtResource( 2 )
+[node name="new new woman import" instance=ExtResource("1")]
+script = ExtResource("2")
 
 [node name="LeftHandTarget" type="Marker3D" parent="." index="0"]
-transform = Transform3D( -0.621714, 0.242423, -0.744783, -0.372363, 0.745081, 0.553354, 0.68907, 0.621358, -0.372958, 0.176506, 2.006, 0.484 )
+transform = Transform3D(-0.621714, 0.242423, -0.744783, -0.372363, 0.745081, 0.553354, 0.68907, 0.621358, -0.372958, 0.176506, 2.006, 0.484)
 
 [node name="RightHandTarget" type="Marker3D" parent="." index="1"]
-transform = Transform3D( -0.289166, -0.466263, 0.836051, 0.347203, 0.762808, 0.545503, -0.892095, 0.44802, -0.05869, -0.327531, 2.006, 0.484 )
+transform = Transform3D(-0.289166, -0.466263, 0.836051, 0.347203, 0.762808, 0.545503, -0.892095, 0.44802, -0.05869, -0.327531, 2.006, 0.484)
+
+[node name="Skeleton3D" parent="godette volleyball" index="0"]
+bones/0/rotation = Quaternion(0.70199, 0, 0, 0.712187)
+bones/3/rotation = Quaternion(-0.0847098, 0, 0, 0.996406)
+bones/10/rotation = Quaternion(0.0155656, -0.00266955, -0.14704, 0.989004)
+bones/11/rotation = Quaternion(0.0328084, -0.000365024, -0.0111246, 0.9994)
+bones/12/rotation = Quaternion(0.324269, -3.60335e-07, -1.27234e-07, 0.945965)
+bones/14/rotation = Quaternion(0.10296, 0.00348483, -0.0532588, 0.993253)
+bones/16/rotation = Quaternion(0.0722073, -0.018541, -0.18318, 0.980249)
+bones/17/rotation = Quaternion(0.137095, -0.00456434, -0.0329708, 0.989999)
+bones/18/rotation = Quaternion(-0.00578354, -0.58487, -0.235693, 0.776108)
+bones/20/rotation = Quaternion(0.135586, -0.0024254, -0.0500054, 0.9895)
+bones/21/rotation = Quaternion(0.112331, 0.00307297, 0.00520583, 0.993653)
+bones/22/rotation = Quaternion(0.0622909, 0.000106556, 0.0203757, 0.99785)
+bones/23/rotation = Quaternion(0.229948, 0.327419, 0.0428073, 0.915472)
+bones/25/rotation = Quaternion(0.184493, 0.00884578, -0.023631, 0.98251)
+bones/26/rotation = Quaternion(0.0504125, 0.00156813, 0.0407774, 0.997894)
+bones/27/rotation = Quaternion(0.0659189, 6.2724e-06, -0.00980938, 0.997777)
+bones/30/rotation = Quaternion(0.188056, -0.0114393, -0.127098, 0.973833)
+bones/33/rotation = Quaternion(0.258999, 0.601229, 0.0804338, 0.751647)
+bones/35/rotation = Quaternion(0.180818, -0.000266503, -0.0442682, 0.98252)
+bones/36/rotation = Quaternion(0.0781883, 0.00116026, 0.0286294, 0.996527)
+bones/37/rotation = Quaternion(0.00213974, -4.85631e-06, -0.0124588, 0.99992)
+bones/38/rotation = Quaternion(0.184807, 0.680703, 0.13929, 0.695046)
+bones/41/rotation = Quaternion(0.0155656, 0.00266963, 0.14704, 0.989004)
+bones/42/rotation = Quaternion(0.0328084, 0.000365024, 0.0111246, 0.9994)
+bones/43/rotation = Quaternion(0.324269, 2.03488e-07, 4.42604e-07, 0.945965)
+bones/45/rotation = Quaternion(0.10296, -0.00348506, 0.053259, 0.993253)
+bones/47/rotation = Quaternion(0.0722069, 0.0185395, 0.183181, 0.980249)
+bones/48/rotation = Quaternion(0.137094, 0.00456685, 0.0329695, 0.989999)
+bones/51/rotation = Quaternion(0.135587, 0.00242636, 0.0500047, 0.9895)
+bones/52/rotation = Quaternion(0.112329, -0.00307523, -0.00520219, 0.993653)
+bones/53/rotation = Quaternion(0.0622912, -0.000105167, -0.020379, 0.99785)
+bones/56/rotation = Quaternion(0.184491, -0.00884577, 0.0236311, 0.98251)
+bones/57/rotation = Quaternion(0.0504143, -0.00156886, -0.0407776, 0.997894)
+bones/58/rotation = Quaternion(0.065922, -5.58537e-06, 0.00980797, 0.997777)
+bones/59/rotation = Quaternion(0.196569, -0.543258, -0.128511, 0.80605)
+bones/61/rotation = Quaternion(0.188055, 0.0114382, 0.127098, 0.973833)
+bones/64/rotation = Quaternion(0.258998, -0.60123, -0.0804329, 0.751647)
+bones/70/rotation = Quaternion(0.224333, -0.00881502, 0.0506362, 0.973156)
+bones/71/rotation = Quaternion(-0.249635, 0.0107749, -0.0447142, 0.967247)
+bones/136/rotation = Quaternion(-0.0632744, -0.152873, -0.722969, 0.670777)
+bones/137/rotation = Quaternion(0.409551, 0.588605, 0.46157, 0.522269)
+bones/138/rotation = Quaternion(0.138491, 0.00319863, 0.0187387, 0.990181)
+bones/139/rotation = Quaternion(0.0457008, -0.00270183, 0.00756351, 0.998923)
+bones/141/rotation = Quaternion(-0.541577, -2.44768e-07, -2.64458e-07, 0.840651)
+bones/142/rotation = Quaternion(-0.310731, 0.000930637, -0.0339287, 0.949892)
+bones/143/rotation = Quaternion(-0.0632744, 0.152873, 0.722969, 0.670777)
+bones/144/rotation = Quaternion(0.409551, -0.588605, -0.461569, 0.52227)
+bones/145/rotation = Quaternion(0.138491, -0.00319872, -0.0187392, 0.990181)
+bones/146/rotation = Quaternion(0.0457008, 0.00270183, -0.00756354, 0.998923)
+bones/149/rotation = Quaternion(-0.310731, -0.000930642, 0.0339287, 0.949892)
+bones/151/rotation = Quaternion(-0.178235, 0.406324, 0.851879, -0.278271)
+bones/153/rotation = Quaternion(0.178235, 0.406323, 0.851879, 0.278271)
+bones/155/rotation = Quaternion(0.857467, 0.0345603, 0.0172346, 0.513087)
+bones/157/rotation = Quaternion(0.857467, -0.0345603, -0.0172346, 0.513087)
 
 [node name="LeftHandSkeletonIK" type="SkeletonIK3D" parent="godette volleyball/Skeleton3D" index="6"]
-process_mode = 2
 process_priority = 1
-root_bone = "upperarm01.L"
-tip_bone = "wrist.L"
+root_bone = &"upperarm01.L"
+tip_bone = &"wrist.L"
 target_node = NodePath("../../../LeftHandTarget")
+max_iterations = 5
 
 [node name="RightHandSkeletonIK" type="SkeletonIK3D" parent="godette volleyball/Skeleton3D" index="7"]
-process_mode = 2
 process_priority = 1
-root_bone = "upperarm01.R"
-tip_bone = "wrist.R"
+root_bone = &"upperarm01.R"
+tip_bone = &"wrist.R"
 target_node = NodePath("../../../RightHandTarget")
+max_iterations = 5
 
 [node name="Empty" parent="." index="3"]
-transform = Transform3D( 0, 1.42731, 0, 0, 0, -1.42731, -1.42731, 0, 0, 0.655382, 0.855518, 1.41535 )
+transform = Transform3D(0, 1.42731, 0, 0, 0, -1.42731, -1.42731, 0, 0, 0.655382, 0.855518, 1.41535)
 
 [node name="AnimationPlayer" parent="." index="4"]
 playback_process_mode = 0
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="5"]
-tree_root = ExtResource( 3 )
+tree_root = ExtResource("3")
 anim_player = NodePath("../AnimationPlayer")
 active = true
-process_mode = 0
 parameters/Dig/blend_amount = 0.0
-parameters/MoveTree/blend_position = Vector2( 0.00417018, -0.0862069 )
-parameters/state/current = 0
+parameters/MoveTree/blend_position = Vector2(0.00417018, -0.0862069)
+parameters/state/current_state = ""
+parameters/state/transition_request = ""
+parameters/state/current_index = -1

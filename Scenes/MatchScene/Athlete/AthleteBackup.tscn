@@ -1,0 +1,94 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://Models/new new woman/new new woman.glb" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/MatchScene/Athlete.gd" type="Script" id=2]
+[ext_resource path="res://Addons/jigglebones/jigglebone.gd" type="Script" id=6]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "DigPreparation"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "DigContact"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=3]
+blend_point_0/node = SubResource( 1 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 2 )
+blend_point_1/pos = 1.0
+min_space = 0.0
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "walkforwards"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "Idle take 1"
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "strafe left"
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "strafe right"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "Walk Back"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id=9]
+blend_point_0/node = SubResource( 4 )
+blend_point_0/pos = Vector2( 0, 0.9 )
+blend_point_1/node = SubResource( 5 )
+blend_point_1/pos = Vector2( 0, 0 )
+blend_point_2/node = SubResource( 6 )
+blend_point_2/pos = Vector2( -0.9, 0 )
+blend_point_3/node = SubResource( 7 )
+blend_point_3/pos = Vector2( 0.9, 0 )
+blend_point_4/node = SubResource( 8 )
+blend_point_4/pos = Vector2( 0, -0.9 )
+snap = Vector2( 0.01, 0.01 )
+
+[sub_resource type="AnimationNodeBlendTree" id=10]
+graph_offset = Vector2( -488, 20 )
+nodes/BlendSpace1D/node = SubResource( 3 )
+nodes/BlendSpace1D/position = Vector2( -220, 120 )
+nodes/BlendSpace2D/node = SubResource( 9 )
+nodes/BlendSpace2D/position = Vector2( 300, 80 )
+nodes/output/position = Vector2( 620, 60 )
+node_connections = [ "output", 0, "BlendSpace2D" ]
+
+[node name="new new woman" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Node" type="Node3D" parent="godette volleyball/Skeleton3D" index="6"]
+transform = Transform3D( 0.991614, -0.126099, -0.0284054, -0.0228429, -0.38721, 0.922317, -0.127207, -0.913443, -0.387051, 0.0447987, 0.757777, 0.33196 )
+script = ExtResource( 6 )
+bone_name = "hair01"
+
+[node name="Node2" type="Node3D" parent="godette volleyball/Skeleton3D" index="7"]
+transform = Transform3D( 0.989225, -0.06441, -0.131533, -0.0396516, -0.982847, 0.182715, -0.14094, -0.175568, -0.974602, 0.144522, 1.48626, 0.895361 )
+script = ExtResource( 6 )
+bone_name = "hair02"
+
+[node name="Node3" type="Node3D" parent="godette volleyball/Skeleton3D" index="8"]
+transform = Transform3D( 0.988977, -0.0362488, -0.143616, -0.0451738, -0.997671, -0.0595339, -0.141018, 0.0653776, -0.988124, 0.150305, 1.62398, 0.890096 )
+script = ExtResource( 6 )
+bone_name = "hair03"
+
+[node name="Node4" type="Node3D" parent="godette volleyball/Skeleton3D" index="9"]
+transform = Transform3D( -0.778739, 0.624614, 0.0587666, -0.0614054, -0.169046, 0.984404, 0.624351, 0.762442, 0.170115, -0.0462037, 0.33824, -0.163029 )
+script = ExtResource( 6 )
+bone_name = "breast.L"
+stiffness = 0.8
+damping = 1.0
+
+[node name="Node5" type="Node3D" parent="godette volleyball/Skeleton3D" index="10"]
+transform = Transform3D( -0.89585, -0.440618, 0.0577249, 0.12315, -0.121444, 0.985642, -0.426967, 0.889463, 0.163171, -0.0451649, 0.337007, -0.156096 )
+script = ExtResource( 6 )
+bone_name = "breast.R"
+stiffness = 0.8
+damping = 1.0
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="1"]
+tree_root = SubResource( 10 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/BlendSpace1D/blend_position = 1.042
+parameters/BlendSpace2D/blend_position = Vector2( 1.121, 0.079 )

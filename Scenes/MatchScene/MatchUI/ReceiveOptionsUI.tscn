@@ -1,0 +1,226 @@
+[gd_scene load_steps=7 format=3 uid="uid://besq01chm6eix"]
+
+[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/ReceiveOptionsUI.gd" id="1_l4r07"]
+[ext_resource type="PackedScene" uid="uid://bpb8ra3kywlo6" path="res://Scenes/MatchScene/MatchUI/CourtRepresentationUI.tscn" id="2_i28go"]
+[ext_resource type="Texture2D" uid="uid://cwr4n2ytf3xfj" path="res://Textures/HalfCourt.png" id="3_ych81"]
+[ext_resource type="PackedScene" uid="uid://6r18x6kmjjvr" path="res://Scenes/MatchScene/MatchUI/ReceiverRepresentationUI.tscn" id="4_ljldc"]
+[ext_resource type="FontFile" uid="uid://c3ryb8bqtv4yu" path="res://Fonts/DynamicFontData_Roboto.tres" id="5_fqxpa"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_8arg1"]
+font = ExtResource("5_fqxpa")
+font_size = 17
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
+
+[node name="ReceiveOptionsUI" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_l4r07")
+
+[node name="CourtRepresentationUI" parent="." instance=ExtResource("2_i28go")]
+visible = false
+layout_mode = 0
+offset_left = 1188.0
+offset_top = 97.0
+offset_right = 2988.0
+offset_bottom = 1197.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 74.0
+offset_right = 1820.0
+offset_bottom = 170.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Rot1Button" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 1"
+
+[node name="Rot2Button" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 2"
+
+[node name="Rot3Button" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 3"
+
+[node name="Rot4Button" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 4"
+
+[node name="Rot5Button" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 5"
+
+[node name="Rot6Button" type="Button" parent="HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 6"
+
+[node name="CurrentRotationButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 189.0
+offset_right = 313.0
+offset_bottom = 250.0
+text = "Go To Current Rotation"
+
+[node name="DisplayedRotationLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 374.0
+offset_top = 207.0
+offset_right = 489.0
+offset_bottom = 245.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 25
+
+[node name="HalfCourtRepresentationUI" type="TextureRect" parent="."]
+self_modulate = Color(1, 0.929412, 0.858824, 1)
+layout_mode = 0
+offset_left = 494.0
+offset_top = 174.0
+offset_right = 1554.0
+offset_bottom = 1083.0
+texture = ExtResource("3_ych81")
+expand_mode = 1
+
+[node name="ValuedTeamMembers" type="Control" parent="HalfCourtRepresentationUI"]
+anchors_preset = 0
+offset_left = 535.0
+offset_right = 535.0
+
+[node name="ReceiverRepresentationUI" parent="HalfCourtRepresentationUI/ValuedTeamMembers" instance=ExtResource("4_ljldc")]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 214.0
+offset_bottom = 317.0
+
+[node name="ReceiverRepresentationUI2" parent="HalfCourtRepresentationUI/ValuedTeamMembers" instance=ExtResource("4_ljldc")]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 214.0
+offset_bottom = 317.0
+
+[node name="ReceiverRepresentationUI3" parent="HalfCourtRepresentationUI/ValuedTeamMembers" instance=ExtResource("4_ljldc")]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 214.0
+offset_bottom = 317.0
+
+[node name="ReceiverRepresentationUI4" parent="HalfCourtRepresentationUI/ValuedTeamMembers" instance=ExtResource("4_ljldc")]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 214.0
+offset_bottom = 317.0
+
+[node name="ReceiverRepresentationUI5" parent="HalfCourtRepresentationUI/ValuedTeamMembers" instance=ExtResource("4_ljldc")]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 214.0
+offset_bottom = 317.0
+
+[node name="ReceiverRepresentationUI6" parent="HalfCourtRepresentationUI/ValuedTeamMembers" instance=ExtResource("4_ljldc")]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 214.0
+offset_bottom = 317.0
+
+[node name="Bounds" type="Control" parent="HalfCourtRepresentationUI"]
+anchors_preset = 0
+offset_left = 535.0
+offset_right = 535.0
+
+[node name="XMinBoundsLine2D" type="Line2D" parent="HalfCourtRepresentationUI/Bounds"]
+position = Vector2(-535, 0)
+points = PackedVector2Array(79.5, 0, 981, 0)
+width = 5.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="XMaxBoundsLine2D" type="Line2D" parent="HalfCourtRepresentationUI/Bounds"]
+position = Vector2(-535, 0)
+points = PackedVector2Array(79.5, 0, 981, 0)
+width = 5.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="ZMinBoundsLine2D" type="Line2D" parent="HalfCourtRepresentationUI/Bounds"]
+points = PackedVector2Array(0, 0, 0, 910)
+width = 5.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="ZMaxBoundsLine2D" type="Line2D" parent="HalfCourtRepresentationUI/Bounds"]
+points = PackedVector2Array(0, 0, 0, 910)
+width = 5.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="DebugInfo" type="Control" parent="HalfCourtRepresentationUI"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SelectedPlayerLabel" type="Label" parent="HalfCourtRepresentationUI/DebugInfo"]
+layout_mode = 0
+offset_left = 1000.0
+offset_top = 734.0
+offset_right = 1216.0
+offset_bottom = 779.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 30
+text = "Selected: None"
+
+[node name="XPosLabel" type="Label" parent="HalfCourtRepresentationUI/DebugInfo"]
+layout_mode = 0
+offset_left = 1000.0
+offset_top = 785.0
+offset_right = 1312.0
+offset_bottom = 830.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 30
+text = "X Position: 4.5 metres"
+
+[node name="ZPosLabel" type="Label" parent="HalfCourtRepresentationUI/DebugInfo"]
+layout_mode = 0
+offset_left = 1000.0
+offset_top = 830.0
+offset_right = 1311.0
+offset_bottom = 875.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 30
+text = "Z position: 4.5 metres"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1506.0
+offset_top = 211.0
+offset_right = 1749.0
+offset_bottom = 315.0
+text = "Opposition Server: Tibby Cotter
+Jump serve: 74
+Float serve: -3.14159
+Underarm serve: 999999999"
+label_settings = SubResource("LabelSettings_8arg1")
+
+[connection signal="pressed" from="HBoxContainer2/Rot1Button" to="." method="_on_rot_1_button_pressed"]
+[connection signal="pressed" from="HBoxContainer2/Rot2Button" to="." method="_on_rot_2_button_pressed"]
+[connection signal="pressed" from="HBoxContainer2/Rot3Button" to="." method="_on_rot_3_button_pressed"]
+[connection signal="pressed" from="HBoxContainer2/Rot4Button" to="." method="_on_rot_4_button_pressed"]
+[connection signal="pressed" from="HBoxContainer2/Rot5Button" to="." method="_on_rot_5_button_pressed"]
+[connection signal="pressed" from="HBoxContainer2/Rot6Button" to="." method="_on_rot_6_button_pressed"]
+[connection signal="pressed" from="CurrentRotationButton" to="." method="_on_current_rotation_button_pressed"]

@@ -1,0 +1,116 @@
+[gd_scene load_steps=6 format=3 uid="uid://bpb8ra3kywlo6"]
+
+[ext_resource type="Texture2D" uid="uid://bijxfpsspog5d" path="res://Textures/Court-Markings.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://bamxyyq7k8h0o" path="res://Textures/Captain.png" id="2"]
+[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/CourtRepresentationUI.gd" id="4"]
+[ext_resource type="PackedScene" uid="uid://dqmt0xifetjx4" path="res://Scenes/MatchScene/MatchUI/2DAthleteRepresentation.tscn" id="4_hf3oi"]
+
+[sub_resource type="CanvasItemMaterial" id="1"]
+light_mode = 1
+
+[node name="CourtRepresentationUI" type="TextureRect"]
+offset_left = 530.0
+offset_right = 2330.0
+offset_bottom = 1100.0
+rotation = 89.5353
+scale = Vector2(0.4746, 0.4746)
+texture = ExtResource("1")
+expand_mode = 1
+script = ExtResource("4")
+
+[node name="ServeTarget" type="TextureRect" parent="."]
+material = SubResource("1")
+layout_mode = 0
+offset_left = 116.806
+offset_top = 530.94
+offset_right = 516.806
+offset_bottom = 930.94
+rotation = -89.5353
+scale = Vector2(0.303373, 0.303373)
+texture = ExtResource("2")
+expand_mode = 1
+
+[node name="Net" type="Line2D" parent="."]
+position = Vector2(2.10706, 0)
+points = PackedVector2Array(898, 1115, 898, -15)
+width = 20.0
+default_color = Color(0, 0, 0, 1)
+
+[node name="ColourRect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 1319.0
+offset_top = 80.0
+offset_right = 1867.0
+offset_bottom = 1015.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 1319.0
+offset_top = 80.0
+offset_right = 1359.0
+offset_bottom = 120.0
+
+[node name="OppositionTeam" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 900.94
+offset_top = 551.0
+offset_right = 940.94
+offset_bottom = 591.0
+scale = Vector2(2.105, 2.105)
+
+[node name="UnscaledOppositionTeam" type="Control" parent="OppositionTeam"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+rotation = -1.5708
+
+[node name="PlayerIn1" parent="OppositionTeam/UnscaledOppositionTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0
+
+[node name="PlayerIn2" parent="OppositionTeam/UnscaledOppositionTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0
+
+[node name="PlayerIn3" parent="OppositionTeam/UnscaledOppositionTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0
+
+[node name="PlayerIn4" parent="OppositionTeam/UnscaledOppositionTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0
+
+[node name="PlayerIn5" parent="OppositionTeam/UnscaledOppositionTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0
+
+[node name="PlayerIn6" parent="OppositionTeam/UnscaledOppositionTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0
+
+[node name="OurTeam" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 900.0
+offset_top = 550.0
+offset_right = 940.0
+offset_bottom = 590.0
+scale = Vector2(2.105, 2.105)
+
+[node name="UnscaledOurTeam" type="Control" parent="OurTeam"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+rotation = -1.5708
+
+[node name="PlayerIn1" parent="OurTeam/UnscaledOurTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0
+
+[node name="PlayerIn2" parent="OurTeam/UnscaledOurTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0
+
+[node name="PlayerIn3" parent="OurTeam/UnscaledOurTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0
+
+[node name="PlayerIn4" parent="OurTeam/UnscaledOurTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0
+
+[node name="PlayerIn5" parent="OurTeam/UnscaledOurTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0
+
+[node name="PlayerIn6" parent="OurTeam/UnscaledOurTeam" instance=ExtResource("4_hf3oi")]
+layout_mode = 0

@@ -48,7 +48,7 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [resource]
-graph_offset = Vector2(-630.623, -36.0164)
+graph_offset = Vector2(-928.602, -95.9808)
 nodes/Animation/node = SubResource("2")
 nodes/Animation/position = Vector2(-980, 100)
 "nodes/Animation 2/node" = SubResource("1")

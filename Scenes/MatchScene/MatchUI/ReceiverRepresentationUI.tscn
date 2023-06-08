@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://6r18x6kmjjvr"]
+
+[ext_resource type="Texture2D" uid="uid://b5bxp73r55d64" path="res://icon.png" id="1_2ltrs"]
+[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/ReceiverRepresentationUI.gd" id="2_bbrfa"]
+
+[node name="ReceiverRepresentationUI" type="TextureRect"]
+offset_left = 456.0
+offset_top = 110.0
+offset_right = 670.0
+offset_bottom = 427.0
+scale = Vector2(0.4, 0.3)
+texture = ExtResource("1_2ltrs")
+script = ExtResource("2_bbrfa")
+
+[node name="Name" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 40
+theme_override_font_sizes/font_size = 40
+text = "fdsafasdasdfsd"
+
+[node name="Button" type="Button" parent="."]
+modulate = Color(0, 0.533333, 1, 0.337255)
+layout_mode = 0
+offset_right = 214.0
+offset_bottom = 317.0
+toggle_mode = true
+icon_alignment = 1
+expand_icon = true
+
+[connection signal="toggled" from="Button" to="." method="_on_button_toggled"]

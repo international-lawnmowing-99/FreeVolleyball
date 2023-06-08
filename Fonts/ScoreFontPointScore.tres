@@ -1,0 +1,9 @@
+[gd_resource type="FontFile" load_steps=2 format=3]
+
+[ext_resource type="FontFile" uid="uid://c3ryb8bqtv4yu" path="res://Fonts/DynamicFontData_Roboto.tres" id="1"]
+
+[resource]
+size = 32
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )

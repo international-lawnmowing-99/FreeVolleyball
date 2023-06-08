@@ -2,7 +2,7 @@ extends Node
 class_name Team
 
 var Enums = preload("res://Scripts/World/Enums.gd")
-var AthleteScene = preload("res://Scenes/Athlete.tscn")
+var AthleteScene = preload("res://Scenes/MatchScene/Athlete/Athlete.tscn")
 
 var teamName:String
 
@@ -34,15 +34,16 @@ var chosenSpiker:Athlete
 var chosenReceiver:Athlete
 
 var defaultReceiveRotations =  [
-	[
-		Vector3(5.5, 0, -4),
-		Vector3(5.0, 0, -2.8),
-		Vector3(3, 0, 1.3),
+	# Assuming setter starts in 1
+	[#setter in 1
+		Vector3(5.5, 0, -4), # pos 1
+		Vector3(5.0, 0, -2.8), # pos 2
+		Vector3(3, 0, 1.3), # etc...
 		Vector3(3.5, 0, 4),
 		Vector3(5.3, 0, 2.6),
 		Vector3(6.5, 0, 0)
 	],
-	[
+	[#setter in 6
 		Vector3(5.5, 0, -1),
 		Vector3(3.0, 0, -3.8),
 		Vector3(.5, 0, -2.5),
@@ -74,7 +75,7 @@ var defaultReceiveRotations =  [
 		Vector3(6.5, 0, 0),
 		Vector3(7.5, 0, -1.75)
 	],
-	[
+	[#setter in 2
 		Vector3(5.5, 0, -3),
 		Vector3(.5, 0, 0),
 		Vector3(5, 0, 2.75),

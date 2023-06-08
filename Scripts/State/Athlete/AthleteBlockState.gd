@@ -86,8 +86,9 @@ func Update(athlete:Athlete):
 				BlockState.Watching:
 					pass
 				BlockState.Preparing:
-					athlete.leftIKTarget.global_transform.origin = lerp(athlete.leftIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
-					athlete.rightIKTarget.global_transform.origin = lerp(athlete.rightIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
+					if blockingTarget.setRequest.target:
+						athlete.leftIKTarget.global_transform.origin = lerp(athlete.leftIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
+						athlete.rightIKTarget.global_transform.origin = lerp(athlete.rightIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
 					#Perhaps adding a random offset would make this look less choreographed...
 					if blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
 						blockState = BlockState.Jump	
@@ -96,8 +97,9 @@ func Update(athlete:Athlete):
 							athlete.rb.gravity_scale = 1
 							athlete.rb.linear_velocity = athlete.ball.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
 				BlockState.Jump:
-					athlete.leftIKTarget.global_transform.origin = lerp(athlete.leftIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
-					athlete.rightIKTarget.global_transform.origin = lerp(athlete.rightIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
+					if blockingTarget.setRequest.target:
+						athlete.leftIKTarget.global_transform.origin = lerp(athlete.leftIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
+						athlete.rightIKTarget.global_transform.origin = lerp(athlete.rightIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
 					#if athlete.role == Enums.Role.Opposite:
 						#(str(blockingTarget.setRequest.target))
 						#print(str(athlete.rightIKTarget.position))

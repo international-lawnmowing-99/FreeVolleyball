@@ -1,5 +1,0 @@
-[gd_resource type="Theme" format=2]
-
-[resource]
-GridContainer/constants/hseparation = 40
-GridContainer/constants/vseparation = 20

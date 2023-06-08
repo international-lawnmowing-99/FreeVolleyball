@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://ccxj5nay244v5"]
+
+[ext_resource type="Script" path="res://Scripts/MatchScene/Athlete.gd" id="1_tmol0"]
+[ext_resource type="PackedScene" uid="uid://budp0wjekefpk" path="res://Scenes/new new woman import.tscn" id="2"]
+[ext_resource type="Script" path="res://Scripts/AthleteDebugTextHolder.gd" id="8"]
+
+[sub_resource type="SystemFont" id="SystemFont_pets7"]
+font_names = PackedStringArray("Times New Roman")
+
+[sub_resource type="StandardMaterial3D" id="2"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="3"]
+material = SubResource("2")
+radius = 0.1
+height = 0.2
+radial_segments = 4
+rings = 3
+
+[node name="RigidBody3D" type="RigidBody3D"]
+sleeping = true
+freeze = true
+angular_damp = 10.0
+script = ExtResource("1_tmol0")
+
+[node name="new new woman import" parent="." instance=ExtResource("2")]
+
+[node name="TextHolder" type="Node3D" parent="new new woman import"]
+script = ExtResource("8")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="new new woman import/TextHolder"]
+offset_right = 301.0
+offset_bottom = 85.0
+theme_override_fonts/normal_font = SubResource("SystemFont_pets7")
+theme_override_font_sizes/normal_font_size = 12
+text = "Default 
+Text"
+scroll_active = false
+
+[node name="Debug" type="CSGMesh3D" parent="."]
+mesh = SubResource("3")

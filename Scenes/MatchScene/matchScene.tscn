@@ -1,0 +1,983 @@
+[gd_scene load_steps=36 format=3 uid="uid://db2fgt6mtocjw"]
+
+[ext_resource type="Script" path="res://Scripts/MatchScene/MatchManager.gd" id="1_mqt8k"]
+[ext_resource type="Script" path="res://Scenes/MatchScene/FrameStepper.gd" id="2_skir3"]
+[ext_resource type="Script" path="res://Scripts/MatchScene/CameraController.gd" id="3_3b621"]
+[ext_resource type="PackedScene" uid="uid://dt5nn2u8v6rsr" path="res://Scenes/MatchScene/default stadium.tscn" id="4_b1xd7"]
+[ext_resource type="Texture2D" uid="uid://bijxfpsspog5d" path="res://Textures/Court-Markings.png" id="5_djvjv"]
+[ext_resource type="Texture2D" uid="uid://cld8hvct3gi61" path="res://Textures/crinkled norm.jpg" id="6_rak20"]
+[ext_resource type="PackedScene" uid="uid://k2tpkkvrgokd" path="res://Scenes/MatchScene/net.tscn" id="7_kivvl"]
+[ext_resource type="PackedScene" path="res://Models/BasicSeat.tscn" id="8_llljp"]
+[ext_resource type="Script" path="res://Scripts/MatchScene/HumanTeam.gd" id="9_qpmxe"]
+[ext_resource type="Script" path="res://Scripts/MatchScene/ComputerTeam.gd" id="10_h0syf"]
+[ext_resource type="PackedScene" path="res://Scenes/MatchScene/ball.tscn" id="11_3od8h"]
+[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/MatchUI.gd" id="12_gpj8b"]
+[ext_resource type="Texture2D" uid="uid://qyj7idx5broe" path="res://Textures/antenna-uv.png" id="13_evta7"]
+[ext_resource type="Script" path="res://Scripts/MatchScene/fps_counter.gd" id="14_3hya6"]
+[ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/ScoreUIMatch.tscn" id="15_w0aqi"]
+[ext_resource type="Script" path="res://Addons/DebugOverlay.gd" id="16_ifqht"]
+[ext_resource type="Script" path="res://Addons/DebugDraw3D.gd" id="17_wg7iy"]
+[ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.tscn" id="18_0pm8c"]
+[ext_resource type="PackedScene" uid="uid://7v1fcf4qi42l" path="res://Scenes/MatchScene/MatchUI/ServeUI.tscn" id="19_gfg2l"]
+[ext_resource type="Script" path="res://Scenes/TeamInfoUI.gd" id="20_mqewi"]
+[ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.tscn" id="21_mfp85"]
+[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/MatchStatistics.gd" id="22_jweii"]
+[ext_resource type="PackedScene" uid="uid://bas6swl121cf5" path="res://Scenes/MatchScene/MatchUI/OnCourtPlayer.tscn" id="23_sry0n"]
+[ext_resource type="PackedScene" uid="uid://dgn1arb8c8e44" path="res://Scenes/MatchScene/MatchUI/TeamTacticsUI.tscn" id="24_v8nr8"]
+[ext_resource type="Script" path="res://Scenes/sillydebug.gd" id="25_mqjes"]
+
+[sub_resource type="Sky" id="3"]
+
+[sub_resource type="Environment" id="4"]
+background_mode = 2
+background_energy_multiplier = 0.6
+sky = SubResource("3")
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.13
+ssao_radius = 0.5
+sdfgi_use_occlusion = true
+sdfgi_bounce_feedback = 1.99
+glow_intensity = 0.27
+glow_blend_mode = 0
+glow_hdr_threshold = 0.0
+glow_hdr_scale = 3.2
+fog_enabled = true
+fog_light_color = Color(0, 0, 0, 1)
+fog_density = 0.1082
+adjustment_brightness = 0.8
+adjustment_contrast = 1.5
+adjustment_saturation = 0.73
+
+[sub_resource type="GDScript" id="5"]
+script/source = "extends Node3D
+
+@onready var mManager:MatchManager = get_tree().root.get_node(\"MatchScene\")
+
+func BallOut(ball:Ball):
+	if ball.wasLastTouchedByA:
+		mManager.PointToTeamB
+	else:
+		mManager.PointToTeamA
+
+
+func _on_Area_body_entered(body):
+	if body is Ball:
+		BallOut(body)
+	else:
+		print (typeof(body))
+"
+
+[sub_resource type="BoxShape3D" id="6"]
+size = Vector3(200, 4.1, 100)
+
+[sub_resource type="BoxShape3D" id="7"]
+size = Vector3(100, 4.1, 9)
+
+[sub_resource type="BoxShape3D" id="8"]
+size = Vector3(9, 4.1, 9)
+
+[sub_resource type="PlaneMesh" id="9"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l5x6s"]
+transparency = 4
+albedo_texture = ExtResource("5_djvjv")
+normal_enabled = true
+normal_scale = 0.1
+normal_texture = ExtResource("6_rak20")
+
+[sub_resource type="CylinderMesh" id="15"]
+height = 0.1
+radial_segments = 32
+
+[sub_resource type="StandardMaterial3D" id="12"]
+albedo_color = Color(0, 1, 0.929412, 0.584314)
+disable_receive_shadows = true
+
+[node name="MatchScene" type="Node3D"]
+script = ExtResource("1_mqt8k")
+
+[node name="Lights" type="Node3D" parent="."]
+process_mode = 3
+script = ExtResource("2_skir3")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lights"]
+environment = SubResource("4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lights"]
+transform = Transform3D(0.741838, -0.0421146, -0.669255, 0.380937, 0.847821, 0.3689, 0.551872, -0.528608, 0.644989, 0, 6.08476, 0)
+light_energy = 3.0
+light_indirect_energy = 0.0
+shadow_enabled = true
+shadow_bias = 0.059
+shadow_blur = 2.0
+directional_shadow_blend_splits = true
+directional_shadow_pancake_size = 3.1
+
+[node name="DirectionalLight2" type="DirectionalLight3D" parent="Lights"]
+transform = Transform3D(-0.0367612, -0.277158, 0.960121, -0.157617, 0.950353, 0.268304, -0.986816, -0.141468, -0.078621, -1.10523, 3.06544, 0)
+light_color = Color(0.984314, 0.752941, 0.752941, 1)
+light_energy = 3.0
+light_indirect_energy = 0.0
+shadow_enabled = true
+shadow_bias = 0.059
+shadow_blur = 2.0
+directional_shadow_blend_splits = true
+directional_shadow_pancake_size = 3.1
+
+[node name="DirectionalLight3" type="DirectionalLight3D" parent="Lights"]
+transform = Transform3D(-0.586371, 0.409591, -0.698859, 0.254077, 0.912204, 0.321448, 0.769164, 0.0109238, -0.638958, 0, 4.31512, 0)
+light_color = Color(0.886275, 0.984314, 0.752941, 1)
+light_energy = 5.0
+light_indirect_energy = 0.0
+shadow_enabled = true
+shadow_bias = 0.059
+shadow_blur = 2.0
+directional_shadow_blend_splits = true
+directional_shadow_pancake_size = 3.1
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-4.15819e-08, -0.50397, 0.863721, 1.34771e-08, 0.863721, 0.50397, -1, 3.25965e-08, -2.91231e-08, 16.6423, 7.60317, 4.76837e-07)
+fov = 50.0
+near = 0.1
+far = 264.0
+script = ExtResource("3_3b621")
+sensitivity = 0.75
+acceleration = 0.1
+max_speed = Vector3(10, 10, 10)
+
+[node name="ZoneOut" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.443, 0)
+script = SubResource("5")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, -54.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneOut/StaticBody3D"]
+shape = SubResource("6")
+
+[node name="StaticBody2" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, 54.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneOut/StaticBody2"]
+shape = SubResource("6")
+
+[node name="StaticBody3" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59, -1.6, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneOut/StaticBody3"]
+shape = SubResource("7")
+
+[node name="StaticBody4" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59, -1.6, 0)
+
+[node name="CollisionShape2" type="CollisionShape3D" parent="ZoneOut/StaticBody4"]
+shape = SubResource("7")
+
+[node name="ZoneInA" type="StaticBody3D" parent="ZoneOut" groups=["ZoneInA"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, -1.6, 0)
+
+[node name="CollisionShape2" type="CollisionShape3D" parent="ZoneOut/ZoneInA"]
+shape = SubResource("8")
+
+[node name="ZoneInB" type="StaticBody3D" parent="ZoneOut" groups=["ZoneInB"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, -1.6, 0)
+
+[node name="CollisionShape3" type="CollisionShape3D" parent="ZoneOut/ZoneInB"]
+shape = SubResource("8")
+
+[node name="Building" type="Node3D" parent="."]
+
+[node name="default stadium" parent="Building" instance=ExtResource("4_b1xd7")]
+transform = Transform3D(60, 0, 0, 0, 20, 0, 0, 0, 60, 0, 20, 0)
+
+[node name="floor small" type="MeshInstance3D" parent="Building"]
+transform = Transform3D(9, 0, 0, 0, 50, 0, 0, 0, 5.5, 0, 0.01, 0)
+mesh = SubResource("9")
+surface_material_override/0 = SubResource("StandardMaterial3D_l5x6s")
+
+[node name="net" parent="Building" instance=ExtResource("7_kivvl")]
+
+[node name="BasicSeat" parent="Building" instance=ExtResource("8_llljp")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 11.478)
+
+[node name="TeamA" type="Node3D" parent="."]
+script = ExtResource("9_qpmxe")
+
+[node name="TeamB" type="Node3D" parent="."]
+script = ExtResource("10_h0syf")
+
+[node name="ball" parent="." instance=ExtResource("11_3od8h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.98628, 0, -0.652901)
+angular_velocity = Vector3(2, 3, 1)
+
+[node name="ServeTarget" type="CSGMesh3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.14245, 0, 0.276108)
+visible = false
+mesh = SubResource("15")
+material = SubResource("12")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("12_gpj8b")
+
+[node name="ToggleTeamTacticsUI" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 53.8174
+offset_top = 262.36
+offset_right = 344.817
+offset_bottom = 324.36
+rotation = 89.5353
+focus_mode = 0
+text = "Tactics"
+
+[node name="ScoreCanvasLayer" type="CanvasLayer" parent="UI"]
+
+[node name="ColourRect" type="ColorRect" parent="UI/ScoreCanvasLayer"]
+visible = false
+offset_left = 425.494
+offset_top = 147.998
+offset_right = 1515.49
+offset_bottom = 955.998
+color = Color(0, 0.27451, 1, 0.415686)
+
+[node name="CourtGraphic" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect"]
+layout_mode = 0
+offset_left = 812.0
+offset_top = -38.0
+offset_right = 2612.0
+offset_bottom = 1062.0
+rotation = 90.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_djvjv")
+stretch_mode = 1
+
+[node name="TeamA" type="Control" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic"]
+visible = false
+anchors_preset = 0
+
+[node name="PlayerGraphic" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 1451.07
+offset_top = 207.32
+offset_right = 1851.07
+offset_bottom = 607.32
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+tooltip_text = "Your mum"
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.213
+offset_right = 1147.56
+offset_bottom = 802.213
+rotation = -89.9999
+text = "999955695"
+
+[node name="PlayerGraphic2" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 1002.08
+offset_top = 200.586
+offset_right = 1402.08
+offset_bottom = 600.586
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic2"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.212
+offset_right = 1147.56
+offset_bottom = 802.212
+rotation = -89.9999
+text = "999955695"
+
+[node name="PlayerGraphic3" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 1017.8
+offset_top = 481.201
+offset_right = 1417.8
+offset_bottom = 881.201
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic3"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.212
+offset_right = 1147.56
+offset_bottom = 802.212
+rotation = -89.9999
+text = "999955695"
+
+[node name="PlayerGraphic4" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 1024.53
+offset_top = 755.081
+offset_right = 1424.53
+offset_bottom = 1155.08
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic4"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.213
+offset_right = 1147.56
+offset_bottom = 802.213
+rotation = -89.9999
+text = "999955695"
+
+[node name="PlayerGraphic5" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 1435.35
+offset_top = 746.101
+offset_right = 1835.35
+offset_bottom = 1146.1
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic5"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.213
+offset_right = 1147.56
+offset_bottom = 802.213
+rotation = -89.9999
+text = "999955695"
+
+[node name="PlayerGraphic6" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 1489.23
+offset_top = 472.221
+offset_right = 1889.23
+offset_bottom = 872.221
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic6"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.213
+offset_right = 1147.56
+offset_bottom = 802.213
+rotation = -89.9999
+text = "999955695"
+
+[node name="PlayerGraphic7" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 916.775
+offset_top = 1255.7
+offset_right = 1316.78
+offset_bottom = 1655.7
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic7"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.213
+offset_right = 1147.56
+offset_bottom = 802.213
+rotation = -89.9999
+text = "999955695"
+
+[node name="PlayerGraphic8" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 1087.39
+offset_top = 1260.19
+offset_right = 1487.39
+offset_bottom = 1660.19
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic8"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.213
+offset_right = 1147.56
+offset_bottom = 802.213
+rotation = -89.9999
+text = "999955695"
+
+[node name="PlayerGraphic9" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 1233.31
+offset_top = 1271.41
+offset_right = 1633.31
+offset_bottom = 1671.41
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic9"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.212
+offset_right = 1147.56
+offset_bottom = 802.212
+rotation = -89.9999
+text = "999955695"
+
+[node name="PlayerGraphic10" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 1390.45
+offset_top = 1271.41
+offset_right = 1790.45
+offset_bottom = 1671.41
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic10"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.213
+offset_right = 1147.56
+offset_bottom = 802.213
+rotation = -89.9999
+text = "999955695"
+
+[node name="PlayerGraphic11" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 1525.15
+offset_top = 1282.64
+offset_right = 1925.15
+offset_bottom = 1682.64
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic11"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.212
+offset_right = 1147.56
+offset_bottom = 802.212
+rotation = -89.9999
+text = "999955695"
+
+[node name="PlayerGraphic12" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA"]
+layout_mode = 0
+offset_left = 1698.01
+offset_top = 1287.13
+offset_right = 2098.01
+offset_bottom = 1687.13
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamA/PlayerGraphic12"]
+layout_mode = 0
+offset_left = 391.559
+offset_top = 603.212
+offset_right = 1147.56
+offset_bottom = 802.212
+rotation = -89.9999
+text = "999955695"
+
+[node name="TeamB" type="Control" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic"]
+visible = false
+anchors_preset = 0
+offset_left = 1800.0
+offset_top = 1100.0
+offset_right = 1800.0
+offset_bottom = 1100.0
+rotation = 180.0
+
+[node name="PlayerGraphic" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 1451.07
+offset_top = 207.32
+offset_right = 1851.07
+offset_bottom = 607.32
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic"]
+layout_mode = 0
+offset_left = -21.166
+offset_top = -148.158
+offset_right = 734.834
+offset_bottom = 50.8423
+rotation = 89.9999
+text = "999955695"
+
+[node name="PlayerGraphic2" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 1002.08
+offset_top = 200.586
+offset_right = 1402.08
+offset_bottom = 600.586
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic2"]
+layout_mode = 0
+offset_left = -21.165
+offset_top = -148.158
+offset_right = 734.835
+offset_bottom = 50.8418
+rotation = 89.9999
+text = "999955695"
+
+[node name="PlayerGraphic3" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 1017.8
+offset_top = 481.201
+offset_right = 1417.8
+offset_bottom = 881.201
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic3"]
+layout_mode = 0
+offset_left = -21.165
+offset_top = -148.158
+offset_right = 734.835
+offset_bottom = 50.8418
+rotation = 89.9999
+text = "999955695"
+
+[node name="PlayerGraphic4" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 1024.53
+offset_top = 755.081
+offset_right = 1424.53
+offset_bottom = 1155.08
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic4"]
+layout_mode = 0
+offset_left = -21.165
+offset_top = -148.158
+offset_right = 734.835
+offset_bottom = 50.8418
+rotation = 89.9999
+text = "999955695"
+
+[node name="PlayerGraphic5" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 1435.35
+offset_top = 746.101
+offset_right = 1835.35
+offset_bottom = 1146.1
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic5"]
+layout_mode = 0
+offset_left = -21.165
+offset_top = -148.158
+offset_right = 734.835
+offset_bottom = 50.8423
+rotation = 89.9999
+text = "999955695"
+
+[node name="PlayerGraphic6" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 1489.23
+offset_top = 472.221
+offset_right = 1889.23
+offset_bottom = 872.221
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic6"]
+layout_mode = 0
+offset_left = -21.165
+offset_top = -148.158
+offset_right = 734.835
+offset_bottom = 50.8423
+rotation = 89.9999
+text = "999955695"
+
+[node name="PlayerGraphic7" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 916.775
+offset_top = 1255.7
+offset_right = 1316.78
+offset_bottom = 1655.7
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic7"]
+layout_mode = 0
+offset_left = -21.166
+offset_top = -148.158
+offset_right = 734.834
+offset_bottom = 50.8423
+rotation = 89.9999
+text = "999955695"
+
+[node name="PlayerGraphic8" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 1087.39
+offset_top = 1260.19
+offset_right = 1487.39
+offset_bottom = 1660.19
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic8"]
+layout_mode = 0
+offset_left = -21.165
+offset_top = -148.158
+offset_right = 734.835
+offset_bottom = 50.8418
+rotation = 89.9999
+text = "999955695"
+
+[node name="PlayerGraphic9" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 1233.31
+offset_top = 1271.41
+offset_right = 1633.31
+offset_bottom = 1671.41
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic9"]
+layout_mode = 0
+offset_left = -21.166
+offset_top = -148.158
+offset_right = 734.834
+offset_bottom = 50.8423
+rotation = 89.9999
+text = "999955695"
+
+[node name="PlayerGraphic10" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 1390.45
+offset_top = 1271.41
+offset_right = 1790.45
+offset_bottom = 1671.41
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic10"]
+layout_mode = 0
+offset_left = -21.165
+offset_top = -148.158
+offset_right = 734.835
+offset_bottom = 50.8418
+rotation = 89.9999
+text = "999955695"
+
+[node name="PlayerGraphic11" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 1525.15
+offset_top = 1282.64
+offset_right = 1925.15
+offset_bottom = 1682.64
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic11"]
+layout_mode = 0
+offset_left = -21.165
+offset_top = -148.158
+offset_right = 734.835
+offset_bottom = 50.8418
+rotation = 89.9999
+text = "999955695"
+
+[node name="PlayerGraphic12" type="TextureRect" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB"]
+layout_mode = 0
+offset_left = 1698.01
+offset_top = 1287.13
+offset_right = 2098.01
+offset_bottom = 1687.13
+scale = Vector2(0.3, 0.3)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("13_evta7")
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect/CourtGraphic/TeamB/PlayerGraphic12"]
+layout_mode = 0
+offset_left = -21.166
+offset_top = -148.158
+offset_right = 734.834
+offset_bottom = 50.8418
+rotation = 89.9999
+text = "999955695"
+
+[node name="FPS Counter" type="Label" parent="UI/ScoreCanvasLayer"]
+offset_right = 267.0
+offset_bottom = 88.0
+script = ExtResource("14_3hya6")
+
+[node name="Score" parent="UI/ScoreCanvasLayer" instance=ExtResource("15_w0aqi")]
+anchors_preset = -1
+
+[node name="ColourRect2" type="ColorRect" parent="UI/ScoreCanvasLayer"]
+visible = false
+offset_left = 1.04538
+offset_top = 277.364
+offset_right = 63.0454
+offset_bottom = 759.364
+
+[node name="ColourRect3" type="ColorRect" parent="UI/ScoreCanvasLayer"]
+visible = false
+offset_left = 1438.76
+offset_top = 977.816
+offset_right = 1748.76
+offset_bottom = 1065.82
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect3"]
+layout_mode = 0
+offset_right = 310.0
+offset_bottom = 89.0
+text = "Substutition"
+
+[node name="ColourRect4" type="ColorRect" parent="UI/ScoreCanvasLayer"]
+visible = false
+offset_left = 1077.76
+offset_top = 977.816
+offset_right = 1387.76
+offset_bottom = 1065.82
+
+[node name="Label" type="Label" parent="UI/ScoreCanvasLayer/ColourRect4"]
+layout_mode = 0
+offset_right = 310.0
+offset_bottom = 89.0
+text = "Time Out"
+
+[node name="Button" type="Button" parent="UI/ScoreCanvasLayer"]
+visible = false
+offset_left = 1811.05
+offset_top = 979.44
+offset_right = 1906.05
+offset_bottom = 1067.44
+
+[node name="DebugOverlay" type="CanvasLayer" parent="UI"]
+script = ExtResource("16_ifqht")
+
+[node name="DebugDraw3D" type="Control" parent="UI/DebugOverlay"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("17_wg7iy")
+
+[node name="PreMatchUI" parent="UI" instance=ExtResource("18_0pm8c")]
+layer = 4
+
+[node name="ServeUI" parent="UI" instance=ExtResource("19_gfg2l")]
+
+[node name="TeamInfoUI" type="CanvasLayer" parent="UI"]
+layer = 2
+script = ExtResource("20_mqewi")
+
+[node name="TeamSelectionUI" type="Control" parent="UI/TeamInfoUI"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1912.0
+offset_bottom = 1078.0
+
+[node name="TeamSelectionUI" parent="UI/TeamInfoUI/TeamSelectionUI" instance=ExtResource("21_mfp85")]
+layout_mode = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+
+[node name="TeamStatsUI" type="Control" parent="UI/TeamInfoUI"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("22_jweii")
+
+[node name="ColourRect" type="ColorRect" parent="UI/TeamInfoUI/TeamStatsUI"]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 0.458824)
+
+[node name="ColourRect2" type="ColorRect" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -823.5
+offset_top = -406.0
+offset_right = 823.5
+offset_bottom = 406.0
+color = Color(0.0235294, 0.0509804, 0.239216, 0.458824)
+
+[node name="TeamAName" type="Button" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect/ColourRect2"]
+layout_mode = 0
+offset_left = 41.349
+offset_top = -39.8882
+offset_right = 814.349
+offset_bottom = 0.111816
+text = "The Beatles"
+
+[node name="TeamBName" type="Button" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect/ColourRect2"]
+layout_mode = 0
+offset_left = 833.811
+offset_top = -39.8882
+offset_right = 1606.81
+offset_bottom = 0.111816
+text = "The Rolling Stones"
+
+[node name="Columns2" type="Control" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect/ColourRect2"]
+anchors_preset = 0
+offset_left = 110.0
+offset_top = 23.0
+offset_right = 1591.0
+offset_bottom = 68.0
+
+[node name="Name" type="Label" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect/ColourRect2/Columns2"]
+layout_mode = 0
+offset_right = 132.0
+offset_bottom = 45.0
+text = "Name"
+
+[node name="Passing" type="Label" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect/ColourRect2/Columns2"]
+layout_mode = 0
+offset_left = 208.0
+offset_right = 340.0
+offset_bottom = 45.0
+text = "Passing (3-2-1-0)"
+
+[node name="ShowStatsButton" type="Button" parent="UI/TeamInfoUI"]
+offset_left = 54.0
+offset_top = 558.0
+offset_right = 346.0
+offset_bottom = 623.0
+rotation = 89.5353
+text = "Stats"
+
+[node name="OnCourtPlayers" type="Control" parent="UI/TeamInfoUI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1920.0
+offset_bottom = -1080.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+mouse_default_cursor_shape = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/TeamInfoUI/OnCourtPlayers"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = 10.0
+offset_right = -30.0
+offset_bottom = 761.0
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="OnCourtPlayer1" parent="UI/TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource("23_sry0n")]
+layout_mode = 2
+
+[node name="OnCourtPlayer2" parent="UI/TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource("23_sry0n")]
+layout_mode = 2
+
+[node name="OnCourtPlayer3" parent="UI/TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource("23_sry0n")]
+layout_mode = 2
+
+[node name="OnCourtPlayer4" parent="UI/TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource("23_sry0n")]
+layout_mode = 2
+
+[node name="OnCourtPlayer5" parent="UI/TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource("23_sry0n")]
+layout_mode = 2
+
+[node name="OnCourtPlayer6" parent="UI/TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource("23_sry0n")]
+layout_mode = 2
+
+[node name="OnCourtPlayer7" parent="UI/TeamInfoUI/OnCourtPlayers/VBoxContainer" instance=ExtResource("23_sry0n")]
+layout_mode = 2
+
+[node name="TeamTacticsUICanvas" type="CanvasLayer" parent="UI"]
+visible = false
+
+[node name="TeamTacticsUI" parent="UI/TeamTacticsUICanvas" instance=ExtResource("24_v8nr8")]
+
+[node name="Label" type="Label" parent="UI/TeamTacticsUICanvas"]
+offset_left = 118.0
+offset_top = 536.0
+offset_right = 158.0
+offset_bottom = 562.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 25
+text = "blah"
+script = ExtResource("25_mqjes")
+
+[connection signal="pressed" from="UI/ToggleTeamTacticsUI" to="UI" method="_on_toggle_team_tactics_ui_pressed"]

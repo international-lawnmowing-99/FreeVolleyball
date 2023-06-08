@@ -1,10 +1,10 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=11 format=3]
 
-[ext_resource path="res://Roboto-Regular.ttf" type="FontFile" id=1]
-[ext_resource path="res://default_env.tres" type="Environment" id=2]
-[ext_resource path="res://Models/fatcylinder.glb" type="PackedScene" id=3]
-[ext_resource path="res://icon.png" type="Texture2D" id=4]
-[ext_resource path="res://Scripts/Fatness test.gd" type="Script" id=5]
+[ext_resource type="FontFile" path="res://Fonts/Roboto-Regular.ttf" id="1"]
+[ext_resource type="Environment" path="res://default_env.tres" id="2"]
+[ext_resource type="PackedScene" uid="uid://nsigouc224oy" path="res://Models/fatcylinder.glb" id="3"]
+[ext_resource type="Texture2D" uid="uid://b5bxp73r55d64" path="res://icon.png" id="4"]
+[ext_resource type="Script" path="res://Scripts/Fatness test.gd" id="5"]
 
 [sub_resource type="StyleBoxLine" id=1]
 thickness = 10
