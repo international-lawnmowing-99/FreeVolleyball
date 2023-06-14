@@ -19,6 +19,7 @@ var jumpSetState = JumpSetState.Undefined
 #var hasSet:bool = false
 var interpolationSpeed = 5
 func Enter(athlete:Athlete):
+	athlete.animTree.set("parameters/state/transition_request", "moving")
 	nameOfState="Set"
 
 	athlete.moveTarget.y = 0

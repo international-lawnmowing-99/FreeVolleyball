@@ -117,10 +117,10 @@ func _ready():
 	neckBone02Id = skel.find_bone("neck02")
 	
 	
-	customPose01 = skel.get_bone_pose(spineBone01Id)
-	customPose02 = skel.get_bone_pose(spineBone02Id)
-	customPoseNeck01 = skel.get_bone_pose((neckBone01Id))
-	customPoseNeck02 = skel.get_bone_pose((neckBone02Id))
+	customPose01 = skel.get_bone_global_pose(spineBone01Id)
+	customPose02 = skel.get_bone_global_pose(spineBone02Id)
+	customPoseNeck01 = skel.get_bone_global_pose(neckBone01Id)
+	customPoseNeck02 = skel.get_bone_global_pose(neckBone02Id)
 	
 
 func _process(_delta):
@@ -175,15 +175,15 @@ func Move(delta):
 	
 func RotateDigPlatform(angle):
 	
-	var acustomPose01 = customPose01.rotated(Vector3.UP, deg_to_rad(angle/2))
-	var acustomPose02 = customPose02.rotated(Vector3.UP, deg_to_rad(angle/2))
-	var acustomPoseNeck01 = customPoseNeck01.rotated(Vector3.UP, deg_to_rad(-angle/2))
-	var acustomPoseNeck02 = customPoseNeck02.rotated(Vector3.UP, deg_to_rad(-angle/2))
+	var acustomPose01 = customPose01.rotated(Vector3.UP, (angle/2))
+	var acustomPose02 = customPose02.rotated(Vector3.UP, (angle/2))
+#	var acustomPoseNeck01 = customPoseNeck01.rotated(Vector3.UP, deg_to_rad(-angle/2))
+	#var acustomPoseNeck02 = customPoseNeck02.rotated(Vector3.UP, deg_to_rad(-angle/2))
 	
 	skel.set_bone_global_pose_override(spineBone01Id, acustomPose01,1.0)
 	skel.set_bone_global_pose_override(spineBone02Id, acustomPose02,1.0)
-	skel.set_bone_global_pose_override(neckBone01Id, acustomPoseNeck01,1.0)
-	skel.set_bone_global_pose_override(neckBone02Id, acustomPoseNeck02,1.0)
+#	skel.set_bone_global_pose_override(neckBone01Id, acustomPoseNeck01,1.0)
+#	skel.set_bone_global_pose_override(neckBone02Id, acustomPoseNeck02,1.0)
 
 static func SortSet(a,b):
 	if a.stats.SetterEvaluation() > b.stats.SetterEvaluation():

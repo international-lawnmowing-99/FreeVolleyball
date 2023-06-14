@@ -28,6 +28,7 @@ var timeTillBlockPeak:float
 
 func Enter(athlete:Athlete):
 	nameOfState="Block"
+	athlete.animTree.set("parameters/state/transition_request", "moving")
 	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
 	timeTillBlockPeak =  jumpYVel / athlete.g
 	blockState = BlockState.Watching

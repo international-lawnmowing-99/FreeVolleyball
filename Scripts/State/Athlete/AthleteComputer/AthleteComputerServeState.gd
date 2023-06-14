@@ -39,6 +39,7 @@ var outputString:String
 
 func Enter(athlete:Athlete):
 	randomize()
+	athlete.animTree.set("parameters/state/transition_request", "moving")
 	nameOfState="ComputerServe"
 	ball = athlete.ball
 	serveState = ServeState.Walking

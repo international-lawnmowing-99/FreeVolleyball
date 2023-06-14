@@ -19,21 +19,19 @@ var position6Bounds = [0,0,0,0]
 
 var currentRotationPositions
 
-var scalingFactorX
-var scalingFactorY 
+var scalingFactor
 var offsetX
 var offsetY
 
 @onready var receiverUIArray = $HalfCourtRepresentationUI/ValuedTeamMembers.get_children()
 
 func Init():
-	scalingFactorX = 909/9 # where does the 9 come from? 909 is court size... (never mind, it's the ration of pixel court size to metres physical court size)
-	scalingFactorY = 909/9
+	scalingFactor = 909.0/9 # where does the 9 come from? 909 is court size... (never mind, it's the ration of pixel court size to metres physical court size)
 	offsetX = receiverUIArray[0].size.x/2 * receiverUIArray[0].scale.x
 	offsetY = receiverUIArray[0].size.y/2 * receiverUIArray[0].scale.y
 	
 	pseudoTeam.CopyTeam(teamA)
-	var i = 0
+
 	for receiverUI in receiverUIArray:
 		receiverUI.receiveOptionsUI = self
 		receiverUI.halfCourtOffsetX = $HalfCourtRepresentationUI/ValuedTeamMembers.global_position.x
@@ -76,16 +74,17 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 	var i = 0
 	for athlete in pseudoTeam.courtPlayers:
 		var rect = $HalfCourtRepresentationUI/ValuedTeamMembers.get_child(i)
-		var pos = teamA.defaultReceiveRotations[pseudoTeam.server][athlete.pseudoRotationPosition - 1]
+		var pos = teamA.receiveRotations[pseudoTeam.server][athlete.pseudoRotationPosition - 1]
 		rect.get_node("Name").text = athlete.stats.lastName + ": " + str(athlete.pseudoRotationPosition)
-		rect.position.x = scalingFactorX * -pos.z - offsetX
-		rect.position.y = scalingFactorY * pos.x - offsetY
+		rect.position.x = scalingFactor * -pos.z - offsetX
+		rect.position.y = scalingFactor * pos.x - offsetY
 		i += 1
 		rect.athlete = athlete
 	
-	currentRotationPositions = teamA.defaultReceiveRotations[pseudoTeam.server]
+	currentRotationPositions = teamA.receiveRotations[pseudoTeam.server]
 
 func LockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
+	
 	for lad in receiverUIArray:
 		if lad != selectedReceiver:
 			lad.selectable = false
@@ -100,11 +99,10 @@ func LockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
 		5: myBounds = position5Bounds
 		6: myBounds = position6Bounds
 		
-	# warning, inconsistent offsets incoming...
-	myBounds[0] = myBounds[0] * scalingFactorY #+ offsetY
-	myBounds[1] = myBounds[1] * scalingFactorY #+ offsetY
-	myBounds[2] = myBounds[2] * scalingFactorX# + offsetX
-	myBounds[3] = myBounds[3] * scalingFactorX# + offsetX
+	myBounds[0] = myBounds[0] * scalingFactor
+	myBounds[1] = myBounds[1] * scalingFactor
+	myBounds[2] = myBounds[2] * scalingFactor
+	myBounds[3] = myBounds[3] * scalingFactor
 	
 	selectedReceiver.bounds = myBounds
 	
@@ -114,12 +112,15 @@ func LockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
 	$HalfCourtRepresentationUI/Bounds/XMaxBoundsLine2D.position.y = myBounds[1] - lineThicknessHalf 
 	$HalfCourtRepresentationUI/Bounds/ZMinBoundsLine2D.position.x = myBounds[2] - lineThicknessHalf
 	$HalfCourtRepresentationUI/Bounds/ZMaxBoundsLine2D.position.x = myBounds[3] - lineThicknessHalf
-func UnlockReceiverUI():
+func UnlockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
 	for lad in receiverUIArray:
 		lad.selectable = true
-	
-	#!!!!!!!!!!!!!!!!!!
-	#currentRotationPositions Updated
+	Console.AddNewLine("X court " + str(currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].x))
+#	rect.position.x = scalingFactorX * -pos.z - offsetX
+#	rect.position.y = scalingFactorY * pos.x - offsetY
+	currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].x = (selectedReceiver.position.y + offsetY) / scalingFactor
+	currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].z = -(selectedReceiver.position.x + offsetX) / scalingFactor
+	Console.AddNewLine(str(currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].x))
 
 func _on_current_rotation_button_pressed():
 	DisplayRotation(teamA.originalRotation1Player.rotationPosition)

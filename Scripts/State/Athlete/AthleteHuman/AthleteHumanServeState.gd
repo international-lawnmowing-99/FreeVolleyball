@@ -56,6 +56,7 @@ const SERVETARGETSPEED = 6
 	
 func Enter(athlete:Athlete):
 	nameOfState="HumanServe"
+	athlete.animTree.set("parameters/state/transition_request", "moving")
 	
 	ball = athlete.ball
 	serveState = ServeState.Walking

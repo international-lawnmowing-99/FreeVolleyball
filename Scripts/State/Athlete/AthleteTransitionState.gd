@@ -6,6 +6,7 @@ func Enter(athlete:Athlete):
 	nameOfState="transition"
 	athlete.moveTarget = athlete.team.GetTransitionPosition(athlete)
 	athlete.spikeState.runupStartPosition = athlete.moveTarget
+	athlete.animTree.set("parameters/state/transition_request", "moving")
 	pass
 func Update(athlete:Athlete):
 	if athlete.position.distance_squared_to(athlete.moveTarget) < 0.1\

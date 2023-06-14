@@ -5,9 +5,10 @@ func Enter(team:Team):
 	nameOfState = "Pre Receive"
 	#ChooseReceiver
 	for athlete in team.courtPlayers:
-		athlete.position = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
-		athlete.moveTarget = team.flip * team.defaultReceiveRotations[team.server][athlete.rotationPosition - 1]
+		athlete.position = team.flip * team.receiveRotations[team.server][athlete.rotationPosition - 1]
+		athlete.moveTarget = team.flip * team.receiveRotations[team.server][athlete.rotationPosition - 1]
 		athlete.stateMachine.SetCurrentState(athlete.chillState)
+		athlete.animTree.set("parameters/state/transition_request", "digging")
 		athlete.rotation.y = -team.flip*PI/2
 		
 	if team.outsideFront.rotationPosition == 2 && team.oppositeHitter.rotationPosition == 4:

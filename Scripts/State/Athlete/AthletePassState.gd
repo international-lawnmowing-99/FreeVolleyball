@@ -12,6 +12,7 @@ var intersectionPointZ
 func Enter(athlete:Athlete):
 	isBallAlreadyPassed = false
 	nameOfState="pass"
+	athlete.animTree.set("parameters/state/transition_request", "digging")
 	ball = athlete.team.ball
 	
 	#Make a determination as to whether the ball will land in the court
@@ -91,7 +92,7 @@ func Enter(athlete:Athlete):
 	intersectionPointZ = m*intersectionPointX + b
 	
 	
-	#athlete.digAngle = rad_to_deg(ball.SignedAngle(athlete.transform.basis.z , -athlete.position + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
+	athlete.digAngle = rad_to_deg(ball.SignedAngle(athlete.transform.basis.z , -athlete.position + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
 	#print("digAngle = " + str(athlete.digAngle))
 	#other team is rotated -90, we're 90
 	#var angle = atan2(athlete.position.z - intersectionPointZ, athlete.position.x - intersectionPointX) 
@@ -113,11 +114,11 @@ func Update(athlete:Athlete):
 		athlete.animTree.set("parameters/Dig/blend_amount", animFactor)
 
 		athlete.RotateDigPlatform(athlete.digAngle)#( lerp(0,athlete.digAngle,(max(1,1/athlete.timeTillBallReachesMe)))))
-	#else:
-		#var a = athlete.animTree.get("parameters/BlendSpace1D/blend_position")
-		#athlete.animTree.set("parameters/BlendSpace1D/blend_position", lerp(a, 0, 5*athlete.myDelta))
-		#athlete.digAngle = lerp(athlete.digAngle,0,3*athlete.myDelta)
-		#athlete.RotateDigPlatform(athlete.digAngle)
+	else:
+		var a = athlete.animTree.get("parameters/Dig/blend_amount")
+		athlete.animTree.set("parameters/Dig/blend_amount", lerp(a, 0.0, 5*athlete.myDelta))
+		athlete.digAngle = lerp(athlete.digAngle,0.0,3*athlete.myDelta)
+		athlete.RotateDigPlatform(athlete.digAngle)
 	if !isBallAlreadyPassed && ball.inPlay && ball.position.y < 1 && \
 		(Vector3(ball.position.x,0, ball.position.z)).distance_to(athlete.position) < 1:
 			PassBall(athlete)

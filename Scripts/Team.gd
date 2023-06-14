@@ -33,57 +33,7 @@ var chosenSetter:Athlete
 var chosenSpiker:Athlete
 var chosenReceiver:Athlete
 
-var defaultReceiveRotations =  [
-	# Assuming setter starts in 1
-	[#setter in 1
-		Vector3(5.5, 0, -4), # pos 1
-		Vector3(5.0, 0, -2.8), # pos 2
-		Vector3(3, 0, 1.3), # etc...
-		Vector3(3.5, 0, 4),
-		Vector3(5.3, 0, 2.6),
-		Vector3(6.5, 0, 0)
-	],
-	[#setter in 6
-		Vector3(5.5, 0, -1),
-		Vector3(3.0, 0, -3.8),
-		Vector3(.5, 0, -2.5),
-		Vector3(3.5, 0, 4),
-		Vector3(5, 0, 1),
-		Vector3(1, 0, 0)
-	],
-	[#setter in 5
-		Vector3(5.5, 0, -3.25),
-		Vector3(2.75, 0, -3.0),
-		Vector3(5, 0, 2.5),
-		Vector3(.5, 0, 4),
-		Vector3(1.5, 0, 1.3),
-		Vector3(6.5, 0, 0)
-	],
-	[#setter 4
-		Vector3(5.5, 0, -4),
-		Vector3(5.0, 0, 2.5),
-		Vector3(2.75, 0, 3.25),
-		Vector3(.5, 0, 4),
-		Vector3(6.5, 0, 0),
-		Vector3(5, 0, -3.5)
-	],
-	[#setter 3
-		Vector3(5.5, 0, -2.75),
-		Vector3(2.75, 0, -1),
-		Vector3(0.5, 0, 0),
-		Vector3(4.5, 0, 2.5),
-		Vector3(6.5, 0, 0),
-		Vector3(7.5, 0, -1.75)
-	],
-	[#setter in 2
-		Vector3(5.5, 0, -3),
-		Vector3(.5, 0, 0),
-		Vector3(5, 0, 2.75),
-		Vector3(1.5, 0, 3.75),
-		Vector3(7.75, 0, .6),
-		Vector3(6.5, 0, 0)
-	]
-]
+var receiveRotations
 
 var server:int = 0
 
@@ -94,7 +44,6 @@ var ballPositionWhenSet:Vector3
 var setTarget:Set
 
 var timeTillDigTarget:float
-
 
 var ball:Ball
 # Setter in 1 so outside, middle, oppo etc in 2,3,4...
@@ -134,6 +83,8 @@ func Init(_ball, choiceState, gameWorld, clubOrInternational, matchManager):
 	allPlayers = team.allPlayers
 	
 	ball = _ball
+	
+	receiveRotations = teamStrategy.receiveRotations["default"]
 	
 	stateMachine._init(self)
 	stateMachine.SetCurrentState(serveState)
@@ -198,13 +149,10 @@ func PlaceTeam():
 
 		originalRotation1Player = courtPlayers[0]
 
-func xzVector(vec:Vector3):
-	return Vector3(vec.x, 0, vec.z)
-
 func UpdateTimeTillDigTarget():
 	
 	if (stateMachine.currentState == setState):
-		timeTillDigTarget = xzVector(ball.position).distance_to(xzVector(receptionTarget)) / max(xzVector(ball.linear_velocity).length(),.0001) 
+		timeTillDigTarget = Maths.XZVector(ball.position).distance_to(Maths.XZVector(receptionTarget)) / max(Maths.XZVector(ball.linear_velocity).length(),.0001) 
 
 	elif stateMachine.currentState == spikeState:
 		timeTillDigTarget = 0

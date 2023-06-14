@@ -48,7 +48,7 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [resource]
-graph_offset = Vector2(-928.602, -95.9808)
+graph_offset = Vector2(-660.893, -24.9829)
 nodes/Animation/node = SubResource("2")
 nodes/Animation/position = Vector2(-980, 100)
 "nodes/Animation 2/node" = SubResource("1")
@@ -58,7 +58,7 @@ nodes/Animation/position = Vector2(-980, 100)
 nodes/Dig/node = SubResource("3")
 nodes/Dig/position = Vector2(-640, 120)
 nodes/MoveTree/node = SubResource("10")
-nodes/MoveTree/position = Vector2(-400, -60)
+nodes/MoveTree/position = Vector2(-320, -20)
 nodes/state/node = SubResource("11")
 nodes/state/position = Vector2(-20, 100)
-node_connections = [&"output", 0, &"state", &"Dig", 0, &"Animation 2", &"Dig", 1, &"Animation", &"state", 0, &"Animation 3", &"state", 1, &"Dig"]
+node_connections = [&"output", 0, &"state", &"Dig", 0, &"Animation 2", &"Dig", 1, &"Animation", &"state", 0, &"MoveTree", &"state", 1, &"Dig"]

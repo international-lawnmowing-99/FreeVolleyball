@@ -6,7 +6,7 @@ var rotationPosition:int
 var bounds
 var selected:bool = false
 var selectable:bool = true
-@export var lerpSpeed = 10
+var lerpSpeed = 10
 var athlete:Athlete
 
 var offsetY
@@ -22,7 +22,6 @@ func _process(delta):
 		position.y = lerp(position.y, get_global_mouse_position().y - halfCourtOffsetY - offsetY, delta * lerpSpeed)
 		position.y = clamp(position.y, bounds[0], bounds[1] - 2 * offsetY)
 
-
 func _on_button_toggled(_button_pressed):
 	if selectable:
 		selected = !selected
@@ -31,5 +30,5 @@ func _on_button_toggled(_button_pressed):
 			receiveOptionsUI.LockReceiverUI(self)
 			self_modulate = Color.BLUE
 		else:
-			receiveOptionsUI.UnlockReceiverUI()
+			receiveOptionsUI.UnlockReceiverUI(self)
 			self_modulate = Color.WHITE

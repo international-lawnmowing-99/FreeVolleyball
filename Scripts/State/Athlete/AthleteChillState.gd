@@ -3,7 +3,7 @@ class_name AthleteChillState
 
 func Enter(athlete:Athlete):
 	nameOfState="Chilling"
-	
+	athlete.animTree.set("parameters/state/transition_request", "moving")
 	athlete.moveTarget = Vector3(athlete.position.x, 0, athlete.position.z)
 
 		
