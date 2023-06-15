@@ -1,15 +1,20 @@
 extends Control
 class_name ReceiveOptionsUI
 
-@onready var courtRepresentationReceive = $CourtRepresentationUI
 @onready var displayedRotationLabel = $DisplayedRotationLabel
+@onready var boundsUI = $HalfCourtRepresentationUI/Bounds
+
+@onready var selectedPlayerLabel = $HalfCourtRepresentationUI/DebugInfo/SelectedPlayerLabel
+@onready var xPosLabel = $HalfCourtRepresentationUI/DebugInfo/XPosLabel
+@onready var zPosLabel = $HalfCourtRepresentationUI/DebugInfo/ZPosLabel
+
 var teamA:Team
 var teamB:Team
 
 var pseudoTeam = PseudoTeam.new()
 
 #[minX, maxX, minZ, maxZ]
-# X is distance from the net (0-9), Z is (-4.5 - 4.5)
+# X is distance from the net (0-9), Z is (-4.5 to 4.5)
 var position1Bounds = [0,0,0,0]
 var position2Bounds = [0,0,0,0]
 var position3Bounds = [0,0,0,0]
@@ -18,6 +23,7 @@ var position5Bounds = [0,0,0,0]
 var position6Bounds = [0,0,0,0]
 
 var currentRotationPositions
+var currentRotation = -1
 
 var scalingFactor
 var offsetX
@@ -63,6 +69,8 @@ func _on_rot_6_button_pressed():
 	DisplayRotation(6)
 
 func DisplayRotation(positionOfOriginalRot1Player:int):
+	currentRotation = positionOfOriginalRot1Player
+	
 	displayedRotationLabel.text = "Rotation " + str(positionOfOriginalRot1Player)
 	var rotationDifference = pseudoTeam.originalRotation1Player.pseudoRotationPosition - positionOfOriginalRot1Player
 	if rotationDifference < 0:
@@ -83,7 +91,14 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 	
 	currentRotationPositions = teamA.receiveRotations[pseudoTeam.server]
 
+func UpdateDebugInfoUI(selectedReceiver:ReceiverRepresentationUI):
+	xPosLabel.text = str("%.1f" % ((selectedReceiver.position.y + offsetY) / scalingFactor)) + "metres from net"
+	zPosLabel.text = str("%.1f" % ((selectedReceiver.position.x + offsetX) / scalingFactor)) + "metres from centre"
+
 func LockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
+	boundsUI.visible = true
+	selectedPlayerLabel.text = selectedReceiver.athlete.stats.lastName + " selected"
+
 	
 	for lad in receiverUIArray:
 		if lad != selectedReceiver:
@@ -112,15 +127,21 @@ func LockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
 	$HalfCourtRepresentationUI/Bounds/XMaxBoundsLine2D.position.y = myBounds[1] - lineThicknessHalf 
 	$HalfCourtRepresentationUI/Bounds/ZMinBoundsLine2D.position.x = myBounds[2] - lineThicknessHalf
 	$HalfCourtRepresentationUI/Bounds/ZMaxBoundsLine2D.position.x = myBounds[3] - lineThicknessHalf
+	
 func UnlockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
+	boundsUI.visible = false
+	selectedPlayerLabel.text = ""
+	xPosLabel.text = ""
+	zPosLabel.text = ""
+	
 	for lad in receiverUIArray:
 		lad.selectable = true
-	Console.AddNewLine("X court " + str(currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].x))
+	#Console.AddNewLine("X court " + str(currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].x))
 #	rect.position.x = scalingFactorX * -pos.z - offsetX
 #	rect.position.y = scalingFactorY * pos.x - offsetY
 	currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].x = (selectedReceiver.position.y + offsetY) / scalingFactor
 	currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].z = -(selectedReceiver.position.x + offsetX) / scalingFactor
-	Console.AddNewLine(str(currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].x))
+	#Console.AddNewLine(str(currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].x))
 
 func _on_current_rotation_button_pressed():
 	DisplayRotation(teamA.originalRotation1Player.rotationPosition)
@@ -156,3 +177,8 @@ func UpdateBounds():
 	position6Bounds[1] = 9
 	position6Bounds[2] = -currentRotationPositions[4].z
 	position6Bounds[3] = -currentRotationPositions[0].z
+
+func _on_revert_button_pressed():
+	# Does deep copying this every time cause a memory leak?
+	teamA.receiveRotations[currentRotation - 1] = teamA.teamStrategy.defaultReceiveRotations[currentRotation - 1].duplicate(true)
+	DisplayRotation(currentRotation)

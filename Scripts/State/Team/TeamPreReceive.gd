@@ -11,6 +11,9 @@ func Enter(team:Team):
 		athlete.animTree.set("parameters/state/transition_request", "digging")
 		athlete.rotation.y = -team.flip*PI/2
 		
+	if !team.outsideFront || !team.oppositeHitter:
+		#It's happened again...
+		pass
 	if team.outsideFront.rotationPosition == 2 && team.oppositeHitter.rotationPosition == 4:
 		team.outsideFront.role = Enums.Role.Opposite
 		team.oppositeHitter.role = Enums.Role.Outside

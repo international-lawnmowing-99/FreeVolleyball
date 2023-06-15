@@ -84,7 +84,7 @@ func Init(_ball, choiceState, gameWorld, clubOrInternational, matchManager):
 	
 	ball = _ball
 	
-	receiveRotations = teamStrategy.receiveRotations["default"]
+	receiveRotations = teamStrategy.receiveRotations["default"].duplicate(true)
 	
 	stateMachine._init(self)
 	stateMachine.SetCurrentState(serveState)

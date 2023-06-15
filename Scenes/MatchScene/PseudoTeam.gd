@@ -63,7 +63,7 @@ func PseudoRotate():
 	
 func CachePlayers():
 	for player in courtPlayers:
-		Console.AddNewLine("Athlete: " + player.stats.lastName + ": " + str(player.pseudoRotationPosition))
+		#Console.AddNewLine("Athlete: " + player.stats.lastName + ": " + str(player.pseudoRotationPosition))
 		if player.role == Enums.Role.Setter:
 			setter = player
 		elif player.role == Enums.Role.Middle && AthleteWouldBeFrontCourt(player):
