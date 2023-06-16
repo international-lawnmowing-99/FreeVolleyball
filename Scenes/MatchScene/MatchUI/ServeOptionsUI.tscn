@@ -1,0 +1,137 @@
+[gd_scene load_steps=2 format=3 uid="uid://bn7njj16hwoye"]
+
+[ext_resource type="PackedScene" uid="uid://bpb8ra3kywlo6" path="res://Scenes/MatchScene/MatchUI/CourtRepresentationUI.tscn" id="1_o24n6"]
+
+[node name="ServeOptionsUI" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 211.0
+offset_right = 378.0
+offset_bottom = 1057.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+custom_minimum_size = Vector2(300, 1000)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button2" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button3" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button4" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button5" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button6" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button7" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button8" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button9" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button10" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button11" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Athlete1ServeOptionsUI" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CourtRepresentationUI" parent="Athlete1ServeOptionsUI" instance=ExtResource("1_o24n6")]
+layout_mode = 0
+offset_left = 1760.81
+offset_top = 214.407
+offset_right = 3560.81
+offset_bottom = 1314.4
+
+[node name="GridContainer" type="GridContainer" parent="Athlete1ServeOptionsUI"]
+layout_mode = 0
+offset_left = 532.0
+offset_top = 338.0
+offset_right = 868.0
+offset_bottom = 936.0
+
+[node name="Button2" type="Button" parent="Athlete1ServeOptionsUI/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Weakest Receiver"
+
+[node name="Button5" type="Button" parent="Athlete1ServeOptionsUI/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Strongest Receiving Attacker"
+
+[node name="Button3" type="Button" parent="Athlete1ServeOptionsUI/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Player"
+
+[node name="Button4" type="Button" parent="Athlete1ServeOptionsUI/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Location"
+
+[node name="Button" type="Button" parent="Athlete1ServeOptionsUI/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Libero"
+
+[node name="ServeDir" type="Line2D" parent="Athlete1ServeOptionsUI"]
+position = Vector2(1555.11, 1058.65)
+rotation = -3.14159
+scale = Vector2(0.4746, 0.4746)
+points = PackedVector2Array(-30, 340, 0, 385, 30, 340, 0, 385, 0, 0)
+width = 20.0
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+sharp_limit = 9.0
+round_precision = 13
+antialiased = true

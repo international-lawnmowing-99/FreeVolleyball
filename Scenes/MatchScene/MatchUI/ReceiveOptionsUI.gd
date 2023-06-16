@@ -92,8 +92,8 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 	currentRotationPositions = teamA.receiveRotations[pseudoTeam.server]
 
 func UpdateDebugInfoUI(selectedReceiver:ReceiverRepresentationUI):
-	xPosLabel.text = str("%.1f" % ((selectedReceiver.position.y + offsetY) / scalingFactor)) + "metres from net"
-	zPosLabel.text = str("%.1f" % ((selectedReceiver.position.x + offsetX) / scalingFactor)) + "metres from centre"
+	xPosLabel.text = str("%.1f" % ((selectedReceiver.position.y + offsetY) / scalingFactor)) + " metres from net"
+	zPosLabel.text = str("%.1f" % ((selectedReceiver.position.x + offsetX) / scalingFactor)) + " metres from centre"
 
 func LockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
 	boundsUI.visible = true
@@ -179,6 +179,5 @@ func UpdateBounds():
 	position6Bounds[3] = -currentRotationPositions[0].z
 
 func _on_revert_button_pressed():
-	# Does deep copying this every time cause a memory leak?
-	teamA.receiveRotations[currentRotation - 1] = teamA.teamStrategy.defaultReceiveRotations[currentRotation - 1].duplicate(true)
+	teamA.receiveRotations[pseudoTeam.server] = teamA.teamStrategy.defaultReceiveRotations[pseudoTeam.server].duplicate(true)
 	DisplayRotation(currentRotation)

@@ -52,9 +52,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ReceiveOptionsUI" parent="." instance=ExtResource("2_xc2ht")]
+visible = false
 
 [node name="ServeOptionsUI" type="Control" parent="."]
-visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
