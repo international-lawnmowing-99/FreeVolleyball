@@ -57,7 +57,16 @@ func SetBall(team:Team):
 	
 	# mint set, poor set (short, long, mis-timed, tight, over, or some combo thereof - so many ways to set poorly!), 2 hits/carry ("setting error")
 	randomize()
-	var setExecution = randi()%3
+	var setExecution = randi()% 100
+	
+	# A 100 setter would always set good?
+	# A 0 setter always makes errors
+	# An 80 setter sets a higher proportion of good sets than a 40
+	
+	var errorThreshold = pow((team.chosenSetter.stats.set/100 - 1.0), 8.0)
+	var perfectThreshold = 1.0 / (1.0 + pow(2.71828, -((team.chosenSetter.stats.set/100.0) - 0.5)/0.1))
+	
+	
 	
 	if setExecution == 0:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.DARK_ORCHID)

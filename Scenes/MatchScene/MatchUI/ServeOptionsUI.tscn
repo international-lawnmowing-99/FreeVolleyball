@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://bn7njj16hwoye"]
+[gd_scene load_steps=4 format=3 uid="uid://bn7njj16hwoye"]
 
 [ext_resource type="PackedScene" uid="uid://bpb8ra3kywlo6" path="res://Scenes/MatchScene/MatchUI/CourtRepresentationUI.tscn" id="1_o24n6"]
+
+[sub_resource type="Gradient" id="Gradient_rt5qm"]
+offsets = PackedFloat32Array(0, 0.524725, 1)
+colors = PackedColorArray(0, 0, 0, 0.784314, 0.372549, 0.372549, 0.372549, 1, 1, 1, 1, 0.784314)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_frqoi"]
+gradient = SubResource("Gradient_rt5qm")
 
 [node name="ServeOptionsUI" type="Control"]
 layout_mode = 3
@@ -85,6 +92,29 @@ offset_left = 1760.81
 offset_top = 214.407
 offset_right = 3560.81
 offset_bottom = 1314.4
+
+[node name="PreSetBlurRect" type="TextureRect" parent="Athlete1ServeOptionsUI/CourtRepresentationUI"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 100.0
+offset_right = 1801.0
+offset_bottom = 999.0
+texture = SubResource("GradientTexture1D_frqoi")
+
+[node name="Label" type="Label" parent="Athlete1ServeOptionsUI/CourtRepresentationUI/PreSetBlurRect"]
+layout_mode = 0
+offset_left = 436.0
+offset_top = 901.0
+offset_right = 1339.0
+offset_bottom = 987.0
+rotation = -1.5708
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 10
+theme_override_font_sizes/font_size = 60
+text = "No Rotation Available"
+horizontal_alignment = 1
 
 [node name="GridContainer" type="GridContainer" parent="Athlete1ServeOptionsUI"]
 layout_mode = 0
