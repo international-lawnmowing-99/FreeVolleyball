@@ -63,17 +63,24 @@ func SetBall(team:Team):
 	# A 0 setter always makes errors
 	# An 80 setter sets a higher proportion of good sets than a 40
 	
-	var errorThreshold = pow((team.chosenSetter.stats.set/100 - 1.0), 8.0)
-	var perfectThreshold = 1.0 / (1.0 + pow(2.71828, -((team.chosenSetter.stats.set/100.0) - 0.5)/0.1))
+	var errorThreshold = 100.0 * pow((team.chosenSetter.stats.set/100 - 1.0), 8.0)
+	var perfectThreshold = 100.0 / (1.0 + pow(2.71828, -((team.chosenSetter.stats.set/100.0) - 0.5)/0.1))
 	
+	Console.AddNewLine("[[[[[ set execution:" + str(setExecution) + " ]]]]]")
+	Console.AddNewLine("[[[[[ error threshold:" + str(errorThreshold) + " ]]]]]")
+	Console.AddNewLine("[[[[[ perfect threshold:" + str(100.0 - perfectThreshold) + " ]]]]]")
 	
-	
-	if setExecution == 0:
-		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.DARK_ORCHID)
-	elif setExecution == 1:
-		Console.AddNewLine(team.chosenSetter.stats.lastName + " shitty set", Color.RED)
-	elif setExecution == 2:
+	if setExecution < errorThreshold:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " setting error", Color.BLUE)
+		team.ball.linear_velocity = Vector3.ZERO
+		if team.isHuman:
+			team.mManager.PointToTeamB()
+		else:
+			team.mManager.PointToTeamA()
+	elif  setExecution > 100 - perfectThreshold:
+		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.DARK_ORCHID)
+	else:
+		Console.AddNewLine(team.chosenSetter.stats.lastName + " shitty set", Color.RED)
 		
 	if !team.setTarget:
 		#setTarget = Set(-4.5, 0, 0, randf() * 6 + 2.5)

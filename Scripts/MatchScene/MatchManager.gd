@@ -17,8 +17,10 @@ var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 @onready var TESTteamRepresentation = $UI/TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
 @onready var serveUI = $UI/ServeUI
 @onready var teamTacticsUI = $UI/TeamTacticsUICanvas/TeamTacticsUI
+
 var isTeamAServing:bool
 var isPaused:bool = false
+
 func _ready():
 	var now = Time.get_ticks_msec()
 	gameWorld.GenerateDefaultWorld(false)
@@ -66,11 +68,11 @@ func _ready():
 	preMatchUI.skipUI()
 	$UI/TeamInfoUI.InitialiseOnCourtPlayerUI()
 
-func _physics_process(_delta: float) -> void:
-#	if ball.blockWillBeAttempted:
-#		if teamA.isNextToSpike:
-#			pass
-	pass
+#func _physics_process(_delta: float) -> void:
+##	if ball.blockWillBeAttempted:
+##		if teamA.isNextToSpike:
+##			pass
+#	pass
 	
 func BallOverNet(hitByTeamA:bool):
 	teamA.isNextToSpike = !teamA.isNextToSpike

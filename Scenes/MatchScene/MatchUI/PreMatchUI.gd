@@ -40,6 +40,8 @@ func PopulateUI(team:Team, otherTeam:Team):
 	$ColourRectIntro/Label.text = team.teamName + " vs " + otherTeam.teamName
 	
 	var humanTeam = $TeamLineUpsUI/HumanTeam
+	if team.allPlayers.size() > 12:
+		var teamDebug = team
 	for i in range(team.allPlayers.size()):
 		if team.allPlayers[i] && humanTeam.get_child(i):
 			humanTeam.get_child(i).DisplayStats(team.allPlayers[i])

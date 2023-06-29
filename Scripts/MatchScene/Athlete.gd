@@ -125,6 +125,8 @@ func _ready():
 
 func _process(_delta):
 	myDelta = _delta
+#	if _delta <= 0.0:
+#		print("quick frame!")
 #	print(stats.lastName + " :: " + str(rotationPosition))
 	if stateMachine.currentState:
 		stateMachine.currentState.Update(self)

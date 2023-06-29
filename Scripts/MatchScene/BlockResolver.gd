@@ -48,7 +48,7 @@ func _process(_delta: float) -> void:
 	pass
 
 func ResolveBlock():
-	Console.AddNewLine("Resolving block, " + str(len(blockers)) + " blockers", Color.YELLOW_GREEN)
+#	Console.AddNewLine("Resolving block, " + str(len(blockers)) + " blockers", Color.YELLOW_GREEN)
 
 	
 	
@@ -65,11 +65,11 @@ func ResolveBlock():
 		
 		blockerCount += 1
 		totalBlockStrength += blocker.stats.block/blockerCount
-	Console.AddNewLine("Spiker stat: " + str(round(spiker.stats.spike)) + " || Blocker stat(s): " + blockStatsString + " ::" + str(totalBlockStrength), Color.YELLOW_GREEN)
+#	Console.AddNewLine("Spiker stat: " + str(round(spiker.stats.spike)) + " || Blocker stat(s): " + blockStatsString + " ::" + str(totalBlockStrength), Color.YELLOW_GREEN)
 
 
 	var attackRoll = randf_range(1, spiker.stats.spike)
-	var blockRoll = randf_range(1, totalBlockStrength)
+	var blockRoll = randf_range(1, totalBlockStrength) * 0
 	
 	Console.AddNewLine("Spike Roll: : " + str(int(attackRoll)) + " || Block Roll: " + str(int(blockRoll)), Color.YELLOW_GREEN)
 	
