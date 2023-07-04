@@ -9,7 +9,7 @@ var teamName:String
 var teamStrategy = preload("res://Scripts/TeamStrategy.gd").new()
 
 var nation
-var mManager
+var mManager:MatchManager
 var isHuman:bool = false
 
 var isLiberoOnCourt:bool

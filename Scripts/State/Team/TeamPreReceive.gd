@@ -13,6 +13,7 @@ func Enter(team:Team):
 		
 	if !team.outsideFront || !team.oppositeHitter:
 		#It's happened again...
+		var i
 		pass
 	if team.outsideFront.rotationPosition == 2 && team.oppositeHitter.rotationPosition == 4:
 		team.outsideFront.role = Enums.Role.Opposite

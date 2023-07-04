@@ -93,6 +93,9 @@ func Update(_athlete:Athlete):
 func Exit(_athlete:Athlete):
 	pass
 
+func ReactToDodgySet():
+	pass
+
 #func TimeToSpikeWithFullRunup() -> float:
 #	var timeToGetToRunup = athlete.distance_to(athlete.spikeState.runupStartPosition)/athlete.stats.speed 
 #	var timeToRunup = runupStartPosition.distance_to(takeOffXZ)/athlete.stats.speed

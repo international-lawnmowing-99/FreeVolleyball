@@ -45,7 +45,7 @@ func DumpBall(team:Team):
 	# a max height of 0.1 above the current height, hundreds of errors appear somewhere during 
 	# physics process, using both physics engines. Not for +0.2 height though
 	
-	team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.position, team.ball.attackTarget, max(team.ball.position.y + 2, 2.9))
+	team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.position, team.ball.attackTarget, max(team.ball.position.y + .1, 2.9))
 #	FindWellBehavedParabola(team.ball.position, team.ball.attackTarget, max(team.ball.position.y + 2, 2.9))
 	print("ball.linear_vel: " + str(team.ball.linear_velocity))
 #	team.ball.linear_velocity = team.ball.FindParabolaForGivenSpeed(team.ball.position, team.ball.attackTarget, randf_range(5,10), false)
@@ -64,23 +64,47 @@ func SetBall(team:Team):
 	# An 80 setter sets a higher proportion of good sets than a 40
 	
 	var errorThreshold = 100.0 * pow((team.chosenSetter.stats.set/100 - 1.0), 8.0)
-	var perfectThreshold = 100.0 / (1.0 + pow(2.71828, -((team.chosenSetter.stats.set/100.0) - 0.5)/0.1))
+	var perfectThreshold = 100.0 - 100.0 / (1.0 + pow(2.71828, -((team.chosenSetter.stats.set/100.0) - 0.5)/0.1))
+	# most sets are perfect now...
 	
-	Console.AddNewLine("[[[[[ set execution:" + str(setExecution) + " ]]]]]")
-	Console.AddNewLine("[[[[[ error threshold:" + str(errorThreshold) + " ]]]]]")
-	Console.AddNewLine("[[[[[ perfect threshold:" + str(100.0 - perfectThreshold) + " ]]]]]")
+#	Console.AddNewLine("[[[[[ set execution:" + str(setExecution) + " ]]]]]")
+#	Console.AddNewLine("[[[[[ error threshold:" + str(errorThreshold) + " ]]]]]")
+#	Console.AddNewLine("[[[[[ perfect threshold:" + str(perfectThreshold) + " ]]]]]")
+#
+#	if setExecution < errorThreshold:
+#		Console.AddNewLine(team.chosenSetter.stats.lastName + " setting error", Color.BLUE)
+#		team.ball.linear_velocity = Vector3.ZERO
+#		if team.isHuman:
+#			team.mManager.PointToTeamB()
+#		else:
+#			team.mManager.PointToTeamA()
+#	elif  setExecution > perfectThreshold:
+#		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.DARK_ORCHID)
+#	else:
+	Console.AddNewLine(team.chosenSetter.stats.lastName + " shitty set", Color.RED)
+	# sets can be off in direction or speed (i.e. max height)
+	# my major issue is setting short! direction not so bad
+	# angle, distance, time as the three possible imperfections
 	
-	if setExecution < errorThreshold:
-		Console.AddNewLine(team.chosenSetter.stats.lastName + " setting error", Color.BLUE)
-		team.ball.linear_velocity = Vector3.ZERO
-		if team.isHuman:
-			team.mManager.PointToTeamB()
+	var difference = perfectThreshold - setExecution
+	# smaller difference = smaller error
+	var error = randf_range(0, difference) / 8
+	
+	team.setTarget.target.x += pow(-1,randi()%2) * error
+	team.setTarget.target.z += pow(-1,randi()%2) * error
+	team.setTarget.height += error
+		
+	if team.isHuman:
+		if team.setTarget.target.x < 0.5:
+			# Tight set
+			pass
+		elif team.setTarget.target.x < -0.5:
+			# Tight set on other side of court, might be able to block
+			pass
 		else:
-			team.mManager.PointToTeamA()
-	elif  setExecution > 100 - perfectThreshold:
-		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.DARK_ORCHID)
-	else:
-		Console.AddNewLine(team.chosenSetter.stats.lastName + " shitty set", Color.RED)
+			# Ball over net
+			team.mManager.BallOverNet(team.isHuman)
+	team.chosenSpiker.spikeState.ReactToDodgySet()
 		
 	if !team.setTarget:
 		#setTarget = Set(-4.5, 0, 0, randf() * 6 + 2.5)

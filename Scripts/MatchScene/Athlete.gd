@@ -176,9 +176,9 @@ func Move(delta):
 	pass
 	
 func RotateDigPlatform(angle):
-#	It looks like zero angles here were the cause of teh infamous "set_axis_angle: The axis Vector3 must be normalized." bug
+#	It looks like zero angles here might have been a(!) cause of teh infamous "set_axis_angle: The axis Vector3 must be normalized." bug
 	if angle == 0.0:
-		angle = 0.001
+		angle = 0.01
 	var acustomPose01 = customPose01.rotated(Vector3.UP, (angle/2))
 	var acustomPose02 = customPose02.rotated(Vector3.UP, (angle/2))
 #	var acustomPoseNeck01 = customPoseNeck01.rotated(Vector3.UP, (-angle/2))
