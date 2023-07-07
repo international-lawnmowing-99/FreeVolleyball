@@ -165,8 +165,6 @@ func UpdateTimeTillDigTarget():
 		
 
 func _process(_delta):
-	if isHuman:
-		stateMachine.Update()
 	stateMachine.Update()
 	if !isHuman && mManager.TESTteamRepresentation.courtPlayers:
 		mManager.TESTteamRepresentation.UpdateRepresentation(get_process_delta_time())
@@ -467,7 +465,7 @@ func Populate(firstNames, lastNames, r):
 		stats.block = skill + randf_range(0,25) + randf_range(0,25)
 		stats.set = skill + randf_range(0,25) + randf_range(0,25)
 		stats.spike = skill + randf_range(0,25) + randf_range(0,25)
-		stats.verticalJump = randf_range(0,.5) + randf_range(.1,.5) + randf_range(.1,.5) + 1.5
+		stats.verticalJump = randf_range(0,.5) + randf_range(.1,.5) + randf_range(.1,.5) + 3.5
 		stats.height = randf_range(.25,.6) + randf_range(.25,.6) #+ randf_range(.35,.6) + randf_range(.35,.6)
 		stats.speed = randf_range(5.5,7.5)
 		stats.dump = skill + randf_range(0,25) + randf_range(0,25)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ccxj5nay244v5"]
+[gd_scene load_steps=8 format=3 uid="uid://ccxj5nay244v5"]
 
 [ext_resource type="Script" path="res://Scripts/MatchScene/Athlete.gd" id="1_og5ci"]
 [ext_resource type="PackedScene" uid="uid://budp0wjekefpk" path="res://Scenes/new new woman import.tscn" id="2"]
@@ -16,6 +16,8 @@ radius = 0.1
 height = 0.2
 radial_segments = 4
 rings = 3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_tp6kt"]
 
 [node name="RigidBody3D" type="RigidBody3D"]
 sleeping = true
@@ -39,3 +41,8 @@ scroll_active = false
 
 [node name="Debug" type="CSGMesh3D" parent="."]
 mesh = SubResource("3")
+
+[node name="CollisionPolygon3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_tp6kt")
+disabled = true

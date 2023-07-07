@@ -139,8 +139,8 @@ func PointToTeamA():
 	isTeamAServing = true
 	
 	#teamA celebrate, watch the ball bounce
-	teamA.Chill()
-	teamB.Chill()
+#	teamA.Chill()
+#	teamB.Chill()
 	await get_tree().create_timer(1).timeout
 	
 	teamA.stateMachine.SetCurrentState(teamA.preserviceState)
@@ -156,8 +156,8 @@ func PointToTeamB():
 	isTeamAServing = false
 	
 	#teamB celebrate, watch the ball bounce
-	teamA.Chill()
-	teamB.Chill()
+#	teamA.Chill()
+#	teamB.Chill()
 	await get_tree().create_timer(1).timeout
 	
 	teamA.stateMachine.SetCurrentState(teamA.prereceiveState)

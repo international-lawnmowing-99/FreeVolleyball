@@ -88,7 +88,7 @@ func SetBall(team:Team):
 	
 	var difference = perfectThreshold - setExecution
 	# smaller difference = smaller error
-	var error = randf_range(0, difference) / 8
+	var error = randf_range(0, difference) / 80
 	
 	team.setTarget.target.x += pow(-1,randi()%2) * error
 	team.setTarget.target.z += pow(-1,randi()%2) * error
@@ -374,11 +374,12 @@ func ChooseSpiker(team:Team):
 		Console.AddNewLine("^^^___^^^  No possible spikers, release ball", Color.CRIMSON)
 
 		return
-
-	var setChoice = randi()%possibleSpikers.size()
 	
-	team.chosenSpiker = possibleSpikers[setChoice]
-	team.setTarget = team.chosenSpiker.setRequest
+	else:
+		var setChoice = randi()%possibleSpikers.size()
+	
+		team.chosenSpiker = possibleSpikers[setChoice]
+		team.setTarget = team.chosenSpiker.setRequest
 
 
 func AthleteCanFullyTransition(athlete) -> bool:
