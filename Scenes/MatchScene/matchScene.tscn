@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://db2fgt6mtocjw"]
+[gd_scene load_steps=37 format=3 uid="uid://db2fgt6mtocjw"]
 
 [ext_resource type="Script" path="res://Scripts/MatchScene/MatchManager.gd" id="1_mqt8k"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/FrameStepper.gd" id="2_skir3"]
@@ -76,6 +76,9 @@ size = Vector3(100, 4.1, 9)
 [sub_resource type="BoxShape3D" id="8"]
 size = Vector3(9, 4.1, 9)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_gg24e"]
+size = Vector3(0.01, 1.83, 9)
+
 [sub_resource type="PlaneMesh" id="9"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l5x6s"]
@@ -149,28 +152,28 @@ max_speed = Vector3(10, 10, 10)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.443, 0)
 script = SubResource("5")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
+[node name="ZoneOut1" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, -54.5)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneOut/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneOut/ZoneOut1"]
 shape = SubResource("6")
 
-[node name="StaticBody2" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
+[node name="ZoneOut2" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, 54.5)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneOut/StaticBody2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneOut/ZoneOut2"]
 shape = SubResource("6")
 
-[node name="StaticBody3" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
+[node name="ZoneOut3" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59, -1.6, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneOut/StaticBody3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneOut/ZoneOut3"]
 shape = SubResource("7")
 
-[node name="StaticBody4" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
+[node name="ZoneOut4" type="StaticBody3D" parent="ZoneOut" groups=["ZoneOut"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59, -1.6, 0)
 
-[node name="CollisionShape2" type="CollisionShape3D" parent="ZoneOut/StaticBody4"]
+[node name="CollisionShape2" type="CollisionShape3D" parent="ZoneOut/ZoneOut4"]
 shape = SubResource("7")
 
 [node name="ZoneInA" type="StaticBody3D" parent="ZoneOut" groups=["ZoneInA"]]
@@ -184,6 +187,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, -1.6, 0)
 
 [node name="CollisionShape3" type="CollisionShape3D" parent="ZoneOut/ZoneInB"]
 shape = SubResource("8")
+
+[node name="ZoneUnderNet" type="Area3D" parent="ZoneOut" groups=["ZoneUnderNet"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ZoneOut/ZoneUnderNet"]
+shape = SubResource("BoxShape3D_gg24e")
 
 [node name="Building" type="Node3D" parent="."]
 

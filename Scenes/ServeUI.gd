@@ -105,6 +105,8 @@ func _on_RepeatLastServe_pressed() -> void:
 func ValidLastServeOption():
 	if !humanServeState.rememberSettings || humanServeState.rememberedServeTarget == null || humanServeState.rememberedServeType == null || humanServeState.rememberedServeAggression == null || humanServeState.rememberedWalkPosition == null:
 		return false
+	if !(humanServeState.serveState == humanServeState.ServeState.Walking):
+		return false
 	return true
 
 	

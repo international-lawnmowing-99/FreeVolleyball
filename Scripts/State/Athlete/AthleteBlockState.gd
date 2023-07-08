@@ -48,6 +48,8 @@ func Enter(athlete:Athlete):
 	
 	
 func Update(athlete:Athlete):
+	athlete.DontFallThroughFloor()
+	
 	if blockingTarget:
 		if isCommitBlocking:
 			match blockState:

@@ -25,7 +25,7 @@ func _process(_delta):
 		if mesh.position.distance_to(floatDisplacement) < 0.1:
 			floatDisplacement = Vector3(0, randf_range(-.3,.3), randf_range(-.3,.3))
 			#ball will be passed at 0.5 metres high for now...
-		floatDisplacement = lerp(floatDisplacement, Vector3.ZERO, _delta /min(.1,abs(position.y - 0.5)))
+	floatDisplacement = lerp(floatDisplacement, Vector3.ZERO, _delta /min(.1,abs(position.y - 0.5)))
 	mesh.position = lerp(mesh.position, floatDisplacement, _delta * 4.5)
 		
 #	if is_inside_tree() && _parented && _pseudoParent:
@@ -56,19 +56,28 @@ func _on_ball_body_entered(body):
 			else:
 				Console.AddNewLine("ball out, point to a")
 				mManager.PointToTeamA()
-		if body.is_in_group("ZoneInA"):
+		elif body.is_in_group("ZoneInA"):
 			floating = false
 			floatDisplacement = Vector3.ZERO
 			inPlay = false
 			mManager.PointToTeamA()
 			Console.AddNewLine("Ball in, point to a")
 
-		if body.is_in_group("ZoneInB"):
+		elif body.is_in_group("ZoneInB"):
 			floating = false
 			floatDisplacement = Vector3.ZERO
 			inPlay = false
 			mManager.PointToTeamB()
 			Console.AddNewLine("Ball in, point to b", Color.BISQUE)
+		elif body.is_in_group("ZoneUnderNet"):
+			inPlay = false
+			if wasLastTouchedByA:
+				Console.AddNewLine("ball under net, point to b", Color.GOLD)
+				mManager.PointToTeamB()
+				
+			else:
+				Console.AddNewLine("ball under net, point to a", Color.GOLD)
+				mManager.PointToTeamA()
 func PretendToBeParented(node):
 	_parented = true
 	_pseudoParent = node

@@ -78,10 +78,12 @@ func Enter(athlete:Athlete):
 			ChooseServeAggression(rememberedServeAggression)
 		if rememberedWalkPosition:
 			athlete.position = rememberedWalkPosition
+			athlete.moveTarget = rememberedWalkPosition
 	else:
 		serveAggression = ServeAggression.UNDEFINED
 		serveType = ServeType.UNDEFINED
 		
+	serveState = ServeState.Walking
 	serveUI.ShowServeChoice()
 		
 #	if randi()%2 == 1:
@@ -232,7 +234,7 @@ func Update(athlete:Athlete):
 				athlete.rb.gravity_scale = 0
 				
 				athlete.position.y = 0
-				serveState = ServeState.Walking
+				serveState = ServeState.NotServing
 				athlete.stateMachine.SetCurrentState(athlete.defendState)
 
 func HitBall(athlete:Athlete):

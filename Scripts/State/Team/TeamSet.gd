@@ -33,7 +33,7 @@ func Update(team:Team):
 			else:
 				SetBall(team)
 	#CheckForSpikeDistance(team)
-	pass
+
 func Exit(_team:Team):
 	pass
 
@@ -44,6 +44,7 @@ func DumpBall(team:Team):
 	# Here's a note about a weird error. If the ball is dumped with a well behaved parabola with 
 	# a max height of 0.1 above the current height, hundreds of errors appear somewhere during 
 	# physics process, using both physics engines. Not for +0.2 height though
+	# Solved - it was the IK system deciding to "rip [the setter's] bloody arms off"!
 	
 	team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.position, team.ball.attackTarget, max(team.ball.position.y + .1, 2.9))
 #	FindWellBehavedParabola(team.ball.position, team.ball.attackTarget, max(team.ball.position.y + 2, 2.9))
@@ -86,24 +87,38 @@ func SetBall(team:Team):
 	# my major issue is setting short! direction not so bad
 	# angle, distance, time as the three possible imperfections
 	
-	var difference = perfectThreshold - setExecution
+	var difference = 100.0 - perfectThreshold - setExecution
 	# smaller difference = smaller error
-	var error = randf_range(0, difference) / 80
-	
-	team.setTarget.target.x += pow(-1,randi()%2) * error
-	team.setTarget.target.z += pow(-1,randi()%2) * error
-	team.setTarget.height += error
-		
+	var error = randf_range(0, difference) /10
 	if team.isHuman:
-		if team.setTarget.target.x < 0.5:
-			# Tight set
-			pass
-		elif team.setTarget.target.x < -0.5:
-			# Tight set on other side of court, might be able to block
-			pass
-		else:
-			# Ball over net
-			team.mManager.BallOverNet(team.isHuman)
+		team.setTarget.target.x -= abs(error)
+	else:
+		team.setTarget.target.x += abs(error)
+	#team.setTarget.target.z += pow(-1,randi()%2) * error
+	team.setTarget.height += abs(error)
+	Console.AddNewLine("Error: " + str(error))
+		
+	# React to the unexpected trajectory of the ball...
+	### 
+	###
+	if team.setTarget.target.x * team.flip < -0.5:
+		Console.AddNewLine("__________________________________________===============================================================================================================================")
+		team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		if team.ball.linear_velocity == Vector3.ZERO:
+			team.ball.linear_velocity = team.ball.FindDownwardsParabola(team.ball.position, team.setTarget.target)
+		team.ball.attackTarget = team.ball.BallPositionAtGivenHeight(0)
+		team.mManager.BallOverNet(team.isHuman)
+		return
+	elif team.setTarget.target.x * team.flip < 0:
+		# Tight set on other side of court, might be able to block
+		pass
+	elif team.setTarget.target.x * team.flip < 0.5:
+		# Tight set on our side
+		pass
+	else:
+		# Standard bad set
+		pass
+
 	team.chosenSpiker.spikeState.ReactToDodgySet()
 		
 	if !team.setTarget:
@@ -363,7 +378,6 @@ func ChooseSpiker(team:Team):
 				possibleSpikers.append(athlete)
 			else:
 				athlete.stateMachine.SetCurrentState(athlete.coverState)
-
 			
 	Console.AddNewLine("Choosing set option...")
 	if possibleSpikers.size() <= 0:
@@ -372,7 +386,6 @@ func ChooseSpiker(team:Team):
 		ballWillBeDumped = true
 		
 		Console.AddNewLine("^^^___^^^  No possible spikers, release ball", Color.CRIMSON)
-
 		return
 	
 	else:

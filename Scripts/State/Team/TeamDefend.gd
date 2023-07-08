@@ -9,12 +9,12 @@ func Enter(team:Team):
 	nameOfState = "Defend"
 	for player in team.courtPlayers:
 #		print(player.stats.lastName)
-		if player.rb.freeze:
+#		if player.rb.freeze:
 #			print(player.stats.lastName + "Changing")
-			if player.FrontCourt():
-				player.stateMachine.SetCurrentState(player.blockState)
-			else:
-				player.stateMachine.SetCurrentState(player.defendState)
+		if player.FrontCourt():
+			player.stateMachine.SetCurrentState(player.blockState)
+		else:
+			player.stateMachine.SetCurrentState(player.defendState)
 	
 	CacheBlockers(team)
 	
