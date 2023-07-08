@@ -118,7 +118,7 @@ func PlaceTeam():
 		add_child(lad)
 		var ladscale = lad.stats.height /1.8
 		
-		lad.scale = Vector3(ladscale, ladscale, ladscale)
+		lad.get_child(0).scale = Vector3(ladscale, ladscale, ladscale)
 		
 		lad.name = lad.stats.firstName + " " + lad.stats.lastName 
 		lad.position = pos

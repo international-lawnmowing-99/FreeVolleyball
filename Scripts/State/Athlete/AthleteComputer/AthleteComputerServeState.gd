@@ -132,11 +132,8 @@ func Update(athlete:Athlete):
 
 				var landing = athlete.position + Vector3(attackTarget.x - athlete.position.x, 0, attackTarget.z - athlete.position.z).normalized() * athlete.stats.verticalJump
 				
-				#Again, don't ask me why this is needed
+
 				athlete.rb.linear_velocity = ball.FindWellBehavedParabola(athlete.position, landing, athlete.stats.verticalJump)
-#				await athlete.get_tree().idle_frame
-#				athlete.rb.linear_velocity = ball.FindWellBehavedParabola(athlete.position, landing, athlete.stats.verticalJump)
-				
 				
 				serveState = ServeState.Jump
 				#if (timeTillJumpPeak<= jumpAnimationTime)

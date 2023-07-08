@@ -133,19 +133,19 @@ func PointToTeamA():
 	score.PointToTeamA()
 	teamA.isNextToSpike = false
 	teamB.isNextToSpike = true
-	
+
 	if !isTeamAServing:
 		teamA.Rotate()
 	isTeamAServing = true
-	
+
 	#teamA celebrate, watch the ball bounce
-#	teamA.Chill()
-#	teamB.Chill()
+	teamA.Chill()
+	teamB.Chill()
 	await get_tree().create_timer(1).timeout
-	
+
 	teamA.stateMachine.SetCurrentState(teamA.preserviceState)
 	teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
-	
+	pass	
 func PointToTeamB():
 	score.PointToTeamB()
 	teamB.isNextToSpike = false
@@ -156,8 +156,8 @@ func PointToTeamB():
 	isTeamAServing = false
 	
 	#teamB celebrate, watch the ball bounce
-#	teamA.Chill()
-#	teamB.Chill()
+	teamA.Chill()
+	teamB.Chill()
 	await get_tree().create_timer(1).timeout
 	
 	teamA.stateMachine.SetCurrentState(teamA.prereceiveState)

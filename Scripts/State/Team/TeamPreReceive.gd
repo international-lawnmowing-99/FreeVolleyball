@@ -10,9 +10,10 @@ func Enter(team:Team):
 		athlete.stateMachine.SetCurrentState(athlete.chillState)
 		athlete.animTree.set("parameters/state/transition_request", "digging")
 		athlete.rotation.y = -team.flip*PI/2
-		
+
 	if !team.outsideFront || !team.oppositeHitter:
 		#It's happened again...
+		# are the two teams the same?? hence 24 players 
 		var i
 		pass
 	if team.outsideFront.rotationPosition == 2 && team.oppositeHitter.rotationPosition == 4:
@@ -23,7 +24,7 @@ func Enter(team:Team):
 	team.isNextToSpike = true
 	team.CheckForLiberoChange()
 	team.chosenSetter = null
-	
+
 	if !team.isHuman:
 		team.mManager.TESTteamRepresentation.AssignCourtPlayers(team)
 		team.mManager.TESTteamRepresentation.UpdateRepresentation(get_process_delta_time())

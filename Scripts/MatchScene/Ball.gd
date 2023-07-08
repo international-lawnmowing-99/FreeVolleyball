@@ -269,12 +269,13 @@ func Serve(startPos, _attackTarget, serveHeight, topspin):
 		if (_attackTarget - startPos).x > 0:
 			topspin *= -1
 		angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), topspin * 80)
-		linear_velocity = Vector3.ZERO
+		#linear_velocity = Vector3.ZERO
+		attackTarget = _attackTarget
 		
 		var impulse = CalculateBallOverNetVelocity(startPos, _attackTarget, serveHeight)
-		
+
 		# :( no fun!
-		if impulse.length() * 3.6 > MAX_SERVE_SPEED:
+		if impulse.length() * 3.6 > MAX_SERVE_SPEED || impulse.length_squared() == 0:
 			print(str(impulse.length() * 3.6))
 			impulse = FindParabolaForGivenSpeed(startPos, _attackTarget, (MAX_SERVE_SPEED - randf_range(0,10))/3.6, false)
 			linear_velocity = impulse
@@ -288,8 +289,10 @@ func Serve(startPos, _attackTarget, serveHeight, topspin):
 		
 		#impulse *= mass
 		linear_velocity = impulse
+		if impulse.length_squared() == 0:
+			attackTarget = Maths.XZVector(position)
 		
-		attackTarget = _attackTarget
+
 		inPlay = true
 		
 func TouchedByB():
