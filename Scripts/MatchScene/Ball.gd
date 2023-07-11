@@ -167,6 +167,11 @@ func SetTimeWellBehavedParabola(startPos:Vector3, endPos:Vector3, maxHeight:floa
 	var timeToPeak = setVelocity.y / gravity
 	var timeDown = sqrt(2 * gravity * abs(maxHeight - endPos.y))/gravity
 	return timeToPeak + timeDown
+	
+#func SetTimeWellBehavedParabolaII(startPos:Vector3, endPos:Vector3):
+#	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
+#	var yVel = sqrt(2 * g * abs(endPos.y - startPos.y))
+#		return yVel / g + sqrt(2 * g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / g
 
 func SetTimeDownwardsParabola(startPos:Vector3, endPos:Vector3):
 	var ballVel = FindDownwardsParabola(startPos, endPos)
@@ -193,11 +198,17 @@ func SignedAngle(from:Vector3, to:Vector3, up:Vector3):
 	else:
 		return unsigned_angle
 
-func BallMaxHeight():
-	return 2.4
+func BallMaxHeight() -> float:
+	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * gravity_scale
+	if linear_velocity.y<0:
+		return position.y
+	else:
+		var timeOfFLight = linear_velocity.y/g
+		var distanceToTravel = linear_velocity.y * timeOfFLight + 0.5 * g * timeOfFLight * timeOfFLight
+		return position.y + distanceToTravel
 
 func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNet:float):
-	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
+	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * gravity_scale
 	var distanceFactor = startPos.x / (abs(startPos.x) + abs(target.x))
 	if startPos.x < 0:
 		distanceFactor *= -1
@@ -272,37 +283,37 @@ func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, ai
 	return projectileVelocity
 
 func Serve(startPos, _attackTarget, serveHeight, topspin):
-		gravity_scale = 1 + topspin
-		
-		rotation = Vector3.ZERO
-		if (_attackTarget - startPos).x > 0:
-			topspin *= -1
-		angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), topspin * 80)
-		#linear_velocity = Vector3.ZERO
-		attackTarget = _attackTarget
-		
-		var impulse = CalculateBallOverNetVelocity(startPos, _attackTarget, serveHeight)
+	gravity_scale = 1 + topspin
+	
+	rotation = Vector3.ZERO
+	if (_attackTarget - startPos).x > 0:
+		topspin *= -1
+	angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), topspin * 80)
+	#linear_velocity = Vector3.ZERO
+	attackTarget = _attackTarget
+	
+	var impulse = CalculateBallOverNetVelocity(startPos, _attackTarget, serveHeight)
 
-		# :( no fun!
-		if impulse.length() * 3.6 > MAX_SERVE_SPEED || impulse.length_squared() == 0:
-			print(str(impulse.length() * 3.6))
-			impulse = FindParabolaForGivenSpeed(startPos, _attackTarget, (MAX_SERVE_SPEED - randf_range(0,10))/3.6, false)
-			linear_velocity = impulse
-			attackTarget = _attackTarget
-			print("SERVE TOO FAST, New net pass: " + str(FindNetPass()))
-			if FindNetPass().y< 2.5:
-				print("serve hits net")
-				Console.AddNewLine("Serve hits net!!!!!!!", Color.BLUE_VIOLET)
-			print(str(impulse.length() * 3.6))
-			
-		
-		#impulse *= mass
+	# :( no fun!
+	if impulse.length() * 3.6 > MAX_SERVE_SPEED || impulse.length_squared() == 0:
+		print(str(impulse.length() * 3.6))
+		impulse = FindParabolaForGivenSpeed(startPos, _attackTarget, (MAX_SERVE_SPEED - randf_range(0,10))/3.6, false)
 		linear_velocity = impulse
-		if impulse.length_squared() == 0:
-			attackTarget = Maths.XZVector(position)
+		attackTarget = _attackTarget
+		print("SERVE TOO FAST, New net pass: " + str(FindNetPass()))
+		if FindNetPass().y< 2.5:
+			print("serve hits net")
+			Console.AddNewLine("Serve hits net!!!!!!!", Color.BLUE_VIOLET)
+		print(str(impulse.length() * 3.6))
 		
+	
+	#impulse *= mass
+	linear_velocity = impulse
+	if impulse.length_squared() == 0:
+		attackTarget = Maths.XZVector(position)
+	
 
-		inPlay = true
+	inPlay = true
 		
 func TouchedByB():
 	wasLastTouchedByA = false

@@ -93,7 +93,7 @@ func _on_CheckBox_toggled(button_pressed: bool) -> void:
 
 
 func _on_RepeatLastServe_pressed() -> void:
-	if ValidLastServeOption():
+	if humanServeState && ValidLastServeOption():
 		humanServeState.serveTarget.position = humanServeState.rememberedServeTarget
 		humanServeState.serveType = humanServeState.rememberedServeType
 		humanServeState.ChooseServeType(humanServeState.rememberedServeType)

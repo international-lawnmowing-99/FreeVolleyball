@@ -22,5 +22,5 @@ func Update(athlete:Athlete):
 func Exit(_athlete:Athlete):
 	pass
 
-func CanFullyTransition(_athlete) -> bool:
-	return true
+#func CanFullyTransition(_athlete) -> bool:
+#	return true
