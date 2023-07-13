@@ -139,7 +139,7 @@ func PassBall(athlete:Athlete):
 	Console.AddNewLine("PASSING || PASS ROLL: " + str(int(passRoll)) + " Difficulty: " + str(int(ball.difficultyOfReception)))
 	var rollOffDifference = passRoll - ball.difficultyOfReception
 	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.AQUA)
-	Console.AddNewLine( str(int(rollOffDifference)) + " roll unchecked differece ", Color.RED)
+#	Console.AddNewLine( str(int(rollOffDifference)) + " roll unchecked differece ", Color.RED)
 
 	
 	if rollOffDifference >= 19:

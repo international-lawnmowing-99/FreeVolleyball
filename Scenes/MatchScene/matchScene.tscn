@@ -14,7 +14,7 @@
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/MatchUI.gd" id="12_gpj8b"]
 [ext_resource type="Texture2D" uid="uid://qyj7idx5broe" path="res://Textures/antenna-uv.png" id="13_evta7"]
 [ext_resource type="Script" path="res://Scripts/MatchScene/fps_counter.gd" id="14_3hya6"]
-[ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/ScoreUIMatch.tscn" id="15_w0aqi"]
+[ext_resource type="PackedScene" uid="uid://dmu0b2wanhyv7" path="res://Scenes/MatchScene/MatchUI/ScoreUIMatch.tscn" id="15_w0aqi"]
 [ext_resource type="Script" path="res://Addons/DebugOverlay.gd" id="16_ifqht"]
 [ext_resource type="Script" path="res://Addons/DebugDraw3D.gd" id="17_wg7iy"]
 [ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.tscn" id="18_0pm8c"]
@@ -787,7 +787,6 @@ offset_bottom = 88.0
 script = ExtResource("14_3hya6")
 
 [node name="Score" parent="UI/ScoreCanvasLayer" instance=ExtResource("15_w0aqi")]
-anchors_preset = -1
 
 [node name="ColourRect2" type="ColorRect" parent="UI/ScoreCanvasLayer"]
 visible = false

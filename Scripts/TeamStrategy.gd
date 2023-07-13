@@ -57,6 +57,8 @@ var defaultReceiveRotations =  [
 		Vector3(6.5, 0, 0)
 	]
 ]
+
+var freeBallTarget:Vector3 = Vector3(4.5, 0, 0)
 var preferredSettingWeights
 var preferredReceptionWeights
 var receiveRotations = {

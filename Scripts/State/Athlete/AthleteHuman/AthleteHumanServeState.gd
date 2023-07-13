@@ -253,7 +253,7 @@ func HitBall(athlete:Athlete):
 			fuckupProb /= 2
 
 	var roll = randf()
-	Console.AddNewLine("fuckup prob: " + str(fuckupProb) + "|| roll: " + str(roll))
+#	Console.AddNewLine("fuckup prob: " + str(fuckupProb) + "|| roll: " + str(roll))
 	if roll < fuckupProb:
 		attackTarget = Vector3(randf_range(1, -8), 0, randf_range(10, 10))
 		topspin = 0

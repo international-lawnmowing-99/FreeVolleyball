@@ -13,7 +13,7 @@ func Enter(team:Team):
 
 	if !team.outsideFront || !team.oppositeHitter:
 		#It's happened again...
-		# are the two teams the same?? hence 24 players 
+		# are the two teams the same?? hence 24 players - YES!
 		var i
 		pass
 	if team.outsideFront.rotationPosition == 2 && team.oppositeHitter.rotationPosition == 4:
