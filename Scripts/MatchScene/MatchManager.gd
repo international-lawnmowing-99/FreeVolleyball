@@ -5,6 +5,12 @@ class_name MatchManager
 var gameWorld = load("res://Scripts/World/GameWorld.gd").new()
 var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 
+@export var debugCylinder:PackedScene
+@export var debugCube:PackedScene
+@export var debugSphere:PackedScene
+var cube
+var cylinder
+var sphere
 
 @onready var teamA:Team = $TeamA
 @onready var teamB:Team = $TeamB
@@ -22,6 +28,12 @@ var isTeamAServing:bool
 var isPaused:bool = false
 
 func _ready():
+	cube = debugCube.instantiate()
+	cylinder = debugCylinder.instantiate()
+	sphere = debugSphere.instantiate()
+	add_child(cube)
+	add_child(sphere)
+	add_child(cylinder)
 	var now = Time.get_ticks_msec()
 	gameWorld.GenerateDefaultWorld(false)
 	var later = Time.get_ticks_msec()

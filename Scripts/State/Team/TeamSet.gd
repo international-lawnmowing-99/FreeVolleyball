@@ -4,7 +4,7 @@ class_name TeamSet
 #can also potentially spike, dogshot
 var ballWillBeDumped:bool = false
 var possibleSpikers = []
-var debugCylinder
+
 
 func Enter(team:Team):
 	nameOfState = "Set"
@@ -13,14 +13,10 @@ func Enter(team:Team):
 	ChooseSetter(team)
 	ThinkAboutDumping(team)
 	
-	debugCylinder = CSGCylinder3D.new()
-	debugCylinder.material = StandardMaterial3D.new()
-	debugCylinder.position = Vector3.ZERO
-	debugCylinder.scale = 0.25 * Vector3.ONE
 	if !ballWillBeDumped:
 		ChooseSpiker(team)
 	#Can the spiker get back to their runup and if not, how will that affect their spike?
-
+	team.mManager.cube.position = team.setTarget.target
 func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
 	
@@ -102,7 +98,7 @@ func SetBall(team:Team):
 	#team.setTarget.target.z += pow(-1,randi()%2) * error
 	team.setTarget.height += 3*abs(error)
 	Console.AddNewLine("Error: " + str(error))
-		
+	team.mManager.cylinder.position = team.setTarget.target
 		
 	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
 	if team.ball.linear_velocity == Vector3.ZERO:
@@ -143,12 +139,16 @@ func SetBall(team:Team):
 			# the ball bounces?
 			
 			if AthleteCanSpikeBadSet(team.chosenSpiker):
+				Console.AddNewLine(team.chosenSpiker.stats.lastName + " (chosenSpiker) CAN spike bad set +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 				team.chosenSpiker.moveTarget = team.chosenSpiker.spikeState.runupStartPosition
+				team.chosenSpiker.setRequest = team.setTarget
 				pass
 			
 			elif AthleteCanStandingRollBadSet(team.chosenSpiker):
+				Console.AddNewLine(team.chosenSpiker.stats.lastName + " (chosenSpiker) can't spike bad set, will be able to aggressively play it though --------------------------------------------------------------------------------------------------------------------")
 				pass
 			else:
+				Console.AddNewLine("Scrambling for bad set ===============================================================")
 				ScrambleForBadSet(team)
 				#
 			
@@ -497,6 +497,11 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	# So can the athlete get to a position which is the distance of their runup plus 
 	# their jump length but all rotated a maximum of 45 degrees from behind the 
 	# point they would contact the new set??
+	
+	if !athlete.FrontCourt():
+		if athlete.team.flip * athlete.team.setTarget.target.x <= athlete.team.flip * (3 - athlete.stats.verticalJump/2):
+			return false
+	
 	var athleteSpikeTime:float = 0
 	
 	# 0 Are they airborne?
@@ -516,6 +521,7 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	# 1 Find new spike contact location
 	# (all normalised so that it takes place from the perspective of the human/teamA side)
 	var spikeContactPos:Vector3 = ball.BallPositionAtGivenHeight(athlete.stats.spikeHeight)
+
 	var XZSpikeContactFlipped = Maths.XZVector(spikeContactPos) * athlete.team.flip
 	# 2 The critical points are the corners of fan shape
 	var leftFanCorner:Vector3
@@ -528,8 +534,8 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	
 	leftFanCorner = XZSpikeContactFlipped + runupVector.rotated(Vector3.UP , -PI/4)
 	rightFanCorner = XZSpikeContactFlipped + runupVector.rotated(Vector3.UP, PI/4)
-	print(str(leftFanCorner))
-	print(str(rightFanCorner))
+	athlete.team.mManager.sphere.position = leftFanCorner
+	athlete.team.mManager.cube.position = rightFanCorner
 	
 	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
 	var jumpTime = jumpYVel / -athlete.g
@@ -539,24 +545,25 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	
 	# 3 If the spiker is left or right of either of the corners, can they make it to one?
 	if athlete.position.z * athlete.team.flip > leftFanCorner.z:
-		athleteSpikeTime += Maths.XZVector(leftFanCorner - athlete.position).length()/athlete.stats.speed
+		athleteSpikeTime += Maths.XZVector(leftFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
+		athlete.spikeState.runupStartPosition = leftFanCorner
 	elif athlete.position.z * athlete.team.flip < rightFanCorner.z:
-		athleteSpikeTime += Maths.XZVector(leftFanCorner - athlete.position).length()/athlete.stats.speed
+		athleteSpikeTime += Maths.XZVector(rightFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
+		athlete.spikeState.runupStartPosition = rightFanCorner
 	# 3.5 Otherwise it gets a little complicated. If they are within the fan, can they
 	# get to the position that is on the circle 3m back from the contact point?
 	# Or, if they are standing just to the side of the contact point for example, 
 	# can they get to the relevant corner? 
-	# If not, can they spike without a runup?
-	var angleToSpikeContactPos = Vector3(1,0,0).angle_to(athlete.team.flip * Maths.XZVector(spikeContactPos - athlete.position))
-	Console.AddNewLine(str(deg_to_rad(angleToSpikeContactPos)) + " degrees angle " + athlete.stats.lastName)
+
+	var angleToSpikeContactPos = Vector3(1,0,0).signed_angle_to(athlete.team.flip * Maths.XZVector(spikeContactPos - athlete.position), Vector3.UP)
+	Console.AddNewLine(str(rad_to_deg(angleToSpikeContactPos)) + " degrees angle " + athlete.stats.lastName)
 	if angleToSpikeContactPos > PI/4:
-		athleteSpikeTime += Maths.XZVector(leftFanCorner - athlete.position).length()/athlete.stats.speed
-		athlete.moveTarget = leftFanCorner * athlete.team.flip
-		pass
+		athleteSpikeTime += Maths.XZVector(leftFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
+		athlete.spikeState.runupStartPosition = leftFanCorner * athlete.team.flip
+
 	elif angleToSpikeContactPos < -PI/4:
-		athleteSpikeTime += Maths.XZVector(rightFanCorner - athlete.position).length()/athlete.stats.speed
-		athlete.moveTarget = rightFanCorner * athlete.team.flip
-		pass
+		athleteSpikeTime += Maths.XZVector(rightFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
+		athlete.spikeState.runupStartPosition = rightFanCorner * athlete.team.flip
 	
 	# 4 Otherwise can they simply make the distance to the spike contact location?
 	else: 
@@ -564,9 +571,13 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 		if distanceToSpikeContact > totalRunupLength:
 			# They are outside the fan radius, just need to head to the location
 			athleteSpikeTime += (distanceToSpikeContact - totalRunupLength)/athlete.stats.speed
-			athlete.spikeState.runupStartPosition = athlete.position + (spikeContactPos - athlete.position) * (distanceToSpikeContact - totalRunupLength) / distanceToSpikeContact
-			
-	
+			athlete.spikeState.runupStartPosition = Maths.XZVector(athlete.position + (spikeContactPos - athlete.position) * (distanceToSpikeContact - totalRunupLength) / distanceToSpikeContact)
+			athlete.team.mManager.sphere.position = athlete.spikeState.runupStartPosition
+		else:
+			# They are inside the fan, need to backtrack a little
+			athleteSpikeTime += (totalRunupLength - distanceToSpikeContact)/athlete.stats.speed
+			athlete.spikeState.runupStartPosition = Maths.XZVector(athlete.position + (athlete.position - spikeContactPos) * totalRunupLength / distanceToSpikeContact)
+			athlete.team.mManager.cube.position = athlete.spikeState.runupStartPosition
 
 	
 	return athleteSpikeTime < ball.SetTimeWellBehavedParabola(ball.position, spikeContactPos, ball.BallMaxHeight())

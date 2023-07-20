@@ -1,8 +1,11 @@
-[gd_scene load_steps=37 format=3 uid="uid://db2fgt6mtocjw"]
+[gd_scene load_steps=40 format=3 uid="uid://db2fgt6mtocjw"]
 
 [ext_resource type="Script" path="res://Scripts/MatchScene/MatchManager.gd" id="1_mqt8k"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/FrameStepper.gd" id="2_skir3"]
+[ext_resource type="PackedScene" uid="uid://v7j10j4aerjd" path="res://Scenes/debugCylinder.tscn" id="2_uqyv5"]
 [ext_resource type="Script" path="res://Scripts/MatchScene/CameraController.gd" id="3_3b621"]
+[ext_resource type="PackedScene" uid="uid://bnvffooqiw24k" path="res://Scenes/debugCube.tscn" id="3_8wn1a"]
+[ext_resource type="PackedScene" uid="uid://year6gts5wvq" path="res://Scenes/debugSphere.tscn" id="4_5aeaw"]
 [ext_resource type="PackedScene" uid="uid://dt5nn2u8v6rsr" path="res://Scenes/MatchScene/default stadium.tscn" id="4_b1xd7"]
 [ext_resource type="Texture2D" uid="uid://bijxfpsspog5d" path="res://Textures/Court-Markings.png" id="5_djvjv"]
 [ext_resource type="Texture2D" uid="uid://cld8hvct3gi61" path="res://Textures/crinkled norm.jpg" id="6_rak20"]
@@ -98,6 +101,9 @@ disable_receive_shadows = true
 
 [node name="MatchScene" type="Node3D"]
 script = ExtResource("1_mqt8k")
+debugCylinder = ExtResource("2_uqyv5")
+debugCube = ExtResource("3_8wn1a")
+debugSphere = ExtResource("4_5aeaw")
 
 [node name="Lights" type="Node3D" parent="."]
 process_mode = 3

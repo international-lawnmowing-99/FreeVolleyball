@@ -11,23 +11,21 @@ Jump
 var takeOffXZ:Vector3
 var timeTillJumpPeak
 var spikeState = SpikeState.NotSpiking
-var athlete:Athlete
+#var athlete:Athlete
 var spikeValue:float = 0
 var runupStartPosition:Vector3
 
-func Enter(_athlete:Athlete):
+func Enter(athlete:Athlete):
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	nameOfState="Spike"
 	if !athlete.setRequest:
 		print(athlete.stats.lastName + ": " + Enums.Role.keys()[athlete.role])
 		athlete.setRequest = athlete.middleSpikes[0]
-	takeOffXZ = Vector3(athlete.setRequest.target.x\
-		- athlete.team.flip * athlete.stats.verticalJump / 2,\
-	0, athlete.setRequest.target.z)
+	CalculateTakeOffXZ(athlete)
 #	athlete.CalculateTimeTillJumpPeak(takeOffXZ)
 	spikeState = SpikeState.ChoiceConfirmed
 	pass
-func Update(_athlete:Athlete):
+func Update(athlete:Athlete):
 	#if athlete.team.flip == 1 && athlete.rotationPosition == 2:
 		#print(spikeState)
 	match spikeState:
@@ -35,9 +33,7 @@ func Update(_athlete:Athlete):
 			pass
 			
 		SpikeState.ChoiceConfirmed:
-			takeOffXZ = Vector3(athlete.setRequest.target.x + athlete.team.flip * athlete.stats.verticalJump / 2, \
-			0, athlete.setRequest.target.z)
-#			athlete.CalculateTimeTillJumpPeak(takeOffXZ)
+			CalculateTakeOffXZ(athlete)
 	
 			var timeTillBallReachesSetTarget:float 
 			var setTime:float
@@ -87,9 +83,10 @@ func Update(_athlete:Athlete):
 				#athlete.PrepareToDefend()
 				spikeState = SpikeState.NotSpiking
 				athlete.ReEvaluateState()
-			pass
-
-	pass
+	
+func CalculateTakeOffXZ(athlete:Athlete):
+	takeOffXZ = Maths.XZVector(athlete.setRequest.target + (athlete.position - athlete.setRequest.target) * (athlete.stats.verticalJump/2 / (Maths.XZVector(athlete.position - athlete.setRequest.target).length())))
+	
 func Exit(_athlete:Athlete):
 	pass
 

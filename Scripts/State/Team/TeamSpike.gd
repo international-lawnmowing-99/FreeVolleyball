@@ -11,21 +11,20 @@ func Enter(_team:Team):
 	pass
 func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
-	if !hit:
+	if !hit && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight:
 		if team.ball.linear_velocity.z > 0:
 			if (team.ball.position.z > team.chosenSpiker.setRequest.target.z && \
-			team.ball.linear_velocity.y <= 0 && \
-			(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5):
+			(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5) &&\
+			Maths.XZVector(team.ball.position - team.chosenSpiker.position).length() < 0.5:
 				SpikeBall(team)
 		elif team.ball.linear_velocity.z < 0:
 			if (team.ball.position.z < team.chosenSpiker.setRequest.target.z &&\
-				team.ball.linear_velocity.y <= 0 && \
-				(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5):
+				(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5) &&\
+				Maths.XZVector(team.ball.position - team.chosenSpiker.position).length() < 0.5:
 					SpikeBall(team)
 		else:
 			Console.AddNewLine("No ball z vel...")
 			if team.ball.position.x <= team.setTarget.target.x &&\
-			team.ball.linear_velocity.y <= 0 && \
 			(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5:
 				SpikeBall(team)
 

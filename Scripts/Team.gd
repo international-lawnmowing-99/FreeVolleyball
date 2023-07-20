@@ -124,7 +124,7 @@ func PlaceTeam():
 		lad.position = pos
 		lad.rotation = rot
 		lad.team = self
-		lad.spikeState.athlete = lad
+#		lad.spikeState.athlete = lad
 		lad.CreateSpikes()
 		lad.moveTarget = Vector3(pos.x,0,pos.z)
 		#allPlayers.append(lad)
