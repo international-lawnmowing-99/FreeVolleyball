@@ -136,10 +136,13 @@ func Update(athlete:Athlete):
 				athlete.rb.linear_velocity = ball.FindWellBehavedParabola(athlete.position, landing, athlete.stats.verticalJump)
 				
 				serveState = ServeState.Jump
+				athlete.rightIK.start()
+				athlete.rightIK.interpolation = 1
 				#if (timeTillJumpPeak<= jumpAnimationTime)
 				#anim.SetTrigger("jump");
 
 		ServeState.Jump:
+				athlete.rightIKTarget.position = athlete.ball.position
 			#if athlete.rb.linear_velocity.y >0:
 				if ball.linear_velocity.y < 0 && athlete.stats.spikeHeight >= ball.position.y:
 					var topspin = 0

@@ -68,12 +68,17 @@ func Update(athlete:Athlete):
 		SpikeState.Runup:
 			if Maths.XZVector(takeOffXZ - athlete.position).length() < 0.1:
 				spikeState = SpikeState.Jump
+				athlete.rightIK.start()
+				athlete.rightIK.interpolation = 1
+				if athlete.rb.freeze:
+					athlete.rb.freeze = false
+					athlete.rb.gravity_scale = 1
+					# We want to contact the ball at our max height...
+					# This means a steeper jump for more extreme verticals
+					athlete.rb.linear_velocity = athlete.team.ball.FindWellBehavedParabola(athlete.position, Vector3(athlete.setRequest.target.x, 0, athlete.setRequest.target.z), athlete.stats.verticalJump)
 
 		SpikeState.Jump:
-			if athlete.rb.freeze:
-				athlete.rb.freeze = false
-				athlete.rb.gravity_scale = 1
-				athlete.rb.linear_velocity = athlete.team.ball.FindWellBehavedParabola(athlete.position, Vector3(athlete.setRequest.target.x, 0, athlete.setRequest.target.z), athlete.stats.verticalJump)
+			athlete.rightIKTarget.global_transform.origin = athlete.team.ball.position
 
 			if athlete.position.y <= 0.05 && athlete.rb.linear_velocity.y < 0:
 				athlete.rb.freeze = true
@@ -85,6 +90,7 @@ func Update(athlete:Athlete):
 				athlete.ReEvaluateState()
 	
 func CalculateTakeOffXZ(athlete:Athlete):
+	var landingPos = Vector3(athlete.setRequest.x, 0, athlete.setRequest.z)
 	takeOffXZ = Maths.XZVector(athlete.setRequest.target + (athlete.position - athlete.setRequest.target) * (athlete.stats.verticalJump/2 / (Maths.XZVector(athlete.position - athlete.setRequest.target).length())))
 	
 func Exit(_athlete:Athlete):

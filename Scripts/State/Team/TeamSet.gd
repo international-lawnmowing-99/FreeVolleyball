@@ -16,7 +16,7 @@ func Enter(team:Team):
 	if !ballWillBeDumped:
 		ChooseSpiker(team)
 	#Can the spiker get back to their runup and if not, how will that affect their spike?
-	team.mManager.cube.position = team.setTarget.target
+	team.mManager.sphere.position = team.setTarget.target
 func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
 	
@@ -447,7 +447,6 @@ func AthleteCanFullyTransition(athlete) -> bool:
 			#they're falling
 			timeToReachGround = sqrt(2 * athlete.g * athlete.position.y)
 	
-	# runupStartPosition not used like that consistently
 	var timeToTransition = athlete.position.distance_to(athlete.spikeState.runupStartPosition)/athlete.stats.speed
 	var timeToRunup = athlete.spikeState.runupStartPosition.distance_to(athlete.spikeState.takeOffXZ)/athlete.stats.speed
 	#
@@ -534,8 +533,8 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	
 	leftFanCorner = XZSpikeContactFlipped + runupVector.rotated(Vector3.UP , -PI/4)
 	rightFanCorner = XZSpikeContactFlipped + runupVector.rotated(Vector3.UP, PI/4)
-	athlete.team.mManager.sphere.position = leftFanCorner
-	athlete.team.mManager.cube.position = rightFanCorner
+#	athlete.team.mManager.sphere.position = leftFanCorner
+	#athlete.team.mManager.cube.position = rightFanCorner
 	
 	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
 	var jumpTime = jumpYVel / -athlete.g
@@ -547,37 +546,45 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	if athlete.position.z * athlete.team.flip > leftFanCorner.z:
 		athleteSpikeTime += Maths.XZVector(leftFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
 		athlete.spikeState.runupStartPosition = leftFanCorner
+		Console.AddNewLine(athlete.stats.lastName + " cornering left" + str(leftFanCorner))
 	elif athlete.position.z * athlete.team.flip < rightFanCorner.z:
 		athleteSpikeTime += Maths.XZVector(rightFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
 		athlete.spikeState.runupStartPosition = rightFanCorner
+		Console.AddNewLine(athlete .stats.lastName + " cornering right" + str(rightFanCorner))
 	# 3.5 Otherwise it gets a little complicated. If they are within the fan, can they
 	# get to the position that is on the circle 3m back from the contact point?
 	# Or, if they are standing just to the side of the contact point for example, 
 	# can they get to the relevant corner? 
 
-	var angleToSpikeContactPos = Vector3(1,0,0).signed_angle_to(athlete.team.flip * Maths.XZVector(spikeContactPos - athlete.position), Vector3.UP)
+	var angleToSpikeContactPos = Vector3(athlete.team.flip,0,0).signed_angle_to(Maths.XZVector(athlete.position - spikeContactPos), Vector3.UP)
 	Console.AddNewLine(str(rad_to_deg(angleToSpikeContactPos)) + " degrees angle " + athlete.stats.lastName)
 	if angleToSpikeContactPos > PI/4:
 		athleteSpikeTime += Maths.XZVector(leftFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
 		athlete.spikeState.runupStartPosition = leftFanCorner * athlete.team.flip
+		Console.AddNewLine(athlete.stats.lastName + " cornering left due to angle" + str(leftFanCorner))
 
 	elif angleToSpikeContactPos < -PI/4:
 		athleteSpikeTime += Maths.XZVector(rightFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
 		athlete.spikeState.runupStartPosition = rightFanCorner * athlete.team.flip
-	
+		Console.AddNewLine(athlete .stats.lastName + " cornering right due to angle" + str(rightFanCorner))
 	# 4 Otherwise can they simply make the distance to the spike contact location?
 	else: 
 		var distanceToSpikeContact = Maths.XZVector(athlete.position - spikeContactPos).length()
+		Console.AddNewLine("distance to spkie contact: " + str(distanceToSpikeContact))
+		Console.AddNewLine("total runup length: " + str(totalRunupLength))
 		if distanceToSpikeContact > totalRunupLength:
+			Console.AddNewLine("distance greater than runup")
 			# They are outside the fan radius, just need to head to the location
 			athleteSpikeTime += (distanceToSpikeContact - totalRunupLength)/athlete.stats.speed
 			athlete.spikeState.runupStartPosition = Maths.XZVector(athlete.position + (spikeContactPos - athlete.position) * (distanceToSpikeContact - totalRunupLength) / distanceToSpikeContact)
-			athlete.team.mManager.sphere.position = athlete.spikeState.runupStartPosition
+#			athlete.team.mManager.sphere.position = athlete.spikeState.runupStartPosition
 		else:
 			# They are inside the fan, need to backtrack a little
+			Console.AddNewLine("runup greater than distance, backtracking")
 			athleteSpikeTime += (totalRunupLength - distanceToSpikeContact)/athlete.stats.speed
 			athlete.spikeState.runupStartPosition = Maths.XZVector(athlete.position + (athlete.position - spikeContactPos) * totalRunupLength / distanceToSpikeContact)
-			athlete.team.mManager.cube.position = athlete.spikeState.runupStartPosition
+	
+	athlete.team.mManager.cube.position = athlete.spikeState.runupStartPosition
 
 	
 	return athleteSpikeTime < ball.SetTimeWellBehavedParabola(ball.position, spikeContactPos, ball.BallMaxHeight())
