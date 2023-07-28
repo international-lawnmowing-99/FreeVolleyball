@@ -90,8 +90,28 @@ func Update(athlete:Athlete):
 				athlete.ReEvaluateState()
 	
 func CalculateTakeOffXZ(athlete:Athlete):
-	var landingPos = Vector3(athlete.setRequest.x, 0, athlete.setRequest.z)
-	takeOffXZ = Maths.XZVector(athlete.setRequest.target + (athlete.position - athlete.setRequest.target) * (athlete.stats.verticalJump/2 / (Maths.XZVector(athlete.position - athlete.setRequest.target).length())))
+	if athlete.team.flip * athlete.setRequest.target.x <= 0.1:
+		Console.AddNewLine("ERROR! SetRequest too close to net", Color.BROWN)
+		return
+	# The parabola is centred on the jump peak, which is the setRequest target
+	# The half length of the jump parabola is as close to half of the jump as possible
+	var halfHorizJump:float = athlete.stats.verticalJump/2
+	var currentMoveVector:Vector3 = Maths.XZVector(athlete.setRequest.target - athlete.position)
+	var flippedProjectionTowardsNet:Vector3 = athlete.team.flip * Maths.XZVector(athlete.setRequest.target) + halfHorizJump * athlete.team.flip * currentMoveVector.normalized() 
+	
+	if flippedProjectionTowardsNet.x <= 0:
+		# Full jump would take them through the net - shorten horizontal jump
+		var flippedLandingX:float = 0.1
+		var flippedSetTargetX = athlete.team.flip * athlete.setRequest.target.x
+		var fractionTravelled = (flippedSetTargetX - flippedLandingX)/(flippedSetTargetX - flippedProjectionTowardsNet.x)
+		var flippedLandingZ = fractionTravelled * (athlete.team.flip * athlete.setRequest.target.z - flippedProjectionTowardsNet.z)
+	
+		var flippedLandingPos = Vector3(flippedLandingX, 0, flippedLandingZ)
+		takeOffXZ = 2 * Maths.XZVector(athlete.setRequest.target) - athlete.team.flip * flippedLandingPos
+	else:
+		# Otherwise takeoff is just the landing vector reversed - visually this is a nice parallelogram!
+		takeOffXZ = 2 * Maths.XZVector(athlete.setRequest.target) - athlete.team.flip * flippedProjectionTowardsNet
+		athlete.team.mManager.cube.position = takeOffXZ
 	
 func Exit(_athlete:Athlete):
 	pass

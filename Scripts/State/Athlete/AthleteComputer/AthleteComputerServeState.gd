@@ -27,90 +27,90 @@ enum ServeAggression{
 const MAXTOPSPIN = 1.8
 const MINTOPSPIN = 0.4
 
-var serveState
-var serveAggression = ServeAggression.UNDEFINED
-var serveType = ServeType.UNDEFINED
+var serveState:ServeState
+var serveAggression:ServeAggression = ServeAggression.UNDEFINED
+var serveType:ServeType = ServeType.UNDEFINED
 
 var ball:Ball
-var takeOffTarget
-var attackTarget
+var takeOffTarget:Vector3
+var attackTarget:Vector3
 var outputString:String
 
+var runupLength:float
+var runup:Vector2
+var jumpDistance:Vector2
 
 func Enter(athlete:Athlete):
+	runupLength = athlete.stats.height * 2.75
 	randomize()
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	nameOfState="ComputerServe"
 	ball = athlete.ball
 	serveState = ServeState.Walking
-	athlete.moveTarget = Vector3(-11.5, 0, 2)
+
 	athlete.rb.freeze = true
 	
 	outputString = ""
+		#Decide what to do...
+	var randServeType = randi()%3
+	if randServeType == 0:
+		serveType = ServeType.Underarm
+		outputString += "Underarm serve, the lad!"
+	elif randServeType == 1:
+		serveType = ServeType.Float
+		outputString += "Float serve"
+	elif randServeType == 2:
+		serveType = ServeType.Jump
+		outputString += "Jump serve"
+
+	#Choose aggression
+	var randServeAggression = randi()%3
+	
+	if randServeAggression == 0:
+		serveAggression = ServeAggression.Safety
+		outputString += " - safety serve"
+	elif randServeAggression == 1:
+		serveAggression = ServeAggression.Moderate
+		outputString += " - average aggression"
+	elif randServeAggression == 2:
+		serveAggression = ServeAggression.Aggressive
+		outputString += " - going for glory"
+
+	#Choose target
+
+	attackTarget = Vector3(randf_range(3, 10), 0, randf_range(-5, 5))
+	Console.AddNewLine(athlete.stats.lastName + ": " + outputString)
+	takeOffTarget = Vector3(-9 - randf_range(0.1, .5), 0, randf_range(-4, 4))
+	
+	
+	runup = Vector2(attackTarget.x - takeOffTarget.x, attackTarget.z - takeOffTarget.z).normalized() * runupLength
+
+	jumpDistance = runup.normalized() * athlete.stats.verticalJump / 2
+	
+	athlete.moveTarget = Vector3(takeOffTarget.x - jumpDistance.x - runup.x, 0, takeOffTarget.z - jumpDistance.y - runup.y)
 	
 func Update(athlete:Athlete):
 	match serveState:
 		ServeState.Walking:
+			ball.position = athlete.position + Vector3.UP
 			if athlete.position.distance_to(athlete.moveTarget) < 0.1:
 				#athlete.look_at(Vector3.ZERO, -Vector3.UP)
-				serveState = ServeState.Aiming
-			
-		ServeState.Aiming:
-			#Decide what to do...
-			var randServeType = randi()%3
-			if randServeType == 0:
-				serveType = ServeType.Underarm
-				outputString += "Underarm serve, the lad!"
-			elif randServeType == 1:
-				serveType = ServeType.Float
-				outputString += "Float serve"
-			elif randServeType == 2:
-				serveType = ServeType.Jump
-				outputString += "Jump serve"
-
-			#Choose aggression
-			var randServeAggression = randi()%3
-			
-			if randServeAggression == 0:
-				serveAggression = ServeAggression.Safety
-				outputString += " - safety serve"
-			elif randServeAggression == 1:
-				serveAggression = ServeAggression.Moderate
-				outputString += " - average aggression"
-			elif randServeAggression == 2:
-				serveAggression = ServeAggression.Aggressive
-				outputString += " - going for glory"
-
-			#Choose target
-
-			attackTarget = Vector3(randf_range(3, 10), 0, randf_range(-5, 5))
-			Console.AddNewLine(athlete.stats.lastName + ": " + outputString)
-			
-			#anim.SetTrigger("jumpServeToss");
-			serveState = ServeState.Tossing
+				athlete.rotation = Vector3(0, PI/2, 0)
+				serveState = ServeState.Tossing
 		
 		ServeState.Tossing:
-#we want to hit it after a 3m runup and a jump
-			if (true):
-				var runupLength = 2.75
-				var runup = Vector2(attackTarget.x - athlete.position.x, attackTarget.z - athlete.position.z).normalized() * runupLength
+			#ball.Unparent()
 
-				var jumpDistance = runup.normalized() * athlete.stats.verticalJump / 2
+			var tossTarget = Vector3(takeOffTarget.x + jumpDistance.x, athlete.stats.spikeHeight, takeOffTarget.z + jumpDistance.y)
 
-
-				#ball.Unparent()
-
-				var tossTarget = Vector3(athlete.position.x + runup.x + jumpDistance.x, athlete.stats.spikeHeight, athlete.position.z + runup.y + jumpDistance.y)
-				takeOffTarget = Vector3(athlete.position.x + runup.x, 0, athlete.position.z + runup.y)
-
-				ball.freeze = false
-				ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, tossTarget, athlete.stats.spikeHeight + 5)
-				
-				ball.rotation = Vector3.ZERO
-				ball.angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), randf_range(-10,-30))
-				
-				serveState = ServeState.WatchingTheBallInTheAir
-				#anim.SetTrigger("startRunup");
+			ball.freeze = false
+			ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, tossTarget, athlete.stats.spikeHeight + randf_range(4,5.5))
+			
+			ball.rotation = Vector3.ZERO
+			ball.angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), randf_range(-10,-30))
+			
+			serveState = ServeState.WatchingTheBallInTheAir
+			#anim.SetTrigger("startRunup");
 
 
 
@@ -143,6 +143,7 @@ func Update(athlete:Athlete):
 
 		ServeState.Jump:
 				athlete.rightIKTarget.position = athlete.ball.position
+				athlete.rightIK.interpolation = 1
 			#if athlete.rb.linear_velocity.y >0:
 				if ball.linear_velocity.y < 0 && athlete.stats.spikeHeight >= ball.position.y:
 					var topspin = 0
