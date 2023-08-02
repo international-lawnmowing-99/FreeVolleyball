@@ -80,85 +80,84 @@ func SetBall(team:Team):
 #			team.mManager.PointToTeamB()
 #		else:
 #			team.mManager.PointToTeamA()
-#	elif  setExecution > perfectThreshold:
-#		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.DARK_ORCHID)
-#	else:
-	Console.AddNewLine(team.chosenSetter.stats.lastName + " shitty set", Color.RED)
-	# sets can be off in direction or speed (i.e. max height)
-	# my major issue is setting short! direction not so bad
-	# angle, distance, time as the three possible imperfections
-	
-	var difference = 100.0 - perfectThreshold - setExecution
-	# smaller difference = smaller error
-	var error = randf_range(0, difference) /30
-	if team.isHuman:
-		team.setTarget.target.x += abs(error)
+	if false:# setExecution > perfectThreshold:
+		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.DARK_ORCHID)
+		team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		if team.ball.linear_velocity == Vector3.ZERO:
+			team.ball.linear_velocity = team.ball.FindDownwardsParabola(team.ball.position, team.setTarget.target)
+			
 	else:
-		team.setTarget.target.x -= abs(error)
-	#team.setTarget.target.z += pow(-1,randi()%2) * error
-	team.setTarget.height += 3*abs(error)
-	Console.AddNewLine("Error: " + str(error))
-	team.mManager.cylinder.position = team.setTarget.target
+		Console.AddNewLine(team.chosenSetter.stats.lastName + " shitty set", Color.RED)
+		# sets can be off in direction or speed (i.e. max height)
+		# my major issue is setting short! direction not so bad
+		# angle, distance, time as the three possible imperfections
 		
-	team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
-	if team.ball.linear_velocity == Vector3.ZERO:
-		team.ball.linear_velocity = team.ball.FindDownwardsParabola(team.ball.position, team.setTarget.target)
-#	
-	team.ballPositionWhenSet = team.ball.position
-	# React to the unexpected trajectory of the ball...
-	### 
-	###
-	if team.setTarget.target.x * team.flip < -0.5:
-		Console.AddNewLine("__________________________________________===============================================================================================================================")
-		team.ball.attackTarget = team.ball.BallPositionAtGivenHeight(0)
-		team.ball.difficultyOfReception = 1.3
-		team.mManager.BallOverNet(team.isHuman)
-		return
-	elif team.setTarget.target.x * team.flip < 0:
-		# Tight set on other side of court, might be able to block
-		pass
-	elif team.setTarget.target.x * team.flip < 0.5:
-		# Tight set on our side
-		pass
-	else:
-		# Standard bad set
-		
-		# Can the ball still be hit? 
-		
-		
-		var maxHeightBadSet = team.ball.BallMaxHeight()
-		if maxHeightBadSet <= team.chosenSpiker.stats.spikeHeight:
-			Console.AddNewLine("can't attack that bad set: Spike height " + str(team.chosenSpiker.stats.spikeHeight) + "  vs set: " + str(maxHeightBadSet))
-			ScrambleForBadSet(team)
+		var difference = 100.0 - perfectThreshold - setExecution
+		# smaller difference = smaller error
+		var error = randf_range(0, difference) /30
+		if team.isHuman:
+			team.setTarget.target.x += abs(error)
 		else:
-			# how long will it take to get to the new contact position?
-			# *Reaction Time* + runup time + jumpTime
+			team.setTarget.target.x -= abs(error)
+		#team.setTarget.target.z += pow(-1,randi()%2) * error
+		team.setTarget.height += 3*abs(error)
+		Console.AddNewLine("Error: " + str(error))
+		team.mManager.cylinder.position = team.setTarget.target
 			
-			# Decide new spiker. In future, if team cohesion is low,
-			# perhaps people will collide or stare at each other while
-			# the ball bounces?
+		team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		if team.ball.linear_velocity == Vector3.ZERO:
+			team.ball.linear_velocity = team.ball.FindDownwardsParabola(team.ball.position, team.setTarget.target)
+	#	
+		team.ballPositionWhenSet = team.ball.position
+		# React to the unexpected trajectory of the ball...
+		### 
+		###
+		if team.setTarget.target.x * team.flip < -0.5:
+			Console.AddNewLine("__________________________________________===============================================================================================================================")
+			team.ball.attackTarget = team.ball.BallPositionAtGivenHeight(0)
+			team.ball.difficultyOfReception = 1.3
+			team.mManager.BallOverNet(team.isHuman)
+			return
+		elif team.setTarget.target.x * team.flip < 0:
+			# Tight set on other side of court, might be able to block
+			pass
+		elif team.setTarget.target.x * team.flip < 0.5:
+			# Tight set on our side
+			pass
+		else:
+			# Standard bad set
 			
-			if AthleteCanSpikeBadSet(team.chosenSpiker):
-				Console.AddNewLine(team.chosenSpiker.stats.lastName + " (chosenSpiker) CAN spike bad set +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-				team.chosenSpiker.moveTarget = team.chosenSpiker.spikeState.runupStartPosition
-				team.chosenSpiker.setRequest = team.setTarget
-				pass
+			# Can the ball still be hit? 
 			
-			elif AthleteCanStandingRollBadSet(team.chosenSpiker):
-				Console.AddNewLine(team.chosenSpiker.stats.lastName + " (chosenSpiker) can't spike bad set, will be able to aggressively play it though --------------------------------------------------------------------------------------------------------------------")
-				pass
-			else:
-				Console.AddNewLine("Scrambling for bad set ===============================================================")
+			
+			var maxHeightBadSet = team.ball.BallMaxHeight()
+			if maxHeightBadSet <= team.chosenSpiker.stats.spikeHeight:
+				Console.AddNewLine("can't attack that bad set: Spike height " + str(team.chosenSpiker.stats.spikeHeight) + "  vs set: " + str(maxHeightBadSet))
 				ScrambleForBadSet(team)
-				#
-			
-			
-			
+			else:
+				# how long will it take to get to the new contact position?
+				# *Reaction Time* + runup time + jumpTime
+				
+				# Decide new spiker. In future, if team cohesion is low,
+				# perhaps people will collide or stare at each other while
+				# the ball bounces?
+				
+				if AthleteCanSpikeBadSet(team.chosenSpiker):
+					Console.AddNewLine(team.chosenSpiker.stats.lastName + " (chosenSpiker) CAN spike bad set +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+					team.chosenSpiker.moveTarget = team.chosenSpiker.spikeState.runupStartPosition
+					#BAD - sets the original spike request to the amended set target
+					team.chosenSpiker.setRequest = team.setTarget
+					pass
+				
+				elif AthleteCanStandingRollBadSet(team.chosenSpiker):
+					Console.AddNewLine(team.chosenSpiker.stats.lastName + " (chosenSpiker) can't spike bad set, will be able to aggressively play it though --------------------------------------------------------------------------------------------------------------------")
+					pass
+				else:
+					Console.AddNewLine("Scrambling for bad set ===============================================================")
+					ScrambleForBadSet(team)
 
-			
-		pass
 	
-	team.chosenSpiker.spikeState.ReactToDodgySet()
+		team.chosenSpiker.spikeState.ReactToDodgySet()
 		
 	if !team.setTarget:
 		#setTarget = Set(-4.5, 0, 0, randf() * 6 + 2.5)
@@ -431,6 +430,11 @@ func ChooseSpiker(team:Team):
 		return
 	
 	else:
+		if team.outsideFront in possibleSpikers:
+			team.chosenSpiker = team.outsideFront
+			team.setTarget = team.outsideFront.setRequest
+			return
+			
 		var setChoice = randi()%possibleSpikers.size()
 	
 		team.chosenSpiker = possibleSpikers[setChoice]

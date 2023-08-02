@@ -21,26 +21,27 @@ func Enter(team:Team):
 	var middleChoice:int = randi()%3
 	match middleChoice:
 		0:
-			team.middleFront.setRequest = team.middleFront.middleSpikes[0]
+			team.middleFront.setRequest = team.middleFront.middleSpikes[0].Duplicate()
 		1:
-			team.middleFront.setRequest = team.middleFront.middleSpikes[1]
+			team.middleFront.setRequest = team.middleFront.middleSpikes[1].Duplicate()
 		2:
-			team.middleFront.setRequest = team.middleFront.middleSpikes[2]
+			team.middleFront.setRequest = team.middleFront.middleSpikes[2].Duplicate()
 
-	team.outsideBack.setRequest =  team.outsideBack.outsideBackSpikes[0]
+	team.outsideBack.setRequest =  team.outsideBack.outsideBackSpikes[0].Duplicate()
 	if team.oppositeHitter.FrontCourt():
-		team.setter.setRequest = team.setter.oppositeBackSpikes[0]
+		team.setter.setRequest = team.setter.oppositeBackSpikes[0].Duplicate()
 		if team.markUndoChangesToRoles:
-			team.oppositeHitter.setRequest = team.oppositeHitter.outsideFrontSpikes[0]
-			team.outsideFront.setRequest = team.outsideFront.oppositeFrontSpikes[0]
+			team.oppositeHitter.setRequest = team.oppositeHitter.outsideFrontSpikes[0].Duplicate()
+			team.outsideFront.setRequest = team.outsideFront.oppositeFrontSpikes[0].Duplicate()
 	
 		else:
-			team.oppositeHitter.setRequest =  team.oppositeHitter.oppositeFrontSpikes[0]
-			team.outsideFront.setRequest = team.outsideFront.outsideFrontSpikes[0]
+			team.oppositeHitter.setRequest =  team.oppositeHitter.oppositeFrontSpikes[0].Duplicate()
+			team.outsideFront.setRequest = team.outsideFront.outsideFrontSpikes[0].Duplicate()
 	else:
-		team.oppositeHitter.setRequest =  team.oppositeHitter.oppositeBackSpikes[0]
-		team.outsideFront.setRequest = team.outsideFront.outsideFrontSpikes[0]
-		team.setter.setRequest = team.setter.oppositeFrontSpikes[0]
+		team.oppositeHitter.setRequest =  team.oppositeHitter.oppositeBackSpikes[0].Duplicate()
+		team.outsideFront.setRequest = team.outsideFront.outsideFrontSpikes[0].Duplicate()
+
+		team.setter.setRequest = team.setter.oppositeFrontSpikes[0].Duplicate()
 
 	for i in range(1, team.courtPlayers.size()):
 		#print(team.courtPlayers[i].stats.lastName)
@@ -49,7 +50,7 @@ func Enter(team:Team):
 			team.courtPlayers[i].stateMachine.SetCurrentState(team.courtPlayers[i].transitionState)
 		
 	team.chosenReceiver.stateMachine.SetCurrentState(team.chosenReceiver.passState)
-
+	Console.AddNewLine("Outside front spike[0] = " + str(team.outsideFront.outsideFrontSpikes[0].target))
 	
 func Update(_team:Team):
 	#Is the ball close enough
@@ -59,6 +60,6 @@ func Exit(team:Team):
 	team.UpdateTimeTillDigTarget()
 	pass
 
-func CheckForFlip(_set:Set, team:Team):
-		var s = Set.new(team.flip* _set.target.x, _set.target.y, team.flip * _set.target.z, _set.height)
-		return s
+#func CheckForFlip(_set:Set, team:Team):
+#		var s = Set.new(team.flip* _set.target.x, _set.target.y, team.flip * _set.target.z, _set.height)
+#		return s

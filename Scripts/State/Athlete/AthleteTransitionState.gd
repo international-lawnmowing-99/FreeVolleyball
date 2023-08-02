@@ -4,7 +4,10 @@ class_name AthleteTransitionState
 
 func Enter(athlete:Athlete):
 	nameOfState="transition"
-	athlete.moveTarget = athlete.team.GetTransitionPosition(athlete)
+	if !athlete.setRequest:
+		athlete.moveTarget = athlete.team.GetTransitionPosition(athlete)
+	else:
+		athlete.moveTarget = Maths.XZVector(athlete.setRequest.target) + athlete.team.flip * Vector3(3, 0, 0)
 	athlete.spikeState.runupStartPosition = athlete.moveTarget
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	pass

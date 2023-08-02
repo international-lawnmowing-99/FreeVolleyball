@@ -12,3 +12,6 @@ func _init(x,y,z,h):
 func CheckFlipped(team):
 	target.x *= team.flip
 	target.z *= team.flip
+
+func Duplicate()->Set:
+	return Set.new(target.x, target.y, target.z, height)

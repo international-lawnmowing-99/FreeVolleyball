@@ -157,7 +157,8 @@ func PointToTeamA():
 
 	teamA.stateMachine.SetCurrentState(teamA.preserviceState)
 	teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
-	pass	
+	ball.inPlay = false
+
 func PointToTeamB():
 	score.PointToTeamB()
 	teamB.isNextToSpike = false
@@ -174,7 +175,8 @@ func PointToTeamB():
 	
 	teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
 	teamB.stateMachine.SetCurrentState(teamB.preserviceState)
-	
+	ball.inPlay = false
+
 func SetToTeamA():
 	$UI/TeamInfoUI/TeamSelectionUI/TeamSelectionUI.EnableRotate()
 	RotateTheBoard()

@@ -9,6 +9,7 @@ Runup,
 Jump
 }
 var takeOffXZ:Vector3
+var landingXZ:Vector3
 var timeTillJumpPeak
 var spikeState = SpikeState.NotSpiking
 #var athlete:Athlete
@@ -75,7 +76,7 @@ func Update(athlete:Athlete):
 					athlete.rb.gravity_scale = 1
 					# We want to contact the ball at our max height...
 					# This means a steeper jump for more extreme verticals
-					athlete.rb.linear_velocity = athlete.team.ball.FindWellBehavedParabola(athlete.position, Vector3(athlete.setRequest.target.x, 0, athlete.setRequest.target.z), athlete.stats.verticalJump)
+					athlete.rb.linear_velocity = athlete.team.ball.FindWellBehavedParabola(athlete.position, landingXZ, athlete.stats.verticalJump)
 
 		SpikeState.Jump:
 			athlete.rightIKTarget.global_transform.origin = athlete.team.ball.position
@@ -90,6 +91,8 @@ func Update(athlete:Athlete):
 				athlete.ReEvaluateState()
 	
 func CalculateTakeOffXZ(athlete:Athlete):
+#	takeOffXZ = Vector3(athlete.setRequest.target.x + athlete.team.flip * athlete.stats.verticalJump/2, 0, athlete.setRequest.target.z)
+#	return
 	if athlete.team.flip * athlete.setRequest.target.x <= 0.1:
 		Console.AddNewLine("ERROR! SetRequest too close to net", Color.BROWN)
 		return
@@ -108,10 +111,12 @@ func CalculateTakeOffXZ(athlete:Athlete):
 	
 		var flippedLandingPos = Vector3(flippedLandingX, 0, flippedLandingZ)
 		takeOffXZ = 2 * Maths.XZVector(athlete.setRequest.target) - athlete.team.flip * flippedLandingPos
+		landingXZ = athlete.team.flip * Vector3(flippedLandingX, 0, flippedLandingZ)
 	else:
 		# Otherwise takeoff is just the landing vector reversed - visually this is a nice parallelogram!
 		takeOffXZ = 2 * Maths.XZVector(athlete.setRequest.target) - athlete.team.flip * flippedProjectionTowardsNet
-		athlete.team.mManager.cube.position = takeOffXZ
+		landingXZ = athlete.team.flip * flippedProjectionTowardsNet
+	athlete.team.mManager.cube.position = takeOffXZ
 	
 func Exit(_athlete:Athlete):
 	pass
