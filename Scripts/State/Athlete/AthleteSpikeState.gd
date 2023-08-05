@@ -17,6 +17,8 @@ var spikeValue:float = 0
 var runupStartPosition:Vector3
 
 func Enter(athlete:Athlete):
+#	athlete.get_node("Debug").global_transform.origin = Vector3.ZERO
+	athlete.get_node("Debug").position.y = athlete.position.y + athlete.stats.height * 1.33
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	nameOfState="Spike"
 	if !athlete.setRequest:

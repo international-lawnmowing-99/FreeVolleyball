@@ -261,7 +261,7 @@ func BaseMove(_delta):
 		position += dir * stats.speed * _delta
 		animTree.set("parameters/MoveTree/blend_position", Vector2(dir.x, dir.z))
 		if abs(position.x - moveTarget.x) > .3 && abs(position.z - moveTarget.z) > .3:
-			look_at_from_position(Maths.XZVector(position), -moveTarget, Vector3.UP)
+			look_at_from_position(Maths.XZVector(position), moveTarget, Vector3.UP)
 			#rotate_y(PI)
 			
 func ReEvaluateState():

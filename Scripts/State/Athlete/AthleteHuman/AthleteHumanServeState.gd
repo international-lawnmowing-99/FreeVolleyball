@@ -271,7 +271,7 @@ func HitBall(athlete:Athlete):
 			ball.Serve(ball.position, attackTarget, 3.6, topspin)
 		else:
 			ball.Serve(ball.position, attackTarget, 2.6, topspin)
-		Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
+#		Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 		athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(true)
 		
 		var difficultyOfReception = 0

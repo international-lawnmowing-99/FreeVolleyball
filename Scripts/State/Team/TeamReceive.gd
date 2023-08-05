@@ -50,7 +50,7 @@ func Enter(team:Team):
 			team.courtPlayers[i].stateMachine.SetCurrentState(team.courtPlayers[i].transitionState)
 		
 	team.chosenReceiver.stateMachine.SetCurrentState(team.chosenReceiver.passState)
-	Console.AddNewLine("Outside front spike[0] = " + str(team.outsideFront.outsideFrontSpikes[0].target))
+#	Console.AddNewLine("Outside front spike[0] = " + str(team.outsideFront.outsideFrontSpikes[0].target))
 	
 func Update(_team:Team):
 	#Is the ball close enough

@@ -94,7 +94,7 @@ func SetBall(team:Team):
 		
 		var difference = 100.0 - perfectThreshold - setExecution
 		# smaller difference = smaller error
-		var error = randf_range(0, difference) /30
+		var error = 2.0# randf_range(0, difference) /30
 		if team.isHuman:
 			team.setTarget.target.x += abs(error)
 		else:
@@ -145,8 +145,8 @@ func SetBall(team:Team):
 				if AthleteCanSpikeBadSet(team.chosenSpiker):
 					Console.AddNewLine(team.chosenSpiker.stats.lastName + " (chosenSpiker) CAN spike bad set +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 					team.chosenSpiker.moveTarget = team.chosenSpiker.spikeState.runupStartPosition
-					#BAD - sets the original spike request to the amended set target
 					team.chosenSpiker.setRequest = team.setTarget
+					team.chosenSpiker.spikeState.spikeState = team.chosenSetter.spikeState.SpikeState.ChoiceConfirmed
 					pass
 				
 				elif AthleteCanStandingRollBadSet(team.chosenSpiker):
@@ -430,10 +430,10 @@ func ChooseSpiker(team:Team):
 		return
 	
 	else:
-		if team.outsideFront in possibleSpikers:
-			team.chosenSpiker = team.outsideFront
-			team.setTarget = team.outsideFront.setRequest
-			return
+#		if team.outsideFront in possibleSpikers:
+#			team.chosenSpiker = team.outsideFront
+#			team.setTarget = team.outsideFront.setRequest
+#			return
 			
 		var setChoice = randi()%possibleSpikers.size()
 	
@@ -510,6 +510,10 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	# 0 Are they airborne?
 	var timeToReachGround:float = 0
 	if !athlete.rb.freeze:
+		if athlete.stateMachine.currentState == athlete.spikeState:
+			Console.AddNewLine("Current spiker can't adjust to bad set after jumping")
+			return false
+			
 		if athlete.rb.linear_velocity.y > 0:
 			# They're going up
 			timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 + athlete.g * athlete.stats.verticalJump)/athlete.g
@@ -549,11 +553,11 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	# 3 If the spiker is left or right of either of the corners, can they make it to one?
 	if athlete.position.z * athlete.team.flip > leftFanCorner.z:
 		athleteSpikeTime += Maths.XZVector(leftFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
-		athlete.spikeState.runupStartPosition = leftFanCorner
+		athlete.spikeState.runupStartPosition = leftFanCorner * athlete.team.flip
 		Console.AddNewLine(athlete.stats.lastName + " cornering left" + str(leftFanCorner))
 	elif athlete.position.z * athlete.team.flip < rightFanCorner.z:
 		athleteSpikeTime += Maths.XZVector(rightFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
-		athlete.spikeState.runupStartPosition = rightFanCorner
+		athlete.spikeState.runupStartPosition = rightFanCorner * athlete.team.flip
 		Console.AddNewLine(athlete .stats.lastName + " cornering right" + str(rightFanCorner))
 	# 3.5 Otherwise it gets a little complicated. If they are within the fan, can they
 	# get to the position that is on the circle 3m back from the contact point?

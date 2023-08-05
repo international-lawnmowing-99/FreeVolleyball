@@ -8,14 +8,15 @@
 font_names = PackedStringArray("Times New Roman")
 
 [sub_resource type="StandardMaterial3D" id="2"]
-albedo_color = Color(0, 0, 0, 1)
+transparency = 1
+albedo_color = Color(0, 1, 0, 0.231373)
 
 [sub_resource type="SphereMesh" id="3"]
 material = SubResource("2")
-radius = 0.1
-height = 0.2
-radial_segments = 4
-rings = 3
+radius = 0.25
+height = 0.5
+radial_segments = 10
+rings = 8
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tp6kt"]
 

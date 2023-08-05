@@ -103,7 +103,7 @@ func Enter(athlete:Athlete):
 
 
 func Update(athlete:Athlete):
-	athlete.get_node("Debug").global_transform.origin = Vector3(intersectionPointX, .5, intersectionPointZ)
+#	athlete.get_node("Debug").global_transform.origin = Vector3(intersectionPointX, .5, intersectionPointZ)
 	athlete.timeTillBallReachesMe = Vector3(ball.position.x, 0, ball.position.z).distance_to(Vector3(athlete.position.x, 0, athlete.position.z))\
 				/max(Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length(), 0.001)
 				
@@ -136,7 +136,7 @@ func PassBall(athlete:Athlete):
 	var ballMaxHeight
 	#perfect pass, 2-pass, 1-pass, shank, some sort of unSafety ball that hits the floor near your feet
 	var passRoll = randf_range(0, athlete.stats.reception)
-	Console.AddNewLine("PASSING || PASS ROLL: " + str(int(passRoll)) + " Difficulty: " + str(int(ball.difficultyOfReception)))
+#	Console.AddNewLine("PASSING || PASS ROLL: " + str(int(passRoll)) + " Difficulty: " + str(int(ball.difficultyOfReception)))
 	var rollOffDifference = passRoll - ball.difficultyOfReception
 	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.AQUA)
 #	Console.AddNewLine( str(int(rollOffDifference)) + " roll unchecked differece ", Color.RED)
@@ -220,7 +220,7 @@ func PassBall(athlete:Athlete):
 	
 
 	ball.linear_velocity = ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
-	var receptionTime = athlete.team.ball.SetTimeWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
+#	var receptionTime = athlete.team.ball.SetTimeWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
 #	Console.AddNewLine("Time till ball at reception target: " + str(receptionTime))
 
 	athlete.get_tree().get_root().get_node("MatchScene").BallReceived(athlete.team.isHuman)
