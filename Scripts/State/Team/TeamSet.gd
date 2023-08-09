@@ -94,7 +94,7 @@ func SetBall(team:Team):
 		
 		var difference = 100.0 - perfectThreshold - setExecution
 		# smaller difference = smaller error
-		var error = 2.0# randf_range(0, difference) /30
+		var error = 3.0# randf_range(0, difference) /30
 		if team.isHuman:
 			team.setTarget.target.x += abs(error)
 		else:
@@ -197,7 +197,34 @@ func AthleteCanStandingRollBadSet(athlete:Athlete) -> bool:
 
 func ScrambleForBadSet(team:Team):
 	# Find someone to roll/push the set over if possible, or else give a free ball
-	pass
+	var ballDigHeight = 0.5
+	var ballPositionAtDig = team.ball.BallPositionAtGivenHeight(ballDigHeight)
+	for athlete in team.courtPlayers:
+		athlete.distanceHack = 9999
+		
+		if athlete == team.chosenSpiker || athlete == team.chosenSetter:
+			continue
+		
+		athlete.distanceHack = Maths.XZVector(ballPositionAtDig - athlete.position).length()/athlete.stats.speed
+		
+		if !athlete.freeze:
+			var timeToReachGround
+			if athlete.rb.linear_velocity.y > 0:
+				# They're going up
+				timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 + athlete.g * athlete.stats.verticalJump)/athlete.g
+			else:
+				# They're falling
+				timeToReachGround = sqrt(2 * athlete.g * athlete.position.y)
+			athlete.distanceHack += timeToReachGround
+			
+		var orderedList = team.courtPlayers.duplicate(false)
+		orderedList.sort_custom(Callable(Athlete,"SortDistance"))
+		if orderedList[0] >= 9999:
+			Console.AddNewLine("No one could reach the ball")
+		else:
+			#orderedList[0].stateMachine.SetCurrentState(orderedList[0].freeBallState)
+			orderedList[0].moveTarget = Maths.XZVector(ballPositionAtDig)
+			Console.AddNewLine(orderedList[0].stats.lastName + " cleans up bad set")
 	team.chosenSpiker.stateMachine.SetCurrentState(team.chosenSpiker.chillState)
 
 func CheckForSpikeDistance(team:Team):
@@ -570,11 +597,15 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 		athleteSpikeTime += Maths.XZVector(leftFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
 		athlete.spikeState.runupStartPosition = leftFanCorner * athlete.team.flip
 		Console.AddNewLine(athlete.stats.lastName + " cornering left due to angle" + str(leftFanCorner))
+		athlete.team.mManager.sphere.position = athlete.position# + Vector3(athlete.team.flip,0,0)
+		athlete.team.mManager.cylinder.position = athlete.position + Maths.XZVector(athlete.position - spikeContactPos)
 
 	elif angleToSpikeContactPos < -PI/4:
 		athleteSpikeTime += Maths.XZVector(rightFanCorner - athlete.team.flip * athlete.position).length()/athlete.stats.speed
 		athlete.spikeState.runupStartPosition = rightFanCorner * athlete.team.flip
 		Console.AddNewLine(athlete .stats.lastName + " cornering right due to angle" + str(rightFanCorner))
+		athlete.team.mManager.sphere.position = athlete.position# + Vector3(athlete.team.flip,0,0)
+		athlete.team.mManager.cylinder.position = athlete.position + Maths.XZVector(athlete.position - spikeContactPos)
 	# 4 Otherwise can they simply make the distance to the spike contact location?
 	else: 
 		var distanceToSpikeContact = Maths.XZVector(athlete.position - spikeContactPos).length()
