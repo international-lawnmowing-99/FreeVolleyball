@@ -219,10 +219,10 @@ func ScrambleForBadSet(team:Team):
 			
 		var orderedList = team.courtPlayers.duplicate(false)
 		orderedList.sort_custom(Callable(Athlete,"SortDistance"))
-		if orderedList[0] >= 9999:
+		if orderedList[0].distanceHack >= 9999:
 			Console.AddNewLine("No one could reach the ball")
 		else:
-			#orderedList[0].stateMachine.SetCurrentState(orderedList[0].freeBallState)
+			orderedList[0].stateMachine.SetCurrentState(orderedList[0].freeBallState)
 			orderedList[0].moveTarget = Maths.XZVector(ballPositionAtDig)
 			Console.AddNewLine(orderedList[0].stats.lastName + " cleans up bad set")
 	team.chosenSpiker.stateMachine.SetCurrentState(team.chosenSpiker.chillState)
@@ -457,9 +457,9 @@ func ChooseSpiker(team:Team):
 		return
 	
 	else:
-#		if team.outsideFront in possibleSpikers:
-#			team.chosenSpiker = team.outsideFront
-#			team.setTarget = team.outsideFront.setRequest
+#		if team.middleFront in possibleSpikers:
+#			team.chosenSpiker = team.middleFront
+#			team.setTarget = team.middleFront.setRequest
 #			return
 			
 		var setChoice = randi()%possibleSpikers.size()
@@ -556,6 +556,9 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	# (all normalised so that it takes place from the perspective of the human/teamA side)
 	var spikeContactPos:Vector3 = ball.BallPositionAtGivenHeight(athlete.stats.spikeHeight)
 
+	
+
+
 	var XZSpikeContactFlipped = Maths.XZVector(spikeContactPos) * athlete.team.flip
 	# 2 The critical points are the corners of fan shape
 	var leftFanCorner:Vector3
@@ -565,6 +568,13 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	var runupLengthWithoutJump = 3
 	var totalRunupLength:float = athlete.stats.verticalJump/2 + runupLengthWithoutJump
 	var runupVector = Vector3(totalRunupLength, 0, 0)
+	
+	# If they can get back to the ordinary runup start position just go there
+	if athleteSpikeTime + totalRunupLength/athlete.stats.speed <= ball.SetTimeWellBehavedParabola(ball.position, spikeContactPos, ball.BallMaxHeight()):
+		athlete.spikeState.runupStartPosition = Maths.XZVector(spikeContactPos + athlete.team.flip * runupVector)
+		return true
+	
+
 	
 	leftFanCorner = XZSpikeContactFlipped + runupVector.rotated(Vector3.UP , -PI/4)
 	rightFanCorner = XZSpikeContactFlipped + runupVector.rotated(Vector3.UP, PI/4)

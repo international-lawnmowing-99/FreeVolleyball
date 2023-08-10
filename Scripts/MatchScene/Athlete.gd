@@ -24,6 +24,7 @@ var serveState
 @onready var setState:AthleteSetState = load("res://Scripts/State/Athlete/AthleteSetState.gd").new()
 @onready var spikeState:AthleteSpikeState = load("res://Scripts/State/Athlete/AthleteSpikeState.gd").new()
 @onready var blockState:AthleteBlockState = load("res://Scripts/State/Athlete/AthleteBlockState.gd").new()
+@onready var freeBallState:AthleteFreeBallState = load("res://Scripts/State/Athlete/AthleteFreeBallState.gd").new()
 @onready var chillState:AthleteChillState = load("res://Scripts/State/Athlete/AthleteChillState.gd").new()
 @onready var coverState:AthleteCoverState = load("res://Scripts/State/Athlete/AthleteCoverState.gd").new()
 
