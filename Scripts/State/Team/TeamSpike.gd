@@ -3,6 +3,8 @@ class_name TeamSpike
 
 var rng = RandomNumberGenerator.new()
 var hit = false
+var timeStart = 0
+var timeEnd = 0
 
 func Enter(_team:Team):
 	nameOfState = "Spike"
@@ -13,10 +15,15 @@ func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
 #	Console.AddNewLine(str((team.ball.position - team.chosenSpiker.setRequest.target).length()))
 	if !hit && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight:
+		timeEnd = Time.get_unix_time_from_system()
+		var timeElapsed = timeEnd - timeStart
+		Console.AddNewLine("Actual time when ball ready to be spiked: " + str(timeElapsed))
 #		if team.ball.linear_velocity.z > 0:
 #			if team.ball.position.z > team.chosenSpiker.setRequest.target.z: #&& \
 #				if(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5:# &&\
-			if Maths.XZVector(team.ball.position - team.chosenSpiker.position).length() < 0.5:
+		if abs(team.ball.position.y - (team.chosenSpiker.position.y + team.chosenSpiker.stats.height * 1.33)) < 0.5:
+			if Maths.XZVector(team.ball.position - team.chosenSpiker.position).length() < 2:
+#			if Vector3(team.chosenSpiker.position.x, team.chosenSpiker.position.y + team.chosenSpiker.stats.height * 1.33, team.chosenSpiker.position.z).distance_to(team.ball.position) <= 1:
 				SpikeBall(team)
 #		elif team.ball.linear_velocity.z < 0:
 #			if team.ball.position.z < team.chosenSpiker.setRequest.target.z:# &&\
@@ -74,10 +81,7 @@ func SpikeBall(team:Team):
 			#team.setTarget = null
 			#print(ball.attackTarget)
 	else:
-		#yet again, somehow necessary
 		ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
-#		await team.get_tree().idle_frame
-#		ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 		ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 		team.setTarget = null
 		

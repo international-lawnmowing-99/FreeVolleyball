@@ -127,3 +127,23 @@ func Exit(athlete:Athlete):
 	athlete.leftIK.stop()
 	athlete.rightIK.stop()
 	pass
+
+func ConfirmCommitBlock(athlete:Athlete, otherTeam:Team):
+	Console.AddNewLine(athlete.stats.lastName + " reconsidering whether to commit block, along with several other life choices")
+	# If I'm commit blocking and the ball is passed, check the following to
+	# see if I can ignore my commit target:
+	# Is the ball too far from the net?
+	# Is the pass too wide/low for the spiker to have enough time to run a quick?
+	# Is the spiker likely to run a more shoot-y quick than expected to make up for their inability to run closer to the setter?
+	# Balance personal embarassment at leaving the net undefended against maximising
+	# defensive expected value of reacting to the other options that are now more likely
+	
+	if otherTeam.receptionTarget.x * otherTeam.flip > athlete.team.teamStrategy.maxCommitDistanceFromNet:
+		isCommitBlocking = false
+		Console.AddNewLine("The set will take place too far from the net for our tastes")
+		return
+	
+	var timeForTargetToReachJumpPeak:float = blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ)
+	var timeToSetBlockingTarget:float = otherTeam.timeTillDigTarget
+	# Move to a more amenable position if applicable
+	

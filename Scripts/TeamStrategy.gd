@@ -72,5 +72,5 @@ var setOptionWeights
 var scheduledSubstitutions
 
 # Blocking options
-
+var maxCommitDistanceFromNet = 2
 

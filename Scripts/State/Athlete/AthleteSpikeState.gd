@@ -38,38 +38,21 @@ func Update(athlete:Athlete):
 		SpikeState.ChoiceConfirmed:
 			CalculateTakeOffXZ(athlete)
 	
-			var timeTillBallReachesSetTarget:float 
-			var setTime:float
-			var yVel:float
-			
+			var timeTillBallReachesSetTarget:float = CalculateTimeTillBallReachesSetTarget(athlete)
 
-			# Setting downwards
-			if athlete.setRequest.height <= athlete.team.receptionTarget.y:
-				if athlete.team.stateMachine.currentState == athlete.team.spikeState:
-					var distanceFactor:float = 1 - Vector3(athlete.ball.position.x, 0, athlete.ball.position.z).distance_to(Maths.XZVector(athlete.team.receptionTarget))/ (Maths.XZVector(athlete.team.receptionTarget).distance_to(Maths.XZVector(athlete.setRequest.target)))
-					setTime = distanceFactor * athlete.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target) 
-				else:
-					setTime = athlete.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
-				
-			else:
-				# Standard set
-				yVel = sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.team.receptionTarget.y))
-				if athlete.team.stateMachine.currentState == athlete.team.spikeState:
-					var distanceFactor:float = 1 - Vector3(athlete.ball.position.x, 0, athlete.ball.position.z).distance_to(Maths.XZVector(athlete.team.receptionTarget))/ (Maths.XZVector(athlete.team.receptionTarget).distance_to(Maths.XZVector(athlete.setRequest.target)))
-					setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)
-				else:
-					setTime = yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
-				
-			timeTillBallReachesSetTarget = athlete.team.timeTillDigTarget + setTime
-			
+#			Console.AddNewLine("time till set target apparently... ")
 			if timeTillBallReachesSetTarget <= athlete.CalculateTimeTillJumpPeak(takeOffXZ) && athlete.team.stateMachine.currentState != athlete.team.receiveState:
 				spikeState = SpikeState.Runup
 				athlete.moveTarget = takeOffXZ
+				Console.AddNewLine(athlete.stats.lastName)
+				Console.AddNewLine("time to set target: " + str(timeTillBallReachesSetTarget))
+				Console.AddNewLine("time till jump peak: " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
+				athlete.team.spikeState.timeStart = Time.get_unix_time_from_system()
 #				print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
 #				print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState))
 
 		SpikeState.Runup:
-			if Maths.XZVector(takeOffXZ - athlete.position).length() < 0.1:
+			if athlete.team.flip * athlete.position.x <= abs(takeOffXZ.x + athlete.team.flip * 0.1): #Maths.XZVector(takeOffXZ - athlete.position).length() < 0.1:
 				spikeState = SpikeState.Jump
 				athlete.rightIK.start()
 				athlete.rightIK.interpolation = 1
@@ -130,3 +113,24 @@ func ReactToDodgySet():
 #	var timeToGetToRunup = athlete.distance_to(athlete.spikeState.runupStartPosition)/athlete.stats.speed 
 #	var timeToRunup = runupStartPosition.distance_to(takeOffXZ)/athlete.stats.speed
 #	var timeToReach
+func CalculateTimeTillBallReachesSetTarget(athlete:Athlete) -> float:
+	var setTime:float
+	var yVel:float
+			# Setting downwards
+	if athlete.setRequest.height <= athlete.team.receptionTarget.y:
+		if athlete.team.stateMachine.currentState == athlete.team.spikeState:
+			var distanceFactor:float = 1 - Vector3(athlete.ball.position.x, 0, athlete.ball.position.z).distance_to(Maths.XZVector(athlete.team.receptionTarget))/ (Maths.XZVector(athlete.team.receptionTarget).distance_to(Maths.XZVector(athlete.setRequest.target)))
+			setTime = distanceFactor * athlete.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target) 
+		else:
+			setTime = athlete.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
+		
+	else:
+		# Standard set
+		yVel = sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.team.receptionTarget.y))
+		if athlete.team.stateMachine.currentState == athlete.team.spikeState:
+			var distanceFactor:float = 1 - Vector3(athlete.ball.position.x, 0, athlete.ball.position.z).distance_to(Maths.XZVector(athlete.team.receptionTarget))/ (Maths.XZVector(athlete.team.receptionTarget).distance_to(Maths.XZVector(athlete.setRequest.target)))
+			setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)
+		else:
+			setTime = yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
+		
+	return athlete.team.timeTillDigTarget + setTime

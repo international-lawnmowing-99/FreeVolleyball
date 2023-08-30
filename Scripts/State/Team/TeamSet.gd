@@ -27,7 +27,7 @@ func Update(team:Team):
 	else:
 		setHeight = team.chosenSetter.stats.standingSetHeight
 	#Is the ball close enough
-	if team.ball.position.y <= setHeight && team.ball.position.y <= team.receptionTarget.y && team.ball.linear_velocity.y < 0 && \
+	if team.ball.position.y <= setHeight && team.ball.linear_velocity.y < 0 && \
 		Vector3(team.chosenSetter.position.x, setHeight, team.chosenSetter.position.z).distance_squared_to(team.ball.position) < 1:
 			if ballWillBeDumped:
 				DumpBall(team)
@@ -301,6 +301,8 @@ func AssignSetter(athlete:Athlete, team:Team, isJumpSetting:bool):
 	athlete.moveTarget = team.receptionTarget
 	athlete.moveTarget.y = 0
 
+	team.mManager.cube.position = athlete.moveTarget
+	team.mManager.sphere.position = team.receptionTarget
 
 func AthleteCanJumpSet(athlete:Athlete, team:Team)->bool:
 	var athleteSetPosition:Vector3 = athlete.ball.BallPositionAtGivenHeight(athlete.stats.jumpSetHeight)

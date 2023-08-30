@@ -82,7 +82,6 @@ bones/157/position = Vector3(-0.171968, 0.0797001, -0.00677191)
 bones/157/rotation = Quaternion(0.871191, -0.0341514, -0.0180549, 0.489423)
 
 [node name="LeftHandSkeletonIK" type="SkeletonIK3D" parent="godette volleyball/Skeleton3D" index="6"]
-process_mode = 4
 process_priority = 1
 root_bone = &"upperarm01.L"
 tip_bone = &"wrist.L"
@@ -90,7 +89,6 @@ target_node = NodePath("../../../LeftHandTarget")
 max_iterations = 5
 
 [node name="RightHandSkeletonIK" type="SkeletonIK3D" parent="godette volleyball/Skeleton3D" index="7"]
-process_mode = 4
 process_priority = 1
 root_bone = &"upperarm01.R"
 tip_bone = &"wrist.R"
@@ -99,9 +97,6 @@ max_iterations = 5
 
 [node name="Empty" parent="." index="3"]
 transform = Transform3D(0, 1.42731, 0, 0, 0, -1.42731, -1.42731, 0, 0, 0.655382, 0.855518, 1.41535)
-
-[node name="AnimationPlayer" parent="." index="4"]
-playback_process_mode = 0
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="5"]
 tree_root = ExtResource("3")

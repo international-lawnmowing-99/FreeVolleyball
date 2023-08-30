@@ -4,6 +4,7 @@ var digHeight:float = 0.5
 
 func Enter(athlete:Athlete):
 	nameOfState="FreeBall"
+	athlete.animTree.set("parameters/state/transition_request", "digging")
 	
 func Update(athlete:Athlete):
 	athlete.DontFallThroughFloor()

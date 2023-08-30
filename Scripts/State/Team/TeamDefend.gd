@@ -4,6 +4,7 @@ class_name TeamDefend
 var otherTeam:Team
 var leftSideBlocker:Athlete
 var rightSideBlocker:Athlete
+var middleBlocker:Athlete
 
 func Enter(team:Team):
 	nameOfState = "Defend"
@@ -79,6 +80,8 @@ func Exit(_team:Team):
 	pass
 
 func CacheBlockers(team:Team):
+	middleBlocker = team.middleFront
+	
 	if team.setter.FrontCourt():
 		rightSideBlocker = team.setter
 		leftSideBlocker = team.outsideFront
@@ -92,41 +95,48 @@ func CacheBlockers(team:Team):
 
 func TripleBlockLeft(team:Team):
 	rightSideBlocker.blockState.blockingTarget = otherTeam.oppositeHitter
-	team.middleFront.blockState.blockingTarget = otherTeam.oppositeHitter
+	middleBlocker.blockState.blockingTarget = otherTeam.oppositeHitter
 	
 	leftSideBlocker.moveTarget = team.flip * Vector3(0.5, 0, 4)
-	team.middleFront.moveTarget = leftSideBlocker.moveTarget + team.flip * Vector3(0,0,-0.8)
+	middleBlocker.moveTarget = leftSideBlocker.moveTarget + team.flip * Vector3(0,0,-0.8)
 	rightSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,-0.8)
 	
 func TripleBlockRight(team:Team):
 	leftSideBlocker.blockState.blockingTarget = otherTeam.outsideFront
-	team.middleFront.blockState.blockingTarget = otherTeam.outsideFront
+	middleBlocker.blockState.blockingTarget = otherTeam.outsideFront
 	
 	rightSideBlocker.moveTarget = team.flip * Vector3(0.5, 0, -4)
-	team.middleFront.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0,0,0.8)
+	middleBlocker.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0,0,0.8)
 	leftSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,0.8)
 	
 func DoubleBlockLeft(team:Team):
-	team.middleFront.blockState.blockingTarget = otherTeam.outsideFront
-	team.middleFront.moveTarget = leftSideBlocker.moveTarget + team.flip * Vector3(0,0,-0.8)
+	middleBlocker.blockState.blockingTarget = otherTeam.outsideFront
+	middleBlocker.moveTarget = leftSideBlocker.moveTarget + team.flip * Vector3(0,0,-0.8)
 	
 func DoubleBlockRight(team:Team):
-	team.middleFront.blockState.blockingTarget = otherTeam.oppositeHitter
-	team.middleFront.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0,0,0.8)
+	middleBlocker.blockState.blockingTarget = otherTeam.oppositeHitter
+	middleBlocker.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0,0,0.8)
 	
 func TripleBlockPipe(team:Team):
 	rightSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
 	leftSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
-	team.middleFront.blockState.blockingTarget = otherTeam.outsideBack
+	middleBlocker.blockState.blockingTarget = otherTeam.outsideBack
 	
 	leftSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,0.8)
 	rightSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,-0.8)
 
-func EvaluateOppositionPass(_team:Team):
+func EvaluateOppositionPass(team:Team):
 	# make a list of available options for the other team's attack
 	# ie, bad pass means no middle, so stack checked actually possible hitters
 #	print("other team reception target: " + str(otherTeam.receptionTarget))
 	var dumpProbability = 0
+	
+	if rightSideBlocker.blockState.isCommitBlocking:
+		rightSideBlocker.blockState.ConfirmCommitBlock(rightSideBlocker, otherTeam)
+	if leftSideBlocker.blockState.isCommitBlocking:
+		leftSideBlocker.blockState.ConfirmCommitBlock(leftSideBlocker, otherTeam)
+	if middleBlocker.blockState.isCommitBlocking:
+		middleBlocker.blockState.ConfirmCommitBlock(middleBlocker, otherTeam)
 
 func ReactToSet(team:Team):
 	# React blockers move to new blocking position, perhaps after a delay given by a "reaction time" stat

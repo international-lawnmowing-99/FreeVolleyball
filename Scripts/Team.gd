@@ -152,8 +152,11 @@ func PlaceTeam():
 func UpdateTimeTillDigTarget():
 	
 	if (stateMachine.currentState == setState):
-		timeTillDigTarget = Maths.XZVector(ball.position).distance_to(Maths.XZVector(receptionTarget)) / max(Maths.XZVector(ball.linear_velocity).length(),.0001) 
-
+		
+		timeTillDigTarget = ball.TimeTillBallReachesHeight(receptionTarget.y) # Maths.XZVector(ball.position).distance_to(Maths.XZVector(receptionTarget)) / max(Maths.XZVector(ball.linear_velocity).length(),.0001) 
+		if !mManager.isPaused:
+			Console.AddNewLine(str("%.2f" % timeTillDigTarget) + " time till dig target updated")
+	
 	elif stateMachine.currentState == spikeState:
 		timeTillDigTarget = 0
 
@@ -162,7 +165,8 @@ func UpdateTimeTillDigTarget():
 
 	else:
 		timeTillDigTarget = 54321
-		
+	
+
 
 func _process(_delta):
 	stateMachine.Update()
