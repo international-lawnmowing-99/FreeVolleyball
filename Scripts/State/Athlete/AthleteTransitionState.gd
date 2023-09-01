@@ -6,8 +6,9 @@ func Enter(athlete:Athlete):
 	nameOfState="transition"
 	if !athlete.setRequest:
 		athlete.moveTarget = athlete.team.GetTransitionPosition(athlete)
+#		Console.AddNewLine(athlete.stats.lastName + " failed to transition adequately, no set target yet...", Color.AZURE)
 	else:
-		athlete.moveTarget = Maths.XZVector(athlete.setRequest.target) + athlete.team.flip * Vector3(3, 0, 0)
+		athlete.moveTarget = Maths.XZVector(athlete.setRequest.target) + athlete.team.flip * Vector3(3 + athlete.stats.verticalJump/2, 0, 0)
 	athlete.spikeState.runupStartPosition = athlete.moveTarget
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	pass

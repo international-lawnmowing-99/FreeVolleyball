@@ -189,10 +189,11 @@ func PassBall(athlete:Athlete):
 		
 		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		Console.AddNewLine(athlete.stats.lastName + " 1-point pass")
+		athlete.team.mManager.cube.position = receptionTarget
 		pass	
 	else:
 		ball.linear_velocity.y *= -1
-
+		ball.linear_velocity *= randf_range(0.5, 1.0)
 		
 		if ball.BallMaxHeight() >= 2.4:
 			receptionTarget = ball.BallPositionAtGivenHeight(2.5)
@@ -218,9 +219,12 @@ func PassBall(athlete:Athlete):
 
 	
 	
-
-	ball.linear_velocity = ball.FindWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
-#	var receptionTime = athlete.team.ball.SetTimeWellBehavedParabola(ball.transform.origin, receptionTarget, ballMaxHeight)
+### IT'S BACK!!! --------------------- (still oddly necessary)
+	ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
+	await athlete.get_tree().process_frame
+	ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
+#### ---------------------------------
+#	var receptionTime = athlete.team.ball.SetTimeWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
 #	Console.AddNewLine("Time till ball at reception target: " + str(receptionTime))
 
 	athlete.get_tree().get_root().get_node("MatchScene").BallReceived(athlete.team.isHuman)

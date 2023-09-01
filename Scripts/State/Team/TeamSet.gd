@@ -301,8 +301,8 @@ func AssignSetter(athlete:Athlete, team:Team, isJumpSetting:bool):
 	athlete.moveTarget = team.receptionTarget
 	athlete.moveTarget.y = 0
 
-	team.mManager.cube.position = athlete.moveTarget
-	team.mManager.sphere.position = team.receptionTarget
+	team.mManager.sphere.position = athlete.moveTarget
+	team.mManager.cylinder.position = team.receptionTarget
 
 func AthleteCanJumpSet(athlete:Athlete, team:Team)->bool:
 	var athleteSetPosition:Vector3 = athlete.ball.BallPositionAtGivenHeight(athlete.stats.jumpSetHeight)
@@ -635,7 +635,7 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 			athleteSpikeTime += (totalRunupLength - distanceToSpikeContact)/athlete.stats.speed
 			athlete.spikeState.runupStartPosition = Maths.XZVector(athlete.position + (athlete.position - spikeContactPos) * totalRunupLength / distanceToSpikeContact)
 	
-	athlete.team.mManager.cube.position = athlete.spikeState.runupStartPosition
+#	athlete.team.mManager.cube.position = athlete.spikeState.runupStartPosition
 
 	
 	return athleteSpikeTime < ball.SetTimeWellBehavedParabola(ball.position, spikeContactPos, ball.BallMaxHeight())
