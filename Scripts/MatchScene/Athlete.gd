@@ -134,6 +134,7 @@ func _process(_delta):
 	BaseMove(_delta)
 	basisz = transform.basis.z
 	basisx = transform.basis.x
+	
 #	rb.linear_velocity = Vector3(0,-1,0)
 #	rb.freeze = false
 #	if transform.origin.y < -0.2:
@@ -240,7 +241,7 @@ func CalculateTimeTillJumpPeak(takeOffXZ):
 		var runupTime
 		var jumpTime
 		var runupDist
-
+		
 		runupDist = Vector3(position.x, 0, position.z).distance_to(takeOffXZ)
 		runupTime = runupDist / stats.speed
 
@@ -254,6 +255,8 @@ func CalculateTimeTillJumpPeak(takeOffXZ):
 	else:
 		timeTillJumpPeak = 0
 		
+	
+	
 	return timeTillJumpPeak
 
 func BaseMove(_delta):

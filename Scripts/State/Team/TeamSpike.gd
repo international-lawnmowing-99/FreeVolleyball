@@ -17,7 +17,7 @@ func Update(team:Team):
 	if !hit && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight:
 		timeEnd = Time.get_unix_time_from_system()
 		var timeElapsed = timeEnd - timeStart
-		Console.AddNewLine("Actual time when ball ready to be spiked: " + str(timeElapsed))
+#		Console.AddNewLine("Actual time when ball ready to be spiked: " + str(timeElapsed))
 #		if team.ball.linear_velocity.z > 0:
 #			if team.ball.position.z > team.chosenSpiker.setRequest.target.z: #&& \
 #				if(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5:# &&\

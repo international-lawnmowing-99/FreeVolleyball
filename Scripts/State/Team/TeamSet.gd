@@ -73,15 +73,15 @@ func SetBall(team:Team):
 #	Console.AddNewLine("[[[[[ error threshold:" + str(errorThreshold) + " ]]]]]")
 #	Console.AddNewLine("[[[[[ perfect threshold:" + str(perfectThreshold) + " ]]]]]")
 #
-#	if setExecution < errorThreshold:
-#		Console.AddNewLine(team.chosenSetter.stats.lastName + " setting error", Color.BLUE)
-#		team.ball.linear_velocity = Vector3.ZERO
-#		if team.isHuman:
-#			team.mManager.PointToTeamB()
-#		else:
-#			team.mManager.PointToTeamA()
-	if false:# setExecution > perfectThreshold:
-		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.DARK_ORCHID)
+	if setExecution < errorThreshold:
+		Console.AddNewLine(team.chosenSetter.stats.lastName + " setting error", Color.BLUE)
+		team.ball.linear_velocity = Vector3.ZERO
+		if team.isHuman:
+			team.mManager.PointToTeamB()
+		else:
+			team.mManager.PointToTeamA()
+	elif setExecution > perfectThreshold:
+		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.LAWN_GREEN)
 		team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
 		if team.ball.linear_velocity == Vector3.ZERO:
 			team.ball.linear_velocity = team.ball.FindDownwardsParabola(team.ball.position, team.setTarget.target)
@@ -94,12 +94,12 @@ func SetBall(team:Team):
 		
 		var difference = 100.0 - perfectThreshold - setExecution
 		# smaller difference = smaller error
-		var error = 3.0# randf_range(0, difference) /30
+		var error = randf_range(0, difference) /30
 		if team.isHuman:
 			team.setTarget.target.x += abs(error)
 		else:
 			team.setTarget.target.x -= abs(error)
-		#team.setTarget.target.z += pow(-1,randi()%2) * error
+		team.setTarget.target.z += pow(-1,randi()%2) * error
 		team.setTarget.height += 3*abs(error)
 		Console.AddNewLine("Error: " + str(error))
 		team.mManager.cylinder.position = team.setTarget.target
@@ -184,7 +184,7 @@ func SetBall(team:Team):
 		#CalculateSetDifficulty()
 
 
-	Console.AddNewLine("Ball vel ----------------------------------- " + str(3.6 * team.ball.linear_velocity.length()))
+#	Console.AddNewLine("Ball vel ----------------------------------- " + str(3.6 * team.ball.linear_velocity.length()))
 	
 	#team.setTarget = null
 	
@@ -192,7 +192,7 @@ func SetBall(team:Team):
 	
 	team.get_tree().get_root().get_node("MatchScene").BallSet(team.isHuman)
 
-func AthleteCanStandingRollBadSet(athlete:Athlete) -> bool:
+func AthleteCanStandingRollBadSet(_athlete:Athlete) -> bool:
 	return false
 
 func ScrambleForBadSet(team:Team):

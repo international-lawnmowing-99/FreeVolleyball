@@ -17,7 +17,7 @@ var internalSetState = InternalSetState.Undefined
 var jumpSetState = JumpSetState.Undefined
 
 #var hasSet:bool = false
-var interpolationSpeed = 5
+var interpolationSpeed = 10
 func Enter(athlete:Athlete):
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	nameOfState="Set"
@@ -27,6 +27,8 @@ func Enter(athlete:Athlete):
 	athlete.rightIK.start()
 	athlete.leftIK.interpolation = 0
 	athlete.rightIK.interpolation = 0
+	athlete.leftIK.interpolation = 1#lerp(athlete.leftIK.interpolation, (1.1 - timeTillSet), 1)
+	athlete.rightIK.interpolation = 1#lerp(athlete.rightIK.interpolation, (1.1 - timeTillSet), 1)
 	
 	if athlete.team.setter != athlete:
 		print("who am I? " + athlete.stats.lastName)
@@ -37,7 +39,7 @@ func Update(athlete:Athlete):
 #	var ballDistance = athlete.position.distance_to(athlete.ball.position)
 #	var ballXZVel = Vector2(athlete.ball.linear_velocity.x, athlete.ball.linear_velocity.z).length()
 	var timeTillSet 
-	
+
 	match internalSetState:
 		InternalSetState.Undefined:
 			timeTillSet = 99999
@@ -67,10 +69,12 @@ func Update(athlete:Athlete):
 					athlete.ReEvaluateState()
 
 	if athlete.ball:
-		athlete.leftIKTarget.global_transform.origin.slerp (athlete.ball.position, athlete.myDelta * interpolationSpeed)
-		athlete.rightIKTarget.global_transform.origin.slerp (athlete.ball.position, athlete.myDelta * interpolationSpeed)
-		athlete.leftIK.interpolation = lerp(athlete.leftIK.interpolation, (1.0 - timeTillSet), athlete.myDelta * interpolationSpeed)
-		athlete.rightIK.interpolation = lerp(athlete.rightIK.interpolation, (1.0 - timeTillSet), athlete.myDelta * interpolationSpeed)
+		athlete.leftIKTarget.global_transform.origin = athlete.ball.global_transform.origin + athlete.team.flip * athlete.get_node("new new woman import").transform.basis.z/4.0
+#		athlete.leftIKTarget.position.slerp (athlete.ball.position, athlete.myDelta * interpolationSpeed)
+		athlete.rightIKTarget.global_transform.origin = athlete.ball.global_transform.origin - athlete.team.flip * athlete.get_node("new new woman import").transform.basis.z/4.0
+		
+#		Console.AddNewLine("time till set " + str("%0.2f" % timeTillSet))
+#		athlete.team.mManager.cube.position = athlete.position + athlete.get_node("new new woman import").transform.basis.x
 #	if athlete.team.flip > 0:
 #		athlete.rotation.y = lerp_angle(athlete.rotation.y, 0, athlete.myDelta * 5)
 #	else:

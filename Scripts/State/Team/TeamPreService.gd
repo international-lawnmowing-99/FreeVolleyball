@@ -40,7 +40,9 @@ func Enter(team:Team):
 	if !team.isHuman:
 		team.mManager.TESTteamRepresentation.AssignCourtPlayers(team)
 		team.mManager.TESTteamRepresentation.UpdateRepresentation(get_process_delta_time())
-
+	
+	team.middleFront.blockState.isCommitBlocking = true
+	team.middleFront.blockState.commitBlockTarget = team.defendState.otherTeam.middleFront
 
 func Update(team:Team):
 	team.stateMachine.SetCurrentState(team.serveState)

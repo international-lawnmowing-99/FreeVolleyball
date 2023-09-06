@@ -125,7 +125,7 @@ func TripleBlockPipe(team:Team):
 	leftSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,0.8)
 	rightSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,-0.8)
 
-func EvaluateOppositionPass(team:Team):
+func EvaluateOppositionPass(_team:Team):
 	# make a list of available options for the other team's attack
 	# ie, bad pass means no middle, so stack checked actually possible hitters
 #	print("other team reception target: " + str(otherTeam.receptionTarget))

@@ -138,7 +138,7 @@ func PassBall(athlete:Athlete):
 	var passRoll = randf_range(0, athlete.stats.reception)
 #	Console.AddNewLine("PASSING || PASS ROLL: " + str(int(passRoll)) + " Difficulty: " + str(int(ball.difficultyOfReception)))
 	var rollOffDifference = passRoll - ball.difficultyOfReception
-	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.AQUA)
+#	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.AQUA)
 #	Console.AddNewLine( str(int(rollOffDifference)) + " roll unchecked differece ", Color.RED)
 
 	
@@ -189,7 +189,7 @@ func PassBall(athlete:Athlete):
 		
 		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		Console.AddNewLine(athlete.stats.lastName + " 1-point pass")
-		athlete.team.mManager.cube.position = receptionTarget
+#		athlete.team.mManager.cube.position = receptionTarget
 		pass	
 	else:
 		ball.linear_velocity.y *= -1

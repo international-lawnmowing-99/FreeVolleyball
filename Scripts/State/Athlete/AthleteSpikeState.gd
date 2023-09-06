@@ -46,9 +46,9 @@ func Update(athlete:Athlete):
 			if timeTillBallReachesSetTarget <= athlete.CalculateTimeTillJumpPeak(takeOffXZ) && athlete.team.stateMachine.currentState != athlete.team.receiveState:
 				spikeState = SpikeState.Runup
 				athlete.moveTarget = takeOffXZ
-				Console.AddNewLine(athlete.stats.lastName)
-				Console.AddNewLine("time to set target: " + str("%0.3f" % timeTillBallReachesSetTarget))
-				Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
+#				Console.AddNewLine(athlete.stats.lastName)
+#				Console.AddNewLine("time to set target: " + str("%0.3f" % timeTillBallReachesSetTarget))
+#				Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
 				athlete.team.spikeState.timeStart = Time.get_unix_time_from_system()
 #				print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
 #				print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState))
@@ -106,16 +106,18 @@ func CalculateTakeOffXZ(athlete:Athlete):
 		
 		takeOffXZ = athlete.team.flip * flippedTakeOffXZ
 		landingXZ = athlete.team.flip * flippedLandingPos
-		athlete.team.mManager.cube.position = takeOffXZ
-		athlete.team.mManager.cylinder.position = landingXZ
-		athlete.team.mManager.sphere.position = Maths.XZVector(athlete.setRequest.target)
+#		athlete.team.mManager.cube.position = takeOffXZ
+#		athlete.team.mManager.cylinder.position = landingXZ
+#		athlete.team.mManager.sphere.position = Maths.XZVector(athlete.setRequest.target)
 	else:
 		# Otherwise takeoff is just the landing vector reversed - visually this is a nice parallelogram!
 		takeOffXZ = 2 * Maths.XZVector(athlete.setRequest.target) - athlete.team.flip * flippedProjectionTowardsNet
 		landingXZ = athlete.team.flip * flippedProjectionTowardsNet
 #	athlete.team.mManager.cube.position = takeOffXZ
 
-func Exit(_athlete:Athlete):
+func Exit(athlete:Athlete):
+	athlete.rightIK.stop()
+	athlete.rightIK.interpolation = 0
 	pass
 
 func ReactToDodgySet():

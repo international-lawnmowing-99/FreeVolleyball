@@ -94,6 +94,7 @@ func Update(athlete:Athlete):
 						athlete.rightIKTarget.global_transform.origin = lerp(athlete.rightIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
 					#Perhaps adding a random offset would make this look less choreographed...
 					if blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
+						Console.AddNewLine(athlete.stats.lastName + " jumps to block")
 						blockState = BlockState.Jump	
 						if athlete.rb.freeze:
 							athlete.rb.freeze = false

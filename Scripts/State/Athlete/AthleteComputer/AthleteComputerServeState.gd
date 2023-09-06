@@ -206,5 +206,7 @@ func Update(athlete:Athlete):
 				athlete.stateMachine.SetCurrentState(athlete.defendState)
 
 	
-func Exit(_athlete:Athlete):
+func Exit(athlete:Athlete):
+	athlete.rightIK.stop()
+	athlete.rightIK.interpolation = 0
 	pass
