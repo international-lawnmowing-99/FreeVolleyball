@@ -119,7 +119,7 @@ func Update(athlete:Athlete):
 		athlete.animTree.set("parameters/Dig/blend_amount", lerp(a, 0.0, 5*athlete.myDelta))
 		athlete.digAngle = lerp(athlete.digAngle,0.0,3*athlete.myDelta)
 		athlete.RotateDigPlatform(athlete.digAngle)
-	if !isBallAlreadyPassed && ball.inPlay && ball.position.y < 1 && \
+	if !isBallAlreadyPassed && ball.inPlay && ball.position.y < 1 && ball.position.y > .35 &&\
 		(Vector3(ball.position.x,0, ball.position.z)).distance_to(athlete.position) < 1:
 			PassBall(athlete)
 			

@@ -15,8 +15,8 @@ func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
 #	Console.AddNewLine(str((team.ball.position - team.chosenSpiker.setRequest.target).length()))
 	if !hit && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight:
-		timeEnd = Time.get_unix_time_from_system()
-		var timeElapsed = timeEnd - timeStart
+#		timeEnd = Time.get_unix_time_from_system()
+#		var timeElapsed = timeEnd - timeStart
 #		Console.AddNewLine("Actual time when ball ready to be spiked: " + str(timeElapsed))
 #		if team.ball.linear_velocity.z > 0:
 #			if team.ball.position.z > team.chosenSpiker.setRequest.target.z: #&& \
@@ -24,6 +24,7 @@ func Update(team:Team):
 		if abs(team.ball.position.y - (team.chosenSpiker.position.y + team.chosenSpiker.stats.height * 1.33)) < 0.5:
 			if Maths.XZVector(team.ball.position - team.chosenSpiker.position).length() < 2:
 #			if Vector3(team.chosenSpiker.position.x, team.chosenSpiker.position.y + team.chosenSpiker.stats.height * 1.33, team.chosenSpiker.position.z).distance_to(team.ball.position) <= 1:
+#				team.chosenSpiker.spikeState.AdjustSpike(team.defendState.otherTeam)
 				SpikeBall(team)
 #		elif team.ball.linear_velocity.z < 0:
 #			if team.ball.position.z < team.chosenSpiker.setRequest.target.z:# &&\

@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" path="res://Models/BasicSeat.tscn" id="8_llljp"]
 [ext_resource type="Script" path="res://Scripts/MatchScene/HumanTeam.gd" id="9_qpmxe"]
 [ext_resource type="Script" path="res://Scripts/MatchScene/ComputerTeam.gd" id="10_h0syf"]
-[ext_resource type="PackedScene" path="res://Scenes/MatchScene/ball.tscn" id="11_3od8h"]
+[ext_resource type="PackedScene" uid="uid://c2rori6kyk43f" path="res://Scenes/MatchScene/ball.tscn" id="11_3od8h"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/MatchUI.gd" id="12_gpj8b"]
 [ext_resource type="Texture2D" uid="uid://qyj7idx5broe" path="res://Textures/antenna-uv.png" id="13_evta7"]
 [ext_resource type="Script" path="res://Scripts/MatchScene/fps_counter.gd" id="14_3hya6"]

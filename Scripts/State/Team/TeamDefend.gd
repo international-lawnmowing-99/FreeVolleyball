@@ -147,14 +147,14 @@ func ReactToSet(team:Team):
 		
 		if team.isHuman:
 			if otherTeam.setTarget.target.z >= 0:
-				leftSideBlocker.moveTarget = Vector3(0.5, 0, otherTeam.chosenSpiker.setRequest.target.z)
+				leftSideBlocker.moveTarget = Vector3(0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z))
 			else:
-				leftSideBlocker.moveTarget = Vector3(0.5, 0, otherTeam.chosenSpiker.setRequest.target.z + 1.5)
+				leftSideBlocker.moveTarget = Vector3(0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z) + 1.5)
 		else:
 			if otherTeam.setTarget.target.z <= 0:
-				leftSideBlocker.moveTarget = Vector3(-0.5, 0, otherTeam.chosenSpiker.setRequest.target.z)
+				leftSideBlocker.moveTarget = Vector3(-0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z))
 			else:
-				leftSideBlocker.moveTarget = Vector3(-0.5, 0, otherTeam.chosenSpiker.setRequest.target.z - 1.5)
+				leftSideBlocker.moveTarget = Vector3(-0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z) - 1.5)
 	
 	
 	if !rightSideBlocker.blockState.isCommitBlocking:
@@ -164,14 +164,14 @@ func ReactToSet(team:Team):
 			
 		if team.isHuman:
 			if otherTeam.setTarget.target.z <= 0:
-				rightSideBlocker.moveTarget = Vector3(0.5, 0, otherTeam.chosenSpiker.setRequest.target.z)
+				rightSideBlocker.moveTarget = Vector3(0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z))
 			else:
-				rightSideBlocker.moveTarget = Vector3(0.5, 0, otherTeam.chosenSpiker.setRequest.target.z - 1.5)
+				rightSideBlocker.moveTarget = Vector3(0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z) - 1.5)
 		else:
 			if otherTeam.setTarget.target.z >= 0:
-				rightSideBlocker.moveTarget = Vector3(-0.5, 0, otherTeam.chosenSpiker.setRequest.target.z)
+				rightSideBlocker.moveTarget = Vector3(-0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z))
 			else:
-				rightSideBlocker.moveTarget = Vector3(-0.5, 0, otherTeam.chosenSpiker.setRequest.target.z + 1.5)
+				rightSideBlocker.moveTarget = Vector3(-0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z) + 1.5)
 	
 	if !team.middleFront.blockState.isCommitBlocking:
 		
@@ -179,9 +179,9 @@ func ReactToSet(team:Team):
 		team.middleFront.blockState.blockState = team.middleFront.blockState.BlockState.Preparing
 			
 		if team.isHuman:
-			team.middleFront.moveTarget = Vector3(0.5, 0, clamp(otherTeam.setTarget.target.z, rightSideBlocker.moveTarget.z + 0.8, leftSideBlocker.moveTarget.z - 0.8))
+			team.middleFront.moveTarget = Vector3(0.5, 0, clamp(otherTeam.setTarget.target.z, rightSideBlocker.moveTarget.z + 0.75, leftSideBlocker.moveTarget.z - 0.75))
 		else:
-			team.middleFront.moveTarget = Vector3(-0.5, 0, clamp(otherTeam.setTarget.target.z, leftSideBlocker.moveTarget.z + 0.8, rightSideBlocker.moveTarget.z - 0.8))
+			team.middleFront.moveTarget = Vector3(-0.5, 0, clamp(otherTeam.setTarget.target.z, leftSideBlocker.moveTarget.z + 0.75, rightSideBlocker.moveTarget.z - 0.75))
 
 
 

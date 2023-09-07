@@ -67,13 +67,13 @@ var defaultPositions = [
 #	Vector3(7.5,0,0)]
 	
 var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(self)
-var serveState:State = load("res://Scripts/State/Team/TeamServe.gd").new()
-var receiveState:State = load("res://Scripts/State/Team/TeamReceive.gd").new()
-var setState:State = load("res://Scripts/State/Team/TeamSet.gd").new()
-var spikeState:State = load("res://Scripts/State/Team/TeamSpike.gd").new()
-var preserviceState:State = load("res://Scripts/State/Team/TeamPreService.gd").new()
-var defendState:State = load("res://Scripts/State/Team/TeamDefend.gd").new()
-var prereceiveState:State = load("res://Scripts/State/Team/TeamPreReceive.gd").new()
+var serveState:TeamServe = load("res://Scripts/State/Team/TeamServe.gd").new()
+var receiveState:TeamReceive = load("res://Scripts/State/Team/TeamReceive.gd").new()
+var setState:TeamSet = load("res://Scripts/State/Team/TeamSet.gd").new()
+var spikeState:TeamSpike = load("res://Scripts/State/Team/TeamSpike.gd").new()
+var preserviceState:TeamPreService = load("res://Scripts/State/Team/TeamPreService.gd").new()
+var defendState:TeamDefend = load("res://Scripts/State/Team/TeamDefend.gd").new()
+var prereceiveState:TeamPreReceive = load("res://Scripts/State/Team/TeamPreReceive.gd").new()
 var chillState = load("res://Scripts/State/Team/TeamState.gd").new()
 
 func Init(_ball, choiceState, gameWorld, clubOrInternational, matchManager):
@@ -469,7 +469,7 @@ func Populate(firstNames, lastNames, r):
 		stats.block = skill + randf_range(0,25) + randf_range(0,25)
 		stats.set = skill + randf_range(0,25) + randf_range(0,25)
 		stats.spike = skill + randf_range(0,25) + randf_range(0,25)
-		stats.verticalJump = randf_range(0,.5) + randf_range(.1,.5) + randf_range(.1,.5) + 3.5
+		stats.verticalJump = randf_range(0,.5) + randf_range(.1,.5) + randf_range(.1,.5) + 1.5
 		stats.height = randf_range(.25,.6) + randf_range(.25,.6) #+ randf_range(.35,.6) + randf_range(.35,.6)
 		stats.speed = randf_range(5.5,7.5)
 		stats.dump = skill + randf_range(0,25) + randf_range(0,25)

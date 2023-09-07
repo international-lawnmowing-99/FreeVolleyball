@@ -49,7 +49,7 @@ func Update(athlete:Athlete):
 #				Console.AddNewLine(athlete.stats.lastName)
 #				Console.AddNewLine("time to set target: " + str("%0.3f" % timeTillBallReachesSetTarget))
 #				Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
-				athlete.team.spikeState.timeStart = Time.get_unix_time_from_system()
+#				athlete.team.spikeState.timeStart = Time.get_unix_time_from_system()
 #				print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
 #				print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState))
 
@@ -64,7 +64,14 @@ func Update(athlete:Athlete):
 					# We want to contact the ball at our max height...
 					# This means a steeper jump for more extreme verticals
 					athlete.rb.linear_velocity = athlete.team.ball.FindWellBehavedParabola(athlete.position, landingXZ, athlete.stats.verticalJump)
-
+					if athlete == athlete.team.chosenSpiker:
+						Console.AddNewLine("Chosen spiker " + athlete.stats.lastName + " thinks about how to spike the ball", Color.TOMATO)
+						Console.AddNewLine("They plan to do [x]...", Color.TOMATO)
+						# Is the set good enough to do everything the spiker wants to do? 
+						# What is their guess as to the block they will face? 
+						# What is their preference as to hitting line or cross? 
+						# How aggressively will they swing? 
+						
 		SpikeState.Jump:
 			athlete.rightIKTarget.global_transform.origin = athlete.team.ball.position
 

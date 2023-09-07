@@ -174,7 +174,7 @@ func Update(athlete:Athlete):
 							ball.floating = true
 						elif serveType == ServeType.Jump:
 							topspin = randf_range(.5, 1.8)
-						ball.Serve(ball.position, attackTarget, 2.6, topspin)
+						ball.Serve(ball.position, attackTarget, 2.8, topspin)
 #						Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 						athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(false)
 						

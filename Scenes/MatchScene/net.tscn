@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://c37jvh8bwhbif" path="res://Models/net.glb" id="1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fb5jm"]
+margin = 0.0
 size = Vector3(0.1, 1, 9)
 
 [node name="net" instance=ExtResource("1")]
@@ -11,8 +12,8 @@ size = Vector3(0.1, 1, 9)
 lod_bias = 0.001
 visibility_range_end = 1000.0
 
-[node name="StaticBody3D" type="StaticBody3D" parent="net2/net border" index="0"]
+[node name="StaticBody3D" type="StaticBody3D" parent="net2/net border" index="0" groups=["Net"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.93, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="net2/net border/StaticBody3D" index="0" groups=["Net"]]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="net2/net border/StaticBody3D" index="0"]
 shape = SubResource("BoxShape3D_fb5jm")

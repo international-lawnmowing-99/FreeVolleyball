@@ -16,7 +16,7 @@ func Enter(team:Team):
 	if !ballWillBeDumped:
 		ChooseSpiker(team)
 	#Can the spiker get back to their runup and if not, how will that affect their spike?
-	team.mManager.sphere.position = team.setTarget.target
+#	team.mManager.sphere.position = team.setTarget.target
 func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
 	
@@ -76,6 +76,7 @@ func SetBall(team:Team):
 	if setExecution < errorThreshold:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " setting error", Color.BLUE)
 		team.ball.linear_velocity = Vector3.ZERO
+		team.Chill()
 		if team.isHuman:
 			team.mManager.PointToTeamB()
 		else:
@@ -468,7 +469,7 @@ func ChooseSpiker(team:Team):
 	
 		team.chosenSpiker = possibleSpikers[setChoice]
 		team.setTarget = team.chosenSpiker.setRequest
-
+		Console.AddNewLine("Chosen spiker is " + team.chosenSpiker.stats.lastName)
 
 func AthleteCanFullyTransition(athlete) -> bool:
 	var timeToReachGround = 0

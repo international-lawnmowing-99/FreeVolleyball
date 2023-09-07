@@ -80,6 +80,9 @@ func _on_ball_body_entered(body):
 			else:
 				Console.AddNewLine("ball under net, point to a", Color.GOLD)
 				mManager.PointToTeamA()
+		elif body.is_in_group("Net"):
+			Console.AddNewLine("Netflipper", Color.CORAL)
+		
 func PretendToBeParented(node):
 	_parented = true
 	_pseudoParent = node

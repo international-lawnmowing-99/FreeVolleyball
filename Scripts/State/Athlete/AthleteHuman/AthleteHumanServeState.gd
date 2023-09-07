@@ -270,7 +270,7 @@ func HitBall(athlete:Athlete):
 		if serveType == ServeType.Underarm:
 			ball.Serve(ball.position, attackTarget, 3.6, topspin)
 		else:
-			ball.Serve(ball.position, attackTarget, 2.6, topspin)
+			ball.Serve(ball.position, attackTarget, 2.8, topspin)
 #		Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 		athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(true)
 		
