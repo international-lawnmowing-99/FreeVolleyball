@@ -81,6 +81,14 @@ func SpikeBall(team:Team):
 			ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 			#team.setTarget = null
 			#print(ball.attackTarget)
+		
+		if abs(netPass.z) >= 4.4:
+			Console.AddNewLine("Ball will pass outside antennae lad", Color.CRIMSON)
+			ball.inPlay = false
+			if team.isHuman:
+				team.mManager.PointToTeamB()
+			else:
+				team.mManager.PointToTeamA()
 	else:
 		ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 		ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)

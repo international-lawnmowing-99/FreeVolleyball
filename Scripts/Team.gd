@@ -101,13 +101,13 @@ func PlaceTeam():
 
 		if i < 6:
 			pos = flip * defaultPositions[i]
-			rot = Vector3(0, flip*-PI/2, 0)
+			rot = Vector3(0, flip * -PI/2, 0)
 
 		else:
 
 			#bench
 			pos = Vector3(flip * (i + 3), 0, 10)
-			rot = Vector3(0,flip*PI,0)
+			rot = Vector3(0,flip * PI,0)
 
 		var lad = AthleteScene.instantiate()
 		
@@ -118,11 +118,11 @@ func PlaceTeam():
 		add_child(lad)
 		var ladscale = lad.stats.height /1.8
 		
-		lad.get_child(0).scale = Vector3(ladscale, ladscale, ladscale)
+		lad.model.scale = Vector3(ladscale, ladscale, ladscale)
 		
 		lad.name = lad.stats.firstName + " " + lad.stats.lastName 
 		lad.position = pos
-		lad.rotation = rot
+		lad.model.rotation = rot
 		lad.team = self
 #		lad.spikeState.athlete = lad
 		lad.CreateSpikes()

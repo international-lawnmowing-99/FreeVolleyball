@@ -69,9 +69,9 @@ func Update(athlete:Athlete):
 					athlete.ReEvaluateState()
 
 	if athlete.ball:
-		athlete.leftIKTarget.global_transform.origin = athlete.ball.global_transform.origin + athlete.team.flip * athlete.get_node("new new woman import").transform.basis.z/4.0
+		athlete.leftIKTarget.global_transform.origin = athlete.ball.global_transform.origin + athlete.model.transform.basis.z/4.0
 #		athlete.leftIKTarget.position.slerp (athlete.ball.position, athlete.myDelta * interpolationSpeed)
-		athlete.rightIKTarget.global_transform.origin = athlete.ball.global_transform.origin - athlete.team.flip * athlete.get_node("new new woman import").transform.basis.z/4.0
+		athlete.rightIKTarget.global_transform.origin = athlete.ball.global_transform.origin - athlete.model.transform.basis.z/4.0
 		
 #		Console.AddNewLine("time till set " + str("%0.2f" % timeTillSet))
 #		athlete.team.mManager.cube.position = athlete.position + athlete.get_node("new new woman import").transform.basis.x

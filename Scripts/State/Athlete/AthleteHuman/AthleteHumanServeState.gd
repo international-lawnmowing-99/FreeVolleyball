@@ -284,7 +284,7 @@ func HitBall(athlete:Athlete):
 				difficultyOfReception = randf_range(0, athlete.stats.serve/3)
 		
 		ball.difficultyOfReception = difficultyOfReception
-		Console.AddNewLine("Difficulty of serve: " + str(int(difficultyOfReception)), Color.DARK_SALMON)
+#		Console.AddNewLine("Difficulty of serve: " + str(int(difficultyOfReception)), Color.DARK_SALMON)
 	ball.TouchedByA()
 	serveState = ServeState.Landing
 func ChooseServeType(type):

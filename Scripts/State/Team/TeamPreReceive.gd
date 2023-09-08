@@ -9,7 +9,7 @@ func Enter(team:Team):
 		athlete.moveTarget = team.flip * team.receiveRotations[team.server][athlete.rotationPosition - 1]
 		athlete.stateMachine.SetCurrentState(athlete.chillState)
 		athlete.animTree.set("parameters/state/transition_request", "digging")
-		athlete.rotation.y = -team.flip*PI/2
+		athlete.model.rotation.y = -team.flip*PI/2
 
 	if !team.outsideFront || !team.oppositeHitter:
 		#It's happened again...

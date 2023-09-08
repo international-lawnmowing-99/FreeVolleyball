@@ -450,7 +450,7 @@ func ChooseSpiker(team:Team):
 			else:
 				athlete.stateMachine.SetCurrentState(athlete.coverState)
 			
-	Console.AddNewLine("Choosing set option...")
+#	Console.AddNewLine("Choosing set option...")
 	if possibleSpikers.size() <= 0:
 		# Is there the opportunity to dump? Or should we do a release ball?
 #		if abs(team.receptionTarget.x) > 

@@ -62,6 +62,8 @@ func Update(athlete:Athlete):
 #							else:
 #								athlete.moveTarget = Vector3(-.5, 0, blockingTarget.spikeState.takeOffXZ.z)
 				BlockState.Preparing:
+#					athlete.model.rotation.slerp(Vector3(0, -athlete.team.flip * PI/2, 0), athlete.myDelta * 10)
+					athlete.model.rotation.y = -athlete.team.flip * PI/2
 					#Perhaps adding a random offset would make this look less choreographed...
 					if blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
 						blockState = BlockState.Jump	
@@ -70,8 +72,9 @@ func Update(athlete:Athlete):
 							athlete.rb.gravity_scale = 1
 							athlete.rb.linear_velocity = athlete.ball.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
 				BlockState.Jump:
-					athlete.leftIKTarget.global_transform.origin = lerp(athlete.leftIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
-					athlete.rightIKTarget.global_transform.origin = lerp(athlete.rightIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
+					if blockingTarget.setRequest.target:
+						athlete.leftIKTarget.global_transform.origin = blockingTarget.setRequest.target
+						athlete.rightIKTarget.global_transform.origin = blockingTarget.setRequest.target
 					#if athlete.role == Enums.Role.Opposite:
 						#(str(blockingTarget.setRequest.target))
 						#print(str(athlete.rightIKTarget.position))
@@ -89,12 +92,13 @@ func Update(athlete:Athlete):
 				BlockState.Watching:
 					pass
 				BlockState.Preparing:
+					athlete.model.rotation.y = -athlete.team.flip * PI/2
 					if blockingTarget.setRequest.target:
-						athlete.leftIKTarget.global_transform.origin = lerp(athlete.leftIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
-						athlete.rightIKTarget.global_transform.origin = lerp(athlete.rightIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
+						athlete.leftIKTarget.global_transform.origin = blockingTarget.setRequest.target
+						athlete.rightIKTarget.global_transform.origin = blockingTarget.setRequest.target
 					#Perhaps adding a random offset would make this look less choreographed...
 					if blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
-						Console.AddNewLine(athlete.stats.lastName + " jumps to block")
+#						Console.AddNewLine(athlete.stats.lastName + " jumps to block")
 						blockState = BlockState.Jump	
 						if athlete.rb.freeze:
 							athlete.rb.freeze = false
@@ -102,8 +106,8 @@ func Update(athlete:Athlete):
 							athlete.rb.linear_velocity = athlete.ball.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
 				BlockState.Jump:
 					if blockingTarget.setRequest.target:
-						athlete.leftIKTarget.global_transform.origin = lerp(athlete.leftIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
-						athlete.rightIKTarget.global_transform.origin = lerp(athlete.rightIKTarget.global_transform.origin, blockingTarget.setRequest.target, 20*athlete.myDelta)
+						athlete.leftIKTarget.global_transform.origin = blockingTarget.setRequest.target
+						athlete.rightIKTarget.global_transform.origin = blockingTarget.setRequest.target
 					#if athlete.role == Enums.Role.Opposite:
 						#(str(blockingTarget.setRequest.target))
 						#print(str(athlete.rightIKTarget.position))
@@ -130,7 +134,7 @@ func Exit(athlete:Athlete):
 	pass
 
 func ConfirmCommitBlock(athlete:Athlete, otherTeam:Team):
-	Console.AddNewLine(athlete.stats.lastName + " reconsidering whether to commit block, along with several other life choices")
+	#	Console.AddNewLine(athlete.stats.lastName + " reconsidering whether to commit block, along with several other life choices")
 	# If I'm commit blocking and the ball is passed, check the following to
 	# see if I can ignore my commit target:
 	# Is the ball too far from the net?

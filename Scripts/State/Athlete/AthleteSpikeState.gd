@@ -46,6 +46,7 @@ func Update(athlete:Athlete):
 			if timeTillBallReachesSetTarget <= athlete.CalculateTimeTillJumpPeak(takeOffXZ) && athlete.team.stateMachine.currentState != athlete.team.receiveState:
 				spikeState = SpikeState.Runup
 				athlete.moveTarget = takeOffXZ
+				athlete.model.look_at(takeOffXZ, Vector3.UP, true)
 #				Console.AddNewLine(athlete.stats.lastName)
 #				Console.AddNewLine("time to set target: " + str("%0.3f" % timeTillBallReachesSetTarget))
 #				Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)))

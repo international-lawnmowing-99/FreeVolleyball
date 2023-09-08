@@ -19,6 +19,8 @@ func Enter(athlete:Athlete):
 
 func Update(athlete:Athlete):
 	athlete.DontFallThroughFloor()
+	if athlete.rb.freeze:
+		athlete.model.look_at(Maths.XZVector(athlete.ball.position + Vector3(0, athlete.position.y, 0)), Vector3.UP, true)
 
 func Exit(_athlete:Athlete):
 	pass

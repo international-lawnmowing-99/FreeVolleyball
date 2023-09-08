@@ -6,7 +6,7 @@ var role
 var stats:Stats = Stats.new()
 
 var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(self)
-
+@onready var model:Node3D = $"new new woman import"
 
 @onready var animTree = $"new new woman import/AnimationTree"
 @onready var rb:RigidBody3D = $"."
@@ -265,7 +265,7 @@ func BaseMove(_delta):
 		position += dir * stats.speed * _delta
 		animTree.set("parameters/MoveTree/blend_position", Vector2(dir.x, dir.z))
 		if abs(position.x - moveTarget.x) > .3 && abs(position.z - moveTarget.z) > .3:
-			$"new new woman import".look_at_from_position(Maths.XZVector(position), moveTarget, Vector3.UP, true)
+			model.look_at_from_position(Maths.XZVector(position), moveTarget, Vector3.UP, true)
 			#rotate_y(PI)
 	elif position != moveTarget && position.distance_to(moveTarget) <= MoveDistanceDelta:
 		position = moveTarget
@@ -282,7 +282,7 @@ func ReEvaluateState():
 					stateMachine.SetCurrentState(transitionState)
 			team.spikeState:
 				if stateMachine.currentState.nameOfState == "Set":
-					rotation.y = -team.flip*PI/2
+					model.rotation.y = -team.flip * PI/2
 					stateMachine.SetCurrentState(defendState)
 				elif stateMachine.currentState.nameOfState == "Spike":
 					#stateMachine.SetCurrentState(coverState)

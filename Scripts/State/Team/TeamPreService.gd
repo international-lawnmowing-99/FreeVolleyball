@@ -13,7 +13,7 @@ func Enter(team:Team):
 		team.courtPlayers[i].position = team.defaultPositions[team.courtPlayers[i].rotationPosition -1] * team.flip 
 		team.courtPlayers[i].moveTarget = team.courtPlayers[i].position
 		team.courtPlayers[i].stateMachine.SetCurrentState(team.courtPlayers[i].chillState)
-		team.courtPlayers[i].rotation.y = -team.flip*PI/2
+		team.courtPlayers[i].model.rotation.y = -team.flip * PI/2
 		
 	var server:Athlete = team.courtPlayers[team.server]
 #	if team.isHuman:

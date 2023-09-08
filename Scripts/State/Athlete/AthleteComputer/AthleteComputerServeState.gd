@@ -95,7 +95,7 @@ func Update(athlete:Athlete):
 			ball.position = athlete.position + Vector3.UP
 			if athlete.position.distance_to(athlete.moveTarget) < 0.1:
 				#athlete.look_at(Vector3.ZERO, -Vector3.UP)
-				athlete.rotation = Vector3(0, PI/2, 0)
+				athlete.model.rotation = Vector3(0, PI/2, 0)
 				serveState = ServeState.Tossing
 		
 		ServeState.Tossing:
