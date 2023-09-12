@@ -39,7 +39,7 @@ blend_point_4/node = SubResource("9")
 blend_point_4/pos = Vector2(1, 0)
 
 [sub_resource type="AnimationNodeTransition" id="11"]
-xfade_time = 0.2
+xfade_time = 0.05
 input_0/name = "moving"
 input_0/auto_advance = false
 input_0/reset = true
@@ -48,17 +48,17 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [resource]
-graph_offset = Vector2(-660.893, -24.9829)
+graph_offset = Vector2(-787.336, -145.011)
 nodes/Animation/node = SubResource("2")
 nodes/Animation/position = Vector2(-980, 100)
 "nodes/Animation 2/node" = SubResource("1")
 "nodes/Animation 2/position" = Vector2(-900, -40)
 "nodes/Animation 3/node" = SubResource("12")
-"nodes/Animation 3/position" = Vector2(-220, 40)
+"nodes/Animation 3/position" = Vector2(-420, 200)
 nodes/Dig/node = SubResource("3")
 nodes/Dig/position = Vector2(-640, 120)
 nodes/MoveTree/node = SubResource("10")
-nodes/MoveTree/position = Vector2(-320, -20)
+nodes/MoveTree/position = Vector2(-320, -40)
 nodes/state/node = SubResource("11")
 nodes/state/position = Vector2(-20, 100)
-node_connections = [&"output", 0, &"state", &"Dig", 0, &"Animation 2", &"Dig", 1, &"Animation", &"state", 0, &"MoveTree", &"state", 1, &"Dig"]
+node_connections = [&"output", 0, &"state", &"Dig", 0, &"Animation 2", &"Dig", 1, &"Animation", &"state", 0, &"Animation 3", &"state", 1, &"Dig"]

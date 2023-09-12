@@ -33,8 +33,9 @@ func Enter(athlete:Athlete):
 
 	
 	var servePos = ball.position
-	athlete.moveTarget = ball.BallPositionAtGivenHeight(0.9) + Vector3(0,-.9, randf_range(-.5,.51))
+	athlete.moveTarget = ball.BallPositionAtGivenHeight(0.5) + Vector3(0,-.5, randf_range(-.25,.25))
 	athlete.moveTarget += (athlete.moveTarget - Vector3(servePos.x, 0, servePos.z)).normalized()/2
+
 	#look_at(Vector3(servePos.x,0, servePos.z), Vector3.UP)
 	
 	#point where a circle will intersect with the xz vector of the ball's motion
@@ -81,9 +82,9 @@ func Enter(athlete:Athlete):
 		var point1x =  (-bDet + sqrt(determinate))/(2*aDet)
 		var point2x = (-bDet - sqrt(determinate))/(2*aDet)
 		if athlete.team.isHuman:
-			intersectionPointX = min(point1x, point2x)
-		else:
 			intersectionPointX = max(point1x, point2x)
+		else:
+			intersectionPointX = min(point1x, point2x)
 	else:
 		# No intersections
 		intersectionPointX = h +1
@@ -91,8 +92,11 @@ func Enter(athlete:Athlete):
 		
 	intersectionPointZ = m*intersectionPointX + b
 	
-	
-	athlete.digAngle = rad_to_deg(ball.SignedAngle(athlete.transform.basis.z , -athlete.position + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
+	# for now the athlete moves in a straight line to the movetarget, without rotating
+	athlete.model.look_at_from_position(Maths.XZVector(athlete.position), Vector3.ZERO, Vector3.UP, true)
+	athlete.digAngle = (ball.SignedAngle(-athlete.model.transform.basis.z , -athlete.position + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
+	athlete.team.mManager.cube.position = athlete.position - athlete.model.transform.basis.z
+	athlete.team.mManager.sphere.position = athlete.position
 	#print("digAngle = " + str(athlete.digAngle))
 	#other team is rotated -90, we're 90
 	#var angle = atan2(athlete.position.z - intersectionPointZ, athlete.position.x - intersectionPointX) 
@@ -110,7 +114,7 @@ func Update(athlete:Athlete):
 
 	if athlete.timeTillBallReachesMe <1.5:
 		athlete.animTree.set("parameters/state/current", 1)
-		var animFactor = 1.5-  athlete.timeTillBallReachesMe 
+		var animFactor = min(1.0, 1.5 -  athlete.timeTillBallReachesMe) 
 		athlete.animTree.set("parameters/Dig/blend_amount", animFactor)
 
 		athlete.RotateDigPlatform(athlete.digAngle)#( lerp(0,athlete.digAngle,(max(1,1/athlete.timeTillBallReachesMe)))))

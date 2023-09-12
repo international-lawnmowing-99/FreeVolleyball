@@ -178,7 +178,6 @@ func Move(delta):
 	pass
 	
 func RotateDigPlatform(angle):
-#	It looks like zero angles here might have been a(!) cause of teh infamous "set_axis_angle: The axis Vector3 must be normalized." bug
 	if angle == 0.0:
 		angle = 0.01
 	var acustomPose01 = customPose01.rotated(Vector3.UP, (angle/2))
@@ -264,9 +263,9 @@ func BaseMove(_delta):
 		var dir = (moveTarget - position).normalized()
 		position += dir * stats.speed * _delta
 		animTree.set("parameters/MoveTree/blend_position", Vector2(dir.x, dir.z))
-		if abs(position.x - moveTarget.x) > .3 && abs(position.z - moveTarget.z) > .3:
-			model.look_at_from_position(Maths.XZVector(position), moveTarget, Vector3.UP, true)
-			#rotate_y(PI)
+		if stateMachine.currentState != passState:
+			if abs(position.x - moveTarget.x) > .3 && abs(position.z - moveTarget.z) > .3:
+				model.look_at_from_position(Maths.XZVector(position), moveTarget, Vector3.UP, true)
 	elif position != moveTarget && position.distance_to(moveTarget) <= MoveDistanceDelta:
 		position = moveTarget
 			
