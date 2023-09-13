@@ -45,12 +45,17 @@ func Enter(athlete:Athlete):
 	
 	athlete.leftIK.start()
 	athlete.rightIK.start()
-	
+	athlete.leftIK.interpolation = 0
+	athlete.rightIK.interpolation = 0
+	athlete.leftIKTarget.position = Vector3(athlete.team.flip * 0.5, 2, athlete.position.z)
+	athlete.rightIKTarget.position = Vector3(athlete.team.flip * 0.5, 2, athlete.position.z)
 	
 func Update(athlete:Athlete):
 	athlete.DontFallThroughFloor()
 	
 	if blockingTarget:
+		athlete.leftIK.interpolation = lerp(athlete.leftIK.interpolation, 1.0, athlete.myDelta)
+		athlete.rightIK.interpolation = lerp(athlete.rightIK.interpolation, 1.0, athlete.myDelta)
 		if isCommitBlocking:
 			match blockState:
 				BlockState.Watching:
@@ -65,7 +70,7 @@ func Update(athlete:Athlete):
 #					athlete.model.rotation.slerp(Vector3(0, -athlete.team.flip * PI/2, 0), athlete.myDelta * 10)
 					athlete.model.rotation.y = -athlete.team.flip * PI/2
 					#Perhaps adding a random offset would make this look less choreographed...
-					if blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
+					if !blockingTarget.rb.freeze && blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
 						blockState = BlockState.Jump	
 						if athlete.rb.freeze:
 							athlete.rb.freeze = false
@@ -97,7 +102,7 @@ func Update(athlete:Athlete):
 						athlete.leftIKTarget.global_transform.origin = blockingTarget.setRequest.target
 						athlete.rightIKTarget.global_transform.origin = blockingTarget.setRequest.target
 					#Perhaps adding a random offset would make this look less choreographed...
-					if blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
+					if !blockingTarget.rb.freeze && blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
 #						Console.AddNewLine(athlete.stats.lastName + " jumps to block")
 						blockState = BlockState.Jump	
 						if athlete.rb.freeze:

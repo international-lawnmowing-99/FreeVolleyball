@@ -78,7 +78,7 @@ func CreateSpikes():
 Set.new(targetXFrontcourt, stats.spikeHeight, 1.5, stats.spikeHeight+ 0.05),
 Set.new(targetXFrontcourt, stats.spikeHeight, -0.5, stats.spikeHeight+ 0.05)]
 		
-	outsideFrontSpikes = [ Set.new(targetXFrontcourt, stats.spikeHeight, 7.2, max(6, stats.spikeHeight + 1)),
+	outsideFrontSpikes = [ Set.new(targetXFrontcourt, stats.spikeHeight, 4.2, max(6, stats.spikeHeight + 1)),
 Set.new(targetXFrontcourt, stats.spikeHeight, -2.75, 3.5),
 Set.new(targetXFrontcourt, stats.spikeHeight, -1, 3.43)]
 

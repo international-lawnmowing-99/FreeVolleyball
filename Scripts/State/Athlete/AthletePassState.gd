@@ -34,7 +34,7 @@ func Enter(athlete:Athlete):
 	
 	var servePos = ball.position
 	athlete.moveTarget = ball.BallPositionAtGivenHeight(0.5) + Vector3(0,-.5, randf_range(-.25,.25))
-	athlete.moveTarget += (athlete.moveTarget - Vector3(servePos.x, 0, servePos.z)).normalized()/2
+	athlete.moveTarget += (athlete.moveTarget - Vector3(servePos.x, 0, servePos.z)).normalized()/3
 
 	#look_at(Vector3(servePos.x,0, servePos.z), Vector3.UP)
 	
@@ -94,7 +94,7 @@ func Enter(athlete:Athlete):
 	
 	# for now the athlete moves in a straight line to the movetarget, without rotating
 	athlete.model.look_at_from_position(Maths.XZVector(athlete.position), Vector3.ZERO, Vector3.UP, true)
-	athlete.digAngle = (ball.SignedAngle(-athlete.model.transform.basis.z , -athlete.position + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
+	athlete.digAngle = (Maths.SignedAngle(-athlete.model.transform.basis.z , -athlete.position + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
 	athlete.team.mManager.cube.position = athlete.position - athlete.model.transform.basis.z
 	athlete.team.mManager.sphere.position = athlete.position
 	#print("digAngle = " + str(athlete.digAngle))
@@ -203,12 +203,16 @@ func PassBall(athlete:Athlete):
 			receptionTarget = ball.BallPositionAtGivenHeight(2.5)
 		else:
 			receptionTarget = ball.BallPositionAtGivenHeight(0)
-		
-		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
+		if is_nan(receptionTarget.x) || is_nan(receptionTarget.z):
+			if ball.position.y > 0:
+				receptionTarget = ball.BallPositionAtGivenHeight(0)
+			else:
+				Console.AddNewLine("Error calculating ball pass trajectory", Color.INDIAN_RED)
+				receptionTarget = ball.position
+				receptionTarget.y = 0
+				ball.linear_velocity = Vector3.ZERO
+		ballMaxHeight = ball.BallMaxHeight()
 		Console.AddNewLine(athlete.stats.lastName + " - Shit pass mate")
-		pass	
-
-
 
 	ball.gravity_scale = 1
 	ball.angular_velocity += Vector3 ( randf_range(-5,5),randf_range(-5,5), randf_range(-5,5))
@@ -219,9 +223,6 @@ func PassBall(athlete:Athlete):
 		ball.TouchedByB()
 	
 	athlete.team.receptionTarget = receptionTarget
-	
-
-	
 	
 ### IT'S BACK!!! --------------------- (still oddly necessary)
 	ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)

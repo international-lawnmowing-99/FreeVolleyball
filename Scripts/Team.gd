@@ -478,6 +478,11 @@ func Populate(firstNames, lastNames, r):
 		stats.blockHeight = stats.height * (1.25) + stats.verticalJump
 		stats.standingSetHeight = stats.height * 1.2
 		stats.jumpSetHeight = stats.standingSetHeight + stats.verticalJump
+		var age = 17 + randi()%28
+		print(str(age))
+		stats.dob["year"] = 2023 - age
+		stats.gameRead = skill/50.0 +  randf()/2.0 * age/(17.0+28.0)
+		print(str(stats.gameRead))
 		#stats.shirtNumber = shirtNumbers[j];
 		#stats.image = images[j];
 		var athlete = Athlete.new()

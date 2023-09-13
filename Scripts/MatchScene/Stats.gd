@@ -17,7 +17,9 @@ var imageID:int = 0
 var speed:float
 var height:float
 var verticalJump:float
+
 var reactionTime:float
+var gameRead:float
 
 var power:float
 var spikeHeight:float

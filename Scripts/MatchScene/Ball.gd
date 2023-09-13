@@ -99,9 +99,12 @@ func BallPositionAtGivenHeight(height:float):
 	return Vector3(newXZPos.x, height, newXZPos.y)
 	
 func TimeTillBallReachesHeight(height:float):
+	# Returns the 2nd time the ball reaches a height if it is travelling up, and the height is above or equal to the ball's height
 	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
 
 	var finalV = sqrt(linear_velocity.y * linear_velocity.y + 2 * g * (position.y - height))
+	if is_nan(finalV):
+		print("Tried to find TimeTillBallReachesHeight - ball won't reach height")
 	var remainingTime = (finalV + linear_velocity.y) / g
 
 	return remainingTime
@@ -130,7 +133,7 @@ func FindWellBehavedParabola(startPos: Vector3,endPos: Vector3, maxHeight:float)
 	var time = yVel / gravity + sqrt(2 * gravity * (maxHeight - endPos.y)) / gravity
 	var xzVel = xzDist / time
 	
-	var xzTheta = SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
+	var xzTheta = Maths.SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
 	
 #	print("\"Well-behaved\" parabola: " + str( Vector3(xzVel * cos(-xzTheta), yVel, xzVel * sin(-xzTheta))))
 	return Vector3(xzVel * cos(-xzTheta), yVel, xzVel * sin(-xzTheta))
@@ -141,7 +144,7 @@ func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 	
 	var yDist = startPos.y - endPos.y
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.z))
-	var xzTheta = SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
+	var xzTheta = Maths.SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
 		
 	
 	# Can the xzDistance be traversed by a ball set horizontally at the maximum allowable speed?
@@ -187,22 +190,6 @@ func SetTimeDownwardsParabola(startPos:Vector3, endPos:Vector3):
 	var ballXZVel = Vector3(ballVel.x, 0, ballVel.z).length()
 	return ballXZDist/ballXZVel
 
-func SignedAngle(from:Vector3, to:Vector3, up:Vector3):
-	if from == to or from == up or up == to:
-		print("signed angle issue(?)")
-		print("from: " + str(from)) 
-		print("to: " + str(to)) 
-		print("up: " + str(up)) 
-		return 0.001
-	var cross_to = from.cross(to)
-	var unsigned_angle = atan2(cross_to.length(), from.dot(to))
-	var theSign = cross_to.dot(up)
-	
-	if theSign < 0:
-		return -unsigned_angle
-	else:
-		return unsigned_angle
-
 func BallMaxHeight() -> float:
 	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * gravity_scale
 	if linear_velocity.y<0:
@@ -244,7 +231,7 @@ func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNe
 	var finalYVel = -(sin(theta) * vel - g * time)
 
 
-	var xzTheta = SignedAngle(Vector3(1, 0, 0), Vector3(target.x, 0, target.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
+	var xzTheta = Maths.SignedAngle(Vector3(1, 0, 0), Vector3(target.x, 0, target.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
 	#xzTheta *= Mathf.Deg2Rad
 
 	var velocity = Vector3(vel * cos(theta) * cos(-xzTheta), finalYVel, vel * cos(theta) * sin(-xzTheta))

@@ -69,9 +69,37 @@ func Update(athlete:Athlete):
 						Console.AddNewLine("Chosen spiker " + athlete.stats.lastName + " thinks about how to spike the ball", Color.TOMATO)
 						Console.AddNewLine("They plan to do [x]...", Color.TOMATO)
 						# Is the set good enough to do everything the spiker wants to do? 
+						
+						if athlete.setRequest.target.y <= 2.43:
+							Console.AddNewLine("Spike contact will be lower than the net")
+							# Can only tip or roll
+						
+						# If they are within the antennae, then the whole court area is open, 
+						# but spiking wide means that line is unavailable
+						
+						var playerToNetVector = Vector3(-athlete.setRequest.target.x, 0, 0)
+						var playerToLeftAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * 4.5 - athlete.setRequest.target.z)
+						var playerToRightAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * -4.5 - athlete.setRequest.target.z)
+						athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target + playerToNetVector)
+						
+						athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target + playerToLeftAntennaVector)
+						var angleToLeftAntenna = Maths.SignedAngle(playerToNetVector, playerToLeftAntennaVector, Vector3.DOWN)
+						var angleToRightAntenna = Maths.SignedAngle(playerToNetVector, playerToRightAntennaVector, Vector3.DOWN)
+						Console.AddNewLine(str(rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna")
+						Console.AddNewLine(str(rad_to_deg(angleToRightAntenna)) + " degrees to right antenna")
+						
+						
+						Console.AddNewLine("Choosing an angle between the two", Color.LIME_GREEN)
+						var lineCross = randf()
+						var spikeAngle 
+						
 						# What is their guess as to the block they will face? 
+						
+						
 						# What is their preference as to hitting line or cross? 
 						# How aggressively will they swing? 
+						Console.AddNewLine("End choice of initial spiking plan", Color.TOMATO)
+						Console.AddNewLine("_____________________________________________________________", Color.TOMATO)
 						
 		SpikeState.Jump:
 			athlete.rightIKTarget.global_transform.origin = athlete.team.ball.position
@@ -124,7 +152,6 @@ func CalculateTakeOffXZ(athlete:Athlete):
 #	athlete.team.mManager.cube.position = takeOffXZ
 
 func Exit(athlete:Athlete):
-	athlete.rightIK.stop()
 	athlete.rightIK.interpolation = 0
 	pass
 
