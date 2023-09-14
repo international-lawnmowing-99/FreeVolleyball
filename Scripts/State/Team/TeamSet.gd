@@ -302,8 +302,8 @@ func AssignSetter(athlete:Athlete, team:Team, isJumpSetting:bool):
 	athlete.moveTarget = team.receptionTarget
 	athlete.moveTarget.y = 0
 
-	team.mManager.sphere.position = athlete.moveTarget
-	team.mManager.cylinder.position = team.receptionTarget
+#	team.mManager.sphere.position = athlete.moveTarget
+#	team.mManager.cylinder.position = team.receptionTarget
 
 func AthleteCanJumpSet(athlete:Athlete, team:Team)->bool:
 	var athleteSetPosition:Vector3 = athlete.ball.BallPositionAtGivenHeight(athlete.stats.jumpSetHeight)

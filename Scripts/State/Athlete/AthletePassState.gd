@@ -232,11 +232,9 @@ func PassBall(athlete:Athlete):
 #	var receptionTime = athlete.team.ball.SetTimeWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
 #	Console.AddNewLine("Time till ball at reception target: " + str(receptionTime))
 
-	athlete.get_tree().get_root().get_node("MatchScene").BallReceived(athlete.team.isHuman)
+	athlete.team.mManager.BallReceived(athlete.team.isHuman)
 
 	await athlete.get_tree().create_timer(.5).timeout
 	athlete.RotateDigPlatform(0)
-	if athlete.role == Enums.Role.Setter:
-		athlete.stateMachine.SetCurrentState(athlete.defendState)
-	else:
-		athlete.stateMachine.SetCurrentState(athlete.transitionState)
+	
+	athlete.stateMachine.SetCurrentState(athlete.transitionState)

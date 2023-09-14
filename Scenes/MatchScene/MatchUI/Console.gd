@@ -17,7 +17,9 @@ func AddNewLine(text:String, colour:Color = Color.WHITE):
 	
 	if existingLines.size() > MAXLINES:
 		#Don't have too many array elements...
-		existingLines.pop_front().queue_free()
+		var lineToDelete = existingLines.pop_front()
+		if is_instance_valid(lineToDelete):
+			lineToDelete.queue_free()
 		
 func Clear():
 	for child in get_children():

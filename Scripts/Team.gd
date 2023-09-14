@@ -265,9 +265,9 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	incoming.moveTarget = incoming.position
 	outgoing.moveTarget = outgoing.position
 
-	var tempRot = incoming.rotation
-	incoming.rotation = outgoing.rotation
-	outgoing.rotation = tempRot
+	var tempRot = incoming.model.rotation
+	incoming.model.rotation = outgoing.model.rotation
+	outgoing.model.rotation = tempRot
 	
 	outgoing.stateMachine.SetCurrentState(outgoing.chillState)
 	incoming.ReEvaluateState()
