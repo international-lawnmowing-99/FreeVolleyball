@@ -66,40 +66,7 @@ func Update(athlete:Athlete):
 					# This means a steeper jump for more extreme verticals
 					athlete.rb.linear_velocity = athlete.team.ball.FindWellBehavedParabola(athlete.position, landingXZ, athlete.stats.verticalJump)
 					if athlete == athlete.team.chosenSpiker:
-						Console.AddNewLine("Chosen spiker " + athlete.stats.lastName + " thinks about how to spike the ball", Color.TOMATO)
-						Console.AddNewLine("They plan to do [x]...", Color.TOMATO)
-						# Is the set good enough to do everything the spiker wants to do? 
-						
-						if athlete.setRequest.target.y <= 2.43:
-							Console.AddNewLine("Spike contact will be lower than the net")
-							# Can only tip or roll
-						
-						# If they are within the antennae, then the whole court area is open, 
-						# but spiking wide means that line is unavailable
-						
-						var playerToNetVector = Vector3(-athlete.setRequest.target.x, 0, 0)
-						var playerToLeftAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * 4.5 - athlete.setRequest.target.z)
-						var playerToRightAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * -4.5 - athlete.setRequest.target.z)
-						athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target + playerToNetVector)
-						
-						athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target + playerToLeftAntennaVector)
-						var angleToLeftAntenna = Maths.SignedAngle(playerToNetVector, playerToLeftAntennaVector, Vector3.DOWN)
-						var angleToRightAntenna = Maths.SignedAngle(playerToNetVector, playerToRightAntennaVector, Vector3.DOWN)
-						Console.AddNewLine(str(rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna")
-						Console.AddNewLine(str(rad_to_deg(angleToRightAntenna)) + " degrees to right antenna")
-						
-						
-						Console.AddNewLine("Choosing an angle between the two", Color.LIME_GREEN)
-						var lineCross = randf()
-						var spikeAngle 
-						
-						# What is their guess as to the block they will face? 
-						
-						
-						# What is their preference as to hitting line or cross? 
-						# How aggressively will they swing? 
-						Console.AddNewLine("End choice of initial spiking plan", Color.TOMATO)
-						Console.AddNewLine("_____________________________________________________________", Color.TOMATO)
+						ChooseSpikingStrategy(athlete)
 						
 		SpikeState.Jump:
 			athlete.rightIKTarget.global_transform.origin = athlete.team.ball.position
@@ -183,3 +150,90 @@ func CalculateTimeTillBallReachesSetTarget(athlete:Athlete) -> float:
 			setTime = yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
 		
 	return athlete.team.timeTillDigTarget + setTime
+
+func ChooseSpikingStrategy(athlete:Athlete):
+	Console.AddNewLine("Chosen spiker " + athlete.stats.lastName + " choosing spiking strategy", Color.TOMATO)
+	ReadBlock(athlete, athlete.team.defendState.otherTeam)
+	ReadDefence(athlete, athlete.team.defendState.otherTeam)
+	
+	# Now that we know what the block and defence are doing, assign a number
+	# to each of the various ways to try to hit the ball
+
+	# Is the set good enough to do everything the spiker wants to do? 
+	
+	if athlete.setRequest.target.y <= 2.43:
+		Console.AddNewLine("Spike contact will be lower than the net")
+		# Can only tip or roll or tool high
+	
+	# If they are within the antennae, then the whole court area is open, 
+	# but spiking wide means that line is unavailable
+	
+	var playerToNetVector = Vector3(-athlete.setRequest.target.x, 0, 0)
+	var playerToLeftAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * 4.5 - athlete.setRequest.target.z)
+	var playerToRightAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * -4.5 - athlete.setRequest.target.z)
+	athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target + playerToNetVector)
+	
+	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target + playerToLeftAntennaVector)
+	var angleToLeftAntenna = Maths.SignedAngle(playerToNetVector, playerToLeftAntennaVector, Vector3.DOWN)
+	var angleToRightAntenna = Maths.SignedAngle(playerToNetVector, playerToRightAntennaVector, Vector3.DOWN)
+	Console.AddNewLine(str(rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna")
+	Console.AddNewLine(str(rad_to_deg(angleToRightAntenna)) + " degrees to right antenna")
+	
+	Console.AddNewLine("Choosing an angle between the two", Color.LIME_GREEN)
+
+	if athlete.FrontCourt():
+		athlete.ball.attackTarget = athlete.team.CheckIfFlipped(Vector3(-randf_range(1, 9), 0, -4.5 + randf_range(0, 9)))
+	else:
+		athlete.ball.attackTarget = athlete.team.CheckIfFlipped(Vector3(-randf_range(6, 9), 0, -4.5 + randf_range(0, 9)))
+	
+	var lineCross = randf()
+	var spikeAngle = lerp(angleToLeftAntenna, angleToRightAntenna, lineCross)
+	
+	# What is their guess as to the block they will face? 
+	
+	
+	# What is their preference as to hitting line or cross? 
+	# How aggressively will they swing? 
+	Console.AddNewLine("End choice of initial spiking plan", Color.TOMATO)
+	Console.AddNewLine("_____________________________________________________________", Color.TOMATO)
+	
+func ReadBlock(athlete:Athlete, otherTeam:Team):
+	Console.AddNewLine("Reading block")
+	var blockMaximumHeight:float = 0
+	var ballRadius:float = 0.13
+	var opposingBlockers:Array = []
+	for potentialBlocker in otherTeam.courtPlayers:
+		if potentialBlocker.FrontCourt() && potentialBlocker.blockState.blockingTarget == athlete:
+			opposingBlockers.append(potentialBlocker)
+			if potentialBlocker.stats.blockHeight > blockMaximumHeight:
+				blockMaximumHeight = potentialBlocker.stats.blockHeight
+	
+	Console.AddNewLine("There are " + str(opposingBlockers.size()) + " blockers to contend with")
+	
+	
+	
+	# Will the block unify into a double or triple, or will there be a big seam? 
+	var timeTillSpike = athlete.ball.TimeTillBallReachesHeight(athlete.stats.spikeHeight)
+	# The block has no seam/minimal seam if the blockers can get to within 0.75 of each other
+	
+	# Who is the blocker that will set the block position? 
+	# If the ball is in the left third, their right, middle third: their middle obviously, ect
+	var mainBlocker:Athlete
+	if athlete.setRequest.target.z > 1.5:
+		mainBlocker = otherTeam.defendState.rightSideBlocker
+	elif athlete.setRequest.target.z > -1.5:
+		mainBlocker = otherTeam.defendState.middleBlocker
+	else:
+		mainBlocker = otherTeam.defendState.leftSideBlocker
+	
+	# We don't really know where the main blocker will set up their jump from
+	# But just assume for now
+	
+	
+	
+	if athlete.stats.spikeHeight - ballRadius > blockMaximumHeight:
+		Console.AddNewLine("Spiker will OTT block")
+	
+func ReadDefence(athlete:Athlete, otherTeam:Team):
+	Console.AddNewLine("Reading defence " + athlete.stats.lastName + " " + otherTeam.teamName)
+	

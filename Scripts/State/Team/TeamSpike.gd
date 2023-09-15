@@ -42,12 +42,10 @@ func Exit(_team:Team):
 	pass
 
 func SpikeBall(team:Team):
+	var netHeightPlusBallClearance:float = 2.43 + .13
 	var ball:Ball = team.ball
-	if team.chosenSpiker.FrontCourt():
-		ball.attackTarget = team.CheckIfFlipped(Vector3(-rng.randf_range(1, 9), 0, -4.5 + rng.randf_range(0, 9)))
-	else:
-		ball.attackTarget = team.CheckIfFlipped(Vector3(-rng.randf_range(6, 9), 0, -4.5 + rng.randf_range(0, 9)))
-	if team.setTarget.height > 2.43:
+
+	if team.setTarget.height > netHeightPlusBallClearance:
 		#Draw a line from the ball to the target. If the point where it crosses the 
 		#net is higher than said net, it can be hit, otherwise roll
 		var netPass:Vector3
@@ -58,7 +56,7 @@ func SpikeBall(team:Team):
 
 		netPass = ball.position + (ball.attackTarget - ball.position) * distanceFactor
 		
-		if netPass.y > 2.43:
+		if netPass.y > netHeightPlusBallClearance:
 			#var xzDistToTarget:float = (Vector3(ball.position.x, 0, ball.position.z) - Vector3(ball.attackTarget.x, 0, ball.attackTarget.z)).length()
 			#var y = ball.position.y
 			#var g = team.chosenSpiker.g
