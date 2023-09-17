@@ -95,8 +95,8 @@ func Enter(athlete:Athlete):
 	# for now the athlete moves in a straight line to the movetarget, without rotating
 	athlete.model.look_at_from_position(Maths.XZVector(athlete.position), Vector3.ZERO, Vector3.UP, true)
 	athlete.digAngle = (Maths.SignedAngle(-athlete.model.transform.basis.z , -athlete.position + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
-	athlete.team.mManager.cube.position = athlete.position - athlete.model.transform.basis.z
-	athlete.team.mManager.sphere.position = athlete.position
+#	athlete.team.mManager.cube.position = athlete.position - athlete.model.transform.basis.z
+#	athlete.team.mManager.sphere.position = athlete.position
 	#print("digAngle = " + str(athlete.digAngle))
 	#other team is rotated -90, we're 90
 	#var angle = atan2(athlete.position.z - intersectionPointZ, athlete.position.x - intersectionPointX) 

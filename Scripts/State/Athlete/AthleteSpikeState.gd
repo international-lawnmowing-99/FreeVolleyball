@@ -152,6 +152,7 @@ func CalculateTimeTillBallReachesSetTarget(athlete:Athlete) -> float:
 	return athlete.team.timeTillDigTarget + setTime
 
 func ChooseSpikingStrategy(athlete:Athlete):
+	Console.AddNewLine("_____________________________________________________________", Color.TOMATO)
 	Console.AddNewLine("Chosen spiker " + athlete.stats.lastName + " choosing spiking strategy", Color.TOMATO)
 	ReadBlock(athlete, athlete.team.defendState.otherTeam)
 	ReadDefence(athlete, athlete.team.defendState.otherTeam)
@@ -176,19 +177,50 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target + playerToLeftAntennaVector)
 	var angleToLeftAntenna = Maths.SignedAngle(playerToNetVector, playerToLeftAntennaVector, Vector3.DOWN)
 	var angleToRightAntenna = Maths.SignedAngle(playerToNetVector, playerToRightAntennaVector, Vector3.DOWN)
-	Console.AddNewLine(str(rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna")
-	Console.AddNewLine(str(rad_to_deg(angleToRightAntenna)) + " degrees to right antenna")
+	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna")
+	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightAntenna)) + " degrees to right antenna")
 	
 	Console.AddNewLine("Choosing an angle between the two", Color.LIME_GREEN)
 
-	if athlete.FrontCourt():
-		athlete.ball.attackTarget = athlete.team.CheckIfFlipped(Vector3(-randf_range(1, 9), 0, -4.5 + randf_range(0, 9)))
-	else:
-		athlete.ball.attackTarget = athlete.team.CheckIfFlipped(Vector3(-randf_range(6, 9), 0, -4.5 + randf_range(0, 9)))
+#	if athlete.FrontCourt():
+#		athlete.ball.attackTarget = athlete.team.CheckIfFlipped(Vector3(-randf_range(1, 9), 0, -4.5 + randf_range(0, 9)))
+#	else:
+#		athlete.ball.attackTarget = athlete.team.CheckIfFlipped(Vector3(-randf_range(6, 9), 0, -4.5 + randf_range(0, 9)))
 	
 	var lineCross = randf()
-	var spikeAngle = lerp(angleToLeftAntenna, angleToRightAntenna, lineCross)
+	var spikeAngleTopDown = lerp(angleToLeftAntenna, angleToRightAntenna, lineCross)
+	spikeAngleTopDown = angleToLeftAntenna/2
+	Console.AddNewLine(str("%.1f" % rad_to_deg(spikeAngleTopDown)) + " potential spike angle")
 	
+	# Find the nearest intersection to the edge of the court along the line
+	# of the angle to work out how long the spike can be
+	var topDownSpikeVector:Vector3 = Vector3(-athlete.team.flip, 0, 0).rotated(Vector3.DOWN, spikeAngleTopDown)
+	Console.AddNewLine(str(topDownSpikeVector) + " spike vector")
+	# Using our old friend y = mx + b (But with z as y)
+	var m:float = topDownSpikeVector.z / topDownSpikeVector.x
+	Console.AddNewLine(str("%.1f" % m) + " m")
+	var b:float = athlete.setRequest.target.z - m * athlete.setRequest.target.x
+	Console.AddNewLine(str("%.1f" % b) + " b")
+	
+	var baselineZIntercept:float = m * 9 * athlete.team.flip - athlete.team.flip * b
+	# If the baseline intercept is wider than the antennae, the ball is out on the side first
+	if abs(baselineZIntercept) > 4.5:
+		var leftSideXIntercept:float = (4.5 - b)/m
+		var rightSideXIntercept:float = (-4.5 - b)/m
+		Console.AddNewLine(str("%.1f" % leftSideXIntercept) + " left x intercept")
+		Console.AddNewLine(str("%.1f" % rightSideXIntercept) + " right x intercept")
+		if sign(leftSideXIntercept) == sign(rightSideXIntercept):
+			var i
+		if sign(leftSideXIntercept) == athlete.team.flip:
+			athlete.ball.attackTarget = Vector3(rightSideXIntercept, 0, -4.5)
+		else:
+			athlete.ball.attackTarget = Vector3(leftSideXIntercept, 0, 4.5)
+	else:
+		athlete.ball.attackTarget = Vector3(9 * -athlete.team.flip, 0, baselineZIntercept)
+	athlete.team.mManager.sphere.position = athlete.ball.attackTarget
+	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target)
+	athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target) + topDownSpikeVector
+	Console.AddNewLine(str("%.1f" % baselineZIntercept) + " baseline z intercept")
 	# What is their guess as to the block they will face? 
 	
 	
