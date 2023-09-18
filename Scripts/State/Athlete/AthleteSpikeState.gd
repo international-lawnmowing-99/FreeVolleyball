@@ -189,7 +189,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	
 	var lineCross = randf()
 	var spikeAngleTopDown = lerp(angleToLeftAntenna, angleToRightAntenna, lineCross)
-	spikeAngleTopDown = angleToLeftAntenna/2
+#	spikeAngleTopDown = PI/4
 	Console.AddNewLine(str("%.1f" % rad_to_deg(spikeAngleTopDown)) + " potential spike angle")
 	
 	# Find the nearest intersection to the edge of the court along the line
@@ -200,9 +200,11 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	var m:float = topDownSpikeVector.z / topDownSpikeVector.x
 	Console.AddNewLine(str("%.1f" % m) + " m")
 	var b:float = athlete.setRequest.target.z - m * athlete.setRequest.target.x
+	Console.AddNewLine(str("%.1f" % athlete.setRequest.target.z) + " set request z", Color.FUCHSIA)
+	Console.AddNewLine(str("%.1f" % athlete.setRequest.target.x) + " set request x", Color.FUCHSIA)
 	Console.AddNewLine(str("%.1f" % b) + " b")
 	
-	var baselineZIntercept:float = m * 9 * athlete.team.flip - athlete.team.flip * b
+	var baselineZIntercept:float = m * 9 * -athlete.team.flip + b
 	# If the baseline intercept is wider than the antennae, the ball is out on the side first
 	if abs(baselineZIntercept) > 4.5:
 		var leftSideXIntercept:float = (4.5 - b)/m
@@ -210,7 +212,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 		Console.AddNewLine(str("%.1f" % leftSideXIntercept) + " left x intercept")
 		Console.AddNewLine(str("%.1f" % rightSideXIntercept) + " right x intercept")
 		if sign(leftSideXIntercept) == sign(rightSideXIntercept):
-			var i
+			Console.AddNewLine("Ball trajectory doesn't cross net inside antennae")
 		if sign(leftSideXIntercept) == athlete.team.flip:
 			athlete.ball.attackTarget = Vector3(rightSideXIntercept, 0, -4.5)
 		else:
