@@ -10,7 +10,7 @@ func KillBlock():
 	ball.linear_velocity.x *= -1
 	randomize()
 	ball.linear_velocity *= randf_range(.5,.9)
-	ball.attackTarget = ball.BallPositionAtGivenHeight(0)
+	ball.attackTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0, 1.0)
 	
 	ball.blockWillBeAttempted = false
 	if spikedByA:
@@ -75,8 +75,9 @@ func ResolveBlock():
 	
 	if attackRoll>blockRoll:
 		ball.blockWillBeAttempted = false
-		spiker.get_tree().get_root().get_node("MatchScene").BallOverNet(spiker.team.isHuman)
-		return
+		if ball.inPlay:
+			spiker.team.mManager.BallOverNet(spiker.team.isHuman)
+			
 	elif blockRoll > attackRoll:
 		KillBlock()
 	else:

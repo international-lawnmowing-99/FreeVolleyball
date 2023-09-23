@@ -153,7 +153,7 @@ func UpdateTimeTillDigTarget():
 	
 	if (stateMachine.currentState == setState):
 		
-		timeTillDigTarget = ball.TimeTillBallReachesHeight(receptionTarget.y) # Maths.XZVector(ball.position).distance_to(Maths.XZVector(receptionTarget)) / max(Maths.XZVector(ball.linear_velocity).length(),.0001) 
+		timeTillDigTarget = Maths.TimeTillBallReachesHeight(ball.linear_velocity, ball.position, receptionTarget.y, 1.0) # Maths.XZVector(ball.position).distance_to(Maths.XZVector(receptionTarget)) / max(Maths.XZVector(ball.linear_velocity).length(),.0001) 
 #		if !mManager.isPaused:
 #			Console.AddNewLine(str("%.2f" % timeTillDigTarget) + " time till dig target updated")
 	

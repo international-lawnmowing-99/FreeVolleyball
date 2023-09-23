@@ -104,7 +104,7 @@ func Update(athlete:Athlete):
 			var tossTarget = Vector3(takeOffTarget.x + jumpDistance.x, athlete.stats.spikeHeight, takeOffTarget.z + jumpDistance.y)
 
 			ball.freeze = false
-			ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, tossTarget, athlete.stats.spikeHeight + randf_range(4,5.5))
+			ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, tossTarget, athlete.stats.spikeHeight + randf_range(4,5.5))
 			
 			ball.rotation = Vector3.ZERO
 			ball.angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), randf_range(-10,-30))
@@ -116,7 +116,7 @@ func Update(athlete:Athlete):
 
 		ServeState.WatchingTheBallInTheAir:
 			#transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(MyMaths.xzVector(ball.attackTarget - transform.position)), 15 * Time.deltaTime);
-			if (ball.TimeTillBallReachesHeight(athlete.stats.spikeHeight) <= athlete.CalculateTimeTillJumpPeak(takeOffTarget)):
+			if (Maths.TimeTillBallReachesHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.spikeHeight, 1.0) <= athlete.CalculateTimeTillJumpPeak(takeOffTarget)):
 				serveState = ServeState.Runup
 				athlete.moveTarget = takeOffTarget
 		
@@ -133,7 +133,7 @@ func Update(athlete:Athlete):
 				var landing = athlete.position + Vector3(attackTarget.x - athlete.position.x, 0, attackTarget.z - athlete.position.z).normalized() * athlete.stats.verticalJump
 				
 
-				athlete.rb.linear_velocity = ball.FindWellBehavedParabola(athlete.position, landing, athlete.stats.verticalJump)
+				athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, landing, athlete.stats.verticalJump)
 				
 				serveState = ServeState.Jump
 				athlete.rightIK.start()
@@ -146,7 +146,7 @@ func Update(athlete:Athlete):
 				athlete.rightIK.interpolation = 1
 			#if athlete.rb.linear_velocity.y >0:
 				if ball.linear_velocity.y < 0 && athlete.stats.spikeHeight >= ball.position.y:
-					var topspin = 0
+					ball.topspin = 1.0
 					# did they stuff up the serve?? 
 					# skill ~ 30 - 70 ~.5
 					# expecting 5 - 30% error rate, depending checked aggro, avg 10%
@@ -164,8 +164,8 @@ func Update(athlete:Athlete):
 					#Console.AddNewLine("fuckup prob: " + str(fuckupProb) + "|| roll: " + str(roll))
 					if roll < fuckupProb:
 						attackTarget = Vector3(randf_range(-1, 8), 0, randf_range(-10, 10))
-						topspin = 0
-						ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.position, attackTarget, 10 + 20 * randf(), false)
+						ball.topspin = 1.0
+						ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, attackTarget, 10 + 20 * randf(), false, ball.topspin)
 						ball.inPlay = false
 						Console.AddNewLine("BAD SERVE. Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 						ball.mManager.PointToTeamA()
@@ -173,10 +173,10 @@ func Update(athlete:Athlete):
 						if serveType == ServeType.Float:
 							ball.floating = true
 						elif serveType == ServeType.Jump:
-							topspin = randf_range(.5, 1.8)
-						ball.Serve(ball.position, attackTarget, 2.8, topspin)
+							ball.topspin = 1 + randf_range(.5, 1.8)
+						ball.Serve(ball.position, attackTarget, 2.8, ball.topspin)
 #						Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
-						athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(false)
+						athlete.team.mManager.BallOverNet(false)
 						
 						var difficultyOfReception = 0
 						match serveAggression:

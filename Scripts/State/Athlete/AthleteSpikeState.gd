@@ -64,12 +64,12 @@ func Update(athlete:Athlete):
 					athlete.rb.gravity_scale = 1
 					# We want to contact the ball at our max height...
 					# This means a steeper jump for more extreme verticals
-					athlete.rb.linear_velocity = athlete.team.ball.FindWellBehavedParabola(athlete.position, landingXZ, athlete.stats.verticalJump)
+					athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, landingXZ, athlete.stats.verticalJump)
 					if athlete == athlete.team.chosenSpiker:
 						ChooseSpikingStrategy(athlete)
 						
 		SpikeState.Jump:
-			athlete.rightIKTarget.global_transform.origin = athlete.team.ball.position
+			athlete.rightIKTarget.global_transform.origin = athlete.ball.position
 
 			if athlete.position.y <= 0.05 && athlete.rb.linear_velocity.y < 0:
 				athlete.rb.freeze = true
@@ -136,9 +136,9 @@ func CalculateTimeTillBallReachesSetTarget(athlete:Athlete) -> float:
 	if athlete.setRequest.height <= athlete.team.receptionTarget.y:
 		if athlete.team.stateMachine.currentState == athlete.team.spikeState:
 			var distanceFactor:float = 1 - Vector3(athlete.ball.position.x, 0, athlete.ball.position.z).distance_to(Maths.XZVector(athlete.team.receptionTarget))/ (Maths.XZVector(athlete.team.receptionTarget).distance_to(Maths.XZVector(athlete.setRequest.target)))
-			setTime = distanceFactor * athlete.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target) 
+			setTime = distanceFactor * Maths.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target) 
 		else:
-			setTime = athlete.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
+			setTime = Maths.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
 		
 	else:
 		# Standard set
@@ -152,6 +152,7 @@ func CalculateTimeTillBallReachesSetTarget(athlete:Athlete) -> float:
 	return athlete.team.timeTillDigTarget + setTime
 
 func ChooseSpikingStrategy(athlete:Athlete):
+	var ball = athlete.ball
 	Console.AddNewLine("_____________________________________________________________", Color.TOMATO)
 	Console.AddNewLine("Chosen spiker " + athlete.stats.lastName + " choosing spiking strategy", Color.TOMATO)
 	ReadBlock(athlete, athlete.team.defendState.otherTeam)
@@ -172,9 +173,9 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	var playerToNetVector = Vector3(-athlete.setRequest.target.x, 0, 0)
 	var playerToLeftAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * 4.5 - athlete.setRequest.target.z)
 	var playerToRightAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * -4.5 - athlete.setRequest.target.z)
-	athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target + playerToNetVector)
+#	athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target + playerToNetVector)
 	
-	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target + playerToLeftAntennaVector)
+#	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target + playerToLeftAntennaVector)
 	var angleToLeftAntenna = Maths.SignedAngle(playerToNetVector, playerToLeftAntennaVector, Vector3.DOWN)
 	var angleToRightAntenna = Maths.SignedAngle(playerToNetVector, playerToRightAntennaVector, Vector3.DOWN)
 	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna")
@@ -192,38 +193,62 @@ func ChooseSpikingStrategy(athlete:Athlete):
 #	spikeAngleTopDown = PI/4
 	Console.AddNewLine(str("%.1f" % rad_to_deg(spikeAngleTopDown)) + " potential spike angle")
 	
+	var furthestCourtPoint:Vector3
 	# Find the nearest intersection to the edge of the court along the line
 	# of the angle to work out how long the spike can be
 	var topDownSpikeVector:Vector3 = Vector3(-athlete.team.flip, 0, 0).rotated(Vector3.DOWN, spikeAngleTopDown)
-	Console.AddNewLine(str(topDownSpikeVector) + " spike vector")
+#	Console.AddNewLine(str(topDownSpikeVector) + " spike vector")
 	# Using our old friend y = mx + b (But with z as y)
 	var m:float = topDownSpikeVector.z / topDownSpikeVector.x
-	Console.AddNewLine(str("%.1f" % m) + " m")
+#	Console.AddNewLine(str("%.1f" % m) + " m")
 	var b:float = athlete.setRequest.target.z - m * athlete.setRequest.target.x
-	Console.AddNewLine(str("%.1f" % athlete.setRequest.target.z) + " set request z", Color.FUCHSIA)
-	Console.AddNewLine(str("%.1f" % athlete.setRequest.target.x) + " set request x", Color.FUCHSIA)
-	Console.AddNewLine(str("%.1f" % b) + " b")
+#	Console.AddNewLine(str("%.1f" % athlete.setRequest.target.z) + " set request z", Color.FUCHSIA)
+#	Console.AddNewLine(str("%.1f" % athlete.setRequest.target.x) + " set request x", Color.FUCHSIA)
+#	Console.AddNewLine(str("%.1f" % b) + " b")
 	
 	var baselineZIntercept:float = m * 9 * -athlete.team.flip + b
 	# If the baseline intercept is wider than the antennae, the ball is out on the side first
 	if abs(baselineZIntercept) > 4.5:
 		var leftSideXIntercept:float = (4.5 - b)/m
 		var rightSideXIntercept:float = (-4.5 - b)/m
-		Console.AddNewLine(str("%.1f" % leftSideXIntercept) + " left x intercept")
-		Console.AddNewLine(str("%.1f" % rightSideXIntercept) + " right x intercept")
+#		Console.AddNewLine(str("%.1f" % leftSideXIntercept) + " left x intercept")
+#		Console.AddNewLine(str("%.1f" % rightSideXIntercept) + " right x intercept")
 		if sign(leftSideXIntercept) == sign(rightSideXIntercept):
 			Console.AddNewLine("Ball trajectory doesn't cross net inside antennae")
 		if sign(leftSideXIntercept) == athlete.team.flip:
-			athlete.ball.attackTarget = Vector3(rightSideXIntercept, 0, -4.5)
+			furthestCourtPoint = Vector3(rightSideXIntercept, 0, -4.5)
 		else:
-			athlete.ball.attackTarget = Vector3(leftSideXIntercept, 0, 4.5)
+			furthestCourtPoint = Vector3(leftSideXIntercept, 0, 4.5)
 	else:
-		athlete.ball.attackTarget = Vector3(9 * -athlete.team.flip, 0, baselineZIntercept)
-	athlete.team.mManager.sphere.position = athlete.ball.attackTarget
-	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target)
-	athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target) + topDownSpikeVector
-	Console.AddNewLine(str("%.1f" % baselineZIntercept) + " baseline z intercept")
-	# What is their guess as to the block they will face? 
+		furthestCourtPoint = Vector3(9 * -athlete.team.flip, 0, baselineZIntercept)
+	
+#	var spikeDepth:float = randf_range(0.1, 1.0)
+	
+	var u = 27.78 # 100 kph spike
+	var topspin = 1.5
+	
+#	var furthestSpikeTargetAngle
+	
+	var lowestNetPass = Vector3(0, 2.43 + 0.15, b)
+	
+	var lowestPossibleSpike = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, lowestNetPass, u, false, 1 + 0.5)
+
+	var closestPossibleSpikeTarget:Vector3 = Maths.BallPositionAtGivenHeight(athlete.setRequest.target, lowestPossibleSpike, 0, 1.5)
+
+	
+	athlete.ball.attackTarget = closestPossibleSpikeTarget
+	
+	athlete.team.mManager.sphere.position = closestPossibleSpikeTarget
+	athlete.team.mManager.cylinder.position = lowestNetPass
+	athlete.team.mManager.cube.position = furthestCourtPoint
+#	athlete.ball.attackTarget = Maths.XZVector(lerp(athlete.ball.FindNetPass(), furthestCourtPoint, spikeDepth))
+
+#	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target)
+#	athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target) + topDownSpikeVector
+#	Console.AddNewLine(str("%.1f" % baselineZIntercept) + " baseline z intercept")
+	
+	var longestPossibleSpikeXZDistance = Maths.XZVector(athlete.setRequest.target).distance_to(furthestCourtPoint)
+	Console.AddNewLine(str("%.1f" % longestPossibleSpikeXZDistance) + " max possible spike distance")
 	
 	
 	# What is their preference as to hitting line or cross? 
@@ -232,6 +257,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	Console.AddNewLine("_____________________________________________________________", Color.TOMATO)
 	
 func ReadBlock(athlete:Athlete, otherTeam:Team):
+	var ball = athlete.ball
 	Console.AddNewLine("Reading block")
 	var blockMaximumHeight:float = 0
 	var ballRadius:float = 0.13
@@ -243,25 +269,46 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 				blockMaximumHeight = potentialBlocker.stats.blockHeight
 	
 	Console.AddNewLine("There are " + str(opposingBlockers.size()) + " blockers to contend with")
-	
+	for i in range (opposingBlockers.size()):
+		Console.AddNewLine(str(i + 1) + ": " + opposingBlockers[i].stats.lastName + " || " + str(opposingBlockers[i].stats.blockHeight * 100))
 	
 	
 	# Will the block unify into a double or triple, or will there be a big seam? 
-	var timeTillSpike = athlete.ball.TimeTillBallReachesHeight(athlete.stats.spikeHeight)
+	var timeTillSpike = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, athlete.stats.spikeHeight, 1.0)
 	# The block has no seam/minimal seam if the blockers can get to within 0.75 of each other
 	
 	# Who is the blocker that will set the block position? 
 	# If the ball is in the left third, their right, middle third: their middle obviously, ect
 	var mainBlocker:Athlete
-	if athlete.setRequest.target.z > 1.5:
+	if athlete.setRequest.target.z * athlete.team.flip > 1.5:
 		mainBlocker = otherTeam.defendState.rightSideBlocker
-	elif athlete.setRequest.target.z > -1.5:
+	elif athlete.setRequest.target.z * athlete.team.flip > -1.5:
 		mainBlocker = otherTeam.defendState.middleBlocker
 	else:
 		mainBlocker = otherTeam.defendState.leftSideBlocker
 	
-	# We don't really know where the main blocker will set up their jump from
-	# But just assume for now
+	if mainBlocker in opposingBlockers:
+		Console.AddNewLine("The relevant blocker will be present", Color.PEACH_PUFF)
+		# We don't really know where the main blocker will set up their jump from
+		# But just assume for now
+		
+		# Also assume effective block coverage is 2/3 of the height of the player
+		var mainBlockerLeftBlockCoverageLimit = mainBlocker.position.z + athlete.team.flip * athlete.stats.height/3
+		var mainBlockerRightBlockCoverageLimit = mainBlocker.position.z - athlete.team.flip * athlete.stats.height/3
+	
+		Console.AddNewLine("Left main block coverage limit: " + str(mainBlockerLeftBlockCoverageLimit), Color.PEACH_PUFF)
+		Console.AddNewLine("Right main block coverage limit: " + str(mainBlockerRightBlockCoverageLimit), Color.PEACH_PUFF)
+		var playerToNetVector = Vector3(-athlete.setRequest.target.x, 0, 0)
+		var playerToLeftBlockLimitVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * mainBlockerLeftBlockCoverageLimit - athlete.setRequest.target.z)
+		var playerToRightBlockLimitVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * mainBlockerRightBlockCoverageLimit - athlete.setRequest.target.z)
+		
+		var angleToLeftBlockLimit = Maths.SignedAngle(playerToNetVector, playerToLeftBlockLimitVector, Vector3.DOWN)
+		var angleToRightBlockLimit = Maths.SignedAngle(playerToNetVector, playerToRightBlockLimitVector, Vector3.DOWN)
+		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftBlockLimit)) + " degrees to left block limit")
+		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightBlockLimit)) + " degrees to right block limit")
+		
+#		athlete.team.mManager.cube.position = Vector3(0, mainBlocker.stats.blockHeight, mainBlockerLeftBlockCoverageLimit)
+#		athlete.team.mManager.cylinder.position = Vector3(0, mainBlocker.stats.blockHeight, mainBlockerRightBlockCoverageLimit)
 	
 	
 	

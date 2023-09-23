@@ -13,7 +13,7 @@ func Enter(athlete:Athlete):
 	isBallAlreadyPassed = false
 	nameOfState="pass"
 	athlete.animTree.set("parameters/state/transition_request", "digging")
-	ball = athlete.team.ball
+	ball = athlete.ball
 	
 	#Make a determination as to whether the ball will land in the court
 	#Ideally take into account:
@@ -33,7 +33,7 @@ func Enter(athlete:Athlete):
 
 	
 	var servePos = ball.position
-	athlete.moveTarget = ball.BallPositionAtGivenHeight(0.5) + Vector3(0,-.5, randf_range(-.25,.25))
+	athlete.moveTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0.5, ball.topspin) + Vector3(0,-.5, randf_range(-.25,.25))
 	athlete.moveTarget += (athlete.moveTarget - Vector3(servePos.x, 0, servePos.z)).normalized()/3
 
 	#look_at(Vector3(servePos.x,0, servePos.z), Vector3.UP)
@@ -199,19 +199,19 @@ func PassBall(athlete:Athlete):
 		ball.linear_velocity.y *= -1
 		ball.linear_velocity *= randf_range(0.5, 1.0)
 		
-		if ball.BallMaxHeight() >= 2.4:
-			receptionTarget = ball.BallPositionAtGivenHeight(2.5)
+		if Maths.BallMaxHeight(ball.position, ball.linear_velocity, 1.0) >= 2.4:
+			receptionTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 2.5, 1.0)
 		else:
-			receptionTarget = ball.BallPositionAtGivenHeight(0)
+			receptionTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0, 1.0)
 		if is_nan(receptionTarget.x) || is_nan(receptionTarget.z):
 			if ball.position.y > 0:
-				receptionTarget = ball.BallPositionAtGivenHeight(0)
+				receptionTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0, 1.0)
 			else:
 				Console.AddNewLine("Error calculating ball pass trajectory", Color.INDIAN_RED)
 				receptionTarget = ball.position
 				receptionTarget.y = 0
 				ball.linear_velocity = Vector3.ZERO
-		ballMaxHeight = ball.BallMaxHeight()
+		ballMaxHeight = Maths.BallMaxHeight(ball.position, ball.linear_velocity, 1.0)
 		Console.AddNewLine(athlete.stats.lastName + " - Shit pass mate")
 
 	ball.gravity_scale = 1
@@ -225,11 +225,11 @@ func PassBall(athlete:Athlete):
 	athlete.team.receptionTarget = receptionTarget
 	
 ### IT'S BACK!!! --------------------- (still oddly necessary)
-	ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
+	ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
 	await athlete.get_tree().process_frame
-	ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
+	ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
 #### ---------------------------------
-#	var receptionTime = athlete.team.ball.SetTimeWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
+#	var receptionTime = Maths.SetTimeWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
 #	Console.AddNewLine("Time till ball at reception target: " + str(receptionTime))
 
 	athlete.team.mManager.BallReceived(athlete.team.isHuman)

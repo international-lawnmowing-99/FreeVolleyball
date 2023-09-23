@@ -44,9 +44,9 @@ func Update(athlete:Athlete):
 		InternalSetState.Undefined:
 			timeTillSet = 99999
 		InternalSetState.StandingSet:
-			timeTillSet = athlete.ball.TimeTillBallReachesHeight(athlete.stats.standingSetHeight)
+			timeTillSet = Maths.TimeTillBallReachesHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.standingSetHeight, 1.0)
 		InternalSetState.JumpSet:
-			timeTillSet = athlete.ball.TimeTillBallReachesHeight(athlete.stats.jumpSetHeight)
+			timeTillSet = Maths.TimeTillBallReachesHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.jumpSetHeight, 1.0)
 			if jumpSetState != JumpSetState.Jump && athlete.position.distance_to(athlete.moveTarget) <= athlete.MoveDistanceDelta:
 				var g = ProjectSettings.get_setting("physics/3d/default_gravity")
 				var jumpYVel = sqrt(2 * g * athlete.stats.verticalJump)
@@ -57,7 +57,7 @@ func Update(athlete:Athlete):
 					if athlete.rb.freeze:
 						athlete.rb.freeze = false
 						athlete.rb.gravity_scale = 1
-						athlete.rb.linear_velocity = athlete.ball.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
+						athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
 			
 			elif jumpSetState == JumpSetState.Jump:
 				if athlete.position.y < 0.1 && athlete.rb.linear_velocity.y < 0:

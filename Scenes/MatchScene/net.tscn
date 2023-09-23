@@ -4,7 +4,7 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fb5jm"]
 margin = 0.0
-size = Vector3(0.1, 1, 9)
+size = Vector3(0.02, 1, 9)
 
 [node name="net" instance=ExtResource("1")]
 

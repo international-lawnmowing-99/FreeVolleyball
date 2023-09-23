@@ -71,11 +71,12 @@ func Update(athlete:Athlete):
 					athlete.model.rotation.y = -athlete.team.flip * PI/2
 					#Perhaps adding a random offset would make this look less choreographed...
 					if !blockingTarget.rb.freeze && blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
+						Console.AddNewLine(athlete.stats.lastName + " jumps to block (commit)")
 						blockState = BlockState.Jump	
 						if athlete.rb.freeze:
 							athlete.rb.freeze = false
 							athlete.rb.gravity_scale = 1
-							athlete.rb.linear_velocity = athlete.ball.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
+							athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
 				BlockState.Jump:
 					if blockingTarget.setRequest.target:
 						athlete.leftIKTarget.global_transform.origin = blockingTarget.setRequest.target
@@ -103,12 +104,12 @@ func Update(athlete:Athlete):
 						athlete.rightIKTarget.global_transform.origin = blockingTarget.setRequest.target
 					#Perhaps adding a random offset would make this look less choreographed...
 					if !blockingTarget.rb.freeze && blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
-#						Console.AddNewLine(athlete.stats.lastName + " jumps to block")
+						Console.AddNewLine(athlete.stats.lastName + " jumps to block (react)")
 						blockState = BlockState.Jump	
 						if athlete.rb.freeze:
 							athlete.rb.freeze = false
 							athlete.rb.gravity_scale = 1
-							athlete.rb.linear_velocity = athlete.ball.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
+							athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
 				BlockState.Jump:
 					if blockingTarget.setRequest.target:
 						athlete.leftIKTarget.global_transform.origin = blockingTarget.setRequest.target

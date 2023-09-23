@@ -60,8 +60,8 @@ func Enter(athlete:Athlete):
 	
 	ball = athlete.ball
 	serveState = ServeState.Walking
-	serveTarget = athlete.get_tree().root.get_node("MatchScene").get_node("ServeTarget")
-	serveUI = athlete.get_tree().root.get_node("MatchScene").get_node("UI/ServeUI")
+	serveTarget = athlete.team.mManager.get_node("ServeTarget")
+	serveUI = athlete.team.mManager.get_node("UI/ServeUI")
 	
 	serveUI.humanServeState = self
 	_athlete = athlete
@@ -162,7 +162,7 @@ func Update(athlete:Athlete):
 
 					ball.freeze = false
 					ball.position = Vector3(athlete.position.x, ball.position.y, athlete.position.z)
-					ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, tossTarget, athlete.stats.spikeHeight + 5)
+					ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, tossTarget, athlete.stats.spikeHeight + 5)
 					
 					ball.rotation = Vector3.ZERO
 					ball.angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), randf_range(10,30))
@@ -181,7 +181,7 @@ func Update(athlete:Athlete):
 
 					ball.freeze = false
 					ball.position = Vector3(athlete.position.x, ball.position.y, athlete.position.z)
-					ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, tossTarget, athlete.stats.spikeHeight + 5)
+					ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, tossTarget, athlete.stats.spikeHeight + 5)
 					
 					ball.rotation = Vector3.ZERO
 					ball.angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), randf_range(10,30))
@@ -198,7 +198,7 @@ func Update(athlete:Athlete):
 
 		ServeState.WatchingTheBallInTheAir:
 			#transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(MyMaths.xzVector(ball.attackTarget - transform.position)), 15 * Time.deltaTime);
-			if (ball.TimeTillBallReachesHeight(athlete.stats.spikeHeight) <= athlete.CalculateTimeTillJumpPeak(takeOffTarget)):
+			if (Maths.TimeTillBallReachesHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.spikeHeight, 1.0) <= athlete.CalculateTimeTillJumpPeak(takeOffTarget)):
 				serveState = ServeState.Runup
 				athlete.moveTarget = takeOffTarget
 		
@@ -215,9 +215,9 @@ func Update(athlete:Athlete):
 				var landing = athlete.position + Vector3(attackTarget.x - athlete.position.x, 0, attackTarget.z - athlete.position.z).normalized() * athlete.stats.verticalJump
 				
 				#Again, don't ask me why this is needed
-				athlete.rb.linear_velocity = ball.FindWellBehavedParabola(athlete.position, landing, athlete.stats.verticalJump)
+				athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, landing, athlete.stats.verticalJump)
 #				await athlete.get_tree().idle_frame
-#				athlete.rb.linear_velocity = ball.FindWellBehavedParabola(athlete.position, landing, athlete.stats.verticalJump)
+#				athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, landing, athlete.stats.verticalJump)
 				
 				serveState = ServeState.Jump
 				#if (timeTillJumpPeak<= jumpAnimationTime)
@@ -240,7 +240,8 @@ func Update(athlete:Athlete):
 func HitBall(athlete:Athlete):
 	var serveRoll = randf_range(0, athlete.stats.serve)
 	
-	var topspin = 0
+	ball.topspin = 1.0
+	
 	# did they stuff up the serve?? 
 	# skill ~ 30 - 70 ~.5
 	# expecting 5 - 30% error rate, depending checked aggro, avg 10%
@@ -256,8 +257,8 @@ func HitBall(athlete:Athlete):
 #	Console.AddNewLine("fuckup prob: " + str(fuckupProb) + "|| roll: " + str(roll))
 	if roll < fuckupProb:
 		attackTarget = Vector3(randf_range(1, -8), 0, randf_range(10, 10))
-		topspin = 0
-		ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.position, attackTarget, 10 + 20 * randf(), false)
+		ball.topspin = 1.0
+		ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, attackTarget, 10 + 20 * randf(), false, ball.topspin)
 		ball.inPlay = false
 		Console.AddNewLine("BAD SERVE. Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 		ball.mManager.PointToTeamB()
@@ -265,14 +266,14 @@ func HitBall(athlete:Athlete):
 		if serveType == ServeType.Float:
 			ball.floating = true
 		elif serveType == ServeType.Jump:
-			topspin = randf_range(.5, 1.8)
+			ball.topspin = 1 + randf_range(.5, 1.8)
 		
 		if serveType == ServeType.Underarm:
-			ball.Serve(ball.position, attackTarget, 3.6, topspin)
+			ball.Serve(ball.position, attackTarget, 3.6, ball.topspin)
 		else:
-			ball.Serve(ball.position, attackTarget, 2.8, topspin)
+			ball.Serve(ball.position, attackTarget, 2.8, ball.topspin)
 #		Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
-		athlete.get_tree().get_root().get_node("MatchScene").BallOverNet(true)
+		athlete.team.mManager.BallOverNet(true)
 		
 		var difficultyOfReception = 0
 		match serveAggression:

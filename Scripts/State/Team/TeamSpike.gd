@@ -56,31 +56,32 @@ func SpikeBall(team:Team):
 
 		netPass = ball.position + (ball.attackTarget - ball.position) * distanceFactor
 		
-		if netPass.y > netHeightPlusBallClearance:
+		if netPass.y > 0:# netHeightPlusBallClearance:
 			#var xzDistToTarget:float = (Vector3(ball.position.x, 0, ball.position.z) - Vector3(ball.attackTarget.x, 0, ball.attackTarget.z)).length()
 			#var y = ball.position.y
 			#var g = team.chosenSpiker.g
 			
 			#initial velocity of spike in mps
-			var u = rng.randf_range(20,37)
+			var u = 27.78
 			#print("Spike Speed(m/s): " + str(u))
 			
 			ball.difficultyOfReception = u/37.0*team.chosenSpiker.stats.spike*2
 			
-			ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false)
+			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 1.5)
 			await team.get_tree().process_frame
-			ball.linear_velocity = ball.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false)
+			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 1.5)
 			
 		else:
+			Console.AddNewLine("Ball will clip net if hit at that speed, finding easy parabola")
 			#yet again, somehow necessary
-			ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+			ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 			await team.get_tree().process_frame
-			ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+			ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 			ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 			#team.setTarget = null
 			#print(ball.attackTarget)
 		
-		if abs(netPass.z) >= 4.4:
+		if abs(netPass.z) >= 4.49:
 			Console.AddNewLine("Ball will pass outside antennae lad", Color.CRIMSON)
 			ball.inPlay = false
 			if team.isHuman:
@@ -88,7 +89,8 @@ func SpikeBall(team:Team):
 			else:
 				team.mManager.PointToTeamA()
 	else:
-		ball.linear_velocity = ball.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+		Console.AddNewLine("set target below net height (taking into account ball clearance): " + str("%.1f"%team.setTarget.height))
+		ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 		ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 		team.setTarget = null
 		

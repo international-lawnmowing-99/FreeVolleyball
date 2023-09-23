@@ -71,15 +71,19 @@ func _on_Area_body_entered(body):
 "
 
 [sub_resource type="BoxShape3D" id="6"]
+margin = 0.0
 size = Vector3(200, 4.1, 100)
 
 [sub_resource type="BoxShape3D" id="7"]
+margin = 0.0
 size = Vector3(100, 4.1, 9)
 
 [sub_resource type="BoxShape3D" id="8"]
+margin = 0.0
 size = Vector3(9, 4.1, 9)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gg24e"]
+margin = 0.0
 size = Vector3(0.01, 1.83, 9)
 
 [sub_resource type="PlaneMesh" id="9"]

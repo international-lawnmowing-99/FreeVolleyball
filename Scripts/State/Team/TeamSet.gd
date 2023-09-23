@@ -47,7 +47,7 @@ func DumpBall(team:Team):
 	# physics process, using both physics engines. Not for +0.2 height though
 	# Solved - it was the IK system deciding to "rip [the setter's] bloody arms off"!
 	
-	team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.position, team.ball.attackTarget, max(team.ball.position.y + .1, 2.9))
+	team.ball.linear_velocity = Maths.CalculateBallOverNetVelocity(team.ball.position, team.ball.attackTarget, max(team.ball.position.y + .1, 2.9), 1.0)
 #	FindWellBehavedParabola(team.ball.position, team.ball.attackTarget, max(team.ball.position.y + 2, 2.9))
 	print("ball.linear_vel: " + str(team.ball.linear_velocity))
 #	team.ball.linear_velocity = team.ball.FindParabolaForGivenSpeed(team.ball.position, team.ball.attackTarget, randf_range(5,10), false)
@@ -83,9 +83,9 @@ func SetBall(team:Team):
 			team.mManager.PointToTeamA()
 	elif setExecution > perfectThreshold:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.LAWN_GREEN)
-		team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
 		if team.ball.linear_velocity == Vector3.ZERO:
-			team.ball.linear_velocity = team.ball.FindDownwardsParabola(team.ball.position, team.setTarget.target)
+			team.ball.linear_velocity = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
 			
 	else:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " shitty set", Color.RED)
@@ -105,9 +105,9 @@ func SetBall(team:Team):
 		Console.AddNewLine("Error: " + str(error))
 		team.mManager.cylinder.position = team.setTarget.target
 			
-		team.ball.linear_velocity = team.ball.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
 		if team.ball.linear_velocity == Vector3.ZERO:
-			team.ball.linear_velocity = team.ball.FindDownwardsParabola(team.ball.position, team.setTarget.target)
+			team.ball.linear_velocity = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
 	#	
 		team.ballPositionWhenSet = team.ball.position
 		# React to the unexpected trajectory of the ball...
@@ -115,7 +115,7 @@ func SetBall(team:Team):
 		###
 		if team.setTarget.target.x * team.flip < -0.5:
 			Console.AddNewLine("__________________________________________===============================================================================================================================")
-			team.ball.attackTarget = team.ball.BallPositionAtGivenHeight(0)
+			team.ball.attackTarget = Maths.BallPositionAtGivenHeight(team.ball.position, team.ball.linear_velocity, 0, 1.0)
 			team.ball.difficultyOfReception = 1.3
 			team.mManager.BallOverNet(team.isHuman)
 			return
@@ -131,7 +131,7 @@ func SetBall(team:Team):
 			# Can the ball still be hit? 
 			
 			
-			var maxHeightBadSet = team.ball.BallMaxHeight()
+			var maxHeightBadSet = Maths.BallMaxHeight(team.ball.position, team.ball.linear_velocity, 1.0)
 			if maxHeightBadSet <= team.chosenSpiker.stats.spikeHeight:
 				Console.AddNewLine("can't attack that bad set: Spike height " + str(team.chosenSpiker.stats.spikeHeight) + "  vs set: " + str(maxHeightBadSet))
 				ScrambleForBadSet(team)
@@ -191,7 +191,7 @@ func SetBall(team:Team):
 	
 
 	
-	team.get_tree().get_root().get_node("MatchScene").BallSet(team.isHuman)
+	team.mManager.BallSet(team.isHuman)
 
 func AthleteCanStandingRollBadSet(_athlete:Athlete) -> bool:
 	return false
@@ -199,7 +199,7 @@ func AthleteCanStandingRollBadSet(_athlete:Athlete) -> bool:
 func ScrambleForBadSet(team:Team):
 	# Find someone to roll/push the set over if possible, or else give a free ball
 	var ballDigHeight = 0.5
-	var ballPositionAtDig = team.ball.BallPositionAtGivenHeight(ballDigHeight)
+	var ballPositionAtDig = Maths.BallPositionAtGivenHeight(team.ball.position, team.ball.linear_velocity, ballDigHeight, 1.0)
 	for athlete in team.courtPlayers:
 		athlete.distanceHack = 9999
 		
@@ -291,10 +291,10 @@ func AssignSetter(athlete:Athlete, team:Team, isJumpSetting:bool):
 	if isJumpSetting:
 		athlete.setState.internalSetState = athlete.setState.InternalSetState.JumpSet
 		athlete.setState.jumpSetState = athlete.setState.JumpSetState.PreSet
-		team.receptionTarget = team.ball.BallPositionAtGivenHeight(athlete.stats.jumpSetHeight)
+		team.receptionTarget = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.jumpSetHeight, 1.0)
 	else:
 		athlete.setState.internalSetState = athlete.setState.InternalSetState.StandingSet
-		team.receptionTarget = team.ball.BallPositionAtGivenHeight(athlete.stats.standingSetHeight)
+		team.receptionTarget = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.standingSetHeight, 1.0)
 
 	athlete.stateMachine.SetCurrentState(athlete.setState)
 	team.chosenSetter = athlete
@@ -306,7 +306,7 @@ func AssignSetter(athlete:Athlete, team:Team, isJumpSetting:bool):
 #	team.mManager.cylinder.position = team.receptionTarget
 
 func AthleteCanJumpSet(athlete:Athlete, team:Team)->bool:
-	var athleteSetPosition:Vector3 = athlete.ball.BallPositionAtGivenHeight(athlete.stats.jumpSetHeight)
+	var athleteSetPosition:Vector3 = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.jumpSetHeight, 1.0)
 
 	if team.isHuman:
 		if athleteSetPosition.x < 0.1:
@@ -315,13 +315,13 @@ func AthleteCanJumpSet(athlete:Athlete, team:Team)->bool:
 		if athleteSetPosition.x > 0.1:
 			return false
 	
-	var timeTillBallAtSetPosition = athlete.ball.TimeTillBallAtPosition(athlete.ball, athleteSetPosition)
+	var timeTillBallAtSetPosition = Maths.TimeTillBallAtPosition(athlete.ball.position, athlete.ball.linear_velocity, athleteSetPosition, 1.0)
 		
 	return timeTillBallAtSetPosition >= athlete.setState.TimeToJumpSet(athlete, athleteSetPosition)
 
 
 func AthleteCanStandingSet(athlete:Athlete, team:Team)->bool:
-	var athleteSetPosition:Vector3 = team.ball.BallPositionAtGivenHeight(athlete.stats.standingSetHeight)
+	var athleteSetPosition:Vector3 = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.standingSetHeight, 1.0)
 	
 	if team.isHuman:
 		if athleteSetPosition.x < 0.1:
@@ -336,7 +336,7 @@ func AthleteCanStandingSet(athlete:Athlete, team:Team)->bool:
 			if athleteSetPosition.x > -3.1:
 				return false
 			
-	var timeTillBallAtSetPosition = athlete.ball.TimeTillBallAtPosition(athlete.ball, athleteSetPosition)
+	var timeTillBallAtSetPosition = Maths.TimeTillBallAtPosition(athlete.ball.position, athlete.ball.linear_velocity, athleteSetPosition, 1.0)
 	
 	return timeTillBallAtSetPosition >= athlete.setState.TimeToStandingSet(athlete, athleteSetPosition)
 
@@ -347,7 +347,7 @@ func AttemptToFindSetterOutOfSystem(team:Team)->bool:
 		if !AthleteCanStandingSet(lad, lad.team):
 			lad.distanceHack = 9999
 			continue
-		var athleteSetPosition:Vector3 = team.ball.BallPositionAtGivenHeight(lad.stats.standingSetHeight)
+		var athleteSetPosition:Vector3 = Maths.BallPositionAtGivenHeight(lad.ball.position, lad.ball.linear_velocity, lad.stats.standingSetHeight, 1.0)
 		var timeToReachGround = 0
 		if !lad.rb.freeze:
 			if lad.rb.linear_velocity.y > 0:
@@ -375,7 +375,7 @@ func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:Team)->bool:
 		if !AthleteCanStandingSet(lad, lad.team):
 			lad.distanceHack = 9999
 			continue
-		var athleteSetPosition:Vector3 = team.ball.BallPositionAtGivenHeight(lad.stats.standingSetHeight)
+		var athleteSetPosition:Vector3 = Maths.BallPositionAtGivenHeight(lad.ball.position, lad.ball.linear_velocity, lad.stats.standingSetHeight, 1.0)
 		var timeToReachGround = 0
 		
 		if !lad.rb.freeze:
@@ -419,11 +419,11 @@ func ChooseSpiker(team:Team):
 		if athlete!= team.chosenSetter && athlete.role != Enums.Role.Libero && athlete != team.middleBack:
 			if team.receptionTarget.x == NAN:
 				var dfsdfds = 1
-			var setSpeed = team.ball.FindWellBehavedParabola(team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height).length()
+			var setSpeed = Maths.FindWellBehavedParabola(team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height).length()
 			# Very hacky, but if no parabola is found then vector3.zero will be returned
 			if setSpeed > 10 || setSpeed < 0.01:
 				# Attempt downwards parabola
-				setSpeed = team.ball.FindDownwardsParabola(team.receptionTarget, athlete.setRequest.target).length()
+				setSpeed = Maths.FindDownwardsParabola(team.receptionTarget, athlete.setRequest.target).length()
 				if setSpeed > 10 || setSpeed < 0.01:
 					athlete.stateMachine.SetCurrentState(athlete.coverState)
 					continue
@@ -492,13 +492,13 @@ func AthleteCanFullyTransition(athlete) -> bool:
 	
 	if athlete.setRequest.target.y > athlete.team.receptionTarget.y:
 	#normal set
-		timeTillBallReachesSetTarget = athlete.ball.TimeTillBallAtPosition(athlete.ball, athlete.team.receptionTarget) \
-		+ athlete.team.ball.SetTimeWellBehavedParabola(athlete.team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
+		timeTillBallReachesSetTarget = Maths.TimeTillBallAtPosition(athlete.ball.position, athlete.ball.linear_velocity, athlete.team.receptionTarget, 1.0) \
+		+ Maths.SetTimeWellBehavedParabola(athlete.team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
 
 	else:
 		# setting downwards
-		timeTillBallReachesSetTarget = athlete.ball.TimeTillBallAtPosition(athlete.ball, athlete.team.receptionTarget) \
-		+ athlete.team.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
+		timeTillBallReachesSetTarget = Maths.TimeTillBallAtPosition(athlete.ball.position, athlete.ball.linear_velocity, athlete.team.receptionTarget, 1.0) \
+		+ Maths.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
 	return timeToJumpPeak < timeTillBallReachesSetTarget
 	
 func AthleteCanDiagonallyTransition(athlete)-> bool:
@@ -516,12 +516,12 @@ func AthleteCanDiagonallyTransition(athlete)-> bool:
 
 	if athlete.setRequest.target.y > athlete.team.receptionTarget.y:
 		#normal set
-		timeTillBallReachesSetTarget = athlete.ball.TimeTillBallAtPosition(athlete.ball, athlete.team.receptionTarget) \
-		+ athlete.team.ball.SetTimeWellBehavedParabola(athlete.team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
+		timeTillBallReachesSetTarget = Maths.TimeTillBallAtPosition(athlete.ball.position, athlete.ball.linear_velocity, athlete.team.receptionTarget, 1.0) \
+		+ Maths.SetTimeWellBehavedParabola(athlete.team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
 	else:
 		# setting downwards
-		timeTillBallReachesSetTarget = athlete.ball.TimeTillBallAtPosition(athlete.ball, athlete.team.receptionTarget) \
-		+ athlete.team.ball.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
+		timeTillBallReachesSetTarget = Maths.TimeTillBallAtPosition(athlete.ball.position, athlete.ball.linear_velocity, athlete.team.receptionTarget, 1.0) \
+		+ Maths.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
 	return timeToJumpPeak < timeTillBallReachesSetTarget
 
 func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
@@ -553,11 +553,11 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	
 	athleteSpikeTime += timeToReachGround
 	
-	var ball:Ball = athlete.team.ball
+	var ball:Ball = athlete.ball
 	
 	# 1 Find new spike contact location
 	# (all normalised so that it takes place from the perspective of the human/teamA side)
-	var spikeContactPos:Vector3 = ball.BallPositionAtGivenHeight(athlete.stats.spikeHeight)
+	var spikeContactPos:Vector3 = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.spikeHeight, 1.0)
 
 	
 
@@ -573,7 +573,7 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 	var runupVector = Vector3(totalRunupLength, 0, 0)
 	
 	# If they can get back to the ordinary runup start position just go there
-	if athleteSpikeTime + totalRunupLength/athlete.stats.speed <= ball.SetTimeWellBehavedParabola(ball.position, spikeContactPos, ball.BallMaxHeight()):
+	if athleteSpikeTime + totalRunupLength/athlete.stats.speed <= Maths.SetTimeWellBehavedParabola(ball.position, spikeContactPos, Maths.BallMaxHeight(ball.position, ball.linear_velocity, 1.0)):
 		athlete.spikeState.runupStartPosition = Maths.XZVector(spikeContactPos + athlete.team.flip * runupVector)
 		return true
 	
@@ -639,4 +639,4 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 #	athlete.team.mManager.cube.position = athlete.spikeState.runupStartPosition
 
 	
-	return athleteSpikeTime < ball.SetTimeWellBehavedParabola(ball.position, spikeContactPos, ball.BallMaxHeight())
+	return athleteSpikeTime < Maths.SetTimeWellBehavedParabola(ball.position, spikeContactPos, Maths.BallMaxHeight(ball.position, ball.linear_velocity, 1.0))

@@ -3,6 +3,7 @@ class_name TeamReceive
 
 func Enter(team:Team):
 	nameOfState = "Receive"
+	Console.AddNewLine(team.teamName + " " + nameOfState)
 	#ChooseReceiver
 		
 	for lad in team.courtPlayers:
