@@ -55,7 +55,7 @@ func Update(athlete:Athlete):
 #				print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState))
 
 		SpikeState.Runup:
-			if athlete.team.flip * athlete.position.x <= abs(takeOffXZ.x + athlete.team.flip * 0.1): #Maths.XZVector(takeOffXZ - athlete.position).length() < 0.1:
+			if athlete.team.flip * athlete.position.x <= abs(takeOffXZ.x + athlete.team.flip * 0.05): #Maths.XZVector(takeOffXZ - athlete.position).length() < 0.1:
 				spikeState = SpikeState.Jump
 				athlete.rightIK.start()
 				athlete.rightIK.interpolation = 1
@@ -225,15 +225,16 @@ func ChooseSpikingStrategy(athlete:Athlete):
 #	var spikeDepth:float = randf_range(0.1, 1.0)
 	
 	var u = 27.78 # 100 kph spike
-	var topspin = 1.5
+	var topspin = 7.0
+	
 	
 #	var furthestSpikeTargetAngle
 	
-	var lowestNetPass = Vector3(0, 2.43 + 0.15, b)
+	var lowestNetPass = Vector3(0, 2.43 + 0.35, b)
 	
-	var lowestPossibleSpike = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, lowestNetPass, u, false, 1 + 0.5)
+	var lowestPossibleSpike = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, lowestNetPass, u, false, topspin)
 
-	var closestPossibleSpikeTarget:Vector3 = Maths.BallPositionAtGivenHeight(athlete.setRequest.target, lowestPossibleSpike, 0, 1.5)
+	var closestPossibleSpikeTarget:Vector3 = Maths.BallPositionAtGivenHeight(athlete.setRequest.target, lowestPossibleSpike, 0, topspin)
 
 	
 	athlete.ball.attackTarget = closestPossibleSpikeTarget

@@ -15,17 +15,18 @@ func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
 #	Console.AddNewLine(str((team.ball.position - team.chosenSpiker.setRequest.target).length()))
 	if !hit && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight:
+		SpikeBall(team)
 #		timeEnd = Time.get_unix_time_from_system()
 #		var timeElapsed = timeEnd - timeStart
 #		Console.AddNewLine("Actual time when ball ready to be spiked: " + str(timeElapsed))
 #		if team.ball.linear_velocity.z > 0:
 #			if team.ball.position.z > team.chosenSpiker.setRequest.target.z: #&& \
 #				if(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5:# &&\
-		if abs(team.ball.position.y - (team.chosenSpiker.position.y + team.chosenSpiker.stats.height * 1.33)) < 0.5:
-			if Maths.XZVector(team.ball.position - team.chosenSpiker.position).length() < 2:
+#		if abs(team.ball.position.y - (team.chosenSpiker.position.y + team.chosenSpiker.stats.height * 1.33)) < 0.5:
+#			if Maths.XZVector(team.ball.position - team.chosenSpiker.position).length() < 2:
 #			if Vector3(team.chosenSpiker.position.x, team.chosenSpiker.position.y + team.chosenSpiker.stats.height * 1.33, team.chosenSpiker.position.z).distance_to(team.ball.position) <= 1:
 #				team.chosenSpiker.spikeState.AdjustSpike(team.defendState.otherTeam)
-				SpikeBall(team)
+
 #		elif team.ball.linear_velocity.z < 0:
 #			if team.ball.position.z < team.chosenSpiker.setRequest.target.z:# &&\
 				
@@ -66,10 +67,10 @@ func SpikeBall(team:Team):
 			#print("Spike Speed(m/s): " + str(u))
 			
 			ball.difficultyOfReception = u/37.0*team.chosenSpiker.stats.spike*2
-			
-			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 1.5)
+			ball.gravity_scale = 7.0
+			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 7.0)
 			await team.get_tree().process_frame
-			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 1.5)
+			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 7.0)
 			
 		else:
 			Console.AddNewLine("Ball will clip net if hit at that speed, finding easy parabola")

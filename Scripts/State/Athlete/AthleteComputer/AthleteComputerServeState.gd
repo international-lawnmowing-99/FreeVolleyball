@@ -152,7 +152,7 @@ func Update(athlete:Athlete):
 					# expecting 5 - 30% error rate, depending checked aggro, avg 10%
 					
 					
-					var fuckupProb = .1#float(serveAggression + 1)/3 * float(1 - (athlete.stats.serve/100))
+					var fuckupProb = 0# .1#float(serveAggression + 1)/3 * float(1 - (athlete.stats.serve/100))
 
 					match serveAggression:
 						ServeAggression.Aggressive:

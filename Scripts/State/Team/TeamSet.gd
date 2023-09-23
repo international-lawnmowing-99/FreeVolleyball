@@ -84,6 +84,9 @@ func SetBall(team:Team):
 	elif setExecution > perfectThreshold:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.LAWN_GREEN)
 		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		await team.get_tree().process_frame
+		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		
 		if team.ball.linear_velocity == Vector3.ZERO:
 			team.ball.linear_velocity = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
 			
@@ -106,6 +109,9 @@ func SetBall(team:Team):
 		team.mManager.cylinder.position = team.setTarget.target
 			
 		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		await team.get_tree().process_frame
+		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		
 		if team.ball.linear_velocity == Vector3.ZERO:
 			team.ball.linear_velocity = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
 	#	
@@ -460,9 +466,9 @@ func ChooseSpiker(team:Team):
 		return
 	
 	else:
-#		if team.middleFront in possibleSpikers:
-#			team.chosenSpiker = team.middleFront
-#			team.setTarget = team.middleFront.setRequest
+#		if team.outsideBack in possibleSpikers:
+#			team.chosenSpiker = team.outsideBack
+#			team.setTarget = team.outsideBack.setRequest
 #			return
 			
 		var setChoice = randi()%possibleSpikers.size()

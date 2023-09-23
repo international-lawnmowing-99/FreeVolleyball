@@ -246,7 +246,7 @@ func HitBall(athlete:Athlete):
 	# skill ~ 30 - 70 ~.5
 	# expecting 5 - 30% error rate, depending checked aggro, avg 10%
 	
-	var fuckupProb = .075
+	var fuckupProb = 0# .075
 	match serveAggression:
 		ServeAggression.Aggressive:
 			fuckupProb *= 2
