@@ -475,7 +475,7 @@ func Populate(firstNames, lastNames, r):
 		stats.dump = skill + randf_range(0,25) + randf_range(0,25)
 		#1.25 is the arm factor of newWoman
 		stats.spikeHeight = stats.height * (1.33) + stats.verticalJump
-		stats.blockHeight = stats.height * (1.25) + stats.verticalJump
+		stats.blockHeight = stats.height * (1.2) + stats.verticalJump
 		stats.standingSetHeight = stats.height * 1.2
 		stats.jumpSetHeight = stats.standingSetHeight + stats.verticalJump
 		var age = 17 + randi()%28
@@ -488,7 +488,6 @@ func Populate(firstNames, lastNames, r):
 		var athlete = Athlete.new()
 		athlete.stats = stats
 		allPlayers.append(athlete)
-		
 		
 		#DateTime oldest = new DateTime(1975, 1, 1);
 

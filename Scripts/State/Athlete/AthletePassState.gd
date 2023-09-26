@@ -197,7 +197,7 @@ func PassBall(athlete:Athlete):
 		pass	
 	else:
 		ball.linear_velocity.y *= -1
-		ball.linear_velocity *= randf_range(0.5, 1.0)
+		ball.linear_velocity *= randf_range(0.4, 1.0)
 		
 		if Maths.BallMaxHeight(ball.position, ball.linear_velocity, 1.0) >= 2.4:
 			receptionTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 2.5, 1.0)

@@ -182,6 +182,14 @@ func ReactToSet(team:Team):
 			team.middleFront.moveTarget = Vector3(0.5, 0, clamp(otherTeam.setTarget.target.z, rightSideBlocker.moveTarget.z + 0.75, leftSideBlocker.moveTarget.z - 0.75))
 		else:
 			team.middleFront.moveTarget = Vector3(-0.5, 0, clamp(otherTeam.setTarget.target.z, leftSideBlocker.moveTarget.z + 0.75, rightSideBlocker.moveTarget.z - 0.75))
-
-
-
+	
+	else:
+		if team.middleFront.blockState.blockingTarget != otherTeam.chosenSpiker:
+			team.middleFront.blockState.blockingTarget = otherTeam.chosenSpiker
+			team.middleFront.blockState.blockState = team.middleFront.blockState.BlockState.Preparing
+			team.middleFront.blockState.isCommitBlocking = false
+			
+			if team.flip * otherTeam.chosenSpiker.setRequest.target.z >= 0:
+				team.middleFront.moveTarget = leftSideBlocker.moveTarget - team.flip * Vector3(0.5, 0, .75)
+			else:
+				team.middleFront.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0.5, 0, .75)

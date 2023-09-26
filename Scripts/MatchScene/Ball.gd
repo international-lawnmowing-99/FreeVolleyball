@@ -31,10 +31,11 @@ func _process(_delta):
 		floatDisplacement = Vector3.ZERO
 	mesh.position = lerp(mesh.position, floatDisplacement, _delta * 4.5)
 		
-#	if is_inside_tree() && _parented && _pseudoParent:
-#		position = _pseudoParent.global_transform.origin
-	#lads = Vector3(-0.5,2.5,0) - transform.origin
-	pass
+	if position.y < -10:
+		if wasLastTouchedByA:
+			mManager.PointToTeamB()
+		else:
+			mManager.PointToTeamA()
 	
 func _ready():
 	add_child(blockResolver)

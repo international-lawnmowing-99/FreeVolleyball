@@ -53,76 +53,61 @@ func Enter(athlete:Athlete):
 func Update(athlete:Athlete):
 	athlete.DontFallThroughFloor()
 	
+	
 	if blockingTarget:
+#		if athlete.team.isHuman && athlete == athlete.team.middleFront:
+#			Console.AddNewLine(blockingTarget.stats.lastName + " blocking target")
+		
 		athlete.leftIK.interpolation = lerp(athlete.leftIK.interpolation, 1.0, athlete.myDelta)
 		athlete.rightIK.interpolation = lerp(athlete.rightIK.interpolation, 1.0, athlete.myDelta)
-		if isCommitBlocking:
-			match blockState:
-				BlockState.Watching:
+
+		match blockState:
+			BlockState.Watching:
+				athlete.model.look_at(Maths.XZVector(athlete.ball.position), Vector3.UP, true)
+				
+				if isCommitBlocking:
 					if blockingTarget && (blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Runup || blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Jump):
 						blockState = BlockState.Preparing
-#						if athlete.role == Enums.Role.Middle && blockingTarget == athlete.team.defendState.otherTeam.middleFront:
-#							if athlete.team.isHuman:
-#								athlete.moveTarget = Vector3(.5, 0, blockingTarget.spikeState.takeOffXZ.z)
-#							else:
-#								athlete.moveTarget = Vector3(-.5, 0, blockingTarget.spikeState.takeOffXZ.z)
-				BlockState.Preparing:
+					
+			BlockState.Preparing:
 #					athlete.model.rotation.slerp(Vector3(0, -athlete.team.flip * PI/2, 0), athlete.myDelta * 10)
-					athlete.model.rotation.y = -athlete.team.flip * PI/2
-					#Perhaps adding a random offset would make this look less choreographed...
-					if !blockingTarget.rb.freeze && blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
-						Console.AddNewLine(athlete.stats.lastName + " jumps to block (commit)")
-						blockState = BlockState.Jump	
-						if athlete.rb.freeze:
-							athlete.rb.freeze = false
-							athlete.rb.gravity_scale = 1
-							athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
-				BlockState.Jump:
-					if blockingTarget.setRequest.target:
-						athlete.leftIKTarget.global_transform.origin = blockingTarget.setRequest.target
-						athlete.rightIKTarget.global_transform.origin = blockingTarget.setRequest.target
-					#if athlete.role == Enums.Role.Opposite:
-						#(str(blockingTarget.setRequest.target))
-						#print(str(athlete.rightIKTarget.position))
+				athlete.model.rotation.y = -athlete.team.flip * PI/2
+				#Perhaps adding a random offset would make this look less choreographed...
+				if athlete.rb.freeze && blockingTarget.spikeState.CalculateTimeTillSpike(blockingTarget) <= timeTillBlockPeak:
+					Console.AddNewLine(athlete.stats.lastName + " jumps to block (commit)")
+					blockState = BlockState.Jump	
 					
-					if athlete.position.y < 0.1 && athlete.rb.linear_velocity.y < 0:
-						blockState = BlockState.Watching
-						athlete.rb.freeze = true
-						athlete.position.y = 0
-						athlete.rb.gravity_scale = 0
-						athlete.ReEvaluateState()
+					athlete.rb.freeze = false
+					athlete.rb.gravity_scale = 1
+					athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
 
-		else:
-			# React Blocking
-			match blockState:
-				BlockState.Watching:
-					pass
-				BlockState.Preparing:
-					athlete.model.rotation.y = -athlete.team.flip * PI/2
-					if blockingTarget.setRequest.target:
-						athlete.leftIKTarget.global_transform.origin = blockingTarget.setRequest.target
-						athlete.rightIKTarget.global_transform.origin = blockingTarget.setRequest.target
-					#Perhaps adding a random offset would make this look less choreographed...
-					if !blockingTarget.rb.freeze && blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ) <=timeTillBlockPeak:
-						Console.AddNewLine(athlete.stats.lastName + " jumps to block (react)")
-						blockState = BlockState.Jump	
-						if athlete.rb.freeze:
-							athlete.rb.freeze = false
-							athlete.rb.gravity_scale = 1
-							athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
-				BlockState.Jump:
-					if blockingTarget.setRequest.target:
-						athlete.leftIKTarget.global_transform.origin = blockingTarget.setRequest.target
-						athlete.rightIKTarget.global_transform.origin = blockingTarget.setRequest.target
-					#if athlete.role == Enums.Role.Opposite:
-						#(str(blockingTarget.setRequest.target))
-						#print(str(athlete.rightIKTarget.position))
-					
-					if athlete.position.y < 0.1 && athlete.rb.linear_velocity.y < 0:
-						blockState = BlockState.Watching
-						athlete.rb.freeze = true
-						athlete.position.y = 0
-						athlete.rb.gravity_scale = 0
+			BlockState.Jump:
+				if blockingTarget.setRequest.target:
+					athlete.leftIKTarget.global_transform.origin = blockingTarget.setRequest.target
+					athlete.rightIKTarget.global_transform.origin = blockingTarget.setRequest.target
+				
+				if athlete.position.y < 0.1 && athlete.rb.linear_velocity.y < 0:
+					blockState = BlockState.Watching
+					athlete.rb.freeze = true
+					athlete.position.y = 0
+					athlete.rb.gravity_scale = 0
+					if isCommitBlocking && athlete.team.stateMachine.currentState == athlete.team.defendState:
+						if athlete == athlete.team.defendState.leftSideBlocker:
+							pass
+								
+						elif athlete == athlete.team.defendState.middleBlocker:
+							blockingTarget = athlete.team.defendState.otherTeam.chosenSpiker
+							if athlete.team.flip * blockingTarget.setRequest.target.z >= 0:
+								athlete.moveTarget = athlete.team.defendState.leftSideBlocker.moveTarget - athlete.team.flip * Vector3(0.5, 0, .75)
+							else:
+								athlete.moveTarget = athlete.team.defendState.rightSideBlocker.moveTarget + athlete.team.flip * Vector3(0.5, 0, .75)
+
+						elif athlete == athlete.team.defendState.rightSideBlocker:
+							pass
+							
+						else:
+							Console.AddNewLine("ERROR, blocker not found for reassignment after commit block", Color.CRIMSON)
+					else:
 						athlete.ReEvaluateState()
 #
 
@@ -154,7 +139,7 @@ func ConfirmCommitBlock(athlete:Athlete, otherTeam:Team):
 		Console.AddNewLine("The set will take place too far from the net for our tastes")
 		return
 	
-	var timeForTargetToReachJumpPeak:float = blockingTarget.CalculateTimeTillJumpPeak(blockingTarget.spikeState.takeOffXZ)
+	var timeForTargetToReachJumpPeak:float = blockingTarget.spikeState.CalculateTimeTillSpike(blockingTarget)
 	var timeToSetBlockingTarget:float = otherTeam.timeTillDigTarget
 	# Move to a more amenable position if applicable
 	

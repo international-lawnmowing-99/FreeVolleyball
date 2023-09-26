@@ -151,8 +151,8 @@ func Update(athlete:Athlete):
 				ServeType.Jump:
 					var runupLength = 2.75
 					var runup = Vector2(attackTarget.x - athlete.position.x, attackTarget.z - athlete.position.z).normalized() * runupLength
-
 					var jumpDistance = runup.normalized() * athlete.stats.verticalJump / 2
+
 
 
 					#ball.Unparent()
@@ -319,7 +319,10 @@ func ChooseServeAggression(aggression):
 		match serveType:
 			ServeType.Jump:
 				if serveAggression == ServeAggression.Aggressive:
-					serveTarget.position.x = randf_range(AGGRESSIVEJUMPBOUNDS[0] + 1 + serveInaccuracy, AGGRESSIVEJUMPBOUNDS[1] - serveInaccuracy)
+					# The current formula gives a max inaccuracy of 4 - so if the bounds are -10 and -6.25,
+					# then some of the time the range will reverse to (-6, -6.25) instead of (-10, -6.25)
+					# So a small number of serves will still land out
+					serveTarget.position.x = randf_range(AGGRESSIVEJUMPBOUNDS[0] + 1 + serveInaccuracy, AGGRESSIVEJUMPBOUNDS[1])
 					serveTarget.position.z = randf_range(AGGRESSIVEJUMPBOUNDS[2] + 0.5 + serveInaccuracy, AGGRESSIVEJUMPBOUNDS[3] - 0.5 - serveInaccuracy)
 				else:
 					serveTarget.position.x = randf_range(FLOATANDSOFTJUMPBOUNDS[0] + 1 + serveInaccuracy, FLOATANDSOFTJUMPBOUNDS[1] - serveInaccuracy)

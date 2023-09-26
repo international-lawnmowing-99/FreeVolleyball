@@ -222,26 +222,26 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	else:
 		furthestCourtPoint = Vector3(9 * -athlete.team.flip, 0, baselineZIntercept)
 	
-#	var spikeDepth:float = randf_range(0.1, 1.0)
-	
 	var u = 27.78 # 100 kph spike
 	var topspin = 7.0
 	
-	
-#	var furthestSpikeTargetAngle
-	
 	var lowestNetPass = Vector3(0, 2.43 + 0.35, b)
-	
+#	athlete.team.mManager.cylinder.position = lowestNetPass
 	var lowestPossibleSpike = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, lowestNetPass, u, false, topspin)
 
 	var closestPossibleSpikeTarget:Vector3 = Maths.BallPositionAtGivenHeight(athlete.setRequest.target, lowestPossibleSpike, 0, topspin)
-
 	
+	var spikeDepth:float = randf_range(0.03, .97)
 	athlete.ball.attackTarget = closestPossibleSpikeTarget
+
+	if -athlete.team.flip * furthestCourtPoint.x > -athlete.team.flip * closestPossibleSpikeTarget.x:
+		if closestPossibleSpikeTarget.z > -4.5 && closestPossibleSpikeTarget.z < 4.5:
+			athlete.ball.attackTarget = lerp(closestPossibleSpikeTarget, furthestCourtPoint, spikeDepth)
 	
 	athlete.team.mManager.sphere.position = closestPossibleSpikeTarget
-	athlete.team.mManager.cylinder.position = lowestNetPass
-	athlete.team.mManager.cube.position = furthestCourtPoint
+	athlete.team.mManager.cube.position = athlete.ball.attackTarget
+	athlete.team.mManager.cylinder.position = furthestCourtPoint
+
 #	athlete.ball.attackTarget = Maths.XZVector(lerp(athlete.ball.FindNetPass(), furthestCourtPoint, spikeDepth))
 
 #	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target)
@@ -249,7 +249,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 #	Console.AddNewLine(str("%.1f" % baselineZIntercept) + " baseline z intercept")
 	
 	var longestPossibleSpikeXZDistance = Maths.XZVector(athlete.setRequest.target).distance_to(furthestCourtPoint)
-	Console.AddNewLine(str("%.1f" % longestPossibleSpikeXZDistance) + " max possible spike distance")
+#	Console.AddNewLine(str("%.1f" % longestPossibleSpikeXZDistance) + " max possible spike distance")
 	
 	
 	# What is their preference as to hitting line or cross? 
@@ -269,27 +269,54 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 			if potentialBlocker.stats.blockHeight > blockMaximumHeight:
 				blockMaximumHeight = potentialBlocker.stats.blockHeight
 	
-	Console.AddNewLine("There are " + str(opposingBlockers.size()) + " blockers to contend with")
+	Console.AddNewLine("There are " + str(opposingBlockers.size()) + " blocker(s) to contend with")
 	for i in range (opposingBlockers.size()):
-		Console.AddNewLine(str(i + 1) + ": " + opposingBlockers[i].stats.lastName + " || " + str(opposingBlockers[i].stats.blockHeight * 100))
+		Console.AddNewLine(str(i + 1) + ": " + opposingBlockers[i].stats.lastName + " || " + str("%.0f"%(opposingBlockers[i].stats.blockHeight * 100)))
 	
 	
 	# Will the block unify into a double or triple, or will there be a big seam? 
 	var timeTillSpike = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, athlete.stats.spikeHeight, 1.0)
+	
 	# The block has no seam/minimal seam if the blockers can get to within 0.75 of each other
 	
 	# Who is the blocker that will set the block position? 
 	# If the ball is in the left third, their right, middle third: their middle obviously, ect
 	var mainBlocker:Athlete
+	var timeDelay = 0.05
 	if athlete.setRequest.target.z * athlete.team.flip > 1.5:
+		Console.AddNewLine("Set will be on the left from the team's perspective")
 		mainBlocker = otherTeam.defendState.rightSideBlocker
+		# Can they execute perfectly?
+		var rightBlockerTime = mainBlocker.moveTarget.distance_to(mainBlocker.position) / mainBlocker.stats.speed + mainBlocker.blockState.timeTillBlockPeak
+		
+		if rightBlockerTime <= timeTillSpike + timeDelay:
+			Console.AddNewLine("Other team's right blocker will be in position")
+		
+		var theirMiddle = otherTeam.defendState.middleBlocker
+		if theirMiddle.blockState.blockingTarget == athlete:
+			var middleBlockerTime = theirMiddle.moveTarget.distance_to(theirMiddle.position) / theirMiddle.stats.speed + theirMiddle.blockState.timeTillBlockPeak
+			if middleBlockerTime <= timeTillSpike + timeDelay:
+				Console.AddNewLine("Other team's middle will make a double block")
+			else:
+				Console.AddNewLine("Other team's middle will try to help, but won't close the seam")
+		else:
+			Console.AddNewLine("Middle not targetting spiker, nor should the left blocker really...")
+			
+		var theirLeft = otherTeam.defendState.leftSideBlocker
+		if theirLeft.blockState.blockingTarget == athlete:
+			var leftBlockerTime = theirLeft.moveTarget.distance_to(theirLeft.position) / theirLeft.stats.speed + theirLeft.blockState.timeTillBlockPeak
+			if leftBlockerTime <= timeTillSpike + timeDelay:
+				Console.AddNewLine("Other team's left blocker will make a triple block")
+			else:
+				Console.AddNewLine("Other team's left blocker will try to help, but won't close the seam")
+				
 	elif athlete.setRequest.target.z * athlete.team.flip > -1.5:
 		mainBlocker = otherTeam.defendState.middleBlocker
 	else:
 		mainBlocker = otherTeam.defendState.leftSideBlocker
 	
 	if mainBlocker in opposingBlockers:
-		Console.AddNewLine("The relevant blocker will be present", Color.PEACH_PUFF)
+#		Console.AddNewLine("The relevant blocker will be present", Color.PEACH_PUFF)
 		# We don't really know where the main blocker will set up their jump from
 		# But just assume for now
 		
@@ -309,7 +336,7 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightBlockLimit)) + " degrees to right block limit")
 		
 #		athlete.team.mManager.cube.position = Vector3(0, mainBlocker.stats.blockHeight, mainBlockerLeftBlockCoverageLimit)
-#		athlete.team.mManager.cylinder.position = Vector3(0, mainBlocker.stats.blockHeight, mainBlockerRightBlockCoverageLimit)
+#		athlete.team.mManager.sphere.position = Vector3(0, mainBlocker.stats.blockHeight, mainBlockerRightBlockCoverageLimit)
 	
 	
 	
@@ -319,3 +346,32 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 func ReadDefence(athlete:Athlete, otherTeam:Team):
 	Console.AddNewLine("Reading defence " + athlete.stats.lastName + " " + otherTeam.teamName)
 	
+func CalculateTimeTillSpike(athlete:Athlete):
+	var timeToGround:float = 0
+	var timeToRunupStart:float = 0
+	var runupTime:float = 0
+	var jumpTime:float
+	
+	if athlete.stateMachine.currentState != self:
+		if !athlete.rb.freeze && athlete.position.y > 0:
+			timeToGround = Maths.TimeTillBallReachesHeight(athlete.position, athlete.linear_velocity, 0, 1.0)
+
+	if spikeState == SpikeState.ChoiceConfirmed || spikeState == SpikeState.NotSpiking:
+		if runupStartPosition:
+			timeToRunupStart = Maths.XZVector(athlete.position).distance_to(runupStartPosition) / athlete.stats.speed
+			runupTime = runupStartPosition.distance_to(takeOffXZ) / athlete.stats.speed
+		
+	if spikeState == SpikeState.Runup:
+		runupTime = Maths.XZVector(athlete.position).distance_to(takeOffXZ) / athlete.stats.speed
+	
+	if spikeState == SpikeState.Jump:
+		if athlete.linear_velocity.y < 0:
+			jumpTime = -athlete.linear_velocity.y / athlete.g
+		else:
+			jumpTime = 0
+	else:
+		jumpTime = Maths.TimeTillBallReachesHeight(Vector3.UP * athlete.stats.verticalJump, Vector3.ZERO, 0, 1.0)
+		
+	var a = timeToGround + timeToRunupStart + runupTime + jumpTime
+#	Console.AddNewLine(str(a))
+	return a
