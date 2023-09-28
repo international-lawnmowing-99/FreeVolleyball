@@ -24,13 +24,13 @@ var isCommitBlocking:bool = false
 var blockState = BlockState.NotBlocking
 
 var blockingTarget:Athlete
-var timeTillBlockPeak:float
+var jumpTime:float
 
 func Enter(athlete:Athlete):
 	nameOfState="Block"
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
-	timeTillBlockPeak =  jumpYVel / athlete.g
+	jumpTime =  jumpYVel / athlete.g
 	blockState = BlockState.Watching
 	
 	if athlete.role == Enums.Role.Middle:
@@ -63,7 +63,7 @@ func Update(athlete:Athlete):
 
 		match blockState:
 			BlockState.Watching:
-				athlete.model.look_at(Maths.XZVector(athlete.ball.position), Vector3.UP, true)
+				athlete.model.look_at(Maths.XZVector(athlete.ball.position) + Vector3(0, athlete.position.y, 0), Vector3.UP, true)
 				
 				if isCommitBlocking:
 					if blockingTarget && (blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Runup || blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Jump):
@@ -73,7 +73,7 @@ func Update(athlete:Athlete):
 #					athlete.model.rotation.slerp(Vector3(0, -athlete.team.flip * PI/2, 0), athlete.myDelta * 10)
 				athlete.model.rotation.y = -athlete.team.flip * PI/2
 				#Perhaps adding a random offset would make this look less choreographed...
-				if athlete.rb.freeze && blockingTarget.spikeState.CalculateTimeTillSpike(blockingTarget) <= timeTillBlockPeak:
+				if athlete.rb.freeze && blockingTarget.spikeState.CalculateTimeTillSpike(blockingTarget) <= jumpTime:
 					Console.AddNewLine(athlete.stats.lastName + " jumps to block (commit)")
 					blockState = BlockState.Jump	
 					

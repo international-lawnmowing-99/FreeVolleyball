@@ -75,6 +75,7 @@ func SetBall(team:Team):
 #
 	if setExecution < errorThreshold:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " setting error", Color.BLUE)
+		team.ball.inPlay = false
 		team.ball.linear_velocity = Vector3.ZERO
 		team.Chill()
 		if team.isHuman:

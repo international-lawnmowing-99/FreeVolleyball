@@ -14,7 +14,7 @@ func Enter(_team:Team):
 func Update(team:Team):
 	team.UpdateTimeTillDigTarget()
 #	Console.AddNewLine(str((team.ball.position - team.chosenSpiker.setRequest.target).length()))
-	if !hit && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight:
+	if !hit &&team.ball.inPlay && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight:
 		SpikeBall(team)
 #		timeEnd = Time.get_unix_time_from_system()
 #		var timeElapsed = timeEnd - timeStart

@@ -238,9 +238,9 @@ func ChooseSpikingStrategy(athlete:Athlete):
 		if closestPossibleSpikeTarget.z > -4.5 && closestPossibleSpikeTarget.z < 4.5:
 			athlete.ball.attackTarget = lerp(closestPossibleSpikeTarget, furthestCourtPoint, spikeDepth)
 	
-	athlete.team.mManager.sphere.position = closestPossibleSpikeTarget
-	athlete.team.mManager.cube.position = athlete.ball.attackTarget
-	athlete.team.mManager.cylinder.position = furthestCourtPoint
+#	athlete.team.mManager.sphere.position = closestPossibleSpikeTarget
+#	athlete.team.mManager.cube.position = athlete.ball.attackTarget
+#	athlete.team.mManager.cylinder.position = furthestCourtPoint
 
 #	athlete.ball.attackTarget = Maths.XZVector(lerp(athlete.ball.FindNetPass(), furthestCourtPoint, spikeDepth))
 
@@ -260,6 +260,109 @@ func ChooseSpikingStrategy(athlete:Athlete):
 func ReadBlock(athlete:Athlete, otherTeam:Team):
 	var ball = athlete.ball
 	Console.AddNewLine("Reading block")
+	
+	var oppositionLeftBlocker = otherTeam.defendState.leftSideBlocker
+	var oppositionMiddleBlocker = otherTeam.defendState.middleBlocker
+	var oppositionRightBlocker = otherTeam.defendState.rightSideBlocker
+	
+	
+	var leftBlockerPossiblePosition
+	var middleBlockerPossiblePosition
+	var rightBlockerPossiblePosition
+	
+	var leftBlockerLeftCoverage
+	var leftBlockerRightCoverage
+	
+	var middleBlockerLeftCoverage
+	var middleBlockerRightCoverage
+	
+	var rightBlockerLeftCoverage
+	var rightBlockerRightCoverage
+	
+	var timeTillSpikeContact = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, athlete.stats.spikeHeight, 1.0)
+	
+	var timeDelay = athlete.myDelta * 5
+	
+	Console.AddNewLine("Assuming blocker will jump for max height at the time of spike contact")
+	
+	if athlete.setRequest.target.z * athlete.team.flip > 1.5:
+		Console.AddNewLine("Opposing right blocker will set block")
+		
+		if timeTillSpikeContact < oppositionRightBlocker.blockState.jumpTime:
+			# They've already jumped
+			Console.AddNewLine("Right blocker position set: has already jumped")
+			rightBlockerPossiblePosition = oppositionRightBlocker.position
+			rightBlockerLeftCoverage = oppositionRightBlocker.position.z + athlete.team.flip * oppositionRightBlocker.stats.height/3
+			rightBlockerRightCoverage = oppositionRightBlocker.position.z - athlete.team.flip * oppositionRightBlocker.stats.height/3
+			
+		else:
+			var moveTime = timeTillSpikeContact - oppositionRightBlocker.blockState.jumpTime
+			# assuming they're on the net already
+			var moveDistance = oppositionRightBlocker.stats.speed * moveTime
+			
+			rightBlockerPossiblePosition = oppositionRightBlocker.position + moveDistance * (oppositionRightBlocker.moveTarget - Maths.XZVector(oppositionRightBlocker.position))
+			
+			rightBlockerLeftCoverage = rightBlockerPossiblePosition.z + athlete.team.flip * oppositionRightBlocker.stats.height/3
+			rightBlockerRightCoverage = rightBlockerPossiblePosition.z - athlete.team.flip * oppositionRightBlocker.stats.height/3
+			
+
+			
+#		var rightBlockerTime = mainBlocker.moveTarget.distance_to(mainBlocker.position) / mainBlocker.stats.speed + mainBlocker.blockState.timeTillBlockPeak
+		
+#		if rightBlockerTime <= timeTillSpikeContact + timeDelay:
+#			Console.AddNewLine("Other team's right blocker will be in position")
+		
+		if oppositionMiddleBlocker.blockState.blockingTarget == athlete:
+			# Has the middle jumped on our middle?
+			var middleLandingTime = 0
+			if !oppositionMiddleBlocker.rb.freeze:
+				Console.AddNewLine("Opposition middle has already jumped")
+				middleLandingTime = Maths.TimeTillBallReachesHeight(oppositionMiddleBlocker.position, oppositionMiddleBlocker.linear_velocity, 0, 1.0)
+			
+			if timeTillSpikeContact < oppositionMiddleBlocker.blockState.jumpTime + middleLandingTime:
+				# The middle has already jumped, or won't land in time to jump again
+				middleBlockerPossiblePosition = oppositionMiddleBlocker.position
+				
+				middleBlockerLeftCoverage = oppositionMiddleBlocker.position.z + athlete.team.flip * oppositionMiddleBlocker.stats.height/3
+				middleBlockerRightCoverage = oppositionMiddleBlocker.position.z - athlete.team.flip * oppositionMiddleBlocker.stats.height/3
+				
+			else: 
+				var moveTime = timeTillSpikeContact - oppositionMiddleBlocker.blockState.jumpTime - middleLandingTime
+				# assuming they're on the net already
+				var moveDistance = oppositionMiddleBlocker.stats.speed * moveTime
+				
+				middleBlockerPossiblePosition = oppositionMiddleBlocker.position + moveDistance * (oppositionMiddleBlocker.moveTarget - Maths.XZVector(oppositionMiddleBlocker.position))
+				
+				middleBlockerLeftCoverage = middleBlockerPossiblePosition.z + athlete.team.flip * oppositionMiddleBlocker.stats.height/3
+				middleBlockerRightCoverage = middleBlockerPossiblePosition.z - athlete.team.flip * oppositionMiddleBlocker.stats.height/3
+	
+			athlete.team.mManager.cube.position = Vector3(0, oppositionMiddleBlocker.stats.blockHeight, middleBlockerLeftCoverage)
+			athlete.team.mManager.sphere.position = Vector3(0, oppositionMiddleBlocker.stats.blockHeight, middleBlockerRightCoverage)
+#			var middleBlockerTime = theirMiddle.moveTarget.distance_to(theirMiddle.position) / theirMiddle.stats.speed + theirMiddle.blockState.jumpTime
+#			if middleBlockerTime <= timeTillSpikeContact + timeDelay:
+#				Console.AddNewLine("Other team's middle will make a double block")
+#			else:
+#				Console.AddNewLine("Other team's middle will try to help, but won't close the seam")
+		else:
+			Console.AddNewLine("Middle not targetting spiker, nor should the left blocker really...")
+			
+		var theirLeft = otherTeam.defendState.leftSideBlocker
+		if theirLeft.blockState.blockingTarget == athlete:
+			var leftBlockerTime = theirLeft.moveTarget.distance_to(theirLeft.position) / theirLeft.stats.speed + theirLeft.blockState.jumpTime
+			if leftBlockerTime <= timeTillSpikeContact + timeDelay:
+				Console.AddNewLine("Other team's left blocker will make a triple block")
+			else:
+				Console.AddNewLine("Other team's left blocker will try to help, but won't close the seam")
+				
+	elif athlete.setRequest.target.z * athlete.team.flip > -1.5:
+		Console.AddNewLine("Opposing middle will set block")
+	else:
+		Console.AddNewLine("Opposing left blocker will set block")
+
+	
+	
+	
+	
 	var blockMaximumHeight:float = 0
 	var ballRadius:float = 0.13
 	var opposingBlockers:Array = []
@@ -275,46 +378,15 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 	
 	
 	# Will the block unify into a double or triple, or will there be a big seam? 
-	var timeTillSpike = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, athlete.stats.spikeHeight, 1.0)
+#	var timeBetweenSpikeAndNetCross = 
+	
 	
 	# The block has no seam/minimal seam if the blockers can get to within 0.75 of each other
 	
 	# Who is the blocker that will set the block position? 
-	# If the ball is in the left third, their right, middle third: their middle obviously, ect
+	# If the ball is in the left third, their right blocker, middle third: their middle obviously, etc
 	var mainBlocker:Athlete
-	var timeDelay = 0.05
-	if athlete.setRequest.target.z * athlete.team.flip > 1.5:
-		Console.AddNewLine("Set will be on the left from the team's perspective")
-		mainBlocker = otherTeam.defendState.rightSideBlocker
-		# Can they execute perfectly?
-		var rightBlockerTime = mainBlocker.moveTarget.distance_to(mainBlocker.position) / mainBlocker.stats.speed + mainBlocker.blockState.timeTillBlockPeak
 		
-		if rightBlockerTime <= timeTillSpike + timeDelay:
-			Console.AddNewLine("Other team's right blocker will be in position")
-		
-		var theirMiddle = otherTeam.defendState.middleBlocker
-		if theirMiddle.blockState.blockingTarget == athlete:
-			var middleBlockerTime = theirMiddle.moveTarget.distance_to(theirMiddle.position) / theirMiddle.stats.speed + theirMiddle.blockState.timeTillBlockPeak
-			if middleBlockerTime <= timeTillSpike + timeDelay:
-				Console.AddNewLine("Other team's middle will make a double block")
-			else:
-				Console.AddNewLine("Other team's middle will try to help, but won't close the seam")
-		else:
-			Console.AddNewLine("Middle not targetting spiker, nor should the left blocker really...")
-			
-		var theirLeft = otherTeam.defendState.leftSideBlocker
-		if theirLeft.blockState.blockingTarget == athlete:
-			var leftBlockerTime = theirLeft.moveTarget.distance_to(theirLeft.position) / theirLeft.stats.speed + theirLeft.blockState.timeTillBlockPeak
-			if leftBlockerTime <= timeTillSpike + timeDelay:
-				Console.AddNewLine("Other team's left blocker will make a triple block")
-			else:
-				Console.AddNewLine("Other team's left blocker will try to help, but won't close the seam")
-				
-	elif athlete.setRequest.target.z * athlete.team.flip > -1.5:
-		mainBlocker = otherTeam.defendState.middleBlocker
-	else:
-		mainBlocker = otherTeam.defendState.leftSideBlocker
-	
 	if mainBlocker in opposingBlockers:
 #		Console.AddNewLine("The relevant blocker will be present", Color.PEACH_PUFF)
 		# We don't really know where the main blocker will set up their jump from
@@ -335,13 +407,12 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftBlockLimit)) + " degrees to left block limit")
 		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightBlockLimit)) + " degrees to right block limit")
 		
-#		athlete.team.mManager.cube.position = Vector3(0, mainBlocker.stats.blockHeight, mainBlockerLeftBlockCoverageLimit)
-#		athlete.team.mManager.sphere.position = Vector3(0, mainBlocker.stats.blockHeight, mainBlockerRightBlockCoverageLimit)
+
 	
 	
 	
-	if athlete.stats.spikeHeight - ballRadius > blockMaximumHeight:
-		Console.AddNewLine("Spiker will OTT block")
+#	if athlete.stats.spikeHeight - ballRadius > blockMaximumHeight:
+#		Console.AddNewLine("Spiker will OTT block")
 	
 func ReadDefence(athlete:Athlete, otherTeam:Team):
 	Console.AddNewLine("Reading defence " + athlete.stats.lastName + " " + otherTeam.teamName)
@@ -352,11 +423,10 @@ func CalculateTimeTillSpike(athlete:Athlete):
 	var runupTime:float = 0
 	var jumpTime:float
 	
-	if athlete.stateMachine.currentState != self:
+	if athlete.stateMachine.currentState != self || spikeState == SpikeState.ChoiceConfirmed || spikeState == SpikeState.NotSpiking:
 		if !athlete.rb.freeze && athlete.position.y > 0:
 			timeToGround = Maths.TimeTillBallReachesHeight(athlete.position, athlete.linear_velocity, 0, 1.0)
 
-	if spikeState == SpikeState.ChoiceConfirmed || spikeState == SpikeState.NotSpiking:
 		if runupStartPosition:
 			timeToRunupStart = Maths.XZVector(athlete.position).distance_to(runupStartPosition) / athlete.stats.speed
 			runupTime = runupStartPosition.distance_to(takeOffXZ) / athlete.stats.speed
@@ -365,10 +435,13 @@ func CalculateTimeTillSpike(athlete:Athlete):
 		runupTime = Maths.XZVector(athlete.position).distance_to(takeOffXZ) / athlete.stats.speed
 	
 	if spikeState == SpikeState.Jump:
-		if athlete.linear_velocity.y < 0:
-			jumpTime = -athlete.linear_velocity.y / athlete.g
+		if !athlete.rb.freeze:
+			if athlete.linear_velocity.y < 0:
+				jumpTime = -athlete.linear_velocity.y / athlete.g
+			else:
+				jumpTime = 0
 		else:
-			jumpTime = 0
+			jumpTime = Maths.TimeTillBallReachesHeight(Vector3.UP * athlete.stats.verticalJump, Vector3.ZERO, 0, 1.0)
 	else:
 		jumpTime = Maths.TimeTillBallReachesHeight(Vector3.UP * athlete.stats.verticalJump, Vector3.ZERO, 0, 1.0)
 		
