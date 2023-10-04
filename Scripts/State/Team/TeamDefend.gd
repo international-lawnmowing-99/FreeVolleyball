@@ -149,13 +149,19 @@ func ReactToSet(team:Team):
 			if otherTeam.setTarget.target.z >= 0:
 				leftSideBlocker.moveTarget = Vector3(0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z))
 			else:
-				leftSideBlocker.moveTarget = Vector3(0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z) + 1.5)
+				if middleBlocker.rb.freeze:
+					leftSideBlocker.moveTarget = Vector3(0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z) + 1.5)
+				else:
+					leftSideBlocker.stateMachine.SetCurrentState(leftSideBlocker.chillState)
 		else:
 			if otherTeam.setTarget.target.z <= 0:
 				leftSideBlocker.moveTarget = Vector3(-0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z))
 			else:
-				leftSideBlocker.moveTarget = Vector3(-0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z) - 1.5)
-	
+				if middleBlocker.rb.freeze:
+					leftSideBlocker.moveTarget = Vector3(-0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z) - 1.5)
+				else:
+					leftSideBlocker.stateMachine.SetCurrentState(leftSideBlocker.chillState)
+		
 	
 	if !rightSideBlocker.blockState.isCommitBlocking:
 		
@@ -166,12 +172,20 @@ func ReactToSet(team:Team):
 			if otherTeam.setTarget.target.z <= 0:
 				rightSideBlocker.moveTarget = Vector3(0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z))
 			else:
-				rightSideBlocker.moveTarget = Vector3(0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z) - 1.5)
+				if middleBlocker.rb.freeze:
+					rightSideBlocker.moveTarget = Vector3(0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z) - 1.5)
+				else:
+					rightSideBlocker.stateMachine.SetCurrentState(rightSideBlocker.chillState)
+
 		else:
 			if otherTeam.setTarget.target.z >= 0:
 				rightSideBlocker.moveTarget = Vector3(-0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z))
+
 			else:
-				rightSideBlocker.moveTarget = Vector3(-0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z) + 1.5)
+				if middleBlocker.rb.freeze:
+					rightSideBlocker.moveTarget = Vector3(-0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z) + 1.5)
+				else:
+					rightSideBlocker.stateMachine.SetCurrentState(rightSideBlocker.chillState)
 	
 	if !team.middleFront.blockState.isCommitBlocking:
 		
