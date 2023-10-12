@@ -444,7 +444,7 @@ func AttemptBlock(spiker:Athlete):
 
 	#the height of the ball over the net
 	
-	var netPass = ball.FindNetPass()
+	var netPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, 7.0)
 	
 	if netPass.y - highestBlockHeight > 0.3:
 		Console.AddNewLine("OTT!!!", Color.AZURE)
@@ -469,8 +469,8 @@ func Populate(firstNames, lastNames, r):
 		stats.block = skill + randf_range(0,25) + randf_range(0,25)
 		stats.set = skill + randf_range(0,25) + randf_range(0,25)
 		stats.spike = skill + randf_range(0,25) + randf_range(0,25)
-		stats.verticalJump = randf_range(0,1.5) + randf_range(.1,.5) + randf_range(.1,.5) + 1.5
-		stats.height = randf_range(.25,.6) + randf_range(.25,.6) #+ randf_range(.35,.6) + randf_range(.35,.6)
+		stats.verticalJump = randf_range(0.1, .5) + randf_range(.1,.5) + randf_range(.1,.5) + randf_range(.35,.6)
+		stats.height = randf_range(.25,.6) + randf_range(.25,.6) + randf_range(.35,.6)# + randf_range(.35,.6)
 		stats.speed = randf_range(5.5,7.5)
 		stats.dump = skill + randf_range(0,25) + randf_range(0,25)
 		#1.25 is the arm factor of newWoman
@@ -479,10 +479,10 @@ func Populate(firstNames, lastNames, r):
 		stats.standingSetHeight = stats.height * 1.2
 		stats.jumpSetHeight = stats.standingSetHeight + stats.verticalJump
 		var age = 17 + randi()%28
-		print(str(age))
+
 		stats.dob["year"] = 2023 - age
 		stats.gameRead = skill/50.0 +  randf()/2.0 * age/(17.0+28.0)
-		print(str(stats.gameRead))
+
 		#stats.shirtNumber = shirtNumbers[j];
 		#stats.image = images[j];
 		var athlete = Athlete.new()

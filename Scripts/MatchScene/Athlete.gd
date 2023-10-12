@@ -148,6 +148,7 @@ func DontFallThroughFloor():
 		position.y = 0
 		#athlete.rotation = Vector3.ZERO
 		rb.angular_velocity = Vector3.ZERO
+#		Console.AddNewLine("Don't fall through floor " + stats.lastName)
 
 func Move(delta):
 	# For the future - measure the length, use it to determine if you should strafe or turn
@@ -266,7 +267,7 @@ func BaseMove(_delta):
 		if stateMachine.currentState != passState:
 			if abs(position.x - moveTarget.x) > .3 && abs(position.z - moveTarget.z) > .3:
 				model.look_at_from_position(Maths.XZVector(position), moveTarget, Vector3.UP, true)
-	elif position != moveTarget && position.distance_to(moveTarget) <= MoveDistanceDelta:
+	elif rb.freeze && position != moveTarget && position.distance_to(moveTarget) <= MoveDistanceDelta:
 		position = moveTarget
 			
 func ReEvaluateState():

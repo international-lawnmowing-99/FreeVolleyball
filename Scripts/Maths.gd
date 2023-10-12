@@ -199,3 +199,15 @@ func SetTimeWellBehavedParabola(startPos:Vector3, endPos:Vector3, maxHeight:floa
 	var timeToPeak = setVelocity.y / gravity
 	var timeDown = sqrt(2 * gravity * abs(maxHeight - endPos.y))/gravity
 	return timeToPeak + timeDown
+	
+func FindNetPass(startPos:Vector3, attackTarget:Vector3, linear_velocity:Vector3, gravity_scale:float)->Vector3:
+	var g = gravity * gravity_scale
+	var distanceFactor = startPos.x / (abs(startPos.x) + abs(attackTarget.x))
+	if startPos.x < 0:
+		distanceFactor *= -1
+
+	var netPass:Vector3 = startPos + (attackTarget - startPos) * distanceFactor
+	var timeTillNet = abs(startPos.x/linear_velocity.x)
+	netPass.y = startPos.y + linear_velocity.y * timeTillNet + .5 * - g * timeTillNet * timeTillNet
+	
+	return netPass

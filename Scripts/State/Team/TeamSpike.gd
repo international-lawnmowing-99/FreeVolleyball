@@ -72,7 +72,7 @@ func SpikeBall(team:Team):
 			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 7.0)
 			await team.get_tree().process_frame
 			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 7.0)
-			var realNetPass = ball.FindNetPass()
+			var realNetPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, 7.0)
 			Console.AddNewLine("Net Pass: " + str(realNetPass))
 		else:
 			Console.AddNewLine("Ball will clip net if hit at that speed, finding easy parabola")

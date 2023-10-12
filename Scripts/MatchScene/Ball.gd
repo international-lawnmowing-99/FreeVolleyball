@@ -96,6 +96,10 @@ func PretendToBeParented(node):
 #		return yVel / g + sqrt(2 * g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / g
 
 func Serve(startPos, _attackTarget, serveHeight, _topspin):
+	mManager.cube.position = Vector3.ZERO
+	mManager.sphere.position = Vector3.ZERO
+	mManager.cylinder.position = Vector3.ZERO
+	
 	topspin = _topspin
 	var visualTopspin = topspin - 1
 	gravity_scale = topspin
@@ -115,8 +119,8 @@ func Serve(startPos, _attackTarget, serveHeight, _topspin):
 		impulse = Maths.FindParabolaForGivenSpeed(startPos, _attackTarget, (MAX_SERVE_SPEED - randf_range(0,10))/3.6, false, topspin)
 		linear_velocity = impulse
 		attackTarget = _attackTarget
-		print("SERVE TOO FAST, New net pass: " + str(FindNetPass()))
-		if FindNetPass().y< 2.5:
+		print("SERVE TOO FAST, New net pass: " + str(Maths.FindNetPass(position, attackTarget, linear_velocity, gravity_scale)))
+		if Maths.FindNetPass(position, attackTarget, linear_velocity, gravity_scale).y< 2.5:
 			print("serve hits net")
 			Console.AddNewLine("Serve hits net!!!!!!!", Color.BLUE_VIOLET)
 		print(str(impulse.length() * 3.6))
@@ -135,15 +139,3 @@ func TouchedByB():
 	
 func TouchedByA():
 	wasLastTouchedByA = true
-
-func FindNetPass()->Vector3:
-	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
-	var distanceFactor = position.x / (abs(position.x) + abs(attackTarget.x))
-	if position.x < 0:
-		distanceFactor *= -1
-
-	var netPass:Vector3 = position + (attackTarget - position) * distanceFactor
-	var timeTillNet = abs(position.x/linear_velocity.x)
-	netPass.y = position.y + linear_velocity.y * timeTillNet + .5 * - g * timeTillNet * timeTillNet
-	
-	return netPass

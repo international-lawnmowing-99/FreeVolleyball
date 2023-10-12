@@ -148,11 +148,12 @@ limits/debugger_stdout/max_chars_per_second=16384
 
 [physics]
 
-3d/physics_engine="Bullet"
 3d/default_linear_damp=0.0
 3d/default_angular_damp=0.0
+3d/sleep_threshold_linear=0.0
+3d/sleep_threshold_angular=0.0
+3d/time_before_sleep=0.0
 common/enable_object_picking=false
-common/physics_fps=180
 
 [rendering]
 
