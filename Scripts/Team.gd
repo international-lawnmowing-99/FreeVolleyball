@@ -470,7 +470,7 @@ func Populate(firstNames, lastNames, r):
 		stats.set = skill + randf_range(0,25) + randf_range(0,25)
 		stats.spike = skill + randf_range(0,25) + randf_range(0,25)
 		stats.verticalJump = randf_range(0.1, .5) + randf_range(.1,.5) + randf_range(.1,.5) + randf_range(.35,.6)
-		stats.height = randf_range(.25,.6) + randf_range(.25,.6) + randf_range(.35,.6)# + randf_range(.35,.6)
+		stats.height = randf_range(.25,.6) + randf_range(.25,.6) + randf_range(.35,.6) + randf_range(.35,.6)
 		stats.speed = randf_range(5.5,7.5)
 		stats.dump = skill + randf_range(0,25) + randf_range(0,25)
 		#1.25 is the arm factor of newWoman

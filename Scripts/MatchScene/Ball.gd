@@ -29,6 +29,7 @@ func _process(_delta):
 	floatDisplacement = lerp(floatDisplacement, Vector3.ZERO, _delta /min(.1,abs(position.y - 0.5)))
 	if position.y <= 0.5:
 		floatDisplacement = Vector3.ZERO
+		floating = false
 	mesh.position = lerp(mesh.position, floatDisplacement, _delta * 4.5)
 		
 	if position.y < -10:

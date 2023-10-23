@@ -375,7 +375,7 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 			Console.AddNewLine("Opposition middle has already jumped")
 			middleLandingTime = Maths.TimeTillBallReachesHeight(oppositionMiddleBlocker.position, oppositionMiddleBlocker.linear_velocity, 0, 1.0)
 			
-		if timeTillSpikeContact < oppositionMiddleBlocker.blockState.jumpTime:
+		if timeTillSpikeContact < oppositionMiddleBlocker.blockState.jumpTime + middleLandingTime:
 #			Console.AddNewLine("Middle position set: has already jumped")
 				middleBlockerPossiblePosition = oppositionMiddleBlocker.position
 				
@@ -544,7 +544,7 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 		Console.AddNewLine("Middle and right blocker seam")	
 		
 	if leftOverlap && rightOverlap:
-		Console.AddNewLine("Triple Block!", Color.DARK_TURQUOISE)
+		Console.AddNewLine("Triple Block! (Predicted)", Color.DARK_TURQUOISE)
 #	var blockMaximumHeight:float = 0
 #	var ballRadius:float = 0.13
 #	var opposingBlockers:Array = []
