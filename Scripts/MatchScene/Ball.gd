@@ -41,9 +41,6 @@ func _process(_delta):
 func _ready():
 	add_child(blockResolver)
 	#DebugOverlay.draw.add_vector(self, "lads", 1, 4, Color(0,1,1, 0.5))
-	for i in range(10):
-		#var velocity = CalculateBallOverNetVelocity(Vector3(i,
-		pass
 	
 func _on_ball_body_entered(body):
 	gravity_scale = 1

@@ -453,7 +453,7 @@ func AttemptBlock(spiker:Athlete):
 		mManager.BallOverNet(!isHuman)
 		return
 	
-	ball.blockResolver.AddUpcomingBlock(isHuman, blockers, spiker)
+	ball.blockResolver.AddUpcomingBlock(!isHuman, blockers, spiker)
 	
 	pass
 
@@ -474,7 +474,7 @@ func Populate(firstNames, lastNames, r):
 		stats.speed = randf_range(5.5,7.5)
 		stats.dump = skill + randf_range(0,25) + randf_range(0,25)
 		#1.25 is the arm factor of newWoman
-		stats.spikeHeight = stats.height * (1.33) + stats.verticalJump
+		stats.spikeHeight = stats.height * (1.25) + stats.verticalJump
 		stats.blockHeight = stats.height * (1.2) + stats.verticalJump
 		stats.standingSetHeight = stats.height * 1.2
 		stats.jumpSetHeight = stats.standingSetHeight + stats.verticalJump

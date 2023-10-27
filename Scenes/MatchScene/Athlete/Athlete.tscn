@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://ccxj5nay244v5"]
+[gd_scene load_steps=10 format=3 uid="uid://ccxj5nay244v5"]
 
 [ext_resource type="Script" path="res://Scripts/MatchScene/Athlete.gd" id="1_og5ci"]
 [ext_resource type="PackedScene" uid="uid://budp0wjekefpk" path="res://Scenes/new new woman import.tscn" id="2"]
@@ -7,12 +7,21 @@
 [sub_resource type="SystemFont" id="SystemFont_pets7"]
 font_names = PackedStringArray("Times New Roman")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqlbm"]
-transparency = 1
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x5vew"]
 albedo_color = Color(1, 1, 0, 1)
 
+[sub_resource type="SphereMesh" id="SphereMesh_x4sb3"]
+material = SubResource("StandardMaterial3D_x5vew")
+radius = 0.05
+height = 0.1
+radial_segments = 5
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_frb0v"]
+albedo_color = Color(0, 1, 0, 1)
+
 [sub_resource type="SphereMesh" id="3"]
-material = SubResource("StandardMaterial3D_gqlbm")
+material = SubResource("StandardMaterial3D_frb0v")
 radius = 0.05
 height = 0.1
 radial_segments = 5
@@ -41,9 +50,11 @@ Text"
 scroll_active = false
 
 [node name="Debug" type="CSGMesh3D" parent="."]
-mesh = SubResource("3")
+visible = false
+mesh = SubResource("SphereMesh_x4sb3")
 
 [node name="Debug2" type="CSGMesh3D" parent="."]
+visible = false
 mesh = SubResource("3")
 
 [node name="CollisionPolygon3D" type="CollisionShape3D" parent="."]

@@ -26,17 +26,15 @@ var rightBlockerLeftCoverage
 var rightBlockerRightCoverage
 
 func Enter(athlete:Athlete):
-#	athlete.get_node("Debug").global_transform.origin = Vector3.ZERO
-	athlete.get_node("Debug").position.y = athlete.position.y + athlete.stats.height * 1.33
+	athlete.debug1.position.y = athlete.position.y + athlete.stats.height * 1.25
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	nameOfState="Spike"
 	if !athlete.setRequest:
 		print(athlete.stats.lastName + ": " + Enums.Role.keys()[athlete.role])
 		athlete.setRequest = athlete.middleSpikes[0]
 	CalculateTakeOffXZ(athlete)
-#	athlete.CalculateTimeTillJumpPeak(takeOffXZ)
 	spikeState = SpikeState.ChoiceConfirmed
-	pass
+
 func Update(athlete:Athlete):
 	#if athlete.team.flip == 1 && athlete.rotationPosition == 2:
 		#print(spikeState)

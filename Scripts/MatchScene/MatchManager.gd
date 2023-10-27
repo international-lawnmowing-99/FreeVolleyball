@@ -41,6 +41,7 @@ func _ready():
 	newMatch.ChooseRandom(gameWorld)
 	
 	ball.mManager = self
+	ball.blockResolver.mManager = self
 	
 	teamA.isHuman = true
 	teamB.isHuman = false
@@ -229,3 +230,13 @@ func UnPause():
 	Engine.time_scale = 1
 	isPaused = false
 	Console.AddNewLine("Game unpaused")
+
+func BallBlocked(spikedByA:bool):
+	await get_tree().create_timer(.25).timeout
+	
+	if spikedByA:
+		teamA.stateMachine.SetCurrentState(teamA.receiveState)
+		teamB.stateMachine.SetCurrentState(teamB.defendState)
+	else:
+		teamB.stateMachine.SetCurrentState(teamB.receiveState)
+		teamA.stateMachine.SetCurrentState(teamA.defendState)

@@ -27,6 +27,8 @@ var blockingTarget:Athlete
 var jumpTime:float
 
 func Enter(athlete:Athlete):
+	athlete.debug1.visible = true
+	athlete.debug2.visible = true
 	nameOfState="Block"
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
@@ -45,21 +47,24 @@ func Enter(athlete:Athlete):
 	
 	athlete.leftIK.start()
 	athlete.rightIK.start()
-	athlete.leftIK.interpolation = 0
-	athlete.rightIK.interpolation = 0
-	athlete.leftIKTarget.position = Vector3(athlete.team.flip * 0.5, 2, athlete.position.z)
-	athlete.rightIKTarget.position = Vector3(athlete.team.flip * 0.5, 2, athlete.position.z)
+	athlete.leftIK.interpolation = 1.0
+	athlete.rightIK.interpolation = 1.0
+#	athlete.leftIKTarget.position = athlete.position# + athlete.model.transform.basis.x/4.0# + Vector3.UP * 2 + athlete.model.transform.basis.z
+#	athlete.rightIKTarget.position = athlete.position# - athlete.model.transform.basis.x/4.0# + Vector3.UP * 2 + athlete.model.transform.basis.z
 	
 func Update(athlete:Athlete):
 	athlete.DontFallThroughFloor()
 	
 	
 	if blockingTarget:
+		athlete.leftIKTarget.global_transform.origin = athlete.model.position + athlete.model.transform.basis.x/4.0 + Vector3.UP * 2 + athlete.model.transform.basis.z
+		athlete.rightIKTarget.global_transform.origin = athlete.model.position + - athlete.model.transform.basis.x/4.0 + Vector3.UP * 2 + athlete.model.transform.basis.z
+
 #		if athlete.team.isHuman && athlete == athlete.team.middleFront:
 #			Console.AddNewLine(blockingTarget.stats.lastName + " blocking target")
 		
-		athlete.leftIK.interpolation = lerp(athlete.leftIK.interpolation, 1.0, athlete.myDelta)
-		athlete.rightIK.interpolation = lerp(athlete.rightIK.interpolation, 1.0, athlete.myDelta)
+#		athlete.leftIK.interpolation = lerp(athlete.leftIK.interpolation, 1.0, athlete.myDelta)
+#		athlete.rightIK.interpolation = lerp(athlete.rightIK.interpolation, 1.0, athlete.myDelta)
 
 		match blockState:
 			BlockState.Watching:
@@ -73,7 +78,8 @@ func Update(athlete:Athlete):
 #					athlete.model.rotation.slerp(Vector3(0, -athlete.team.flip * PI/2, 0), athlete.myDelta * 10)
 				athlete.model.rotation.y = -athlete.team.flip * PI/2
 				#Perhaps adding a random offset would make this look less choreographed...
-				if athlete.rb.freeze && blockingTarget.spikeState.CalculateTimeTillSpike(blockingTarget) <= jumpTime:
+				var timeFromSpikeToNet = blockingTarget.setRequest.target.x/25
+				if athlete.rb.freeze && blockingTarget.spikeState.CalculateTimeTillSpike(blockingTarget) + timeFromSpikeToNet <= jumpTime:
 					Console.AddNewLine(athlete.stats.lastName + " jumps to block (commit)")
 					blockState = BlockState.Jump	
 					
@@ -119,9 +125,14 @@ func Update(athlete:Athlete):
 #		athlete.moveTarget = athlete.team.CheckIfFlipped(Vector3(0.5, 0, blockingTarget.setRequest.target.z))
 #		pass
 
+		athlete.debug1.global_transform.origin = athlete.leftIKTarget.global_transform.origin
+		athlete.debug2.global_transform.origin = athlete.rightIKTarget.global_transform.origin
+		
 func Exit(athlete:Athlete):
 	athlete.leftIK.stop()
 	athlete.rightIK.stop()
+	athlete.debug1.visible = false
+	athlete.debug2.visible = false
 	pass
 
 func ConfirmCommitBlock(athlete:Athlete, otherTeam:Team):

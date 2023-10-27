@@ -6,11 +6,13 @@ var blockers:Array
 var ball:Ball
 var spiker:Athlete
 var netPass:Vector3
+var mManager:MatchManager
 
 func KillBlock():
 	ball.linear_velocity.x *= -1
 	randomize()
 	ball.linear_velocity *= randf_range(.5,.9)
+	ball.linear_velocity.y *= 2.0
 	ball.gravity_scale = 1.0
 	ball.topspin = 1.0
 	ball.attackTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0, 1.0)
@@ -20,7 +22,13 @@ func KillBlock():
 		ball.TouchedByB()
 	else:
 		ball.TouchedByA()
-	pass
+	if ball.linear_velocity.length() * 3.6 > 100:
+		Console.AddNewLine("Extreme Kill Block! Added velocity.......", Color.RED)
+		Console.AddNewLine("Kill Block! Ball speed: " + str(ball.linear_velocity.length() * 3.6) + " kph", Color.RED)
+		Console.AddNewLine("Kill Block! Ball speed: " + str(ball.linear_velocity.length() * 3.6) + " kph", Color.WHITE)
+		Console.AddNewLine("Kill Block! Ball speed: " + str(ball.linear_velocity.length() * 3.6) + " kph", Color.BLUE)
+	
+	mManager.BallBlocked(spikedByA)
 	
 func ReflectBlock():
 	pass
@@ -35,18 +43,15 @@ func BlockFault():
 	pass
 	
 func _init(_ball:Ball):
-
-
 	ball = _ball
-	pass
 
 func _physics_process(_delta: float) -> void:
 	if ball.blockWillBeAttempted:
-		if spikedByA:
-			if ball.position.x >= 0:
+		if !spikedByA:
+			if ball.position.x >= -0.25:
 				ResolveBlock()
 		else:
-			if ball.position.x <= 0:
+			if ball.position.x <= 0.25:
 				ResolveBlock()
 	pass
 

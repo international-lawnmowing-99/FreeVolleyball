@@ -1,19 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://budp0wjekefpk"]
+[gd_scene load_steps=4 format=3 uid="uid://budp0wjekefpk"]
 
 [ext_resource type="PackedScene" uid="uid://cghu1tykr381r" path="res://Models/new new woman/new new woman.glb" id="1"]
 [ext_resource type="Script" path="res://Scenes/new new woman import.gd" id="2"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://ow68ywnb7vxl" path="res://Models/new new woman/new new woman AnimTree.tres" id="3"]
-[ext_resource type="Texture2D" uid="uid://h58y4c67vtyb" path="res://Models/BasicSeat_church_bricks_02_diff_png_1k.png" id="4_x5ukq"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_3pe10"]
-top_radius = 0.66
-bottom_radius = 0.66
-height = 0.02
-radial_segments = 20
-rings = 1
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3nv2i"]
-albedo_texture = ExtResource("4_x5ukq")
 
 [node name="new new woman import" instance=ExtResource("1")]
 script = ExtResource("2")
@@ -110,9 +99,3 @@ parameters/MoveTree/blend_position = Vector2(-0.00103843, 0.0133843)
 parameters/state/current_state = "moving"
 parameters/state/transition_request = ""
 parameters/state/current_index = 0
-
-[node name="Block area" type="CSGMesh3D" parent="." index="6"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.91085, 0.382241)
-visible = false
-mesh = SubResource("CylinderMesh_3pe10")
-material = SubResource("StandardMaterial3D_3nv2i")
