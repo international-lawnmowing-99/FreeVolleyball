@@ -444,7 +444,7 @@ func AttemptBlock(spiker:Athlete):
 
 	#the height of the ball over the net
 	
-	var netPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, 7.0)
+	var netPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, 3.0)
 	
 	if netPass.y - highestBlockHeight > 0.3:
 		Console.AddNewLine("OTT!!!", Color.AZURE)

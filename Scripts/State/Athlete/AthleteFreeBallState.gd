@@ -12,7 +12,7 @@ func Update(athlete:Athlete):
 		athlete.ball.attackTarget = Vector3(athlete.team.flip * randf_range(-2,-9), 0, randf_range(-4.5, 4.5))
 		athlete.ball.linear_velocity = Maths.CalculateBallOverNetVelocity(athlete.ball.position, athlete.ball.attackTarget, 3.1, 1.0)
 		athlete.team.mManager.BallOverNet(athlete.team.isHuman)
-		athlete.ball.difficultyOfReception = 1.3
+		athlete.ball.difficucrltyOfReception = 1.3
 
 func Exit(_athlete:Athlete):
 	pass

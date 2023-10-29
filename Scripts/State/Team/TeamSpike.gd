@@ -12,6 +12,9 @@ func Enter(_team:Team):
 	hit = false
 	pass
 func Update(team:Team):
+	if !team.chosenSpiker:
+		return
+
 	team.UpdateTimeTillDigTarget()
 #	Console.AddNewLine(str((team.ball.position - team.chosenSpiker.setRequest.target).length()))
 	if !hit &&team.ball.inPlay && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight:
@@ -67,12 +70,12 @@ func SpikeBall(team:Team):
 			#print("Spike Speed(m/s): " + str(u))
 			
 			ball.difficultyOfReception = u/37.0*team.chosenSpiker.stats.spike*2
-			ball.gravity_scale = 7.0
-			ball.topspin = 7.0
-			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 7.0)
+			ball.gravity_scale = 3.0
+			ball.topspin = 3.0
+			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 3.0)
 			await team.get_tree().process_frame
-			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 7.0)
-			var realNetPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, 7.0)
+			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 3.0)
+			var realNetPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, 3.0)
 			Console.AddNewLine("Net Pass: " + str(realNetPass))
 			ball.blockResolver.netPass = realNetPass
 		else:

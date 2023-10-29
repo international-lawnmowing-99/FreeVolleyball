@@ -31,7 +31,21 @@ func KillBlock():
 	mManager.BallBlocked(spikedByA)
 	
 func ReflectBlock():
-	pass
+	# Ball loops up back on our side
+	ball.blockWillBeAttempted = false
+	ball.linear_velocity.x *= -1
+	ball.linear_velocity *= randf_range(0.05, 0.3)
+	ball.linear_velocity.y = randf_range(1.5, 5)
+	
+	if spikedByA:
+		ball.TouchedByB()
+	else:
+		ball.TouchedByA()
+		
+	Console.AddNewLine("Reflect block", Color.THISTLE)
+	ball.SetTopspin(1.0)
+	ball.attackTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0, 1.0)
+	spiker.team.stateMachine.SetCurrentState(spiker.team.receiveState)
 	
 func TouchBlock():
 	pass
@@ -40,7 +54,12 @@ func SnickBlock():
 	pass
 	
 func BlockFault():
-	pass
+	if spikedByA:
+		Console.AddNewLine("Net Touch by team B", Color.THISTLE)
+		mManager.PointToTeamA()
+	else:
+		Console.AddNewLine("Net Touch by team A", Color.THISTLE)
+		mManager.PointToTeamB()
 	
 func _init(_ball:Ball):
 	ball = _ball
@@ -164,12 +183,15 @@ func ResolveBlock():
 	
 	# Ineffective block
 	if attackRoll>blockRoll + (1 + deflectGradient):
-		KillBlock()
+#		KillBlock()
+		ReflectBlock()
 			
 	elif blockRoll * (1 - deflectGradient) > attackRoll:
-		KillBlock()
+#		KillBlock()
+		ReflectBlock()
 	else:
-		KillBlock()
+#		KillBlock()
+		ReflectBlock()
 	
 	
 	

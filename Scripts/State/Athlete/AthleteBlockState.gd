@@ -97,7 +97,7 @@ func Update(athlete:Athlete):
 					athlete.rb.freeze = true
 					athlete.position.y = 0
 					athlete.rb.gravity_scale = 0
-					if isCommitBlocking && athlete.team.stateMachine.currentState == athlete.team.defendState:
+					if isCommitBlocking && athlete.team.stateMachine.currentState == athlete.team.defendState && blockingTarget.setRequest:
 						if athlete == athlete.team.defendState.leftSideBlocker:
 							pass
 								

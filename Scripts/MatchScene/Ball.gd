@@ -42,6 +42,10 @@ func _ready():
 	add_child(blockResolver)
 	#DebugOverlay.draw.add_vector(self, "lads", 1, 4, Color(0,1,1, 0.5))
 	
+func SetTopspin(_topspin:float):
+	topspin = _topspin
+	gravity_scale = _topspin
+
 func _on_ball_body_entered(body):
 	gravity_scale = 1
 #	print (body.name)

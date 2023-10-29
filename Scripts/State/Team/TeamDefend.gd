@@ -139,6 +139,8 @@ func EvaluateOppositionPass(_team:Team):
 		middleBlocker.blockState.ConfirmCommitBlock(middleBlocker, otherTeam)
 
 func ReactToSet(team:Team):
+	if !otherTeam.chosenSpiker:
+		return
 	# React blockers move to new blocking position, perhaps after a delay given by a "reaction time" stat
 	if !leftSideBlocker.blockState.isCommitBlocking:
 		

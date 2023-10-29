@@ -68,7 +68,7 @@ func SetBall(team:Team):
 	var errorThreshold = 100.0 * pow((team.chosenSetter.stats.set/100 - 1.0), 8.0)
 	var perfectThreshold = 100.0 - 100.0 / (1.0 + pow(2.71828, -((team.chosenSetter.stats.set/100.0) - 0.5)/0.1))
 	# most sets are perfect now...
-	
+#	setExecution = perfectThreshold - 1
 #	Console.AddNewLine("[[[[[ set execution:" + str(setExecution) + " ]]]]]")
 #	Console.AddNewLine("[[[[[ error threshold:" + str(errorThreshold) + " ]]]]]")
 #	Console.AddNewLine("[[[[[ perfect threshold:" + str(perfectThreshold) + " ]]]]]")
@@ -105,7 +105,7 @@ func SetBall(team:Team):
 		else:
 			team.setTarget.target.x -= abs(error)
 		team.setTarget.target.z += pow(-1,randi()%2) * error
-		team.setTarget.height += 3*abs(error)
+		team.setTarget.height += randf_range(0,4) * abs(error)
 		Console.AddNewLine("Error: " + str(error))
 		team.mManager.cylinder.position = team.setTarget.target
 			
@@ -156,7 +156,7 @@ func SetBall(team:Team):
 					team.chosenSpiker.setRequest = team.setTarget
 					team.chosenSpiker.spikeState.spikeState = team.chosenSetter.spikeState.SpikeState.ChoiceConfirmed
 					pass
-				
+
 				elif AthleteCanStandingRollBadSet(team.chosenSpiker):
 					Console.AddNewLine(team.chosenSpiker.stats.lastName + " (chosenSpiker) can't spike bad set, will be able to aggressively play it though --------------------------------------------------------------------------------------------------------------------")
 					pass
@@ -165,7 +165,7 @@ func SetBall(team:Team):
 					ScrambleForBadSet(team)
 
 	
-		team.chosenSpiker.spikeState.ReactToDodgySet()
+#		team.chosenSpiker.spikeState.ReactToDodgySet()
 		
 	if !team.setTarget:
 		#setTarget = Set(-4.5, 0, 0, randf() * 6 + 2.5)
@@ -187,7 +187,7 @@ func SetBall(team:Team):
 		team.setTarget = team.middleFront.middleSpikes[0]
 		
 	for athlete in possibleSpikers:
-		if athlete != team.chosenSpiker:
+		if athlete != team.chosenSpiker && athlete.stateMachine.currentState != athlete.freeBallState:
 			athlete.stateMachine.SetCurrentState(athlete.coverState)
 		#CalculateSetDifficulty()
 
@@ -225,15 +225,17 @@ func ScrambleForBadSet(team:Team):
 				timeToReachGround = sqrt(2 * athlete.g * athlete.position.y)
 			athlete.distanceHack += timeToReachGround
 			
-		var orderedList = team.courtPlayers.duplicate(false)
-		orderedList.sort_custom(Callable(Athlete,"SortDistance"))
-		if orderedList[0].distanceHack >= 9999:
-			Console.AddNewLine("No one could reach the ball")
-		else:
-			orderedList[0].stateMachine.SetCurrentState(orderedList[0].freeBallState)
-			orderedList[0].moveTarget = Maths.XZVector(ballPositionAtDig)
-			Console.AddNewLine(orderedList[0].stats.lastName + " cleans up bad set")
+	var orderedList = team.courtPlayers.duplicate(false)
+	orderedList.sort_custom(Callable(Athlete,"SortDistance"))
+	if orderedList[0].distanceHack >= 9999:
+		Console.AddNewLine("No one could reach the ball")
+	else:
+		orderedList[0].stateMachine.SetCurrentState(orderedList[0].freeBallState)
+		orderedList[0].moveTarget = Maths.XZVector(ballPositionAtDig)
+		Console.AddNewLine(orderedList[0].stats.lastName + " cleans up bad set")
 	team.chosenSpiker.stateMachine.SetCurrentState(team.chosenSpiker.chillState)
+	team.stateMachine.SetCurrentState(team.chillState)
+	team.chosenSpiker = null
 
 func CheckForSpikeDistance(team:Team):
 	if !team.chosenSpiker:

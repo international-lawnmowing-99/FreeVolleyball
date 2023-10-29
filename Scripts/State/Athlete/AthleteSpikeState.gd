@@ -129,8 +129,8 @@ func Exit(athlete:Athlete):
 	athlete.rightIK.interpolation = 0
 	pass
 
-func ReactToDodgySet():
-	pass
+#func ReactToDodgySet():
+#	pass
 
 #func TimeToSpikeWithFullRunup() -> float:
 #	var timeToGetToRunup = athlete.distance_to(athlete.spikeState.runupStartPosition)/athlete.stats.speed 
@@ -230,7 +230,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 		furthestCourtPoint = Vector3(9 * -athlete.team.flip, 0, baselineZIntercept)
 	
 	var u = 27.78 # 100 kph spike
-	var topspin = 7.0
+	var topspin = 3.0
 	
 	var lowestNetPass = Vector3(0, 2.43 + 0.35, b)
 #	athlete.team.mManager.cylinder.position = lowestNetPass
@@ -254,8 +254,8 @@ func ChooseSpikingStrategy(athlete:Athlete):
 #	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target)
 #	athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target) + topDownSpikeVector
 #	Console.AddNewLine(str("%.1f" % baselineZIntercept) + " baseline z intercept")
-	var vel = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, ball.attackTarget, u, false, 7.0)
-	athlete.team.mManager.cylinder.position = Maths.FindNetPass(athlete.setRequest.target, ball.attackTarget, vel, 7.0)
+	var vel = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, ball.attackTarget, u, false, 3.0)
+	athlete.team.mManager.cylinder.position = Maths.FindNetPass(athlete.setRequest.target, ball.attackTarget, vel, 3.0)
 	Console.AddNewLine("Predicted net pass: " + str(athlete.team.mManager.cylinder.position))
 	var longestPossibleSpikeXZDistance = Maths.XZVector(athlete.setRequest.target).distance_to(furthestCourtPoint)
 #	Console.AddNewLine(str("%.1f" % longestPossibleSpikeXZDistance) + " max possible spike distance")
