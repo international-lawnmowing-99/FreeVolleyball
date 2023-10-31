@@ -46,6 +46,7 @@ func ReflectBlock():
 	ball.SetTopspin(1.0)
 	ball.attackTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0, 1.0)
 	spiker.team.stateMachine.SetCurrentState(spiker.team.receiveState)
+	blockers[0].team.stateMachine.SetCurrentState(blockers[0].team.defendState)
 	
 func TouchBlock():
 	pass

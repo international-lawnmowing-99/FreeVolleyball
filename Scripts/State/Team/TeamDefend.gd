@@ -206,6 +206,6 @@ func ReactToSet(team:Team):
 			team.middleFront.blockState.isCommitBlocking = false
 			
 			if team.flip * otherTeam.chosenSpiker.setRequest.target.z >= 0:
-				team.middleFront.moveTarget = leftSideBlocker.moveTarget - team.flip * Vector3(0.5, 0, .75)
+				team.middleFront.moveTarget = leftSideBlocker.moveTarget - team.flip * Vector3(0, 0, .75)
 			else:
-				team.middleFront.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0.5, 0, .75)
+				team.middleFront.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0, 0, .75)

@@ -142,7 +142,7 @@ func Update(athlete:Athlete):
 				#anim.SetTrigger("jump");
 
 		ServeState.Jump:
-				athlete.rightIKTarget.position = athlete.ball.position
+				athlete.rightIKTarget.global_transform.origin = athlete.ball.global_transform.origin
 				athlete.rightIK.interpolation = 1
 			#if athlete.rb.linear_velocity.y >0:
 				if ball.linear_velocity.y < 0 && athlete.stats.spikeHeight >= ball.position.y:

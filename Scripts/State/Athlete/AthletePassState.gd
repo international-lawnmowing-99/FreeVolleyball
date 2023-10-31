@@ -33,7 +33,7 @@ func Enter(athlete:Athlete):
 
 	
 	var servePos = ball.position
-	athlete.moveTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0.5, ball.topspin) + Vector3(0,-.5, randf_range(-.25,.25))
+	athlete.moveTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, athlete.stats.digHeight, ball.topspin) + Vector3(0,-athlete.stats.digHeight, randf_range(-.25,.25))
 	athlete.moveTarget += (athlete.moveTarget - Vector3(servePos.x, 0, servePos.z)).normalized()/3
 
 	#look_at(Vector3(servePos.x,0, servePos.z), Vector3.UP)
@@ -123,7 +123,7 @@ func Update(athlete:Athlete):
 		athlete.animTree.set("parameters/Dig/blend_amount", lerp(a, 0.0, 5*athlete.myDelta))
 		athlete.digAngle = lerp(athlete.digAngle,0.0,3*athlete.myDelta)
 		athlete.RotateDigPlatform(athlete.digAngle)
-	if !isBallAlreadyPassed && ball.inPlay && ball.position.y < 1 && ball.position.y > .35 &&\
+	if !isBallAlreadyPassed && ball.inPlay && ball.position.y < athlete.stats.digHeight && ball.position.y > .35 &&\
 		(Vector3(ball.position.x,0, ball.position.z)).distance_to(athlete.position) < 1:
 			PassBall(athlete)
 			

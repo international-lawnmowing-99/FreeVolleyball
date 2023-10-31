@@ -303,3 +303,11 @@ func ReEvaluateState():
 			position.y = 0
 			ReEvaluateState()
 			Console.AddNewLine("recursive reevaluate: " + stats.lastName, Color.BLACK)
+
+func WaitThenTransition(passAdmirationTime:float):
+	await get_tree().create_timer(passAdmirationTime).timeout
+	stateMachine.SetCurrentState(transitionState)
+
+func WaitThenChill(passCommiserationTime:float):
+	await get_tree().create_timer(passCommiserationTime).timeout
+	stateMachine.SetCurrentState(transitionState)

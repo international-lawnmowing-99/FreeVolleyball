@@ -57,8 +57,8 @@ func Update(athlete:Athlete):
 	
 	
 	if blockingTarget:
-		athlete.leftIKTarget.global_transform.origin = athlete.model.position + athlete.model.transform.basis.x/4.0 + Vector3.UP * 2 + athlete.model.transform.basis.z
-		athlete.rightIKTarget.global_transform.origin = athlete.model.position + - athlete.model.transform.basis.x/4.0 + Vector3.UP * 2 + athlete.model.transform.basis.z
+		athlete.leftIKTarget.global_transform.origin = athlete.model.position + athlete.model.transform.basis.x/4.0 + Vector3.UP * 2 + athlete.model.transform.basis.z * 2
+		athlete.rightIKTarget.global_transform.origin = athlete.model.position + - athlete.model.transform.basis.x/4.0 + Vector3.UP * 2 + athlete.model.transform.basis.z * 2
 
 #		if athlete.team.isHuman && athlete == athlete.team.middleFront:
 #			Console.AddNewLine(blockingTarget.stats.lastName + " blocking target")
@@ -97,12 +97,13 @@ func Update(athlete:Athlete):
 					athlete.rb.freeze = true
 					athlete.position.y = 0
 					athlete.rb.gravity_scale = 0
-					if isCommitBlocking && athlete.team.stateMachine.currentState == athlete.team.defendState && blockingTarget.setRequest:
+					if isCommitBlocking && athlete.team.stateMachine.currentState == athlete.team.defendState && blockingTarget:
 						if athlete == athlete.team.defendState.leftSideBlocker:
 							pass
 								
 						elif athlete == athlete.team.defendState.middleBlocker:
-							blockingTarget = athlete.team.defendState.otherTeam.chosenSpiker
+							if athlete.team.defendState.otherTeam.chosenSpiker:
+								blockingTarget = athlete.team.defendState.otherTeam.chosenSpiker
 							if athlete.team.flip * blockingTarget.setRequest.target.z >= 0:
 								athlete.moveTarget = athlete.team.defendState.leftSideBlocker.moveTarget - athlete.team.flip * Vector3(0.5, 0, .75)
 							else:

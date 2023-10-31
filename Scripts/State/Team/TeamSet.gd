@@ -446,6 +446,9 @@ func ChooseSpiker(team:Team):
 				# and the time for the athlete to get to the transition position, 
 				# then run up, then reach max jump height
 				if athlete.rb.freeze:
+					if athlete == team.chosenReceiver:
+						athlete.WaitThenTransition(0.5)
+						continue
 					athlete.stateMachine.SetCurrentState(athlete.transitionState)
 				possibleSpikers.append(athlete)
 				

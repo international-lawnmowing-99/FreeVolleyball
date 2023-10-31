@@ -16,6 +16,7 @@ var imageID:int = 0
 
 var speed:float
 var height:float
+var digHeight:float
 var verticalJump:float
 
 var reactionTime:float

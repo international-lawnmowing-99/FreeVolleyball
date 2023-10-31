@@ -418,6 +418,9 @@ func CheckIfFlipped(vectorToBeChecked:Vector3):
 func Chill():
 	stateMachine.SetCurrentState(chillState)
 	for player in courtPlayers:
+		if player == chosenReceiver:
+			player.WaitThenChill(.75)
+			continue
 		player.stateMachine.SetCurrentState(player.chillState)
 
 func AttemptBlock(spiker:Athlete):
@@ -476,6 +479,8 @@ func Populate(firstNames, lastNames, r):
 		#1.25 is the arm factor of newWoman
 		stats.spikeHeight = stats.height * (1.25) + stats.verticalJump
 		stats.blockHeight = stats.height * (1.2) + stats.verticalJump
+		# This is riddiculous obviously, a consequence of dodgy animation
+		stats.digHeight = stats.height #* 1.08
 		stats.standingSetHeight = stats.height * 1.2
 		stats.jumpSetHeight = stats.standingSetHeight + stats.verticalJump
 		var age = 17 + randi()%28
