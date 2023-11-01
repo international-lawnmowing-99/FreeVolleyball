@@ -185,10 +185,10 @@ func ChooseSpikingStrategy(athlete:Athlete):
 #	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target + playerToLeftAntennaVector)
 	var angleToLeftAntenna = Maths.SignedAngle(playerToNetVector, playerToLeftAntennaVector, Vector3.DOWN)
 	var angleToRightAntenna = Maths.SignedAngle(playerToNetVector, playerToRightAntennaVector, Vector3.DOWN)
-	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna")
-	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightAntenna)) + " degrees to right antenna")
-	
-	Console.AddNewLine("Choosing an angle between the two", Color.LIME_GREEN)
+#	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna")
+#	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightAntenna)) + " degrees to right antenna")
+#
+#	Console.AddNewLine("Choosing an angle between the two", Color.LIME_GREEN)
 
 #	if athlete.FrontCourt():
 #		athlete.ball.attackTarget = athlete.team.CheckIfFlipped(Vector3(-randf_range(1, 9), 0, -4.5 + randf_range(0, 9)))
@@ -198,7 +198,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	var lineCross = randf()
 	var spikeAngleTopDown = lerp(angleToLeftAntenna, angleToRightAntenna, lineCross)
 #	spikeAngleTopDown = PI/4
-	Console.AddNewLine(str("%.1f" % rad_to_deg(spikeAngleTopDown)) + " potential spike angle")
+#	Console.AddNewLine(str("%.1f" % rad_to_deg(spikeAngleTopDown)) + " potential spike angle")
 	
 	var furthestCourtPoint:Vector3
 	# Find the nearest intersection to the edge of the court along the line
@@ -256,7 +256,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 #	Console.AddNewLine(str("%.1f" % baselineZIntercept) + " baseline z intercept")
 	var vel = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, ball.attackTarget, u, false, 3.0)
 	athlete.team.mManager.cylinder.position = Maths.FindNetPass(athlete.setRequest.target, ball.attackTarget, vel, 3.0)
-	Console.AddNewLine("Predicted net pass: " + str(athlete.team.mManager.cylinder.position))
+#	Console.AddNewLine("Predicted net pass: " + str(athlete.team.mManager.cylinder.position))
 	var longestPossibleSpikeXZDistance = Maths.XZVector(athlete.setRequest.target).distance_to(furthestCourtPoint)
 #	Console.AddNewLine(str("%.1f" % longestPossibleSpikeXZDistance) + " max possible spike distance")
 	
@@ -487,8 +487,8 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 		var angleToRightLeft = Maths.SignedAngle(playerToNetVector, playerToRightLeft, Vector3.DOWN)
 		var angleToRightRight = Maths.SignedAngle(playerToNetVector, playerToRightRight, Vector3.DOWN)
 		
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightRight)) + " degrees to (opposition perspective) right blocker right hand")
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightLeft)) + " degrees to (opposition perspective) right blocker left hand")
+#		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightRight)) + " degrees to (opposition perspective) right blocker right hand")
+#		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightLeft)) + " degrees to (opposition perspective) right blocker left hand")
 		
 	if !middleBlockerLeftCoverage:
 		Console.AddNewLine("Couldn't see a middle block, maybe you can though", Color.LIME_GREEN)
@@ -501,8 +501,8 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 		var angleToMiddleLeft = Maths.SignedAngle(playerToNetVector, playerToMiddleLeft, Vector3.DOWN)
 		var angleToMiddleRight = Maths.SignedAngle(playerToNetVector, playerToMiddleRight, Vector3.DOWN)
 		
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleRight)) + " degrees to (opposition perspective) middle blocker right hand")		
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleLeft)) + " degrees to (opposition perspective) middle blocker left hand")
+#		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleRight)) + " degrees to (opposition perspective) middle blocker right hand")		
+#		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleLeft)) + " degrees to (opposition perspective) middle blocker left hand")
 	
 	
 	if !leftBlockerLeftCoverage:
@@ -515,8 +515,8 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 		var angleToLeftLeft = Maths.SignedAngle(playerToNetVector, playerToLeftLeft, Vector3.DOWN)
 		var angleToLeftRight = Maths.SignedAngle(playerToNetVector, playerToLeftRight, Vector3.DOWN)
 		
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftRight)) + " degrees to (opposition perspective) left blocker right hand")
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftLeft)) + " degrees to (opposition perspective) left blocker left hand")
+#		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftRight)) + " degrees to (opposition perspective) left blocker right hand")
+#		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftLeft)) + " degrees to (opposition perspective) left blocker left hand")
 	
 
 
@@ -528,18 +528,18 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 	if !middleBlockerLeftCoverage || ! leftBlockerRightCoverage:
 		Console.AddNewLine("Middle and left blocker didn't both show up")
 	elif flip * middleBlockerLeftCoverage < flip * leftBlockerRightCoverage:
-		Console.AddNewLine("Middle and left blocker overlapped")
+		Console.AddNewLine("Middle and left blocker overlap (Predicted)")
 		leftOverlap = true
 	else:
-		Console.AddNewLine("Middle and left blocker seam")
+		Console.AddNewLine("Middle and left blocker seam (Predicted)")
 
 	if !middleBlockerRightCoverage || ! rightBlockerLeftCoverage:
 		Console.AddNewLine("Middle and right blocker didn't both show up")	
 	elif flip * middleBlockerRightCoverage > flip * rightBlockerLeftCoverage:
-		Console.AddNewLine("Middle and right blocker overlapped")	
+		Console.AddNewLine("Middle and right blocker overlap (Predicted)")	
 		rightOverlap = true
 	else:
-		Console.AddNewLine("Middle and right blocker seam")	
+		Console.AddNewLine("Middle and right blocker seam (Predicted)")
 		
 	if leftOverlap && rightOverlap:
 		Console.AddNewLine("Triple Block! (Predicted)", Color.DARK_TURQUOISE)

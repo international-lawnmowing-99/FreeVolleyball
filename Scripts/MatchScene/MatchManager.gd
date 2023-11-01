@@ -51,26 +51,21 @@ func _ready():
 	teamA.defendState.otherTeam = teamB
 	teamB.defendState.otherTeam = teamA
 
-	var rand = RandomNumberGenerator.new()
-	rand.randomize()
+	randomize()
 
-	if rand.randi_range(1,2) == 1:
+	if randi_range(1,2) == 1:
 		isTeamAServing = false
 		teamA.isNextToSpike = false
 		teamB.isNextToSpike = true
+		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
+		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
+	
 	else:
 		isTeamAServing = true
 		teamA.isNextToSpike = true
 		teamB.isNextToSpike = false
-
-	if isTeamAServing:
 		teamA.stateMachine.SetCurrentState(teamA.preserviceState)
 		teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
-
-	else:
-		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
-		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
-
 	
 	score.teamANameText.text = teamA.teamName
 	score.teamBNameText.text = teamB.teamName
@@ -81,12 +76,7 @@ func _ready():
 	preMatchUI.skipUI()
 	$UI/TeamInfoUI.InitialiseOnCourtPlayerUI()
 
-#func _physics_process(_delta: float) -> void:
-##	if ball.blockWillBeAttempted:
-##		if teamA.isNextToSpike:
-##			pass
-#	pass
-	
+
 func BallOverNet(hitByTeamA:bool):
 	teamA.isNextToSpike = !teamA.isNextToSpike
 	teamB.isNextToSpike = !teamB.isNextToSpike

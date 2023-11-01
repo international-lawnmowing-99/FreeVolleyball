@@ -78,7 +78,7 @@ func Update(athlete:Athlete):
 #					athlete.model.rotation.slerp(Vector3(0, -athlete.team.flip * PI/2, 0), athlete.myDelta * 10)
 				athlete.model.rotation.y = -athlete.team.flip * PI/2
 				#Perhaps adding a random offset would make this look less choreographed...
-				var timeFromSpikeToNet = blockingTarget.setRequest.target.x/25
+				var timeFromSpikeToNet =  blockingTarget.setRequest.target.distance_to(athlete.moveTarget + Vector3.UP * blockingTarget.setRequest.target.y)/27.7
 				if athlete.rb.freeze && blockingTarget.spikeState.CalculateTimeTillSpike(blockingTarget) + timeFromSpikeToNet <= jumpTime:
 					Console.AddNewLine(athlete.stats.lastName + " jumps to block (commit)")
 					blockState = BlockState.Jump	

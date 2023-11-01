@@ -20,12 +20,12 @@ func Enter(athlete:Athlete):
 	# 1: confidence that it's in
 	# 2: confidence that it's my ball to take
 	
-	if athlete.team.isHuman:
+	if athlete.team.isHuman && ball.wasLastTouchedByA:
 		if ball.attackTarget.x > 9.2 || ball.attackTarget.x < 0 ||\
 		ball.attackTarget.z < -4.7 || ball.attackTarget.z > 4.7:
 			athlete.stateMachine.SetCurrentState(athlete.chillState)
 			return
-	else: 
+	elif !athlete.team.isHuman && !ball.wasLastTouchedByA: 
 		if ball.attackTarget.x < -9.2 || ball.attackTarget.x > 0 ||\
 		ball.attackTarget.z < -4.7 || ball.attackTarget.z > 4.7:
 			athlete.stateMachine.SetCurrentState(athlete.chillState)

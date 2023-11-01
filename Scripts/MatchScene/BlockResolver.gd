@@ -52,7 +52,19 @@ func TouchBlock():
 	pass
 	
 func SnickBlock():
-	pass
+	Console.AddNewLine("Snick block", Color.TURQUOISE)
+	ball.blockWillBeAttempted = false
+	ball.SetTopspin(1.0)
+	ball.attackTarget.x = -spiker.team.flip * randf_range(4.5, 15.0)
+	ball.attackTarget.z = randf_range(-6.0, 6.0)
+	ball.attackTarget.y = 0
+	
+	var ballMaxHeight = randf_range(ball.position.y + 0.5, ball.position.y + 7.0)
+	
+	ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget, ballMaxHeight)
+	ball.difficultyOfReception = randf_range(0, 20)
+	mManager.BallOverNet(spiker.team.isHuman)
+	ball.wasLastTouchedByA = !spikedByA
 	
 func BlockFault():
 	if spikedByA:
@@ -185,14 +197,14 @@ func ResolveBlock():
 	# Ineffective block
 	if attackRoll>blockRoll + (1 + deflectGradient):
 #		KillBlock()
-		ReflectBlock()
+		SnickBlock()
 			
 	elif blockRoll * (1 - deflectGradient) > attackRoll:
 #		KillBlock()
-		ReflectBlock()
+		SnickBlock()
 	else:
 #		KillBlock()
-		ReflectBlock()
+		SnickBlock()
 	
 	
 	

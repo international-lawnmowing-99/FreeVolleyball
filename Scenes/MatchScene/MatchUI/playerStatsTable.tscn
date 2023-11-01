@@ -1,0 +1,91 @@
+[gd_scene load_steps=2 format=3 uid="uid://cts4mqjkgj1vj"]
+
+[ext_resource type="PackedScene" uid="uid://bjvp6sd0ubyn" path="res://Scenes/MatchScene/MatchUI/playerStatsRow.tscn" id="1_mprq0"]
+
+[node name="PlayerStatsTable" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Headings" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(1280, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Selected" type="Button" parent="Headings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Selected"
+
+[node name="FirstName" type="Button" parent="Headings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "First Name"
+
+[node name="LastName" type="Button" parent="Headings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Last Name"
+
+[node name="SpikeHeight" type="Button" parent="Headings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Spike Height"
+
+[node name="BlockHeight" type="Button" parent="Headings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Block Height"
+
+[node name="Serve" type="Button" parent="Headings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Serve"
+
+[node name="Spike" type="Button" parent="Headings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Spike"
+
+[node name="Receive" type="Button" parent="Headings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Receive"
+
+[node name="Set" type="Button" parent="Headings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Set"
+
+[node name="Stamina" type="Button" parent="Headings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Stamina"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 64.0
+offset_right = 1280.0
+offset_bottom = 84.0
+
+[node name="PlayerStatsRow" parent="VBoxContainer" instance=ExtResource("1_mprq0")]
+layout_mode = 2
+
+[node name="PlayerStatsRow2" parent="VBoxContainer" instance=ExtResource("1_mprq0")]
+layout_mode = 2
+
+[node name="PlayerStatsRow3" parent="VBoxContainer" instance=ExtResource("1_mprq0")]
+layout_mode = 2
+
+[node name="PlayerStatsRow4" parent="VBoxContainer" instance=ExtResource("1_mprq0")]
+layout_mode = 2
+
+[node name="PlayerStatsRow5" parent="VBoxContainer" instance=ExtResource("1_mprq0")]
+layout_mode = 2
+
+[node name="PlayerStatsRow6" parent="VBoxContainer" instance=ExtResource("1_mprq0")]
+layout_mode = 2

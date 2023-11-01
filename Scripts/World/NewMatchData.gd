@@ -38,8 +38,8 @@ func ChooseRandom(gameWorld:GameWorld):
 	bChoiceState = bChoiceState.ChooseRandom(gameWorld, clubOrInternational)
 	
 
-	var teamA:Team = gameWorld.GetTeam(aChoiceState, clubOrInternational)
-	var teamB:Team = gameWorld.GetTeam(bChoiceState, clubOrInternational)
+	var teamA:Team = gameWorld.GetTeam(aChoiceState, clubOrInternational).duplicate
+	var teamB:Team = gameWorld.GetTeam(aChoiceState, clubOrInternational)
 
 	if teamA.allPlayers.size() != 12:
 		var now = Time.get_ticks_msec()
