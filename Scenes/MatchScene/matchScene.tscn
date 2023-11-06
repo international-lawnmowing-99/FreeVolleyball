@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://db2fgt6mtocjw"]
+[gd_scene load_steps=42 format=3 uid="uid://db2fgt6mtocjw"]
 
 [ext_resource type="Script" path="res://Scripts/MatchScene/MatchManager.gd" id="1_mqt8k"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/FrameStepper.gd" id="2_skir3"]
@@ -25,6 +25,7 @@
 [ext_resource type="Script" path="res://Scenes/TeamInfoUI.gd" id="20_mqewi"]
 [ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.tscn" id="21_mfp85"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/MatchStatistics.gd" id="22_jweii"]
+[ext_resource type="PackedScene" uid="uid://cts4mqjkgj1vj" path="res://Scenes/MatchScene/MatchUI/PlayerStatsTable.tscn" id="22_osxw1"]
 [ext_resource type="PackedScene" uid="uid://bas6swl121cf5" path="res://Scenes/MatchScene/MatchUI/OnCourtPlayer.tscn" id="23_sry0n"]
 [ext_resource type="PackedScene" uid="uid://dgn1arb8c8e44" path="res://Scenes/MatchScene/MatchUI/TeamTacticsUI.tscn" id="24_v8nr8"]
 [ext_resource type="Script" path="res://Scenes/sillydebug.gd" id="25_mqjes"]
@@ -857,9 +858,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("17_wg7iy")
 
-[node name="PreMatchUI" parent="UI" instance=ExtResource("18_0pm8c")]
-layer = 4
-
 [node name="ServeUI" parent="UI" instance=ExtResource("19_gfg2l")]
 
 [node name="TeamInfoUI" type="CanvasLayer" parent="UI"]
@@ -1006,5 +1004,14 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 25
 text = "blah"
 script = ExtResource("25_mqjes")
+
+[node name="PreMatchUI" parent="UI" instance=ExtResource("18_0pm8c")]
+layer = 4
+
+[node name="PlayerStatsTable" parent="UI/PreMatchUI" instance=ExtResource("22_osxw1")]
+offset_left = 427.0
+offset_top = 8.0
+offset_right = -213.0
+offset_bottom = -352.0
 
 [connection signal="pressed" from="UI/ToggleTeamTacticsUI" to="UI" method="_on_toggle_team_tactics_ui_pressed"]

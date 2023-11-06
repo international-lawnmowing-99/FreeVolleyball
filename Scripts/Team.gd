@@ -80,6 +80,7 @@ func Init(_ball, choiceState, gameWorld, clubOrInternational, matchManager):
 	mManager = matchManager
 	var team = gameWorld.GetTeam(choiceState, clubOrInternational)
 	teamName = team.teamName
+	nation = team.nation
 	allPlayers = team.allPlayers.duplicate(true)
 	
 	ball = _ball

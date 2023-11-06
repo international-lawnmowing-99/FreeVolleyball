@@ -49,17 +49,29 @@ func GetTeam(choiceState, mode):
 		return continents[choiceState.continentIndex].nations[choiceState.nationIndices[choiceState.continentIndex]].nationalTeam
 
 func LoadText():
-	var f = FileAccess.open("res://Data/firstNames.txt", FileAccess.READ)
-	var g = FileAccess.open("res://Data/lastNames.txt", FileAccess.READ)
+	var f = FileAccess.open("res://Data/firstNames.txt", FileAccess.READ_WRITE)
+	var g = FileAccess.open("res://Data/lastNames.txt", FileAccess.READ_WRITE)
 	var n = FileAccess.open("res://Data/nationsAndPop.txt", FileAccess.READ)
 	
+	for i in range(10):
+		Console.AddNewLine(f.get_line())
+
+	f.seek(0)	
 	while not f.eof_reached():
-		firstNames.append(f.get_line())
+		var line = f.get_line()
+		if line != "\n":
+			firstNames.append(line)
 	while not g.eof_reached():
 		lastNames.append(g.get_line())
 	while not n.eof_reached():
 		nationsText.append(n.get_line())
-
+	
+	f.close()
+	f = FileAccess.open("res://Data/firstNames2.txt", FileAccess.WRITE)
+	for line in firstNames:
+		f.store_line(line)
+	f.close()
+		
 func split(s: String, delimeters, allow_empty: bool = false) -> Array:
 	var parts := []
 

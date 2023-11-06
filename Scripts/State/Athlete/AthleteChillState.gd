@@ -19,6 +19,7 @@ func Update(athlete:Athlete):
 			athlete.rb.freeze = true
 			athlete.spikeState.spikeState == athlete.spikeState.SpikeState.NotSpiking
 			athlete.blockState.blockState == athlete.blockState.BlockState.NotBlocking
-
+	else:
+		athlete.model.look_at(Maths.XZVector(athlete.ball.position), Vector3.UP, true)
 func Exit(_athlete:Athlete):
 	pass
