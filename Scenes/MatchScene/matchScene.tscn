@@ -1009,6 +1009,7 @@ script = ExtResource("25_mqjes")
 layer = 4
 
 [node name="PlayerStatsTable" parent="UI/PreMatchUI" instance=ExtResource("22_osxw1")]
+visible = false
 offset_left = 427.0
 offset_top = 8.0
 offset_right = -213.0

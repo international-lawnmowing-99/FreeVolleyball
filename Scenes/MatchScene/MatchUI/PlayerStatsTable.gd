@@ -71,13 +71,14 @@ func _on_last_name_pressed():
 
 
 func _on_spike_height_pressed():
-	if spikeAscending:
+	if spikeHeightAscending:
 		allPlayers.sort_custom(func(a,b): return a.stats.spikeHeight > b.stats.spikeHeight)
 	else:
 		allPlayers.sort_custom(func(a,b): return a.stats.spikeHeight < b.stats.spikeHeight)
 		
 	spikeHeightAscending = !spikeHeightAscending
-
+	for i in allPlayerStatsRows.size():
+		allPlayerStatsRows[i].DisplayPlayer(allPlayers[i])
 
 func _on_block_height_pressed():
 	if blockHeightAscending:
@@ -86,6 +87,8 @@ func _on_block_height_pressed():
 		allPlayers.sort_custom(func(a,b): return a.stats.blockHeight < b.stats.blockHeight)
 		
 	blockHeightAscending = !blockHeightAscending
+	for i in allPlayerStatsRows.size():
+		allPlayerStatsRows[i].DisplayPlayer(allPlayers[i])
 
 func _on_serve_pressed():
 	if serveAscending:
@@ -94,6 +97,8 @@ func _on_serve_pressed():
 		allPlayers.sort_custom(func(a,b): return a.stats.serve < b.stats.serve)
 		
 	serveAscending = !serveAscending
+	for i in allPlayerStatsRows.size():
+		allPlayerStatsRows[i].DisplayPlayer(allPlayers[i])
 
 func _on_spike_pressed():
 	if spikeAscending:
@@ -102,6 +107,8 @@ func _on_spike_pressed():
 		allPlayers.sort_custom(func(a,b): return a.stats.spike < b.stats.spike)
 	
 	spikeAscending = !spikeAscending
+	for i in allPlayerStatsRows.size():
+		allPlayerStatsRows[i].DisplayPlayer(allPlayers[i])
 
 func _on_receive_pressed():
 	if receiveAscending:
@@ -110,6 +117,8 @@ func _on_receive_pressed():
 		allPlayers.sort_custom(func(a,b): return a.stats.reception < b.stats.reception)
 		
 	receiveAscending = !receiveAscending
+	for i in allPlayerStatsRows.size():
+		allPlayerStatsRows[i].DisplayPlayer(allPlayers[i])
 
 
 func _on_set_pressed():
@@ -119,4 +128,6 @@ func _on_set_pressed():
 		allPlayers.sort_custom(func(a,b): return a.stats.set < b.stats.set)
 
 	setAscending = !setAscending
+	for i in allPlayerStatsRows.size():
+		allPlayerStatsRows[i].DisplayPlayer(allPlayers[i])
 
