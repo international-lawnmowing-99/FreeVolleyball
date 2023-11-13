@@ -13,7 +13,10 @@ class_name PlayerStatsRow
 
 @onready var selected:CheckBox = $AllItems/Selected
 
-func DisplayPlayer(athlete:Athlete):
+var athlete:Athlete
+
+func DisplayPlayer(_athlete:Athlete):
+	athlete = _athlete
 	firstName.text = athlete.stats.firstName
 	lastName.text = athlete.stats.lastName
 	spikeHeight.text = str(int(athlete.stats.spikeHeight * 100))
@@ -24,4 +27,10 @@ func DisplayPlayer(athlete:Athlete):
 	set.text = str(int(athlete.stats.set))
 	stamina.text = str(int(athlete.stats.serve))
 	
-	selected.button_pressed = true
+	selected.button_pressed = athlete.uiSelected
+
+
+
+func _on_selected_pressed():
+	if athlete: 
+		athlete.uiSelected = selected.button_pressed

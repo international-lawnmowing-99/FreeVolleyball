@@ -224,9 +224,12 @@ func Update(athlete:Athlete):
 				#anim.SetTrigger("jump");
 
 		ServeState.Jump:
+			athlete.rightIK.start()
+			athlete.rightIKTarget.global_transform.origin = athlete.ball.global_transform.origin
+			athlete.rightIK.interpolation = 1
 			#if athlete.rb.linear_velocity.y >0:
-				if ball.linear_velocity.y < 0 && athlete.stats.spikeHeight >= ball.position.y:
-					HitBall(athlete)
+			if ball.linear_velocity.y < 0 && athlete.stats.spikeHeight >= ball.position.y:
+				HitBall(athlete)
 
 		ServeState.Landing:
 			if (athlete.position.y <= 0.01 && athlete.rb.linear_velocity.y < 0):
@@ -360,5 +363,7 @@ func CommenceServe():
 	serveState = ServeState.Tossing
 	serveTarget.visible = false
 	
-func Exit(__athlete:Athlete):
+func Exit(athlete:Athlete):
+	athlete.rightIK.stop()
+	athlete.rightIK.interpolation = 0
 	pass

@@ -1,63 +1,235 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=9 format=3 uid="uid://cycfwen4jhh1v"]
 
 [ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.tscn" id="1"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.gd" id="2"]
-[ext_resource type="Texture2D" uid="uid://bohxkkb71fd34" path="res://Textures/headIcon.jpg" id="3"]
+[ext_resource type="Texture2D" uid="uid://c5r216hy1gmcv" path="res://Textures/293px-Small_arrow_pointing_left.svg.png" id="2_5hwqb"]
 [ext_resource type="Texture2D" uid="uid://b11tiqqynj7p6" path="res://Textures/net-graphic.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://browddj6fobwl" path="res://Textures/143640-allan-border-s-cricket-dos-screenshot-coin-toss.png" id="5"]
 [ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/NameCard.tscn" id="7"]
 [ext_resource type="Theme" path="res://Scenes/MatchScene/gridTheme.tres" id="8"]
-[ext_resource type="FontFile" path="res://Fonts/a font.tres" id="9"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/TeamLineUpsUI.gd" id="10"]
-[ext_resource type="FontFile" path="res://Fonts/teamNameFont.tres" id="11"]
-
-[sub_resource type="StyleBoxFlat" id=13]
-bg_color = Color( 0.6, 0.6, 0.6, 0 )
-border_width_left = 10
-border_width_top = 10
-border_width_right = 10
-border_width_bottom = 10
-border_color = Color( 1, 0.678431, 0, 1 )
-border_blend = true
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
-
-[sub_resource type="StyleBoxFlat" id=17]
-bg_color = Color( 0.756863, 1, 0, 1 )
 
 [node name="PreMatchUI" type="CanvasLayer"]
-script = ExtResource( 2 )
+script = ExtResource("2")
+
+[node name="MatchStartMenu" type="ColorRect" parent="."]
+visible = false
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MatchStartMenu"]
+layout_mode = 0
+offset_left = 125.0
+offset_top = 100.0
+offset_right = 605.0
+offset_bottom = 980.0
+theme_override_constants/separation = 125
+alignment = 1
+
+[node name="FullStartButton" type="Button" parent="MatchStartMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+text = "Select Teams Manually"
+
+[node name="AcceleratedStartButton" type="Button" parent="MatchStartMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+text = "Accelerated Start"
+
+[node name="InstantStartButton" type="Button" parent="MatchStartMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+text = "Instant Start"
+
+[node name="FullStartColourRect" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="ConfirmButton" type="Button" parent="FullStartColourRect"]
+layout_mode = 0
+offset_left = 1642.0
+offset_top = 927.0
+offset_right = 1814.0
+offset_bottom = 986.0
+text = "Confirm"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FullStartColourRect"]
+layout_mode = 0
+offset_left = 232.0
+offset_top = 144.0
+offset_right = 375.0
+offset_bottom = 393.0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="ClubInternationalLabel" type="Label" parent="FullStartColourRect/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Club/International"
+horizontal_alignment = 1
+
+[node name="LeftButton" type="Button" parent="FullStartColourRect/VBoxContainer/ClubInternationalLabel"]
+layout_mode = 0
+offset_left = -45.0
+offset_top = -4.0
+offset_right = -11.0
+offset_bottom = 29.0
+icon = ExtResource("2_5hwqb")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="RightButton" type="Button" parent="FullStartColourRect/VBoxContainer/ClubInternationalLabel"]
+layout_mode = 0
+offset_left = 187.0
+offset_top = 28.0
+offset_right = 221.0
+offset_bottom = 61.0
+rotation = -3.14159
+icon = ExtResource("2_5hwqb")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="ContinentLabel" type="Label" parent="FullStartColourRect/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Continent"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftButton" type="Button" parent="FullStartColourRect/VBoxContainer/ContinentLabel"]
+layout_mode = 0
+offset_left = -45.0
+offset_top = -4.0
+offset_right = -11.0
+offset_bottom = 29.0
+icon = ExtResource("2_5hwqb")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="RightButton" type="Button" parent="FullStartColourRect/VBoxContainer/ContinentLabel"]
+layout_mode = 0
+offset_left = 187.0
+offset_top = 28.0
+offset_right = 221.0
+offset_bottom = 61.0
+rotation = -3.14159
+icon = ExtResource("2_5hwqb")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="NationLabel" type="Label" parent="FullStartColourRect/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Nation"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftButton" type="Button" parent="FullStartColourRect/VBoxContainer/NationLabel"]
+layout_mode = 0
+offset_left = -45.0
+offset_top = -4.0
+offset_right = -11.0
+offset_bottom = 29.0
+icon = ExtResource("2_5hwqb")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="RightButton" type="Button" parent="FullStartColourRect/VBoxContainer/NationLabel"]
+layout_mode = 0
+offset_left = 187.0
+offset_top = 28.0
+offset_right = 221.0
+offset_bottom = 61.0
+rotation = -3.14159
+icon = ExtResource("2_5hwqb")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="ClubTeamLabel" type="Label" parent="FullStartColourRect/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Club Team"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftButton" type="Button" parent="FullStartColourRect/VBoxContainer/ClubTeamLabel"]
+layout_mode = 0
+offset_left = -45.0
+offset_top = -4.0
+offset_right = -11.0
+offset_bottom = 29.0
+icon = ExtResource("2_5hwqb")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="RightButton" type="Button" parent="FullStartColourRect/VBoxContainer/ClubTeamLabel"]
+layout_mode = 0
+offset_left = 187.0
+offset_top = 28.0
+offset_right = 221.0
+offset_bottom = 61.0
+rotation = -3.14159
+icon = ExtResource("2_5hwqb")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="BackButtonFullStart" type="Button" parent="FullStartColourRect"]
+layout_mode = 0
+offset_left = 151.0
+offset_top = 919.0
+offset_right = 286.0
+offset_bottom = 991.0
+text = "Back"
 
 [node name="ColourRectIntro" type="ColorRect" parent="."]
 visible = false
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.803922 )
+color = Color(0, 0, 0, 0.803922)
 
 [node name="Label" type="Label" parent="ColourRectIntro"]
+layout_mode = 0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_top = -111.5
 offset_bottom = -44.5
-custom_fonts/font = ExtResource( 9 )
 text = "Australia vs. France"
-align = 1
+horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="ColourRectIntro"]
+layout_mode = 0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_top = -34.5
 offset_bottom = 34.5
-custom_fonts/font = ExtResource( 11 )
 text = "Friday 11/11/2022
 Sydney Olympic Park, Australia"
-align = 1
+horizontal_alignment = 1
 
 [node name="Button" type="Button" parent="ColourRectIntro"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -67,21 +239,17 @@ offset_top = 227.5
 offset_right = 328.5
 offset_bottom = 380.5
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
-text = "Continue          "
-icon = ExtResource( 3 )
-expand_icon = true
+text = "Continue"
 
 [node name="Toss" type="ColorRect" parent="."]
 visible = false
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.92549, 0.811765, 0.364706, 1 )
+color = Color(0.92549, 0.811765, 0.364706, 1)
 
 [node name="ChooseHeads" type="Button" parent="Toss"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -91,15 +259,11 @@ offset_top = -244.5
 offset_right = 864.5
 offset_bottom = -91.5
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Choose Heads"
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="ChooseTails" type="Button" parent="Toss"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -109,28 +273,25 @@ offset_top = 24.375
 offset_right = 868.385
 offset_bottom = 177.375
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Choose Tails"
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="TextureRect" type="TextureRect" parent="Toss"]
+layout_mode = 0
 offset_left = 406.25
 offset_top = 315.378
 offset_right = 1046.25
 offset_bottom = 715.378
-texture = ExtResource( 5 )
+texture = ExtResource("5")
 
 [node name="WonToss" type="ColorRect" parent="Toss"]
-visible = false
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.74902, 0.92549, 0.364706, 1 )
+color = Color(0.74902, 0.92549, 0.364706, 1)
 
 [node name="ChooseServeReceive" type="Button" parent="Toss/WonToss"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -140,15 +301,11 @@ offset_top = -244.5
 offset_right = 864.5
 offset_bottom = -91.5
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Choose Serve/Receive"
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="ChooseSide" type="Button" parent="Toss/WonToss"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -158,16 +315,12 @@ offset_top = 24.375
 offset_right = 868.385
 offset_bottom = 177.375
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Choose Side of Court"
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="ChooseServe" type="Button" parent="Toss/WonToss"]
 visible = false
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -177,16 +330,12 @@ offset_top = -236.5
 offset_right = 864.5
 offset_bottom = -83.5
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Choose To Serve"
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="ChooseReceive" type="Button" parent="Toss/WonToss"]
 visible = false
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -196,16 +345,12 @@ offset_top = 24.375
 offset_right = 868.385
 offset_bottom = 177.375
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Choose To Receive"
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="ChooseCurrentSide" type="Button" parent="Toss/WonToss"]
 visible = false
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -215,16 +360,12 @@ offset_top = -236.5
 offset_right = 864.5
 offset_bottom = -83.5
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Stay On This Side"
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="ChooseOtherSide" type="Button" parent="Toss/WonToss"]
 visible = false
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -234,36 +375,33 @@ offset_top = 24.375
 offset_right = 868.385
 offset_bottom = 177.375
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Choose Other Side"
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="InfoText" type="Label" parent="Toss/WonToss"]
+layout_mode = 0
 offset_left = 245.852
 offset_top = 522.067
 offset_right = 914.852
 offset_bottom = 721.067
-custom_fonts/font = ExtResource( 11 )
 text = "Won Toss"
 
 [node name="CoinResultText" type="Label" parent="Toss/WonToss"]
+layout_mode = 0
 offset_left = 201.307
 offset_top = 78.3992
 offset_right = 1164.31
 offset_bottom = 277.399
-custom_fonts/font = ExtResource( 11 )
 text = "Coin is UNDEFINED!"
 
 [node name="LostToss" type="ColorRect" parent="Toss"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.192157, 0.52549, 0.0980392, 1 )
+color = Color(0.192157, 0.52549, 0.0980392, 1)
 
 [node name="ChooseCurrentSide" type="Button" parent="Toss/LostToss"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -273,15 +411,11 @@ offset_top = -244.5
 offset_right = 864.5
 offset_bottom = -91.5
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Choose This Side"
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="ChooseOtherSide" type="Button" parent="Toss/LostToss"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -291,16 +425,12 @@ offset_top = 24.375
 offset_right = 868.385
 offset_bottom = 177.375
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Choose The Other Side"
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="ChooseServe" type="Button" parent="Toss/LostToss"]
 visible = false
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -310,16 +440,12 @@ offset_top = -244.5
 offset_right = 864.5
 offset_bottom = -91.5
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Choose To Serve "
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="ChooseReceive" type="Button" parent="Toss/LostToss"]
 visible = false
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -329,215 +455,168 @@ offset_top = 24.375
 offset_right = 868.385
 offset_bottom = 177.375
 focus_mode = 0
-custom_colors/font_color = Color( 0.972549, 0.815686, 0.486275, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 13 )
-focus_mode = 0
 text = "Choose To Receive"
-icon = ExtResource( 3 )
 expand_icon = true
 
 [node name="InfoText" type="Label" parent="Toss/LostToss"]
+layout_mode = 0
 offset_left = 274.36
 offset_top = 507.812
 offset_right = 943.361
 offset_bottom = 706.812
-custom_fonts/font = ExtResource( 11 )
 text = "Lost Toss"
 
 [node name="CoinResultText" type="Label" parent="Toss/LostToss"]
+layout_mode = 0
 offset_left = 124.689
 offset_top = 276.179
 offset_right = 1087.69
 offset_bottom = 475.179
-custom_fonts/font = ExtResource( 11 )
 text = "Coin is Heads!"
 
 [node name="OppositionChoiceText" type="Label" parent="Toss/LostToss"]
+layout_mode = 0
 offset_left = 56.981
 offset_top = 759.046
 offset_right = 1839.98
 offset_bottom = 958.046
-custom_fonts/font = ExtResource( 11 )
 text = "Other team chose to Serve"
 
-[node name="TeamSelectionUI" parent="." instance=ExtResource( 1 )]
+[node name="TeamSelectionUI" parent="." instance=ExtResource("1")]
 visible = false
+anchors_preset = 15
 
 [node name="TeamLineUpsUI" type="ColorRect" parent="."]
 visible = false
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.972549, 0.976471, 0.576471, 1 )
-script = ExtResource( 10 )
+color = Color(0.972549, 0.976471, 0.576471, 1)
+script = ExtResource("10")
 
 [node name="OppositionTeam" type="GridContainer" parent="TeamLineUpsUI"]
+layout_mode = 0
 offset_left = 1316.0
 offset_top = 119.0
 offset_right = 1856.0
 offset_bottom = 819.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource( 8 )
+theme = ExtResource("8")
 columns = 2
 
-[node name="NameCard1" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_bottom = 100.0
+[node name="NameCard1" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard2" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_right = 540.0
-offset_bottom = 100.0
+[node name="NameCard2" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard3" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_top = 120.0
-offset_bottom = 220.0
+[node name="NameCard3" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard4" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_top = 120.0
-offset_right = 540.0
-offset_bottom = 220.0
+[node name="NameCard4" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard5" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_top = 240.0
-offset_bottom = 340.0
+[node name="NameCard5" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard6" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_top = 240.0
-offset_right = 540.0
-offset_bottom = 340.0
+[node name="NameCard6" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard7" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_top = 360.0
-offset_bottom = 460.0
+[node name="NameCard7" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard8" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_top = 360.0
-offset_right = 540.0
-offset_bottom = 460.0
+[node name="NameCard8" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard9" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_top = 480.0
-offset_bottom = 580.0
+[node name="NameCard9" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard10" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_top = 480.0
-offset_right = 540.0
-offset_bottom = 580.0
+[node name="NameCard10" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard11" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_top = 600.0
-offset_bottom = 700.0
+[node name="NameCard11" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard12" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_top = 600.0
-offset_right = 540.0
-offset_bottom = 700.0
+[node name="NameCard12" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
 
 [node name="HumanTeam" type="GridContainer" parent="TeamLineUpsUI"]
+layout_mode = 0
 offset_left = 76.0
 offset_top = 133.0
 offset_right = 616.0
 offset_bottom = 833.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource( 8 )
+theme = ExtResource("8")
 columns = 2
 
-[node name="NameCard1" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_bottom = 100.0
+[node name="NameCard1" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard2" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_right = 540.0
-offset_bottom = 100.0
+[node name="NameCard2" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard3" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_top = 120.0
-offset_bottom = 220.0
+[node name="NameCard3" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard4" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_top = 120.0
-offset_right = 540.0
-offset_bottom = 220.0
+[node name="NameCard4" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard5" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_top = 240.0
-offset_bottom = 340.0
+[node name="NameCard5" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard6" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_top = 240.0
-offset_right = 540.0
-offset_bottom = 340.0
+[node name="NameCard6" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard7" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_top = 360.0
-offset_bottom = 460.0
+[node name="NameCard7" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard8" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_top = 360.0
-offset_right = 540.0
-offset_bottom = 460.0
+[node name="NameCard8" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard9" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_top = 480.0
-offset_bottom = 580.0
+[node name="NameCard9" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard10" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_top = 480.0
-offset_right = 540.0
-offset_bottom = 580.0
+[node name="NameCard10" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard11" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_top = 600.0
-offset_bottom = 700.0
+[node name="NameCard11" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
-[node name="NameCard12" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource( 7 )]
-offset_left = 290.0
-offset_top = 600.0
-offset_right = 540.0
-offset_bottom = 700.0
+[node name="NameCard12" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
 
 [node name="TeamAName" type="Label" parent="TeamLineUpsUI"]
-modulate = Color( 0, 0.0166669, 1, 1 )
+modulate = Color(0, 0.0166669, 1, 1)
+layout_mode = 0
 offset_top = 21.0
 offset_right = 960.0
 offset_bottom = 88.0
-custom_fonts/font = ExtResource( 11 )
 text = "Australia"
-align = 1
 
 [node name="TeamBName" type="Label" parent="TeamLineUpsUI"]
-modulate = Color( 0, 0.0166669, 1, 1 )
+modulate = Color(0, 0.0166669, 1, 1)
+layout_mode = 0
 offset_left = 960.0
 offset_top = 13.0
 offset_right = 1920.0
 offset_bottom = 80.0
-custom_fonts/font = ExtResource( 11 )
 text = "France"
-align = 1
 
 [node name="Button" type="Button" parent="TeamLineUpsUI"]
+layout_mode = 0
 offset_left = 1395.0
 offset_top = 943.0
 offset_right = 1920.0
 offset_bottom = 1080.0
-custom_colors/font_color = Color( 0.290196, 0, 1, 1 )
-custom_fonts/font = ExtResource( 11 )
-custom_styles/normal = SubResource( 17 )
 text = "Continue"
-icon = ExtResource( 4 )
+icon = ExtResource("4")
 expand_icon = true
 
+[connection signal="pressed" from="MatchStartMenu/VBoxContainer/FullStartButton" to="." method="_on_full_start_button_pressed"]
+[connection signal="pressed" from="FullStartColourRect/BackButtonFullStart" to="." method="_on_back_button_full_start_pressed"]
 [connection signal="pressed" from="ColourRectIntro/Button" to="." method="_on_Intro_Button_pressed"]
 [connection signal="pressed" from="Toss/ChooseHeads" to="." method="_on_ChooseHeads_pressed"]
 [connection signal="pressed" from="Toss/ChooseTails" to="." method="_on_ChooseTails_pressed"]

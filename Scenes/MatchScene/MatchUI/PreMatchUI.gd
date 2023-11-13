@@ -6,12 +6,17 @@ extends CanvasLayer
 @onready var toss = $Toss
 @onready var wonToss = $Toss/WonToss
 @onready var lostToss = $Toss/LostToss
+@onready var matchStartMenu = $MatchStartMenu
+@onready var fullStartMenu = $FullStartColourRect
+
 
 func skipUI():
 	matchIntro.hide()
 
 func _ready():
-	matchIntro.show()
+	matchStartMenu.show()
+	fullStartMenu.hide()
+	matchIntro.hide()
 	
 	teamSelection.hide()
 	teamLineups.hide()
@@ -150,3 +155,21 @@ func _on_ChooseServeReceive_pressed():
 	$Toss/WonToss/ChooseSide.hide()
 	$Toss/WonToss/ChooseServeReceive.hide()
 
+
+
+func _on_back_button_full_start_pressed():
+	fullStartMenu.hide()
+	matchStartMenu.show()
+
+
+func _on_full_start_button_pressed():
+	matchStartMenu.hide()
+	fullStartMenu.show()
+
+
+func _on_accelerated_start_button_pressed():
+	pass # Replace with function body.
+
+
+func _on_instant_start_button_pressed():
+	pass # Replace with function body.

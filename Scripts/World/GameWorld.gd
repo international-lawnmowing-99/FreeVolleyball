@@ -36,7 +36,7 @@ func GenerateDefaultWorld(generateAllPlayers:bool):
 
 			continents[continents.size() - 1].nations.append(Nation.new(finalName, pop))
 
-			var currentNation = continents[continents.size() - 1].nations[continents[continents.size() - 1].nations.size() - 1]
+			var currentNation:Nation = continents[continents.size() - 1].nations[continents[continents.size() - 1].nations.size() - 1]
 
 			currentNation.Populate(firstNames, lastNames, r, generateAllPlayers)
 
@@ -53,10 +53,6 @@ func LoadText():
 	var g = FileAccess.open("res://Data/lastNames.txt", FileAccess.READ_WRITE)
 	var n = FileAccess.open("res://Data/nationsAndPop.txt", FileAccess.READ)
 	
-	for i in range(10):
-		Console.AddNewLine(f.get_line())
-
-	f.seek(0)	
 	while not f.eof_reached():
 		var line = f.get_line()
 		if line != "\n":

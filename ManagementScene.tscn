@@ -23,9 +23,9 @@ theme = ExtResource("4")
 
 [node name="Label3" type="Label" parent="ColorRect/ColorRect2"]
 layout_mode = 0
-offset_left = -31.0
+offset_left = 33.0
 offset_top = 42.0
-offset_right = 408.0
+offset_right = 345.0
 offset_bottom = 179.0
 text = "Competition
  Ladder"
@@ -41,9 +41,9 @@ theme = ExtResource("4")
 
 [node name="Label3" type="Label" parent="ColorRect/ColorRect3"]
 layout_mode = 0
-offset_left = -31.0
+offset_left = 33.0
 offset_top = 42.0
-offset_right = 408.0
+offset_right = 472.0
 offset_bottom = 179.0
 text = "Team Info"
 

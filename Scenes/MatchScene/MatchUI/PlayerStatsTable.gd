@@ -130,4 +130,3 @@ func _on_set_pressed():
 	setAscending = !setAscending
 	for i in allPlayerStatsRows.size():
 		allPlayerStatsRows[i].DisplayPlayer(allPlayers[i])
-

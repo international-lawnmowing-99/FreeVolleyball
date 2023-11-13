@@ -83,3 +83,5 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "99"
 horizontal_alignment = 1
+
+[connection signal="pressed" from="AllItems/Selected" to="." method="_on_selected_pressed"]

@@ -72,8 +72,8 @@ var outsideFrontSpikes
 var oppositeFrontSpikes
 var oppositeBackSpikes
 
-#because can't work out how to pass arguments to the sort_custom class
 var distanceHack
+var uiSelected:bool = false
 
 func CreateSpikes():
 	var targetXFrontcourt = stats.spikeHeight/2 + 0.15

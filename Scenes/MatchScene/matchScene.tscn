@@ -20,7 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://dmu0b2wanhyv7" path="res://Scenes/MatchScene/MatchUI/ScoreUIMatch.tscn" id="15_w0aqi"]
 [ext_resource type="Script" path="res://Addons/DebugOverlay.gd" id="16_ifqht"]
 [ext_resource type="Script" path="res://Addons/DebugDraw3D.gd" id="17_wg7iy"]
-[ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.tscn" id="18_0pm8c"]
+[ext_resource type="PackedScene" uid="uid://cycfwen4jhh1v" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.tscn" id="18_0pm8c"]
 [ext_resource type="PackedScene" uid="uid://7v1fcf4qi42l" path="res://Scenes/MatchScene/MatchUI/ServeUI.tscn" id="19_gfg2l"]
 [ext_resource type="Script" path="res://Scenes/TeamInfoUI.gd" id="20_mqewi"]
 [ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.tscn" id="21_mfp85"]

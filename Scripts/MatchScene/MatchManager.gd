@@ -2,7 +2,7 @@ extends Node3D
 
 class_name MatchManager
 
-var gameWorld = load("res://Scripts/World/GameWorld.gd").new()
+var gameWorld:GameWorld = load("res://Scripts/World/GameWorld.gd").new()
 var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 
 @export var debugCylinder:PackedScene
@@ -26,6 +26,7 @@ var sphere
 
 var isTeamAServing:bool
 var isPaused:bool = false
+var chooseTeamsManually:bool = false
 
 func _ready():
 	cube = debugCube.instantiate()
@@ -38,7 +39,10 @@ func _ready():
 	gameWorld.GenerateDefaultWorld(false)
 	var later = Time.get_ticks_msec()
 	print(str(later - now) + "ms generate world")
-	newMatch.ChooseRandom(gameWorld)
+	
+	if !chooseTeamsManually:
+		newMatch.ChooseRandom(gameWorld)
+		
 	
 	ball.mManager = self
 	ball.blockResolver.mManager = self
@@ -73,7 +77,7 @@ func _ready():
 	teamTacticsUI.Init(teamA, teamB)
 	
 	preMatchUI.PopulateUI(teamA, teamB)
-	preMatchUI.skipUI()
+#	preMatchUI.skipUI()
 	$UI/TeamInfoUI.InitialiseOnCourtPlayerUI()
 
 
@@ -134,6 +138,11 @@ func _input(_event):
 
 func PointToTeamA():
 	score.PointToTeamA()
+	
+	Console.AddNewLine("=============================================================")
+	Console.AddNewLine("Point: Score is " + score.teamAScoreText.text + ":" + score.teamBScoreText.text)
+	Console.AddNewLine("=============================================================")
+	
 	teamA.isNextToSpike = false
 	teamB.isNextToSpike = true
 
@@ -150,8 +159,14 @@ func PointToTeamA():
 	teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
 	ball.inPlay = false
 
+
 func PointToTeamB():
 	score.PointToTeamB()
+	
+	Console.AddNewLine("=============================================================")
+	Console.AddNewLine("Point: Score is " + score.teamAScoreText.text + ":" + score.teamBScoreText.text)
+	Console.AddNewLine("=============================================================")
+	
 	teamB.isNextToSpike = false
 	teamA.isNextToSpike = true
 	
@@ -167,6 +182,7 @@ func PointToTeamB():
 	teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
 	teamB.stateMachine.SetCurrentState(teamB.preserviceState)
 	ball.inPlay = false
+
 
 func SetToTeamA():
 	$UI/TeamInfoUI/TeamSelectionUI/TeamSelectionUI.EnableRotate()
