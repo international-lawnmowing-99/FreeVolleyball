@@ -16,9 +16,10 @@ var setAscending:bool = false
 var staminaAscending:bool = false
 
 func _ready():
-	await get_tree().create_timer(.1).timeout
-	var mManager:MatchManager = get_tree().root.get_node("MatchScene")
-	PopulateTable(mManager.teamA)
+	pass
+#	await get_tree().create_timer(.1).timeout
+#	var mManager:MatchManager = get_tree().root.get_node("MatchScene")
+#	PopulateTable(mManager.teamA)
 
 func PopulateTable(team:Team):
 	if team.nation.nationalTeam.players:

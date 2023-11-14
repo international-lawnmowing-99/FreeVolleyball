@@ -8,7 +8,7 @@ var _pseudoParent
 var wasLastTouchedByA:bool
 var attackTarget
 var mManager:MatchManager
-var inPlay:bool = true
+var inPlay:bool = false
 var blockWillBeAttempted = false
 var blockResolver = load("res://Scripts/MatchScene/BlockResolver.gd").new(self)
 

@@ -1,7 +1,6 @@
 extends Node
 class_name Team
 
-var Enums = preload("res://Scripts/World/Enums.gd")
 var AthleteScene = preload("res://Scenes/MatchScene/Athlete/Athlete.tscn")
 
 var teamName:String
@@ -171,7 +170,7 @@ func UpdateTimeTillDigTarget():
 
 func _process(_delta):
 	stateMachine.Update()
-	if !isHuman && mManager.TESTteamRepresentation.courtPlayers:
+	if !isHuman && mManager && mManager.TESTteamRepresentation.courtPlayers:
 		mManager.TESTteamRepresentation.UpdateRepresentation(get_process_delta_time())
 
 func Rotate():

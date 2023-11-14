@@ -23,12 +23,15 @@ var sphere
 @onready var TESTteamRepresentation = $UI/TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
 @onready var serveUI = $UI/ServeUI
 @onready var teamTacticsUI = $UI/TeamTacticsUICanvas/TeamTacticsUI
+@onready var camera = $Camera3D
 
 var isTeamAServing:bool
 var isPaused:bool = false
 var chooseTeamsManually:bool = false
 
 func _ready():
+	teamA.Chill()
+	teamB.Chill()
 	cube = debugCube.instantiate()
 	cylinder = debugCylinder.instantiate()
 	sphere = debugSphere.instantiate()
@@ -39,6 +42,13 @@ func _ready():
 	gameWorld.GenerateDefaultWorld(false)
 	var later = Time.get_ticks_msec()
 	print(str(later - now) + "ms generate world")
+	
+	
+	preMatchUI.Init(gameWorld, newMatch)
+	
+	camera._gui.LockCamera()
+	
+func StartGame():
 	
 	if !chooseTeamsManually:
 		newMatch.ChooseRandom(gameWorld)

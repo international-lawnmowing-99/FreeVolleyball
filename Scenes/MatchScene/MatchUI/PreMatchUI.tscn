@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://cycfwen4jhh1v"]
+[gd_scene load_steps=10 format=3 uid="uid://cycfwen4jhh1v"]
 
 [ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.tscn" id="1"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://c5r216hy1gmcv" path="res://Textures/293px-Small_arrow_pointing_left.svg.png" id="2_5hwqb"]
+[ext_resource type="PackedScene" uid="uid://dia2qm24xemkg" path="res://Scenes/PreMatchUI/TeamChoice.tscn" id="2_kpox3"]
 [ext_resource type="Texture2D" uid="uid://b11tiqqynj7p6" path="res://Textures/net-graphic.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://browddj6fobwl" path="res://Textures/143640-allan-border-s-cricket-dos-screenshot-coin-toss.png" id="5"]
 [ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/NameCard.tscn" id="7"]
@@ -56,141 +57,19 @@ offset_right = 1814.0
 offset_bottom = 986.0
 text = "Confirm"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="FullStartColourRect"]
+[node name="TeamAChooser" parent="FullStartColourRect" instance=ExtResource("2_kpox3")]
 layout_mode = 0
-offset_left = 232.0
-offset_top = 144.0
-offset_right = 375.0
-offset_bottom = 393.0
-theme_override_constants/separation = 20
-alignment = 1
+offset_left = 356.0
+offset_top = 277.0
+offset_right = 499.0
+offset_bottom = 526.0
 
-[node name="ClubInternationalLabel" type="Label" parent="FullStartColourRect/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Club/International"
-horizontal_alignment = 1
-
-[node name="LeftButton" type="Button" parent="FullStartColourRect/VBoxContainer/ClubInternationalLabel"]
+[node name="TeamBChooser" parent="FullStartColourRect" instance=ExtResource("2_kpox3")]
 layout_mode = 0
-offset_left = -45.0
-offset_top = -4.0
-offset_right = -11.0
-offset_bottom = 29.0
-icon = ExtResource("2_5hwqb")
-text_overrun_behavior = 3
-clip_text = true
-icon_alignment = 1
-expand_icon = true
-
-[node name="RightButton" type="Button" parent="FullStartColourRect/VBoxContainer/ClubInternationalLabel"]
-layout_mode = 0
-offset_left = 187.0
-offset_top = 28.0
-offset_right = 221.0
-offset_bottom = 61.0
-rotation = -3.14159
-icon = ExtResource("2_5hwqb")
-text_overrun_behavior = 3
-clip_text = true
-icon_alignment = 1
-expand_icon = true
-
-[node name="ContinentLabel" type="Label" parent="FullStartColourRect/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Continent"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="LeftButton" type="Button" parent="FullStartColourRect/VBoxContainer/ContinentLabel"]
-layout_mode = 0
-offset_left = -45.0
-offset_top = -4.0
-offset_right = -11.0
-offset_bottom = 29.0
-icon = ExtResource("2_5hwqb")
-text_overrun_behavior = 3
-clip_text = true
-icon_alignment = 1
-expand_icon = true
-
-[node name="RightButton" type="Button" parent="FullStartColourRect/VBoxContainer/ContinentLabel"]
-layout_mode = 0
-offset_left = 187.0
-offset_top = 28.0
-offset_right = 221.0
-offset_bottom = 61.0
-rotation = -3.14159
-icon = ExtResource("2_5hwqb")
-text_overrun_behavior = 3
-clip_text = true
-icon_alignment = 1
-expand_icon = true
-
-[node name="NationLabel" type="Label" parent="FullStartColourRect/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Nation"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="LeftButton" type="Button" parent="FullStartColourRect/VBoxContainer/NationLabel"]
-layout_mode = 0
-offset_left = -45.0
-offset_top = -4.0
-offset_right = -11.0
-offset_bottom = 29.0
-icon = ExtResource("2_5hwqb")
-text_overrun_behavior = 3
-clip_text = true
-icon_alignment = 1
-expand_icon = true
-
-[node name="RightButton" type="Button" parent="FullStartColourRect/VBoxContainer/NationLabel"]
-layout_mode = 0
-offset_left = 187.0
-offset_top = 28.0
-offset_right = 221.0
-offset_bottom = 61.0
-rotation = -3.14159
-icon = ExtResource("2_5hwqb")
-text_overrun_behavior = 3
-clip_text = true
-icon_alignment = 1
-expand_icon = true
-
-[node name="ClubTeamLabel" type="Label" parent="FullStartColourRect/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Club Team"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="LeftButton" type="Button" parent="FullStartColourRect/VBoxContainer/ClubTeamLabel"]
-layout_mode = 0
-offset_left = -45.0
-offset_top = -4.0
-offset_right = -11.0
-offset_bottom = 29.0
-icon = ExtResource("2_5hwqb")
-text_overrun_behavior = 3
-clip_text = true
-icon_alignment = 1
-expand_icon = true
-
-[node name="RightButton" type="Button" parent="FullStartColourRect/VBoxContainer/ClubTeamLabel"]
-layout_mode = 0
-offset_left = 187.0
-offset_top = 28.0
-offset_right = 221.0
-offset_bottom = 61.0
-rotation = -3.14159
-icon = ExtResource("2_5hwqb")
-text_overrun_behavior = 3
-clip_text = true
-icon_alignment = 1
-expand_icon = true
+offset_left = 1252.0
+offset_top = 277.0
+offset_right = 1395.0
+offset_bottom = 526.0
 
 [node name="BackButtonFullStart" type="Button" parent="FullStartColourRect"]
 layout_mode = 0
@@ -199,6 +78,59 @@ offset_top = 919.0
 offset_right = 286.0
 offset_bottom = 991.0
 text = "Back"
+
+[node name="TeamALabel" type="Label" parent="FullStartColourRect"]
+layout_mode = 0
+offset_left = 390.0
+offset_top = 226.0
+offset_right = 448.0
+offset_bottom = 252.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Team A"
+
+[node name="TeamBLabel" type="Label" parent="FullStartColourRect"]
+layout_mode = 0
+offset_left = 1286.0
+offset_top = 226.0
+offset_right = 1344.0
+offset_bottom = 252.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Team B"
+
+[node name="GenderLabel" type="Label" parent="FullStartColourRect"]
+layout_mode = 0
+offset_left = 824.0
+offset_top = 128.0
+offset_right = 962.0
+offset_bottom = 154.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Gender"
+horizontal_alignment = 1
+
+[node name="LeftButton" type="Button" parent="FullStartColourRect/GenderLabel"]
+layout_mode = 0
+offset_left = -45.0
+offset_top = -4.0
+offset_right = -11.0
+offset_bottom = 29.0
+icon = ExtResource("2_5hwqb")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="RightButton" type="Button" parent="FullStartColourRect/GenderLabel"]
+layout_mode = 0
+offset_left = 187.0
+offset_top = 28.0
+offset_right = 221.0
+offset_bottom = 61.0
+rotation = -3.14159
+icon = ExtResource("2_5hwqb")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
 
 [node name="ColourRectIntro" type="ColorRect" parent="."]
 visible = false
@@ -616,6 +548,8 @@ icon = ExtResource("4")
 expand_icon = true
 
 [connection signal="pressed" from="MatchStartMenu/VBoxContainer/FullStartButton" to="." method="_on_full_start_button_pressed"]
+[connection signal="pressed" from="MatchStartMenu/VBoxContainer/AcceleratedStartButton" to="." method="_on_accelerated_start_button_pressed"]
+[connection signal="pressed" from="MatchStartMenu/VBoxContainer/InstantStartButton" to="." method="_on_instant_start_button_pressed"]
 [connection signal="pressed" from="FullStartColourRect/BackButtonFullStart" to="." method="_on_back_button_full_start_pressed"]
 [connection signal="pressed" from="ColourRectIntro/Button" to="." method="_on_Intro_Button_pressed"]
 [connection signal="pressed" from="Toss/ChooseHeads" to="." method="_on_ChooseHeads_pressed"]

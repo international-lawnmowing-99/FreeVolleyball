@@ -1,4 +1,8 @@
 extends CanvasLayer
+class_name PreMatchUI
+
+var newMatchData:NewMatchData
+var gameWorld:GameWorld
 
 @onready var matchIntro = $ColourRectIntro
 @onready var teamSelection = $TeamSelectionUI
@@ -9,9 +13,20 @@ extends CanvasLayer
 @onready var matchStartMenu = $MatchStartMenu
 @onready var fullStartMenu = $FullStartColourRect
 
+@onready var teamAChooser:TeamChoice = $FullStartColourRect/TeamAChooser
+@onready var teamBChooser:TeamChoice = $FullStartColourRect/TeamBChooser
 
 func skipUI():
 	matchIntro.hide()
+	
+func Init(_gameWorld:GameWorld, _newMatchData:NewMatchData):
+	gameWorld = _gameWorld
+	newMatchData = _newMatchData
+	newMatchData.aChoiceState = PlayerChoiceState.new(gameWorld)
+	newMatchData.bChoiceState = PlayerChoiceState.new(gameWorld)
+	teamAChooser.Init(gameWorld, newMatchData.aChoiceState)
+	teamBChooser.Init(gameWorld, newMatchData.bChoiceState)
+	
 
 func _ready():
 	matchStartMenu.show()

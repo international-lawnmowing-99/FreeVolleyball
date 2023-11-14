@@ -1,0 +1,148 @@
+[gd_scene load_steps=3 format=3 uid="uid://dia2qm24xemkg"]
+
+[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/TeamChoice.gd" id="1_0t3ah"]
+[ext_resource type="Texture2D" uid="uid://c5r216hy1gmcv" path="res://Textures/293px-Small_arrow_pointing_left.svg.png" id="2_rubhj"]
+
+[node name="TeamChoice" type="VBoxContainer"]
+offset_left = 355.0
+offset_top = 276.0
+offset_right = 580.0
+offset_bottom = 525.0
+theme_override_constants/separation = 20
+script = ExtResource("1_0t3ah")
+
+[node name="ClubInternationalLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Club/International"
+horizontal_alignment = 1
+
+[node name="LeftButton" type="Button" parent="ClubInternationalLabel"]
+layout_mode = 0
+offset_left = -45.0
+offset_top = -4.0
+offset_right = -11.0
+offset_bottom = 29.0
+icon = ExtResource("2_rubhj")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="RightButton" type="Button" parent="ClubInternationalLabel"]
+layout_mode = 0
+offset_left = 267.0
+offset_top = 28.0
+offset_right = 301.0
+offset_bottom = 61.0
+rotation = -3.14159
+icon = ExtResource("2_rubhj")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="ContinentLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Continent"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftButton" type="Button" parent="ContinentLabel"]
+layout_mode = 0
+offset_left = -45.0
+offset_top = -4.0
+offset_right = -11.0
+offset_bottom = 29.0
+icon = ExtResource("2_rubhj")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="RightButton" type="Button" parent="ContinentLabel"]
+layout_mode = 0
+offset_left = 267.0
+offset_top = 28.0
+offset_right = 301.0
+offset_bottom = 61.0
+rotation = -3.14159
+icon = ExtResource("2_rubhj")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="NationLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Nation"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftButton" type="Button" parent="NationLabel"]
+layout_mode = 0
+offset_left = -45.0
+offset_top = -4.0
+offset_right = -11.0
+offset_bottom = 29.0
+icon = ExtResource("2_rubhj")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="RightButton" type="Button" parent="NationLabel"]
+layout_mode = 0
+offset_left = 267.0
+offset_top = 28.0
+offset_right = 301.0
+offset_bottom = 61.0
+rotation = -3.14159
+icon = ExtResource("2_rubhj")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="ClubTeamLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Club Team"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftButton" type="Button" parent="ClubTeamLabel"]
+layout_mode = 0
+offset_left = -45.0
+offset_top = -4.0
+offset_right = -11.0
+offset_bottom = 29.0
+icon = ExtResource("2_rubhj")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="RightButton" type="Button" parent="ClubTeamLabel"]
+layout_mode = 0
+offset_left = 267.0
+offset_top = 28.0
+offset_right = 301.0
+offset_bottom = 61.0
+rotation = -3.14159
+icon = ExtResource("2_rubhj")
+text_overrun_behavior = 3
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[connection signal="pressed" from="ClubInternationalLabel/LeftButton" to="." method="_on_club_or_international_left_button_pressed"]
+[connection signal="pressed" from="ClubInternationalLabel/RightButton" to="." method="_on_club_or_international_right_button_pressed"]
+[connection signal="pressed" from="ContinentLabel/LeftButton" to="." method="_on_continent_left_button_pressed"]
+[connection signal="pressed" from="ContinentLabel/RightButton" to="." method="_on_continent_right_button_pressed"]
+[connection signal="pressed" from="NationLabel/LeftButton" to="." method="_on_nation_left_button_pressed"]
+[connection signal="pressed" from="NationLabel/RightButton" to="." method="_on_nation_right_button_pressed"]
+[connection signal="pressed" from="ClubTeamLabel/LeftButton" to="." method="_on_club_team_left_button_pressed"]
+[connection signal="pressed" from="ClubTeamLabel/RightButton" to="." method="_on_club_team_right_button_pressed"]
