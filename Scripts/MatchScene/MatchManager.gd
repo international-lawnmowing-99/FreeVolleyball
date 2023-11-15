@@ -44,7 +44,7 @@ func _ready():
 	print(str(later - now) + "ms generate world")
 	
 	
-	preMatchUI.Init(gameWorld, newMatch)
+	preMatchUI.Init(self)
 	
 	camera._gui.LockCamera()
 	

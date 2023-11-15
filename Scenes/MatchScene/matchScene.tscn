@@ -23,7 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://cycfwen4jhh1v" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.tscn" id="18_0pm8c"]
 [ext_resource type="PackedScene" uid="uid://7v1fcf4qi42l" path="res://Scenes/MatchScene/MatchUI/ServeUI.tscn" id="19_gfg2l"]
 [ext_resource type="Script" path="res://Scenes/TeamInfoUI.gd" id="20_mqewi"]
-[ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.tscn" id="21_mfp85"]
+[ext_resource type="PackedScene" uid="uid://c0t3dj6fskv0t" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.tscn" id="21_mfp85"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/MatchStatistics.gd" id="22_jweii"]
 [ext_resource type="PackedScene" uid="uid://cts4mqjkgj1vj" path="res://Scenes/MatchScene/MatchUI/PlayerStatsTable.tscn" id="22_osxw1"]
 [ext_resource type="PackedScene" uid="uid://bas6swl121cf5" path="res://Scenes/MatchScene/MatchUI/OnCourtPlayer.tscn" id="23_sry0n"]
@@ -873,6 +873,7 @@ offset_bottom = 1078.0
 
 [node name="TeamSelectionUI" parent="UI/TeamInfoUI/TeamSelectionUI" instance=ExtResource("21_mfp85")]
 layout_mode = 0
+anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
 

@@ -3,6 +3,7 @@ class_name PreMatchUI
 
 var newMatchData:NewMatchData
 var gameWorld:GameWorld
+var mManager:MatchManager
 
 @onready var matchIntro = $ColourRectIntro
 @onready var teamSelection = $TeamSelectionUI
@@ -12,6 +13,7 @@ var gameWorld:GameWorld
 @onready var lostToss = $Toss/LostToss
 @onready var matchStartMenu = $MatchStartMenu
 @onready var fullStartMenu = $FullStartColourRect
+@onready var athletesTableMenu = $AllAthletesTableColourRect
 
 @onready var teamAChooser:TeamChoice = $FullStartColourRect/TeamAChooser
 @onready var teamBChooser:TeamChoice = $FullStartColourRect/TeamBChooser
@@ -19,9 +21,10 @@ var gameWorld:GameWorld
 func skipUI():
 	matchIntro.hide()
 	
-func Init(_gameWorld:GameWorld, _newMatchData:NewMatchData):
-	gameWorld = _gameWorld
-	newMatchData = _newMatchData
+func Init(_mManager:MatchManager):
+	mManager = _mManager
+	gameWorld = mManager.gameWorld
+	newMatchData = mManager.newMatch
 	newMatchData.aChoiceState = PlayerChoiceState.new(gameWorld)
 	newMatchData.bChoiceState = PlayerChoiceState.new(gameWorld)
 	teamAChooser.Init(gameWorld, newMatchData.aChoiceState)
@@ -183,8 +186,19 @@ func _on_full_start_button_pressed():
 
 
 func _on_accelerated_start_button_pressed():
+	newMatchData.ChooseRandom(gameWorld)
+	athletesTableMenu.show()
+	athletesTableMenu.get_node("PlayerStatsTable").PopulateTable(gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational))
 	pass # Replace with function body.
 
 
 func _on_instant_start_button_pressed():
-	pass # Replace with function body.
+	hide()
+	mManager.StartGame()
+
+
+func _on_full_start_confirm_button_pressed():
+	if teamAChooser.ValidChoice() && teamBChooser.ValidChoice():
+		fullStartMenu.hide()
+		athletesTableMenu.show()
+		athletesTableMenu.get_node("PlayerStatsTable").PopulateTable(gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational))

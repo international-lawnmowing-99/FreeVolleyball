@@ -1,12 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://cycfwen4jhh1v"]
+[gd_scene load_steps=11 format=3 uid="uid://cycfwen4jhh1v"]
 
-[ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://c0t3dj6fskv0t" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.tscn" id="1"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://c5r216hy1gmcv" path="res://Textures/293px-Small_arrow_pointing_left.svg.png" id="2_5hwqb"]
 [ext_resource type="PackedScene" uid="uid://dia2qm24xemkg" path="res://Scenes/PreMatchUI/TeamChoice.tscn" id="2_kpox3"]
 [ext_resource type="Texture2D" uid="uid://b11tiqqynj7p6" path="res://Textures/net-graphic.png" id="4"]
+[ext_resource type="PackedScene" uid="uid://cts4mqjkgj1vj" path="res://Scenes/MatchScene/MatchUI/PlayerStatsTable.tscn" id="4_esi31"]
 [ext_resource type="Texture2D" uid="uid://browddj6fobwl" path="res://Textures/143640-allan-border-s-cricket-dos-screenshot-coin-toss.png" id="5"]
-[ext_resource type="PackedScene" path="res://Scenes/MatchScene/MatchUI/NameCard.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://c62uwhs35dmk" path="res://Scenes/MatchScene/MatchUI/NameCard.tscn" id="7"]
 [ext_resource type="Theme" path="res://Scenes/MatchScene/gridTheme.tres" id="8"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/TeamLineUpsUI.gd" id="10"]
 
@@ -46,6 +47,7 @@ focus_mode = 0
 text = "Instant Start"
 
 [node name="FullStartColourRect" type="ColorRect" parent="."]
+visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0
 
@@ -62,7 +64,7 @@ layout_mode = 0
 offset_left = 356.0
 offset_top = 277.0
 offset_right = 499.0
-offset_bottom = 526.0
+offset_bottom = 441.0
 
 [node name="TeamBChooser" parent="FullStartColourRect" instance=ExtResource("2_kpox3")]
 layout_mode = 0
@@ -81,21 +83,23 @@ text = "Back"
 
 [node name="TeamALabel" type="Label" parent="FullStartColourRect"]
 layout_mode = 0
-offset_left = 390.0
-offset_top = 226.0
-offset_right = 448.0
-offset_bottom = 252.0
+offset_left = 356.0
+offset_top = 230.0
+offset_right = 581.0
+offset_bottom = 256.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Team A"
+text = "Team A (Human)"
+horizontal_alignment = 1
 
 [node name="TeamBLabel" type="Label" parent="FullStartColourRect"]
 layout_mode = 0
-offset_left = 1286.0
+offset_left = 1252.0
 offset_top = 226.0
-offset_right = 1344.0
+offset_right = 1477.0
 offset_bottom = 252.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Team B"
+text = "Team B (Computer)"
+horizontal_alignment = 1
 
 [node name="GenderLabel" type="Label" parent="FullStartColourRect"]
 layout_mode = 0
@@ -131,6 +135,18 @@ text_overrun_behavior = 3
 clip_text = true
 icon_alignment = 1
 expand_icon = true
+
+[node name="AllAthletesTableColourRect" type="ColorRect" parent="."]
+visible = false
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="PlayerStatsTable" parent="AllAthletesTableColourRect" instance=ExtResource("4_esi31")]
+layout_mode = 1
+offset_left = 315.0
+offset_top = 87.0
+offset_right = -325.0
+offset_bottom = -273.0
 
 [node name="ColourRectIntro" type="ColorRect" parent="."]
 visible = false
@@ -416,7 +432,6 @@ text = "Other team chose to Serve"
 
 [node name="TeamSelectionUI" parent="." instance=ExtResource("1")]
 visible = false
-anchors_preset = 15
 
 [node name="TeamLineUpsUI" type="ColorRect" parent="."]
 visible = false
@@ -550,6 +565,7 @@ expand_icon = true
 [connection signal="pressed" from="MatchStartMenu/VBoxContainer/FullStartButton" to="." method="_on_full_start_button_pressed"]
 [connection signal="pressed" from="MatchStartMenu/VBoxContainer/AcceleratedStartButton" to="." method="_on_accelerated_start_button_pressed"]
 [connection signal="pressed" from="MatchStartMenu/VBoxContainer/InstantStartButton" to="." method="_on_instant_start_button_pressed"]
+[connection signal="pressed" from="FullStartColourRect/ConfirmButton" to="." method="_on_full_start_confirm_button_pressed"]
 [connection signal="pressed" from="FullStartColourRect/BackButtonFullStart" to="." method="_on_back_button_full_start_pressed"]
 [connection signal="pressed" from="ColourRectIntro/Button" to="." method="_on_Intro_Button_pressed"]
 [connection signal="pressed" from="Toss/ChooseHeads" to="." method="_on_ChooseHeads_pressed"]

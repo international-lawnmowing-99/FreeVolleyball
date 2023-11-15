@@ -4,10 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://c5r216hy1gmcv" path="res://Textures/293px-Small_arrow_pointing_left.svg.png" id="2_rubhj"]
 
 [node name="TeamChoice" type="VBoxContainer"]
-offset_left = 355.0
-offset_top = 276.0
-offset_right = 580.0
-offset_bottom = 525.0
+custom_minimum_size = Vector2(225, 0)
+offset_right = 225.0
+offset_bottom = 249.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 20
 script = ExtResource("1_0t3ah")
 

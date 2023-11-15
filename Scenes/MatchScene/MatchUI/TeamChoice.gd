@@ -18,6 +18,18 @@ func Init(_gameWorld, _choiceState):
 	nationLabel.hide()
 	clubTeamLabel.hide()
 
+func ValidChoice() -> bool:
+	match clubOrInternationalMode:
+		Enums.ClubOrInternational.NotSelected:
+			return false
+		Enums.ClubOrInternational.International:
+			if choiceState.nationIndices[choiceState.continentIndex] < 0:
+				return false
+		Enums.ClubOrInternational.Club:
+			if choiceState.clubTeamIndices[choiceState.continentIndex][choiceState.nationIndices[choiceState.continentIndex]] < 0:
+				return false
+	return true
+
 func _on_club_or_international_left_button_pressed():
 	match clubOrInternationalMode:
 		Enums.ClubOrInternational.NotSelected:
