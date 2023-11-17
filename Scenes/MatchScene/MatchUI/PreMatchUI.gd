@@ -14,9 +14,13 @@ var mManager:MatchManager
 @onready var matchStartMenu = $MatchStartMenu
 @onready var fullStartMenu = $FullStartColourRect
 @onready var athletesTableMenu = $AllAthletesTableColourRect
+@onready var playerStatsTable:PlayerStatsTable = $AllAthletesTableColourRect/PlayerStatsTable
+@onready var allAthletesTitleLabel:Label = $AllAthletesTableColourRect/AllAthletesTitleLabel
 
 @onready var teamAChooser:TeamChoice = $FullStartColourRect/TeamAChooser
 @onready var teamBChooser:TeamChoice = $FullStartColourRect/TeamBChooser
+
+var usingAcceleratedStart:bool = false
 
 func skipUI():
 	matchIntro.hide()
@@ -27,8 +31,8 @@ func Init(_mManager:MatchManager):
 	newMatchData = mManager.newMatch
 	newMatchData.aChoiceState = PlayerChoiceState.new(gameWorld)
 	newMatchData.bChoiceState = PlayerChoiceState.new(gameWorld)
-	teamAChooser.Init(gameWorld, newMatchData.aChoiceState)
-	teamBChooser.Init(gameWorld, newMatchData.bChoiceState)
+	teamAChooser.Init(self, gameWorld, newMatchData.aChoiceState)
+	teamBChooser.Init(self, gameWorld, newMatchData.bChoiceState)
 	
 
 func _ready():
@@ -181,12 +185,15 @@ func _on_back_button_full_start_pressed():
 
 
 func _on_full_start_button_pressed():
+	usingAcceleratedStart = false
 	matchStartMenu.hide()
 	fullStartMenu.show()
 
 
 func _on_accelerated_start_button_pressed():
+	usingAcceleratedStart = true
 	newMatchData.ChooseRandom(gameWorld)
+	allAthletesTitleLabel.text = mManager.teamA.teamName + " vs " + mManager.teamB.teamName
 	athletesTableMenu.show()
 	athletesTableMenu.get_node("PlayerStatsTable").PopulateTable(gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational))
 	pass # Replace with function body.
@@ -201,4 +208,41 @@ func _on_full_start_confirm_button_pressed():
 	if teamAChooser.ValidChoice() && teamBChooser.ValidChoice():
 		fullStartMenu.hide()
 		athletesTableMenu.show()
+
+		mManager.teamA.Init(mManager, newMatchData.aChoiceState, gameWorld, newMatchData.clubOrInternational)
+		mManager.teamB.Init(mManager, newMatchData.bChoiceState, gameWorld, newMatchData.clubOrInternational)
+		
+		allAthletesTitleLabel.text = mManager.teamA.teamName + " vs " + mManager.teamB.teamName
 		athletesTableMenu.get_node("PlayerStatsTable").PopulateTable(gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational))
+
+
+func _on_back_button_table_pressed():
+	playerStatsTable.clear()
+	athletesTableMenu.hide()
+	if usingAcceleratedStart:
+		matchStartMenu.show()
+	else:
+		fullStartMenu.show()
+
+
+func _on_table_confirm_button_pressed():
+	if playerStatsTable.selectedPlayers.size() == 12:
+		hide()
+		mManager.StartGame()
+	else:
+		Console.AddNewLine("Number of selected players is not 12!")
+		Console.AddNewLine("Number of selected players is not 12!")
+
+func SyncroniseClubOrInternational(clubOrInternational:Enums.ClubOrInternational):
+	# In the future, club vs international matches will be possible, but not yet
+	# Also, matches with custom players drawn from anywhere
+	
+	if teamAChooser.clubOrInternationalMode == clubOrInternational:
+		pass
+	else:
+		teamAChooser._on_club_or_international_left_button_pressed()
+	
+	if teamBChooser.clubOrInternationalMode == clubOrInternational:
+		pass
+	else:
+		teamBChooser._on_club_or_international_left_button_pressed()

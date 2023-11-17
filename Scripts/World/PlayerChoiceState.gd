@@ -1,9 +1,8 @@
 extends Node
 
 class_name PlayerChoiceState
-const Enums = preload("res://Scripts/World/Enums.gd")
 
-
+#var clubOrInternational:Enums.ClubOrInternational = Enums.ClubOrInternational.NotSelected
 var continentIndex = -1
 
 var nationIndices = []

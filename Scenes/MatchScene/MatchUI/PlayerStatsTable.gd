@@ -5,6 +5,8 @@ var playerStatsRow = preload("res://Scenes/MatchScene/MatchUI/PlayerStatsRow.tsc
 @onready var rows = $ScrollContainer/Rows
 var allPlayerStatsRows = []
 var allPlayers = []
+var selectedPlayers = []
+
 var firstNamesAscending:bool = false
 var lastNamesAscending:bool = false
 var spikeHeightAscending:bool = false
@@ -20,12 +22,18 @@ func _ready():
 #	await get_tree().create_timer(.1).timeout
 #	var mManager:MatchManager = get_tree().root.get_node("MatchScene")
 #	PopulateTable(mManager.teamA)
+func clear():
+	allPlayerStatsRows.clear()
+	allPlayers.clear()
+	for entry in rows.get_children():
+		entry.queue_free()
 
 func PopulateTable(team:Team):
 	if team.nation.nationalTeam.players:
 		for player in team.nation.nationalTeam.players:
 			allPlayers.append(player)
 			var newRow:PlayerStatsRow = playerStatsRow.instantiate()
+			newRow.playerStatsTable = self
 			rows.add_child(newRow)
 			newRow.DisplayPlayer(player)
 			allPlayerStatsRows.append(newRow)
@@ -34,18 +42,18 @@ func PopulateTable(team:Team):
 		for player in team.allPlayers:
 			allPlayers.append(player)
 			var newRow:PlayerStatsRow = playerStatsRow.instantiate()
-
+			newRow.playerStatsTable = self
+			
 			rows.add_child(newRow)
 			newRow.DisplayPlayer(player)
 
 			allPlayerStatsRows.append(newRow)
 
-
 func _on_selected_pressed():
-#	for row in allPlayerStatsRows:
-#		if row.selected.button_pressed:
-#			rows.move_child(row, 0)
-	pass
+	allPlayers.sort_custom(func(a,b): return a.uiSelected > b.uiSelected)
+	
+	for i in allPlayerStatsRows.size():
+		allPlayerStatsRows[i].DisplayPlayer(allPlayers[i])
 
 func _on_first_name_pressed():
 	if firstNamesAscending:
@@ -131,3 +139,9 @@ func _on_set_pressed():
 	setAscending = !setAscending
 	for i in allPlayerStatsRows.size():
 		allPlayerStatsRows[i].DisplayPlayer(allPlayers[i])
+
+func SelectUnelectAthlete(athlete:Athlete):
+	if athlete in selectedPlayers:
+		selectedPlayers.erase(athlete)
+	else:
+		selectedPlayers.append(athlete)

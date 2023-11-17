@@ -10,8 +10,10 @@ var clubOrInternationalMode:Enums.ClubOrInternational = Enums.ClubOrInternationa
 @onready var clubTeamLabel:Label = $ClubTeamLabel
 @onready var continentLabel:Label = $ContinentLabel
 @onready var nationLabel:Label = $NationLabel
+var preMatchUI:PreMatchUI
 
-func Init(_gameWorld, _choiceState):
+func Init(_preMatchUI, _gameWorld, _choiceState):
+	preMatchUI = _preMatchUI
 	gameWorld = _gameWorld
 	choiceState = _choiceState
 	continentLabel.hide()
@@ -47,7 +49,9 @@ func _on_club_or_international_left_button_pressed():
 			clubOrInternationalLabel.text = "Club"
 			if nationLabel.visible:
 				clubTeamLabel.show()
-
+				
+	preMatchUI.SyncroniseClubOrInternational(clubOrInternationalMode)
+		
 func _on_club_or_international_right_button_pressed():
 	match clubOrInternationalMode:
 		Enums.ClubOrInternational.NotSelected:
@@ -65,7 +69,8 @@ func _on_club_or_international_right_button_pressed():
 			if nationLabel.visible:
 				clubTeamLabel.show()
 
-
+	preMatchUI.SyncroniseClubOrInternational(clubOrInternationalMode)
+	
 func _on_continent_left_button_pressed():
 	choiceState.continentIndex -= 1
 	if choiceState.continentIndex < 0:

@@ -75,14 +75,14 @@ var defendState:TeamDefend = load("res://Scripts/State/Team/TeamDefend.gd").new(
 var prereceiveState:TeamPreReceive = load("res://Scripts/State/Team/TeamPreReceive.gd").new()
 var chillState = load("res://Scripts/State/Team/TeamState.gd").new()
 
-func Init(_ball, choiceState, gameWorld, clubOrInternational, matchManager):
+func Init(matchManager, choiceState, gameWorld, clubOrInternational):
 	mManager = matchManager
 	var team = gameWorld.GetTeam(choiceState, clubOrInternational)
 	teamName = team.teamName
 	nation = team.nation
 	allPlayers = team.allPlayers.duplicate(true)
 	
-	ball = _ball
+	ball = mManager.ball
 	
 	receiveRotations = teamStrategy.receiveRotations["default"].duplicate(true)
 	

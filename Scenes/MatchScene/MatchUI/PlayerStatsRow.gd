@@ -14,6 +14,7 @@ class_name PlayerStatsRow
 @onready var selected:CheckBox = $AllItems/Selected
 
 var athlete:Athlete
+var playerStatsTable:PlayerStatsTable
 
 func DisplayPlayer(_athlete:Athlete):
 	athlete = _athlete
@@ -32,5 +33,11 @@ func DisplayPlayer(_athlete:Athlete):
 
 
 func _on_selected_pressed():
+	if selected.button_pressed && playerStatsTable.selectedPlayers.size() >= 12:
+		selected.button_pressed = false
+		Console.AddNewLine("Too many players selected already!")
+		return
+		
 	if athlete: 
 		athlete.uiSelected = selected.button_pressed
+		playerStatsTable.SelectUnelectAthlete(athlete)

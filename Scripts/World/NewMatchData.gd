@@ -5,8 +5,8 @@ class_name NewMatchData
 var aChoiceState:PlayerChoiceState
 var bChoiceState:PlayerChoiceState
 
-const Enums = preload("res://Scripts/World/Enums.gd")
 var clubOrInternational = Enums.ClubOrInternational.NotSelected
+
 var gender = Enums.Gender.NotSelected
 var homeTeam = Enums.HomeTeam.NotSelected
 

@@ -60,8 +60,8 @@ func StartGame():
 	teamA.isHuman = true
 	teamB.isHuman = false
 	
-	teamA.Init(ball, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational, self)
-	teamB.Init(ball, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational, self)
+	teamA.Init(self, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational)
+	teamB.Init(self, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational)
 	teamA.defendState.otherTeam = teamB
 	teamB.defendState.otherTeam = teamA
 
