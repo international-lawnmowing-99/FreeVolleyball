@@ -86,7 +86,7 @@ func Init(matchManager, choiceState, gameWorld, clubOrInternational):
 	receiveRotations = teamStrategy.receiveRotations["default"].duplicate(true)
 	
 	stateMachine._init(self)
-	stateMachine.SetCurrentState(serveState)
+	stateMachine.SetCurrentState(chillState)
 	
 	AutoSelectTeamLineup()
 	PlaceTeam()
@@ -109,7 +109,7 @@ func PlaceTeam():
 			rot = Vector3(0,flip * PI,0)
 
 		var lad = AthleteScene.instantiate()
-		
+		lad._ready()
 		lad.stats = allPlayers[i].stats
 		lad.role = allPlayers[i].role
 		

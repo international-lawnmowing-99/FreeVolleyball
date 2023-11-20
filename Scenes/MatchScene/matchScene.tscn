@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://db2fgt6mtocjw"]
+[gd_scene load_steps=38 format=3 uid="uid://db2fgt6mtocjw"]
 
 [ext_resource type="Script" path="res://Scripts/MatchScene/MatchManager.gd" id="1_mqt8k"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/FrameStepper.gd" id="2_skir3"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/MatchUI.gd" id="12_gpj8b"]
 [ext_resource type="Texture2D" uid="uid://qyj7idx5broe" path="res://Textures/antenna-uv.png" id="13_evta7"]
 [ext_resource type="Script" path="res://Scripts/MatchScene/fps_counter.gd" id="14_3hya6"]
+[ext_resource type="Script" path="res://Scenes/sillydebug.gd" id="14_d4rla"]
 [ext_resource type="PackedScene" uid="uid://dmu0b2wanhyv7" path="res://Scenes/MatchScene/MatchUI/ScoreUIMatch.tscn" id="15_w0aqi"]
 [ext_resource type="PackedScene" uid="uid://cycfwen4jhh1v" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.tscn" id="18_0pm8c"]
 [ext_resource type="PackedScene" uid="uid://7v1fcf4qi42l" path="res://Scenes/MatchScene/MatchUI/ServeUI.tscn" id="19_gfg2l"]
@@ -244,6 +245,17 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("12_gpj8b")
+
+[node name="sillydebug" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 78.0
+offset_top = 550.0
+offset_right = 588.0
+offset_bottom = 635.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 51
+text = "Set"
+script = ExtResource("14_d4rla")
 
 [node name="ToggleTeamTacticsUI" type="Button" parent="UI"]
 layout_mode = 0

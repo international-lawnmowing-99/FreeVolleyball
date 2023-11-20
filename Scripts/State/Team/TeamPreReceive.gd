@@ -10,7 +10,9 @@ func Enter(team:Team):
 		athlete.stateMachine.SetCurrentState(athlete.chillState)
 		athlete.animTree.set("parameters/state/transition_request", "digging")
 		athlete.model.rotation.y = -team.flip*PI/2
-
+	
+	team.CachePlayers()
+	
 	if !team.outsideFront || !team.oppositeHitter:
 		#It's happened again...
 		# are the two teams the same?? hence 24 players - YES!

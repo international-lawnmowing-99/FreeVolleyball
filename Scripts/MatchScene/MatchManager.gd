@@ -46,41 +46,47 @@ func _ready():
 	
 	camera._gui.LockCamera()
 
-func ConfirmTeams(newTeamA:Team, newTeamB:Team):
+func ConfirmTeams():
+	var teamANode = $TeamA
+	var teamBNode = $TeamB
+	
 	var natTeamScript = load("res://Scripts/World/NationalTeam.gd")
 	var teamScript = load("res://Scripts/Team.gd")
 	
-	teamA = newTeamA
-	teamB = newTeamB
-	
-
-	
-	if teamA is NationalTeam:
-		
-		$TeamA.set_script(natTeamScript)
-#		$TeamA.get_script() = teamA
-		teamA.SelectNationalTeam()
+	if teamA is NationalTeam:	
+		teamANode.set_script(natTeamScript)
+		teamANode.SelectNationalTeam()
 	else:
-		$TeamA.set_script(teamScript)
+		teamANode.set_script(teamScript)
+		
 	if teamB is NationalTeam:
-		$TeamB.set_script(natTeamScript)
-		teamB.SelectNationalTeam()
-#		print("YOUR MUM")
+		teamBNode.set_script(natTeamScript)
+		teamBNode.SelectNationalTeam()
 	else:
 		$TeamB.set_script(teamScript)
 		
-func StartGame():
-	ball.mManager = self
-	ball.blockResolver.mManager = self
+	teamA = teamANode
+	teamB = teamBNode
 	
 	teamA.isHuman = true
 	teamB.isHuman = false
 	teamB.flip = -1
 	
-	teamA.Init(self, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational)
-	teamB.Init(self, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational)
 	teamA.defendState.otherTeam = teamB
 	teamB.defendState.otherTeam = teamA
+	
+	teamA.Init(self, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational)
+	teamB.Init(self, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational)	
+	
+	teamA.set_process(true)
+	teamB.set_process(true)
+	
+	$UI/sillydebug.StartDebug()
+	
+	
+func StartGame():
+	ball.mManager = self
+	ball.blockResolver.mManager = self
 
 	randomize()
 
