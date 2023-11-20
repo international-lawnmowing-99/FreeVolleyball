@@ -201,6 +201,8 @@ func _on_accelerated_start_button_pressed():
 
 func _on_instant_start_button_pressed():
 	hide()
+	newMatchData.ChooseRandom(gameWorld)
+	mManager.ConfirmTeams(gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational), gameWorld.GetTeam(newMatchData.bChoiceState, newMatchData.clubOrInternational))
 	mManager.StartGame()
 
 
@@ -208,9 +210,6 @@ func _on_full_start_confirm_button_pressed():
 	if teamAChooser.ValidChoice() && teamBChooser.ValidChoice():
 		fullStartMenu.hide()
 		athletesTableMenu.show()
-
-		mManager.teamA.Init(mManager, newMatchData.aChoiceState, gameWorld, newMatchData.clubOrInternational)
-		mManager.teamB.Init(mManager, newMatchData.bChoiceState, gameWorld, newMatchData.clubOrInternational)
 		
 		allAthletesTitleLabel.text = mManager.teamA.teamName + " vs " + mManager.teamB.teamName
 		athletesTableMenu.get_node("PlayerStatsTable").PopulateTable(gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational))

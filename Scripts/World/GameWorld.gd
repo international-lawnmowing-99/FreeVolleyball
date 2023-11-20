@@ -63,10 +63,8 @@ func LoadText():
 		nationsText.append(n.get_line())
 	
 	f.close()
-	f = FileAccess.open("res://Data/firstNames2.txt", FileAccess.WRITE)
-	for line in firstNames:
-		f.store_line(line)
-	f.close()
+	g.close()
+	n.close()
 		
 func split(s: String, delimeters, allow_empty: bool = false) -> Array:
 	var parts := []

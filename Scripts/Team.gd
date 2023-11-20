@@ -2,7 +2,6 @@ extends Node
 class_name Team
 
 var AthleteScene = preload("res://Scenes/MatchScene/Athlete/Athlete.tscn")
-
 var teamName:String
 
 var teamStrategy = preload("res://Scripts/TeamStrategy.gd").new()

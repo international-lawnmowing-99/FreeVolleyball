@@ -12,8 +12,8 @@ var cube
 var cylinder
 var sphere
 
-@onready var teamA:Team = $TeamA
-@onready var teamB:Team = $TeamB
+var teamA:Team
+var teamB:Team
 
 @onready var ball = $ball
 
@@ -27,17 +27,15 @@ var sphere
 
 var isTeamAServing:bool
 var isPaused:bool = false
-var chooseTeamsManually:bool = false
 
 func _ready():
-	teamA.Chill()
-	teamB.Chill()
 	cube = debugCube.instantiate()
 	cylinder = debugCylinder.instantiate()
 	sphere = debugSphere.instantiate()
 	add_child(cube)
 	add_child(sphere)
 	add_child(cylinder)
+	
 	var now = Time.get_ticks_msec()
 	gameWorld.GenerateDefaultWorld(false)
 	var later = Time.get_ticks_msec()
@@ -47,18 +45,37 @@ func _ready():
 	preMatchUI.Init(self)
 	
 	camera._gui.LockCamera()
+
+func ConfirmTeams(newTeamA:Team, newTeamB:Team):
+	var natTeamScript = load("res://Scripts/World/NationalTeam.gd")
+	var teamScript = load("res://Scripts/Team.gd")
 	
-func StartGame():
+	teamA = newTeamA
+	teamB = newTeamB
 	
-	if !chooseTeamsManually:
-		newMatch.ChooseRandom(gameWorld)
+
+	
+	if teamA is NationalTeam:
 		
-	
+		$TeamA.set_script(natTeamScript)
+#		$TeamA.get_script() = teamA
+		teamA.SelectNationalTeam()
+	else:
+		$TeamA.set_script(teamScript)
+	if teamB is NationalTeam:
+		$TeamB.set_script(natTeamScript)
+		teamB.SelectNationalTeam()
+#		print("YOUR MUM")
+	else:
+		$TeamB.set_script(teamScript)
+		
+func StartGame():
 	ball.mManager = self
 	ball.blockResolver.mManager = self
 	
 	teamA.isHuman = true
 	teamB.isHuman = false
+	teamB.flip = -1
 	
 	teamA.Init(self, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational)
 	teamB.Init(self, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational)
