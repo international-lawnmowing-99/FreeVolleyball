@@ -35,7 +35,7 @@ func DisplayPlayer(_athlete:Athlete):
 func _on_selected_pressed():
 	if selected.button_pressed && playerStatsTable.selectedPlayers.size() >= 12:
 		selected.button_pressed = false
-		Console.AddNewLine("Too many players selected already!")
+		Console.AddNewLine("12 players selected already!")
 		return
 		
 	if athlete: 

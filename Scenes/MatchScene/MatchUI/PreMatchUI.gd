@@ -68,7 +68,8 @@ func PopulateUI(team:Team, otherTeam:Team):
 	
 	var humanTeam = $TeamLineUpsUI/HumanTeam
 	if team.allPlayers.size() > 12:
-		var teamDebug = team
+		Console.AddNewLine("Honey, we've duplicated the players somewhere...")
+		return
 	for i in range(team.allPlayers.size()):
 		if team.allPlayers[i] && humanTeam.get_child(i):
 			humanTeam.get_child(i).DisplayStats(team.allPlayers[i])
@@ -193,7 +194,7 @@ func _on_full_start_button_pressed():
 func _on_accelerated_start_button_pressed():
 	usingAcceleratedStart = true
 	newMatchData.ChooseRandom(gameWorld)
-	allAthletesTitleLabel.text = mManager.teamA.teamName + " vs " + mManager.teamB.teamName
+	allAthletesTitleLabel.text = gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational).teamName + " vs " + gameWorld.GetTeam(newMatchData.bChoiceState, newMatchData.clubOrInternational).teamName
 	athletesTableMenu.show()
 	athletesTableMenu.get_node("PlayerStatsTable").PopulateTable(gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational))
 	pass # Replace with function body.
@@ -227,9 +228,16 @@ func _on_back_button_table_pressed():
 func _on_table_confirm_button_pressed():
 	if playerStatsTable.selectedPlayers.size() == 12:
 		hide()
+		
+		if newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
+			var teamA:NationalTeam = gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational)
+			for lad in playerStatsTable.allPlayers:
+				if lad.uiSelected:
+					teamA.allPlayers.append(lad)
+			gameWorld.GetTeam(newMatchData.bChoiceState, newMatchData.clubOrInternational).SelectNationalTeam()
+		mManager.ConfirmTeams()
 		mManager.StartGame()
 	else:
-		Console.AddNewLine("Number of selected players is not 12!")
 		Console.AddNewLine("Number of selected players is not 12!")
 
 func SyncroniseClubOrInternational(clubOrInternational:Enums.ClubOrInternational):

@@ -459,12 +459,12 @@ func AttemptBlock(spiker:Athlete):
 	
 	pass
 
-func Populate(firstNames, lastNames, r):
+func Populate(firstNames, lastNames):
 	for _j in range(12):
 		var stats = Stats.new()
 		var skill = randf_range(0,10) + randf_range(0,10) + randf_range(0,10) + randf_range(0,10) + randf_range(0,10)
-		stats.firstName = firstNames[r.randi_range(0, firstNames.size() - 1)]
-		stats.lastName = lastNames[r.randi_range(0, lastNames.size() - 1)]
+		stats.firstName = firstNames[randi_range(0, firstNames.size() - 1)]
+		stats.lastName = lastNames[randi_range(0, lastNames.size() - 1)]
 		stats.nation = nation.countryName
 		stats.serve = skill + randf_range(0,25) + randf_range(0,25)
 		stats.reception = skill + randf_range(0,25) + randf_range(0,25)

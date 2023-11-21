@@ -55,13 +55,15 @@ func ConfirmTeams():
 	
 	if teamA is NationalTeam:	
 		teamANode.set_script(natTeamScript)
-		teamANode.SelectNationalTeam()
+		if teamA.players.size() < 12:
+			teamANode.SelectNationalTeam()
 	else:
 		teamANode.set_script(teamScript)
 		
 	if teamB is NationalTeam:
 		teamBNode.set_script(natTeamScript)
-		teamBNode.SelectNationalTeam()
+		if teamB.players.size() < 12:
+			teamBNode.SelectNationalTeam()
 	else:
 		$TeamB.set_script(teamScript)
 		
@@ -76,7 +78,7 @@ func ConfirmTeams():
 	teamB.defendState.otherTeam = teamA
 	
 	teamA.Init(self, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational)
-	teamB.Init(self, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational)	
+	teamB.Init(self, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational)	
 	
 	teamA.set_process(true)
 	teamB.set_process(true)
@@ -112,7 +114,7 @@ func StartGame():
 	preMatchUI.PopulateUI(teamA, teamB)
 #	preMatchUI.skipUI()
 	$UI/TeamInfoUI.InitialiseOnCourtPlayerUI()
-
+	camera._gui.UnlockCamera()
 
 func BallOverNet(hitByTeamA:bool):
 	teamA.isNextToSpike = !teamA.isNextToSpike
