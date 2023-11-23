@@ -137,7 +137,6 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="AllAthletesTableColourRect" type="ColorRect" parent="."]
-visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0
 
@@ -154,6 +153,14 @@ offset_left = 151.0
 offset_top = 919.0
 offset_right = 286.0
 offset_bottom = 991.0
+text = "Back"
+
+[node name="AutoSelect" type="Button" parent="AllAthletesTableColourRect"]
+layout_mode = 0
+offset_left = 151.0
+offset_top = 135.0
+offset_right = 286.0
+offset_bottom = 207.0
 text = "Back"
 
 [node name="ConfirmButton" type="Button" parent="AllAthletesTableColourRect"]
@@ -457,6 +464,11 @@ text = "Other team chose to Serve"
 
 [node name="TeamSelectionUI" parent="." instance=ExtResource("1")]
 visible = false
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+color = Color(1, 1, 1, 0.443137)
 
 [node name="TeamLineUpsUI" type="ColorRect" parent="."]
 visible = false
@@ -561,21 +573,33 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="TeamAName" type="Label" parent="TeamLineUpsUI"]
-modulate = Color(0, 0.0166669, 1, 1)
 layout_mode = 0
 offset_top = 21.0
 offset_right = 960.0
 offset_bottom = 88.0
+theme_override_colors/font_color = Color(0.45098, 0.807843, 0.917647, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 5
+theme_override_font_sizes/font_size = 40
 text = "Australia"
+horizontal_alignment = 1
 
 [node name="TeamBName" type="Label" parent="TeamLineUpsUI"]
-modulate = Color(0, 0.0166669, 1, 1)
 layout_mode = 0
 offset_left = 960.0
 offset_top = 13.0
 offset_right = 1920.0
 offset_bottom = 80.0
+theme_override_colors/font_color = Color(0.45098, 0.807843, 0.917647, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 5
+theme_override_font_sizes/font_size = 40
 text = "France"
+horizontal_alignment = 1
 
 [node name="Button" type="Button" parent="TeamLineUpsUI"]
 layout_mode = 0
@@ -593,6 +617,7 @@ expand_icon = true
 [connection signal="pressed" from="FullStartColourRect/ConfirmButton" to="." method="_on_full_start_confirm_button_pressed"]
 [connection signal="pressed" from="FullStartColourRect/BackButtonFullStart" to="." method="_on_back_button_full_start_pressed"]
 [connection signal="pressed" from="AllAthletesTableColourRect/BackButtonTable" to="." method="_on_back_button_table_pressed"]
+[connection signal="pressed" from="AllAthletesTableColourRect/AutoSelect" to="." method="_on_auto_select_pressed"]
 [connection signal="pressed" from="AllAthletesTableColourRect/ConfirmButton" to="." method="_on_table_confirm_button_pressed"]
 [connection signal="pressed" from="ColourRectIntro/Button" to="." method="_on_Intro_Button_pressed"]
 [connection signal="pressed" from="Toss/ChooseHeads" to="." method="_on_ChooseHeads_pressed"]

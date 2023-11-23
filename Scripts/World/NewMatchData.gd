@@ -10,6 +10,10 @@ var clubOrInternational = Enums.ClubOrInternational.NotSelected
 var gender = Enums.Gender.NotSelected
 var homeTeam = Enums.HomeTeam.NotSelected
 
+var location
+var date
+var isTeamAServing:bool
+
 func ChooseRandom(gameWorld:GameWorld):
 	randomize()
 	if (randi_range(0,1) == 1):
@@ -26,6 +30,11 @@ func ChooseRandom(gameWorld:GameWorld):
 		homeTeam = Enums.HomeTeam.TeamA
 	else:
 		homeTeam = Enums.HomeTeam.TeamB
+		
+	if randi_range(1,2) == 1:
+		isTeamAServing = false
+	else:
+		isTeamAServing = true
 		
 	aChoiceState = PlayerChoiceState.new(gameWorld)
 	bChoiceState = PlayerChoiceState.new(gameWorld)

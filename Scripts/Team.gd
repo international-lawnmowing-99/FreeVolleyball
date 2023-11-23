@@ -456,8 +456,7 @@ func AttemptBlock(spiker:Athlete):
 		return
 	
 	ball.blockResolver.AddUpcomingBlock(!isHuman, blockers, spiker)
-	
-	pass
+
 
 func Populate(firstNames, lastNames):
 	for _j in range(12):

@@ -21,7 +21,7 @@ func _ready() -> void:
 		card.teamSelectionUI = self
 
 func CardSelected(athlete:Athlete):
-	if $PlayerStatsViewer:
+	if athlete && $PlayerStatsViewer:
 		$PlayerStatsViewer.Populate(athlete)
 
 func RequestSub(athlete:Athlete):
@@ -99,8 +99,13 @@ func Refresh(team:Team = mManager.teamA):
 			4: $HumanTeam/NameCard4.DisplayStats(athlete)
 			5: $HumanTeam/NameCard5.DisplayStats(athlete)
 			6: $HumanTeam/NameCard6.DisplayStats(athlete)
-			
+
+
+func IsValid():
 	
+	
+	return true
+
 func EnableRotate():
 	$RotationControl.show()
 

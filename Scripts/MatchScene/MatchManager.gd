@@ -29,6 +29,9 @@ var isTeamAServing:bool
 var isPaused:bool = false
 
 func _ready():
+	ball.mManager = self
+	ball.blockResolver.mManager = self
+	
 	cube = debugCube.instantiate()
 	cylinder = debugCylinder.instantiate()
 	sphere = debugSphere.instantiate()
@@ -87,32 +90,23 @@ func ConfirmTeams():
 	
 	
 func StartGame():
-	ball.mManager = self
-	ball.blockResolver.mManager = self
-
-	randomize()
-
-	if randi_range(1,2) == 1:
-		isTeamAServing = false
-		teamA.isNextToSpike = false
-		teamB.isNextToSpike = true
-		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
-		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
-	
-	else:
+	if newMatch.isTeamAServing:
 		isTeamAServing = true
 		teamA.isNextToSpike = true
 		teamB.isNextToSpike = false
 		teamA.stateMachine.SetCurrentState(teamA.preserviceState)
-		teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
+		teamB.stateMachine.SetCurrentState(teamB.prereceiveState)	
+	else:
+		teamA.isNextToSpike = false
+		teamB.isNextToSpike = true
+		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
+		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
 	
 	score.teamANameText.text = teamA.teamName
 	score.teamBNameText.text = teamB.teamName
 	
 	teamTacticsUI.Init(teamA, teamB)
 	
-	preMatchUI.PopulateUI(teamA, teamB)
-#	preMatchUI.skipUI()
 	$UI/TeamInfoUI.InitialiseOnCourtPlayerUI()
 	camera._gui.UnlockCamera()
 

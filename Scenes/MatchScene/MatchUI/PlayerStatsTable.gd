@@ -17,20 +17,18 @@ var receiveAscending:bool = false
 var setAscending:bool = false
 var staminaAscending:bool = false
 
-func _ready():
-	pass
-#	await get_tree().create_timer(.1).timeout
-#	var mManager:MatchManager = get_tree().root.get_node("MatchScene")
-#	PopulateTable(mManager.teamA)
 func clear():
 	allPlayerStatsRows.clear()
 	allPlayers.clear()
+	for lad in selectedPlayers:
+		lad.uiSelected = false
+	selectedPlayers.clear()
 	for entry in rows.get_children():
 		entry.queue_free()
 
 func PopulateTable(team:Team):
-	if team.nation.nationalTeam.players:
-		for player in team.nation.nationalTeam.players:
+	if team is NationalTeam:
+		for player in team.players:
 			allPlayers.append(player)
 			var newRow:PlayerStatsRow = playerStatsRow.instantiate()
 			newRow.playerStatsTable = self
@@ -45,9 +43,11 @@ func PopulateTable(team:Team):
 			newRow.playerStatsTable = self
 			
 			rows.add_child(newRow)
+			player.uiSelected = true
 			newRow.DisplayPlayer(player)
 
 			allPlayerStatsRows.append(newRow)
+			newRow._on_selected_pressed()
 
 func _on_selected_pressed():
 	allPlayers.sort_custom(func(a,b): return a.uiSelected > b.uiSelected)
@@ -145,3 +145,4 @@ func SelectUnelectAthlete(athlete:Athlete):
 		selectedPlayers.erase(athlete)
 	else:
 		selectedPlayers.append(athlete)
+
