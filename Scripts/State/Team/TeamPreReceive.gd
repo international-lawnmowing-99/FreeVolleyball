@@ -11,7 +11,7 @@ func Enter(team:Team):
 		athlete.animTree.set("parameters/state/transition_request", "digging")
 		athlete.model.rotation.y = -team.flip*PI/2
 	
-	team.CachePlayers()
+
 	
 	if !team.outsideFront || !team.oppositeHitter:
 		#It's happened again...
@@ -30,6 +30,8 @@ func Enter(team:Team):
 	if !team.isHuman:
 		team.mManager.TESTteamRepresentation.AssignCourtPlayers(team)
 		team.mManager.TESTteamRepresentation.UpdateRepresentation(get_process_delta_time())
+	
+#	team.CachePlayers()
 	
 func Update(_team:Team):
 	#Is the ball close enough

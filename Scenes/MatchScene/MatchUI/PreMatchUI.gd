@@ -100,7 +100,7 @@ func PopulateUI(team:Team, otherTeam:Team):
 
 
 func DoToss(choseHeads:bool):
-	var coin:bool = randi() % 1
+	var coin:bool = randi() % 2
 	print("coin is heads?: " + str(coin))
 	if coin == true:
 		$Toss/WonToss/CoinResultText.text = "Coin is Heads!"
@@ -236,10 +236,14 @@ func _on_instant_start_button_pressed():
 
 func _on_full_start_confirm_button_pressed():
 	if teamAChooser.ValidChoice() && teamBChooser.ValidChoice():
+		SyncroniseClubOrInternational(teamAChooser.clubOrInternationalMode)
 		fullStartMenu.hide()
 		athletesTableMenu.show()
-		
-		allAthletesTitleLabel.text = mManager.teamA.teamName + " vs " + mManager.teamB.teamName
+		var teamA = gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational)
+		var teamB = gameWorld.GetTeam(newMatchData.bChoiceState, newMatchData.clubOrInternational)
+		allAthletesTitleLabel.text = teamA.teamName + " vs " + teamB.teamName
+		gameWorld.PopulateTeam(teamA)
+		gameWorld.PopulateTeam(teamB)
 		athletesTableMenu.get_node("PlayerStatsTable").PopulateTable(gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational))
 
 
@@ -259,7 +263,10 @@ func _on_table_confirm_button_pressed():
 			for lad in playerStatsTable.allPlayers:
 				if lad.uiSelected:
 					teamA.allPlayers.append(lad)
+#			var teamB = 
 			gameWorld.GetTeam(newMatchData.bChoiceState, newMatchData.clubOrInternational).SelectNationalTeam()
+		
+		
 		mManager.ConfirmTeams()
 #		mManager.StartGame()
 		matchStartMenu.hide()
@@ -274,6 +281,19 @@ func SyncroniseClubOrInternational(clubOrInternational:Enums.ClubOrInternational
 	# In the future, club vs international matches will be possible, but not yet
 	# Also, matches with custom players drawn from anywhere
 	
+	if teamAChooser.clubOrInternationalMode == Enums.ClubOrInternational.NotSelected:
+		if clubOrInternational == Enums.ClubOrInternational.Club:
+			teamAChooser._on_club_or_international_left_button_pressed()
+		else:
+			teamAChooser._on_club_or_international_right_button_pressed()
+		return
+	if teamBChooser.clubOrInternationalMode == Enums.ClubOrInternational.NotSelected:
+		if clubOrInternational == Enums.ClubOrInternational.Club:
+			teamBChooser._on_club_or_international_left_button_pressed()
+		else:
+			teamBChooser._on_club_or_international_right_button_pressed()
+		return
+		
 	if teamAChooser.clubOrInternationalMode == clubOrInternational:
 		pass
 	else:
@@ -283,14 +303,20 @@ func SyncroniseClubOrInternational(clubOrInternational:Enums.ClubOrInternational
 		pass
 	else:
 		teamBChooser._on_club_or_international_left_button_pressed()
-
+	
+	newMatchData.clubOrInternational = clubOrInternational
 
 func _on_auto_select_pressed():
+	playerStatsTable.selectedPlayers.clear()
 	
 	if newMatchData.clubOrInternational == Enums.ClubOrInternational.Club:
-		playerStatsTable.selectedPlayers.clear()
 		for lad in playerStatsTable.allPlayers:
 			lad.uiSelected = true
+			playerStatsTable.selectedPlayers.append(lad)
 	elif newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
-		pass
+		playerStatsTable.allPlayers.sort_custom(Callable(Athlete,"SortSkill"))
+		for i in range(12):
+			playerStatsTable.allPlayers[i].uiSelected = true
+			playerStatsTable.selectedPlayers.append(playerStatsTable.allPlayers[i])
+
 	playerStatsTable._on_selected_pressed()

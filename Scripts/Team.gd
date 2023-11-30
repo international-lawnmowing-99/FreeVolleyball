@@ -75,6 +75,8 @@ var prereceiveState:TeamPreReceive = load("res://Scripts/State/Team/TeamPreRecei
 var chillState = load("res://Scripts/State/Team/TeamState.gd").new()
 
 func Init(matchManager, choiceState, gameWorld, clubOrInternational):
+	if allPlayers.size() > 0:
+		Console.AddNewLine("Warning! adding more players to team")
 	mManager = matchManager
 	var team = gameWorld.GetTeam(choiceState, clubOrInternational)
 	teamName = team.teamName
@@ -459,6 +461,10 @@ func AttemptBlock(spiker:Athlete):
 
 
 func Populate(firstNames, lastNames):
+	if allPlayers.size() != 0:
+		for i in range (32):
+			Console.AddNewLine("!Generating additional unnecessary players!!")
+			
 	for _j in range(12):
 		var stats = Stats.new()
 		var skill = randf_range(0,10) + randf_range(0,10) + randf_range(0,10) + randf_range(0,10) + randf_range(0,10)

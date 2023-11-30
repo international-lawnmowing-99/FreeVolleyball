@@ -68,7 +68,7 @@ func _on_club_or_international_right_button_pressed():
 			clubOrInternationalLabel.text = "Club"
 			if nationLabel.visible:
 				clubTeamLabel.show()
-
+	
 	preMatchUI.SyncroniseClubOrInternational(clubOrInternationalMode)
 	
 func _on_continent_left_button_pressed():

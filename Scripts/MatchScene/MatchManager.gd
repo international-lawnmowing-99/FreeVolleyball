@@ -56,19 +56,12 @@ func ConfirmTeams():
 	var natTeamScript = load("res://Scripts/World/NationalTeam.gd")
 	var teamScript = load("res://Scripts/Team.gd")
 	
-	if teamA is NationalTeam:	
+	if newMatch.clubOrInternational == Enums.ClubOrInternational.International:
 		teamANode.set_script(natTeamScript)
-		if teamA.players.size() < 12:
-			teamANode.SelectNationalTeam()
+		teamBNode.set_script(natTeamScript)
 	else:
 		teamANode.set_script(teamScript)
-		
-	if teamB is NationalTeam:
-		teamBNode.set_script(natTeamScript)
-		if teamB.players.size() < 12:
-			teamBNode.SelectNationalTeam()
-	else:
-		$TeamB.set_script(teamScript)
+		teamBNode.set_script(teamScript)
 		
 	teamA = teamANode
 	teamB = teamBNode
@@ -86,7 +79,7 @@ func ConfirmTeams():
 	teamA.set_process(true)
 	teamB.set_process(true)
 	
-	$UI/sillydebug.StartDebug()
+	$UI/sillydebug.StartDebug(teamA)
 	
 	
 func StartGame():
@@ -95,7 +88,7 @@ func StartGame():
 		teamA.isNextToSpike = true
 		teamB.isNextToSpike = false
 		teamA.stateMachine.SetCurrentState(teamA.preserviceState)
-		teamB.stateMachine.SetCurrentState(teamB.prereceiveState)	
+		teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
 	else:
 		teamA.isNextToSpike = false
 		teamB.isNextToSpike = true

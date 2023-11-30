@@ -47,7 +47,6 @@ focus_mode = 0
 text = "Instant Start"
 
 [node name="FullStartColourRect" type="ColorRect" parent="."]
-visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0
 
@@ -137,6 +136,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="AllAthletesTableColourRect" type="ColorRect" parent="."]
+visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0
 
@@ -155,13 +155,13 @@ offset_right = 286.0
 offset_bottom = 991.0
 text = "Back"
 
-[node name="AutoSelect" type="Button" parent="AllAthletesTableColourRect"]
+[node name="AutoSelectButton" type="Button" parent="AllAthletesTableColourRect"]
 layout_mode = 0
 offset_left = 151.0
 offset_top = 135.0
 offset_right = 286.0
 offset_bottom = 207.0
-text = "Back"
+text = "Auto Select"
 
 [node name="ConfirmButton" type="Button" parent="AllAthletesTableColourRect"]
 layout_mode = 0
@@ -617,7 +617,7 @@ expand_icon = true
 [connection signal="pressed" from="FullStartColourRect/ConfirmButton" to="." method="_on_full_start_confirm_button_pressed"]
 [connection signal="pressed" from="FullStartColourRect/BackButtonFullStart" to="." method="_on_back_button_full_start_pressed"]
 [connection signal="pressed" from="AllAthletesTableColourRect/BackButtonTable" to="." method="_on_back_button_table_pressed"]
-[connection signal="pressed" from="AllAthletesTableColourRect/AutoSelect" to="." method="_on_auto_select_pressed"]
+[connection signal="pressed" from="AllAthletesTableColourRect/AutoSelectButton" to="." method="_on_auto_select_pressed"]
 [connection signal="pressed" from="AllAthletesTableColourRect/ConfirmButton" to="." method="_on_table_confirm_button_pressed"]
 [connection signal="pressed" from="ColourRectIntro/Button" to="." method="_on_Intro_Button_pressed"]
 [connection signal="pressed" from="Toss/ChooseHeads" to="." method="_on_ChooseHeads_pressed"]

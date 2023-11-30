@@ -7,7 +7,7 @@ func Enter(team:Team):
 #	if team.isHuman:
 #		print("Human team about to serve ----------------------------")
 	team.isNextToSpike = false
-	team.CachePlayers()
+#	team.CachePlayers()
 	for i in range(6):
 		#	var pos = team.defaultPositions[team.courtPlayers[i].rotationPosition -1]
 		team.courtPlayers[i].position = team.defaultPositions[team.courtPlayers[i].rotationPosition -1] * team.flip 

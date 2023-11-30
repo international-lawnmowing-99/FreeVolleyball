@@ -82,3 +82,18 @@ func split(s: String, delimeters, allow_empty: bool = false) -> Array:
 		parts.push_back(s.substr(start, i - start))
 
 	return parts
+
+func PopulateTeam(team:Team):
+	if team is NationalTeam:
+		for clubTeam in team.nation.league:
+			if clubTeam.allPlayers.size() > 0:
+				Console.AddNewLine("ERROR! Couldn't add more players to full team!")
+			else:
+				clubTeam.Populate(firstNames, lastNames)
+				team.players += clubTeam.allPlayers
+	else:
+		if team.allPlayers.size() > 0:
+			Console.AddNewLine("ERROR! Couldn't add more players to full team!")
+		else:
+			team.Populate(firstNames, lastNames)
+	
