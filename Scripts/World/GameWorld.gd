@@ -10,7 +10,7 @@ var nationsText = []
 var continents = []
 
 
-func GenerateDefaultWorld(generateAllPlayers:bool):
+func GenerateDefaultWorld(generatematchPlayers:bool):
 	LoadText()
 	randomize()
 
@@ -37,7 +37,7 @@ func GenerateDefaultWorld(generateAllPlayers:bool):
 
 			var currentNation:Nation = continents[continents.size() - 1].nations[continents[continents.size() - 1].nations.size() - 1]
 
-			currentNation.Populate(firstNames, lastNames, generateAllPlayers)
+			currentNation.Populate(firstNames, lastNames, generatematchPlayers)
 
 func GetTeam(choiceState, mode):
 	if (mode == Enums.ClubOrInternational.Club):
@@ -86,13 +86,13 @@ func split(s: String, delimeters, allow_empty: bool = false) -> Array:
 func PopulateTeam(team:Team):
 	if team is NationalTeam:
 		for clubTeam in team.nation.league:
-			if clubTeam.allPlayers.size() > 0:
-				Console.AddNewLine("ERROR! Couldn't add more players to full team!")
+			if clubTeam.matchPlayers.size() > 0:
+				Console.AddNewLine("ERROR! Couldn't add more players to full club team!")
 			else:
 				clubTeam.Populate(firstNames, lastNames)
-				team.players += clubTeam.allPlayers
+				team.nationalPlayers += clubTeam.matchPlayers
 	else:
-		if team.allPlayers.size() > 0:
+		if team.matchPlayers.size() > 0:
 			Console.AddNewLine("ERROR! Couldn't add more players to full team!")
 		else:
 			team.Populate(firstNames, lastNames)

@@ -57,8 +57,8 @@ func _on_Intro_Button_pressed():
 	$TeamLineUpsUI/TeamBName.text = mManager.teamB.teamName
 	
 	for i in range(12):
-		$TeamLineUpsUI/HumanTeam.get_child(i).DisplayStats(mManager.teamA.allPlayers[i])
-		$TeamLineUpsUI/OppositionTeam.get_child(i).DisplayStats(mManager.teamB.allPlayers[i])
+		$TeamLineUpsUI/HumanTeam.get_child(i).DisplayStats(mManager.teamA.matchPlayers[i])
+		$TeamLineUpsUI/OppositionTeam.get_child(i).DisplayStats(mManager.teamB.matchPlayers[i])
 
 
 func _Lineup_Button_pressed():
@@ -77,13 +77,13 @@ func PopulateUI(team:Team, otherTeam:Team):
 	$ColourRectIntro/Label.text = team.teamName + " vs " + otherTeam.teamName
 	
 	var humanTeam = $TeamLineUpsUI/HumanTeam
-	if team.allPlayers.size() > 12:
+	if team.matchPlayers.size() > 12:
 		Console.AddNewLine("Honey, we've duplicated the players somewhere...")
 		return
-	for i in range(team.allPlayers.size()):
-		if team.allPlayers[i] && humanTeam.get_child(i):
-			humanTeam.get_child(i).DisplayStats(team.allPlayers[i])
-			$TeamLineUpsUI/OppositionTeam.get_child(i).DisplayStats(otherTeam.allPlayers[i])
+	for i in range(team.matchPlayers.size()):
+		if team.matchPlayers[i] && humanTeam.get_child(i):
+			humanTeam.get_child(i).DisplayStats(team.matchPlayers[i])
+			$TeamLineUpsUI/OppositionTeam.get_child(i).DisplayStats(otherTeam.matchPlayers[i])
 	
 	$TeamLineUpsUI/TeamAName.text = team.teamName
 	$TeamLineUpsUI/TeamBName.text = otherTeam.teamName
@@ -91,12 +91,12 @@ func PopulateUI(team:Team, otherTeam:Team):
 	$TeamSelectionUI/TeamName.text = team.teamName
 	
 	for i in range(6):
-		$TeamSelectionUI/HumanTeam.get_child(i).DisplayStats(team.allPlayers[i])
+		$TeamSelectionUI/HumanTeam.get_child(i).DisplayStats(team.matchPlayers[i])
 		
-	$TeamSelectionUI/LiberoNameCard.DisplayStats(team.allPlayers[6])
+	$TeamSelectionUI/LiberoNameCard.DisplayStats(team.matchPlayers[6])
 	
 	for i in range(5):
-		$TeamSelectionUI/HumanTeamBench.get_child(i).DisplayStats(team.allPlayers[7 + i])
+		$TeamSelectionUI/HumanTeamBench.get_child(i).DisplayStats(team.matchPlayers[7 + i])
 
 
 func DoToss(choseHeads:bool):
@@ -239,12 +239,11 @@ func _on_full_start_confirm_button_pressed():
 		SyncroniseClubOrInternational(teamAChooser.clubOrInternationalMode)
 		fullStartMenu.hide()
 		athletesTableMenu.show()
-		var teamA = gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational)
-		var teamB = gameWorld.GetTeam(newMatchData.bChoiceState, newMatchData.clubOrInternational)
-		allAthletesTitleLabel.text = teamA.teamName + " vs " + teamB.teamName
-		gameWorld.PopulateTeam(teamA)
-		gameWorld.PopulateTeam(teamB)
-		athletesTableMenu.get_node("PlayerStatsTable").PopulateTable(gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational))
+		mManager.PrepareLocalTeamObjects(newMatchData)
+
+		allAthletesTitleLabel.text = mManager.teamA.teamName + " vs " + mManager.teamB.teamName
+
+		athletesTableMenu.get_node("PlayerStatsTable").PopulateTable(mManager.teamA)
 
 
 func _on_back_button_table_pressed():
@@ -259,12 +258,11 @@ func _on_back_button_table_pressed():
 func _on_table_confirm_button_pressed():
 	if playerStatsTable.selectedPlayers.size() == 12:
 		if newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
-			var teamA:NationalTeam = gameWorld.GetTeam(newMatchData.aChoiceState, newMatchData.clubOrInternational)
-			for lad in playerStatsTable.allPlayers:
+			for lad in playerStatsTable.matchPlayers:
 				if lad.uiSelected:
-					teamA.allPlayers.append(lad)
-#			var teamB = 
-			gameWorld.GetTeam(newMatchData.bChoiceState, newMatchData.clubOrInternational).SelectNationalTeam()
+					mManager.teamA.matchPlayers.append(lad)
+			
+			mManager.teamB.SelectNationalTeam()
 		
 		
 		mManager.ConfirmTeams()
@@ -310,13 +308,13 @@ func _on_auto_select_pressed():
 	playerStatsTable.selectedPlayers.clear()
 	
 	if newMatchData.clubOrInternational == Enums.ClubOrInternational.Club:
-		for lad in playerStatsTable.allPlayers:
+		for lad in playerStatsTable.matchPlayers:
 			lad.uiSelected = true
 			playerStatsTable.selectedPlayers.append(lad)
 	elif newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
-		playerStatsTable.allPlayers.sort_custom(Callable(Athlete,"SortSkill"))
+		playerStatsTable.matchPlayers.sort_custom(Callable(Athlete,"SortSkill"))
 		for i in range(12):
-			playerStatsTable.allPlayers[i].uiSelected = true
-			playerStatsTable.selectedPlayers.append(playerStatsTable.allPlayers[i])
+			playerStatsTable.matchPlayers[i].uiSelected = true
+			playerStatsTable.selectedPlayers.append(playerStatsTable.matchPlayers[i])
 
 	playerStatsTable._on_selected_pressed()

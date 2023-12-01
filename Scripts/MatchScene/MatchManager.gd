@@ -50,31 +50,10 @@ func _ready():
 	camera._gui.LockCamera()
 
 func ConfirmTeams():
-	var teamANode = $TeamA
-	var teamBNode = $TeamB
+
 	
-	var natTeamScript = load("res://Scripts/World/NationalTeam.gd")
-	var teamScript = load("res://Scripts/Team.gd")
-	
-	if newMatch.clubOrInternational == Enums.ClubOrInternational.International:
-		teamANode.set_script(natTeamScript)
-		teamBNode.set_script(natTeamScript)
-	else:
-		teamANode.set_script(teamScript)
-		teamBNode.set_script(teamScript)
-		
-	teamA = teamANode
-	teamB = teamBNode
-	
-	teamA.isHuman = true
-	teamB.isHuman = false
-	teamB.flip = -1
-	
-	teamA.defendState.otherTeam = teamB
-	teamB.defendState.otherTeam = teamA
-	
-	teamA.Init(self, newMatch.aChoiceState, gameWorld, newMatch.clubOrInternational)
-	teamB.Init(self, newMatch.bChoiceState, gameWorld, newMatch.clubOrInternational)	
+	teamA.Init(self)
+	teamB.Init(self)
 	
 	teamA.set_process(true)
 	teamB.set_process(true)
@@ -268,3 +247,30 @@ func BallBlocked(spikedByA:bool):
 	else:
 		teamB.stateMachine.SetCurrentState(teamB.receiveState)
 		teamA.stateMachine.SetCurrentState(teamA.defendState)
+
+func PrepareLocalTeamObjects(newMatchData:NewMatchData):
+	var teamANode = $TeamA
+	var teamBNode = $TeamB
+	
+	var natTeamScript = load("res://Scripts/World/NationalTeam.gd")
+	var teamScript = load("res://Scripts/Team.gd")
+	
+	if newMatch.clubOrInternational == Enums.ClubOrInternational.International:
+		teamANode.set_script(natTeamScript)
+		teamBNode.set_script(natTeamScript)
+	else:
+		teamANode.set_script(teamScript)
+		teamBNode.set_script(teamScript)
+		
+	teamA = teamANode
+	teamB = teamBNode
+	
+	teamA.isHuman = true
+	teamB.isHuman = false
+	teamB.flip = -1
+	
+	teamA.defendState.otherTeam = teamB
+	teamB.defendState.otherTeam = teamA
+	
+	teamA.CopyGameWorldPlayers(gameWorld, newMatchData.aChoiceState, newMatchData.clubOrInternational)
+	teamB.CopyGameWorldPlayers(gameWorld, newMatchData.bChoiceState, newMatchData.clubOrInternational)

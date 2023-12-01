@@ -56,10 +56,10 @@ func ChooseRandom(gameWorld:GameWorld):
 		var now = Time.get_ticks_msec()
 		for team in teamA.nation.league:
 			team.Populate(gameWorld.firstNames, gameWorld.lastNames)
-			teamA.nation.nationalTeam.players += team.allPlayers
+			teamA.nation.nationalTeam.nationalPlayers += team.matchPlayers
 		for team in teamB.nation.league:
 			team.Populate(gameWorld.firstNames, gameWorld.lastNames)
-			teamB.nation.nationalTeam.players += team.allPlayers
+			teamB.nation.nationalTeam.nationalPlayers += team.matchPlayers
 		var later = Time.get_ticks_msec()
 		print(str((later-now)) + " make all teams in nation")
 		

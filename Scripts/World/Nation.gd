@@ -12,7 +12,7 @@ var nationalTeam:NationalTeam
 var league = []
 var players
 
-func Populate(firstNames, lastNames, generateAllPlayers:bool):
+func Populate(firstNames, lastNames, generatematchPlayers:bool):
 	var numberOfTeams:int = clamp((population / 700000), 2, 30)
 	nationalTeam = NationalTeam.new()
 	nationalTeam.teamName = countryName
@@ -30,9 +30,9 @@ func Populate(firstNames, lastNames, generateAllPlayers:bool):
 
 #shirtNumbers = shirtNumbers.OrderBy(x => Guid.NewGuid()).ToList();
 #images = images.OrderBy(x => Guid.NewGuid()).ToList();
-		if generateAllPlayers:
+		if generatematchPlayers:
 			team.Populate(firstNames, lastNames)
-			nationalTeam.players += team.allPlayers
+			nationalTeam.nationalPlayers += team.matchPlayers
 
 		league.append(team)
 

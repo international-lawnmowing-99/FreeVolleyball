@@ -14,7 +14,7 @@ var isLiberoOnCourt:bool
 var isNextToSpike:bool
 var markUndoChangesToRoles:bool
 
-var allPlayers = []
+var matchPlayers = []
 var courtPlayers = []
 var benchPlayers = []
 
@@ -74,15 +74,29 @@ var defendState:TeamDefend = load("res://Scripts/State/Team/TeamDefend.gd").new(
 var prereceiveState:TeamPreReceive = load("res://Scripts/State/Team/TeamPreReceive.gd").new()
 var chillState = load("res://Scripts/State/Team/TeamState.gd").new()
 
-func Init(matchManager, choiceState, gameWorld, clubOrInternational):
-	if allPlayers.size() > 0:
-		Console.AddNewLine("Warning! adding more players to team")
-	mManager = matchManager
+func CopyGameWorldPlayers(gameWorld:GameWorld, choiceState:PlayerChoiceState, clubOrInternational:Enums.ClubOrInternational):
+	if matchPlayers.size() > 0:
+		Console.AddNewLine("ERROR! Couldn't add more players to local team from world equivalent")
+		return
+		
 	var team = gameWorld.GetTeam(choiceState, clubOrInternational)
+	if team is NationalTeam:
+		if team.nationalPlayers.size() == 0:
+			gameWorld.PopulateTeam(team)
+	else:
+		if team.matchPlayers.size() == 0:
+			gameWorld.PopulateTeam(team)
+
 	teamName = team.teamName
 	nation = team.nation
-	allPlayers = team.allPlayers.duplicate(true)
 	
+	if self is NationalTeam:
+		(self as NationalTeam).nationalPlayers = team.nationalPlayers.duplicate(true)
+	else:
+		matchPlayers = team.matchPlayers.duplicate(true)
+
+func Init(matchManager):
+	mManager = matchManager
 	ball = mManager.ball
 	
 	receiveRotations = teamStrategy.receiveRotations["default"].duplicate(true)
@@ -90,7 +104,9 @@ func Init(matchManager, choiceState, gameWorld, clubOrInternational):
 	stateMachine._init(self)
 	stateMachine.SetCurrentState(chillState)
 	
+	
 	AutoSelectTeamLineup()
+	
 	PlaceTeam()
 	CachePlayers()
 	
@@ -112,8 +128,8 @@ func PlaceTeam():
 
 		var lad = AthleteScene.instantiate()
 		lad._ready()
-		lad.stats = allPlayers[i].stats
-		lad.role = allPlayers[i].role
+		lad.stats = matchPlayers[i].stats
+		lad.role = matchPlayers[i].role
 		
 		
 		add_child(lad)
@@ -128,7 +144,7 @@ func PlaceTeam():
 #		lad.spikeState.athlete = lad
 		lad.CreateSpikes()
 		lad.moveTarget = Vector3(pos.x,0,pos.z)
-		#allPlayers.append(lad)
+		#matchPlayers.append(lad)
 		if !isHuman:
 			lad.get_child(0).ChangeShirtColour(Color(1,3,0))
 		if i  < 6 :
@@ -290,20 +306,20 @@ func CachePlayers():
 
 
 func AutoSelectTeamLineup():
-	allPlayers.sort_custom(Callable(Athlete,"SortSet"))
-	var orderedSetterList =  allPlayers.duplicate(false)
+	matchPlayers.sort_custom(Callable(Athlete,"SortSet"))
+	var orderedSetterList =  matchPlayers.duplicate(false)
 	
-	allPlayers.sort_custom(Callable(Athlete,"SortOutside"))
-	var orderedOutsideList = allPlayers.duplicate(false)
+	matchPlayers.sort_custom(Callable(Athlete,"SortOutside"))
+	var orderedOutsideList = matchPlayers.duplicate(false)
 	
-	allPlayers.sort_custom(Callable(Athlete,"SortLibero"))
-	var orderedLiberoList = allPlayers.duplicate(false)
+	matchPlayers.sort_custom(Callable(Athlete,"SortLibero"))
+	var orderedLiberoList = matchPlayers.duplicate(false)
 	
-	allPlayers.sort_custom(Callable(Athlete,"SortOpposite"))
-	var orderedOppositeList = allPlayers.duplicate(false) 
+	matchPlayers.sort_custom(Callable(Athlete,"SortOpposite"))
+	var orderedOppositeList = matchPlayers.duplicate(false) 
 	
-	allPlayers.sort_custom(Callable(Athlete,"SortMiddle"))
-	var orderedMiddleList = allPlayers.duplicate(false)
+	matchPlayers.sort_custom(Callable(Athlete,"SortMiddle"))
+	var orderedMiddleList = matchPlayers.duplicate(false)
 
 	var aptitudeLists = [orderedSetterList,orderedLiberoList,orderedOutsideList,orderedOppositeList,orderedMiddleList]
 
@@ -360,21 +376,21 @@ func SwapPlayer(player,newPostion):
 	#print("-----------")
 	#print("")
 	var index = -1
-	for i in range(allPlayers.size()):
-		if (allPlayers[i] == player):
+	for i in range(matchPlayers.size()):
+		if (matchPlayers[i] == player):
 			index = i
 			break
 	
-	#for i in range(allPlayers.size()):
-	#	print(str(allPlayers[i].role) + " " + str(i))
+	#for i in range(matchPlayers.size()):
+	#	print(str(matchPlayers[i].role) + " " + str(i))
 
 	#print ("")
-	var temp = allPlayers[newPostion]
-	allPlayers[newPostion] = player
-	allPlayers[index] = temp
+	var temp = matchPlayers[newPostion]
+	matchPlayers[newPostion] = player
+	matchPlayers[index] = temp
 	
-	#for i in range(allPlayers.size()):
-	#	print(str(allPlayers[i].role) + " " + str(i))
+	#for i in range(matchPlayers.size()):
+	#	print(str(matchPlayers[i].role) + " " + str(i))
 	
 func GetTransitionPosition(athlete):
 	if (setter.FrontCourt()):
@@ -461,7 +477,7 @@ func AttemptBlock(spiker:Athlete):
 
 
 func Populate(firstNames, lastNames):
-	if allPlayers.size() != 0:
+	if matchPlayers.size() != 0:
 		for i in range (32):
 			Console.AddNewLine("!Generating additional unnecessary players!!")
 			
@@ -496,7 +512,7 @@ func Populate(firstNames, lastNames):
 		#stats.image = images[j];
 		var athlete = Athlete.new()
 		athlete.stats = stats
-		allPlayers.append(athlete)
+		matchPlayers.append(athlete)
 		
 		#DateTime oldest = new DateTime(1975, 1, 1);
 
