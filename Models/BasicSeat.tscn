@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://bsqyjxmqx64pr"]
 
-[ext_resource path="res://Models/BasicSeat.glb" type="PackedScene" id=1]
+[ext_resource type="PackedScene" uid="uid://d17lwio3xhtud" path="res://Models/BasicSeat.glb" id="1"]
 
-[node name="BasicSeat" instance=ExtResource( 1 )]
-transform = Transform3D( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
+[node name="BasicSeat" instance=ExtResource("1")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)

@@ -1,9 +1,6 @@
 extends Node
 class_name Nation
 
-const Athlete = preload("res://Scripts/MatchScene/Athlete.gd")
-
-
 var countryName
 var population:int
 

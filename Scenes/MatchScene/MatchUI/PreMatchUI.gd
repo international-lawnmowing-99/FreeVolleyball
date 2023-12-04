@@ -230,6 +230,7 @@ func _on_accelerated_start_button_pressed():
 func _on_instant_start_button_pressed():
 	hide()
 	newMatchData.ChooseRandom(gameWorld)
+	mManager.PrepareLocalTeamObjects(newMatchData)
 	mManager.ConfirmTeams()
 	mManager.StartGame()
 
