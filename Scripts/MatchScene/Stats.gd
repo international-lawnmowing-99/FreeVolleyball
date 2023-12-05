@@ -6,6 +6,7 @@ var lastName:String
 
 var serve:float
 var reception:float
+@warning_ignore("shadowed_variable_base_class")
 var set:float
 var dump:float
 var spike:float

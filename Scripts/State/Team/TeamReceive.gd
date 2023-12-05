@@ -44,11 +44,11 @@ func Enter(team:Team):
 
 		team.setter.setRequest = team.setter.oppositeFrontSpikes[0].Duplicate()
 
-	for i in range(1, team.courtPlayers.size()):
+	for i in range(1, orderedList.size()):
 		#print(team.courtPlayers[i].stats.lastName)
-		if team.courtPlayers[i].rb.freeze:
+		if orderedList[i].rb.freeze:
 			#print(team.courtPlayers[i].stats.lastName + " transitnio")
-			team.courtPlayers[i].stateMachine.SetCurrentState(team.courtPlayers[i].transitionState)
+			orderedList[i].stateMachine.SetCurrentState(orderedList[i].transitionState)
 		
 	team.chosenReceiver.stateMachine.SetCurrentState(team.chosenReceiver.passState)
 #	Console.AddNewLine("Outside front spike[0] = " + str(team.outsideFront.outsideFrontSpikes[0].target))

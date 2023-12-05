@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bijxfpsspog5d" path="res://Textures/Court-Markings.png" id="5_djvjv"]
 [ext_resource type="Texture2D" uid="uid://cld8hvct3gi61" path="res://Textures/crinkled norm.jpg" id="6_rak20"]
 [ext_resource type="PackedScene" uid="uid://k2tpkkvrgokd" path="res://Scenes/MatchScene/net.tscn" id="7_kivvl"]
-[ext_resource type="PackedScene" path="res://Models/BasicSeat.tscn" id="8_llljp"]
+[ext_resource type="PackedScene" uid="uid://bsqyjxmqx64pr" path="res://Models/BasicSeat.tscn" id="8_llljp"]
 [ext_resource type="PackedScene" uid="uid://c2rori6kyk43f" path="res://Scenes/MatchScene/ball.tscn" id="11_3od8h"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/MatchUI.gd" id="12_gpj8b"]
 [ext_resource type="Texture2D" uid="uid://qyj7idx5broe" path="res://Textures/antenna-uv.png" id="13_evta7"]

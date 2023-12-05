@@ -161,6 +161,7 @@ func _on_ChooseServe_pressed():
 			mManager.RotateTheBoard()
 	
 	teamSelection.show()
+	teamSelection.Refresh()
 
 func _on_ChooseReceive_pressed():
 	toss.hide()
@@ -176,12 +177,14 @@ func _on_ChooseReceive_pressed():
 			mManager.RotateTheBoard()
 			
 	teamSelection.show()
+	teamSelection.Refresh()
 
 func _on_ChooseCurrentSide_pressed():
 	toss.hide()
 	lostToss.hide()
 	Console.AddNewLine("Staying checked same side")
 	teamSelection.show()
+	teamSelection.Refresh()
 
 func _on_ChooseOtherSide_pressed():
 	toss.hide()
@@ -189,6 +192,7 @@ func _on_ChooseOtherSide_pressed():
 	Console.AddNewLine("Changing sides like a dickhead")
 	mManager.RotateTheBoard()
 	teamSelection.show()
+	teamSelection.Refresh()
 
 func _on_ChooseSide_pressed():
 	$Toss/WonToss/ChooseOtherSide.show()
@@ -230,7 +234,13 @@ func _on_accelerated_start_button_pressed():
 func _on_instant_start_button_pressed():
 	hide()
 	newMatchData.ChooseRandom(gameWorld)
+	
 	mManager.PrepareLocalTeamObjects(newMatchData)
+	
+	if newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
+		(mManager.teamA as NationalTeam).SelectNationalTeam()
+		(mManager.teamB as NationalTeam).SelectNationalTeam()
+	
 	mManager.ConfirmTeams()
 	mManager.StartGame()
 
@@ -258,13 +268,13 @@ func _on_back_button_table_pressed():
 
 func _on_table_confirm_button_pressed():
 	if playerStatsTable.selectedPlayers.size() == 12:
+		mManager.PrepareLocalTeamObjects(newMatchData)
 		if newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
 			for lad in playerStatsTable.matchPlayers:
 				if lad.uiSelected:
 					mManager.teamA.matchPlayers.append(lad)
 			
 			mManager.teamB.SelectNationalTeam()
-		
 		
 		mManager.ConfirmTeams()
 #		mManager.StartGame()

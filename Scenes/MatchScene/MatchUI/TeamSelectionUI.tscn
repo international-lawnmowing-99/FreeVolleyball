@@ -21,7 +21,7 @@ offset_right = 112.0
 offset_bottom = -256.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.443137)
+color = Color(0, 0, 0, 0.784314)
 script = ExtResource("1")
 
 [node name="Line2D" type="Line2D" parent="."]
@@ -31,48 +31,31 @@ default_color = Color(0.839216, 0.623529, 0.207843, 1)
 
 [node name="HumanTeamBench" type="GridContainer" parent="."]
 layout_mode = 0
-offset_left = 62.2182
-offset_top = 121.38
-offset_right = 636.218
-offset_bottom = 845.38
+offset_left = 62.0
+offset_top = 121.0
+offset_right = 338.0
+offset_bottom = 799.0
 theme = SubResource("15")
-columns = 2
 
 [node name="NameCard1" parent="HumanTeamBench" instance=ExtResource("3")]
 layout_mode = 2
+size_flags_vertical = 6
 
 [node name="NameCard2" parent="HumanTeamBench" instance=ExtResource("3")]
 layout_mode = 2
+size_flags_vertical = 6
 
 [node name="NameCard3" parent="HumanTeamBench" instance=ExtResource("3")]
 layout_mode = 2
+size_flags_vertical = 6
 
 [node name="NameCard4" parent="HumanTeamBench" instance=ExtResource("3")]
 layout_mode = 2
+size_flags_vertical = 6
 
 [node name="NameCard5" parent="HumanTeamBench" instance=ExtResource("3")]
 layout_mode = 2
-
-[node name="NameCard6" parent="HumanTeamBench" instance=ExtResource("3")]
-layout_mode = 2
-
-[node name="NameCard7" parent="HumanTeamBench" instance=ExtResource("3")]
-layout_mode = 2
-
-[node name="NameCard8" parent="HumanTeamBench" instance=ExtResource("3")]
-layout_mode = 2
-
-[node name="NameCard9" parent="HumanTeamBench" instance=ExtResource("3")]
-layout_mode = 2
-
-[node name="NameCard10" parent="HumanTeamBench" instance=ExtResource("3")]
-layout_mode = 2
-
-[node name="NameCard11" parent="HumanTeamBench" instance=ExtResource("3")]
-layout_mode = 2
-
-[node name="NameCard12" parent="HumanTeamBench" instance=ExtResource("3")]
-layout_mode = 2
+size_flags_vertical = 6
 
 [node name="CourtBackground" type="ColorRect" parent="."]
 layout_mode = 0

@@ -40,6 +40,7 @@ blend_point_4/pos = Vector2(1, 0)
 
 [sub_resource type="AnimationNodeTransition" id="11"]
 xfade_time = 0.05
+allow_transition_to_self = true
 input_0/name = "moving"
 input_0/auto_advance = false
 input_0/reset = true
@@ -48,7 +49,7 @@ input_1/auto_advance = false
 input_1/reset = true
 
 [resource]
-graph_offset = Vector2(-787.336, -145.011)
+graph_offset = Vector2(-568.689, 62.5251)
 nodes/Animation/node = SubResource("2")
 nodes/Animation/position = Vector2(-980, 100)
 "nodes/Animation 2/node" = SubResource("1")
