@@ -26,6 +26,7 @@ var middleFront:Athlete
 var outsideFront:Athlete
 var libero:Athlete
 var originalRotation1Player:Athlete
+var rotationsElapsed:int = 0
 
 var chosenSetter:Athlete
 var chosenSpiker:Athlete
@@ -479,7 +480,8 @@ func AttemptBlock(spiker:Athlete):
 func Populate(firstNames, lastNames):
 	if matchPlayers.size() != 0:
 		for i in range (32):
-			Console.AddNewLine("!Generating additional unnecessary players!!")
+			Console.AddNewLine("!Not Generating additional unnecessary players!!")
+		return
 			
 	for _j in range(12):
 		var stats = Stats.new()

@@ -33,9 +33,10 @@ func Enter(athlete:Athlete):
 
 	
 	var servePos = ball.position
+	
 	athlete.moveTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, athlete.stats.digHeight, ball.topspin) + Vector3(0,-athlete.stats.digHeight, randf_range(-.25,.25))
 	athlete.moveTarget += (athlete.moveTarget - Vector3(servePos.x, 0, servePos.z)).normalized()/2
-
+	
 	#look_at(Vector3(servePos.x,0, servePos.z), Vector3.UP)
 	
 	#point where a circle will intersect with the xz vector of the ball's motion
@@ -135,6 +136,8 @@ func PassBall(athlete:Athlete):
 	isBallAlreadyPassed = true
 	ball.floating = false
 	ball.floatDisplacement = Vector3.ZERO
+	ball.SetTopspin(1.0)
+	
 	#Engine.time_scale = 0.25
 	var receptionTarget
 	var ballMaxHeight

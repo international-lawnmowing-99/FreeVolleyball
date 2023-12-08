@@ -1,8 +1,11 @@
 extends ColorRect
+
+class_name NameCard
+
 var Enums = preload("res://Scripts/World/Enums.gd")
 var isMouseHovering:bool
 var cardAthlete:Athlete
-var teamSelectionUI
+var teamSelectionUI:TeamSelectionUI
 var state = Enums.NameCardState.UNDEFINED
 var previousColour:Color
 
@@ -72,3 +75,7 @@ func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("LMB"):
 		if state == Enums.NameCardState.Substitutable && isMouseHovering:
 			teamSelectionUI.ExecuteSub(cardAthlete)
+
+
+func _on_captain_button_pressed():
+	teamSelectionUI.SelectCaptain(cardAthlete)

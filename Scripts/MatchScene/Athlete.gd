@@ -4,6 +4,7 @@ class_name Athlete
 var g = ProjectSettings.get_setting("physics/3d/default_gravity")
 var role
 var stats:Stats = Stats.new()
+var substitutionInfo:SubstitutionInfo = SubstitutionInfo.new()
 
 var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(self)
 @onready var model:Node3D = $"new new woman import"

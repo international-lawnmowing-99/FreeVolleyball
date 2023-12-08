@@ -93,3 +93,4 @@ text = "Captain"
 [connection signal="mouse_entered" from="." to="." method="_on_NameCard_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_NameCard_mouse_exited"]
 [connection signal="pressed" from="SubstituteButton" to="." method="_on_SubstituteButton_pressed"]
+[connection signal="pressed" from="CaptainButton" to="." method="_on_captain_button_pressed"]

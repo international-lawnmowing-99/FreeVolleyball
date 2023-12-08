@@ -4,7 +4,7 @@ class_name TeamSelectionUI
 var nameCards:Array
 var normalColour = Color.CHOCOLATE
 var mManager:MatchManager
-var athleteToBeSubbed
+var athleteToBeSubbed:Athlete
 
 func _ready() -> void:
 	mManager = get_tree().root.get_node("MatchScene")
@@ -30,11 +30,14 @@ func RequestSub(athlete:Athlete):
 	
 	for card in nameCards:
 		card.ChangeColour(Color.RED)
-	for card in $HumanTeamBench.get_children():
-		card.state = Enums.NameCardState.Substitutable
-		card.ChangeColour(Color.CHARTREUSE)
+	for card:NameCard in $HumanTeamBench.get_children():
+		if !card.cardAthlete.substitutionInfo.hasEnteredCourtFromBenchThisSet:
+			card.state = Enums.NameCardState.Substitutable
+			card.ChangeColour(Color.CHARTREUSE)
 
 func ExecuteSub(incoming:Athlete):
+	incoming.substitutionInfo.hasEnteredCourtFromBenchThisSet = true
+	incoming.substitutionInfo.startingRotationPosition = athleteToBeSubbed.substitutionInfo.startingRotationPosition
 	
 	incoming.team.InstantaneouslySwapPlayers(athleteToBeSubbed, incoming)
 	Refresh(incoming.team)
@@ -43,7 +46,8 @@ func ExecuteSub(incoming:Athlete):
 		card.state = Enums.NameCardState.UNDEFINED
 	for card in nameCards:
 		card.ChangeColour(normalColour)
-	pass
+	
+	incoming.team.CachePlayers()
 
 func RotateClockwise(team:Team):
 	#can only rotate before the serve
@@ -51,19 +55,19 @@ func RotateClockwise(team:Team):
 	Refresh(team)
 	team.stateMachine.SetCurrentState(team.preserviceState)
 	Console.AddNewLine("-")
-	Console.AddNewLine("orig rot 1: " + team.originalRotation1Player.stats.lastName)
-	# remember the original rotaion 1 player for later designation of rotations
-	if team.originalRotation1Player == team.courtPlayers[5]:
-		# I believe that courtPlayers[0] is the original
-		team.originalRotation1Player = team.courtPlayers[0]
-		Console.AddNewLine("Back to start of rotation")
-	else:
-		var origRot1Index = team.courtPlayers.find(team.originalRotation1Player)
-			
-		Console.AddNewLine("team.courtPlayers.find(team.originalRotation1Player) + 1 = " + str(team.courtPlayers.find(team.originalRotation1Player) + 1))
-		team.originalRotation1Player = team.courtPlayers[team.courtPlayers.find(team.originalRotation1Player) + 1]
+	#Console.AddNewLine("orig rot 1: " + team.originalRotation1Player.stats.lastName)
+	## remember the original rotaion 1 player for later designation of rotations
+	#if team.originalRotation1Player == team.courtPlayers[5]:
+		## I believe that courtPlayers[0] is the original
+		#team.originalRotation1Player = team.courtPlayers[0]
+		#Console.AddNewLine("Back to start of rotation")
+	#else:
+		#var origRot1Index = team.courtPlayers.find(team.originalRotation1Player)
+			#
+		#Console.AddNewLine("team.courtPlayers.find(team.originalRotation1Player) + 1 = " + str(team.courtPlayers.find(team.originalRotation1Player) + 1))
+		#team.originalRotation1Player = team.courtPlayers[team.courtPlayers.find(team.originalRotation1Player) + 1]
 	Console.AddNewLine("rotated orig rot 1: " + team.originalRotation1Player.stats.lastName)
-	
+	Console.AddNewLine("Orig rot 1 in position " + str(team.originalRotation1Player.rotationPosition))
 	
 func RotateAntiClockwise(team:Team):
 	for i in range(5):
@@ -125,3 +129,11 @@ func _on_CancelSubButton_pressed() -> void:
 	for card in nameCards:
 		card.ChangeColour(normalColour)
 	pass # Replace with function body.
+
+func SelectCaptain(athlete:Athlete):
+	for nameCard:NameCard in nameCards:
+		if nameCard.cardAthlete != athlete:
+			nameCard.get_node("CaptainIcon").visible = false
+		else:
+			nameCard.get_node("CaptainIcon").visible = true
+	

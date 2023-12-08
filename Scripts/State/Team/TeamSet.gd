@@ -54,7 +54,7 @@ func DumpBall(team:Team):
 #	if team.ball.FindNetPass().y <= 2.5:
 #		team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.position, team.ball.attackTarget, 2.5)
 	team.mManager.BallOverNet(team.isHuman)
-	
+
 func SetBall(team:Team):
 	
 	# mint set, poor set (short, long, mis-timed, tight, over, or some combo thereof - so many ways to set poorly!), 2 hits/carry ("setting error")

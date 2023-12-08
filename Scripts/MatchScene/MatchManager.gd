@@ -50,7 +50,6 @@ func _ready():
 	camera._gui.LockCamera()
 
 func ConfirmTeams():
-
 	
 	teamA.Init(self)
 	teamB.Init(self)
@@ -58,10 +57,30 @@ func ConfirmTeams():
 	teamA.set_process(true)
 	teamB.set_process(true)
 	
+	score.teamANameText.text = teamA.teamName
+	score.teamBNameText.text = teamB.teamName
+	
 	$UI/sillydebug.StartDebug(teamA)
 	
 	
 func StartGame():
+	for athlete:Athlete in teamA.courtPlayers:
+		if athlete.role != Enums.Role.Libero:
+			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
+			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.substitutionInfo.startingRotationPosition))
+		else:
+			teamA.benchPlayers[0].substitutionInfo.startingRotationPosition = athlete.rotationPosition
+			#Console.AddNewLine(teamA.benchPlayers[0].stats.lastName + " starting in position " + str(athlete.rotationPosition))
+	
+	for athlete:Athlete in teamB.courtPlayers:
+		if athlete.role != Enums.Role.Libero:
+			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
+			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.substitutionInfo.startingRotationPosition))
+		else:
+			teamB.benchPlayers[0].substitutionInfo.startingRotationPosition = athlete.rotationPosition
+			#Console.AddNewLine(teamB.benchPlayers[0].stats.lastName + " starting in position " + str(athlete.rotationPosition))
+	
+	
 	if newMatch.isTeamAServing:
 		isTeamAServing = true
 		teamA.isNextToSpike = true
@@ -73,9 +92,6 @@ func StartGame():
 		teamB.isNextToSpike = true
 		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
 		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
-	
-	score.teamANameText.text = teamA.teamName
-	score.teamBNameText.text = teamB.teamName
 	
 	teamTacticsUI.Init(teamA, teamB)
 	

@@ -31,9 +31,9 @@ default_color = Color(0.839216, 0.623529, 0.207843, 1)
 
 [node name="HumanTeamBench" type="GridContainer" parent="."]
 layout_mode = 0
-offset_left = 62.0
+offset_left = 190.0
 offset_top = 121.0
-offset_right = 338.0
+offset_right = 466.0
 offset_bottom = 799.0
 theme = SubResource("15")
 
@@ -75,13 +75,13 @@ offset_bottom = 746.075
 [node name="Line2D2" type="Line2D" parent="."]
 position = Vector2(787.567, 382.377)
 scale = Vector2(0.326706, 1.39676)
-points = PackedVector2Array(3177.78, -3.66284, -2.39679, -3.8028)
+points = PackedVector2Array(3177, -3, -3, -3)
 default_color = Color(0.867188, 0.732952, 0.474243, 1)
 
 [node name="Line2D3" type="Line2D" parent="."]
 position = Vector2(787.567, 138.695)
 scale = Vector2(0.326706, 2.57903)
-points = PackedVector2Array(3177.78, -3.66284, -2.39679, -3.8028)
+points = PackedVector2Array(3177, -3, -3, -3)
 default_color = Color(0, 0, 0, 1)
 
 [node name="TeamName" type="Label" parent="."]
@@ -268,6 +268,19 @@ theme_override_font_sizes/font_size = 36
 text = "Rotate"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="SubsRemainingLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1330.0
+offset_top = 866.0
+offset_right = 1772.0
+offset_bottom = 896.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_outline_size = 3
+theme_override_font_sizes/font_size = 21
+text = "Substitutions remaining: Unlimited (Pre Set)"
 
 [connection signal="pressed" from="CancelSubButton" to="." method="_on_CancelSubButton_pressed"]
 [connection signal="pressed" from="RotationControl/ClockwiseButton" to="." method="_on_ClockwiseButton_pressed"]
