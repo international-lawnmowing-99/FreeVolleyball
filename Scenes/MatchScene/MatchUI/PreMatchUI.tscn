@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://cycfwen4jhh1v"]
 
-[ext_resource type="PackedScene" uid="uid://c0t3dj6fskv0t" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://c0t3dj6fskv0t" path="res://Scenes/MatchScene/MatchUI/TeamSubstitutionUI.tscn" id="1"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://c5r216hy1gmcv" path="res://Textures/293px-Small_arrow_pointing_left.svg.png" id="2_5hwqb"]
 [ext_resource type="PackedScene" uid="uid://dia2qm24xemkg" path="res://Scenes/PreMatchUI/TeamChoice.tscn" id="2_kpox3"]
@@ -462,7 +462,7 @@ offset_right = 1839.98
 offset_bottom = 958.046
 text = "Other team chose to Serve"
 
-[node name="TeamSelectionUI" parent="." instance=ExtResource("1")]
+[node name="TeamSubstitutionUI" parent="." instance=ExtResource("1")]
 visible = false
 offset_left = 0.0
 offset_top = 0.0

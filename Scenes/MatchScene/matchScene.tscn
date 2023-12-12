@@ -20,7 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://cycfwen4jhh1v" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.tscn" id="18_0pm8c"]
 [ext_resource type="PackedScene" uid="uid://7v1fcf4qi42l" path="res://Scenes/MatchScene/MatchUI/ServeUI.tscn" id="19_gfg2l"]
 [ext_resource type="Script" path="res://Scenes/TeamInfoUI.gd" id="20_mqewi"]
-[ext_resource type="PackedScene" uid="uid://c0t3dj6fskv0t" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.tscn" id="21_mfp85"]
+[ext_resource type="PackedScene" uid="uid://c0t3dj6fskv0t" path="res://Scenes/MatchScene/MatchUI/TeamSubstitutionUI.tscn" id="21_mfp85"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/MatchStatistics.gd" id="22_jweii"]
 [ext_resource type="PackedScene" uid="uid://cts4mqjkgj1vj" path="res://Scenes/MatchScene/MatchUI/PlayerStatsTable.tscn" id="22_osxw1"]
 [ext_resource type="PackedScene" uid="uid://bas6swl121cf5" path="res://Scenes/MatchScene/MatchUI/OnCourtPlayer.tscn" id="23_sry0n"]
@@ -119,7 +119,7 @@ environment = SubResource("4")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lights"]
 transform = Transform3D(0.741838, -0.0421148, -0.669255, 0.380937, 0.847821, 0.3689, 0.551872, -0.528608, 0.644989, 0, 6.08476, 0)
-light_energy = 4.0
+light_energy = 2.0
 light_indirect_energy = 0.0
 shadow_enabled = true
 shadow_bias = 0.059
@@ -859,14 +859,14 @@ offset_bottom = 1067.44
 layer = 2
 script = ExtResource("20_mqewi")
 
-[node name="TeamSelectionUI" type="Control" parent="UI/TeamInfoUI"]
+[node name="TeamSubstitutionUI" type="Control" parent="UI/TeamInfoUI"]
 visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1912.0
 offset_bottom = 1078.0
 
-[node name="TeamSelectionUI" parent="UI/TeamInfoUI/TeamSelectionUI" instance=ExtResource("21_mfp85")]
+[node name="TeamSubstitutionUI" parent="UI/TeamInfoUI/TeamSubstitutionUI" instance=ExtResource("21_mfp85")]
 layout_mode = 0
 anchors_preset = 0
 anchor_right = 0.0

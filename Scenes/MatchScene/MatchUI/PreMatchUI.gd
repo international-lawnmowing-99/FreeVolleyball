@@ -6,7 +6,7 @@ var gameWorld:GameWorld
 var mManager:MatchManager
 
 @onready var matchIntro = $ColourRectIntro
-@onready var teamSelection = $TeamSelectionUI
+@onready var teamSubstitutionUI = $TeamSubstitutionUI
 @onready var teamLineups = $TeamLineUpsUI
 @onready var toss = $Toss
 @onready var wonToss = $Toss/WonToss
@@ -42,9 +42,9 @@ func _ready():
 	fullStartMenu.hide()
 	matchIntro.hide()
 	
-	teamSelection.hide()
+	teamSubstitutionUI.hide()
 	teamLineups.hide()
-	$TeamSelectionUI/AcceptButton.connect("pressed",Callable(self,"TeamSelectionAcceptButton_pressed"))
+	$TeamSubstitutionUI/AcceptButton.connect("pressed",Callable(self,"TeamSubstitutionAcceptButton_pressed"))
 	toss.hide()
 	wonToss.hide()
 	lostToss.hide()
@@ -66,9 +66,9 @@ func _Lineup_Button_pressed():
 	toss.show()
 
 
-func TeamSelectionAcceptButton_pressed():
-	if teamSelection.IsValid():
-		teamSelection.hide()
+func TeamSubstitutionAcceptButton_pressed():
+	if teamSubstitutionUI.IsValid():
+		teamSubstitutionUI.hide()
 		mManager.StartGame()
 	else:
 		Console.AddNewLine("Must choose a valid rotation")
@@ -88,15 +88,15 @@ func PopulateUI(team:Team, otherTeam:Team):
 	$TeamLineUpsUI/TeamAName.text = team.teamName
 	$TeamLineUpsUI/TeamBName.text = otherTeam.teamName
 	
-	$TeamSelectionUI/TeamName.text = team.teamName
+	$TeamSubstitutionUI/TeamName.text = team.teamName
 	
 	for i in range(6):
-		$TeamSelectionUI/HumanTeam.get_child(i).DisplayStats(team.matchPlayers[i])
+		$TeamSubstitutionUI/HumanTeam.get_child(i).DisplayStats(team.matchPlayers[i])
 		
-	$TeamSelectionUI/LiberoNameCard.DisplayStats(team.matchPlayers[6])
+	$TeamSubstitutionUI/LiberoNameCard.DisplayStats(team.matchPlayers[6])
 	
 	for i in range(5):
-		$TeamSelectionUI/HumanTeamBench.get_child(i).DisplayStats(team.matchPlayers[7 + i])
+		$TeamSubstitutionUI/HumanTeamBench.get_child(i).DisplayStats(team.matchPlayers[7 + i])
 
 
 func DoToss(choseHeads:bool):
@@ -160,8 +160,8 @@ func _on_ChooseServe_pressed():
 			Console.AddNewLine("Other team chose to change side")
 			mManager.RotateTheBoard()
 	
-	teamSelection.show()
-	teamSelection.Refresh()
+	teamSubstitutionUI.show()
+	teamSubstitutionUI.Refresh()
 
 func _on_ChooseReceive_pressed():
 	toss.hide()
@@ -176,23 +176,23 @@ func _on_ChooseReceive_pressed():
 			Console.AddNewLine("Other team chose to change side")
 			mManager.RotateTheBoard()
 			
-	teamSelection.show()
-	teamSelection.Refresh()
+	teamSubstitutionUI.show()
+	teamSubstitutionUI.Refresh()
 
 func _on_ChooseCurrentSide_pressed():
 	toss.hide()
 	lostToss.hide()
 	Console.AddNewLine("Staying checked same side")
-	teamSelection.show()
-	teamSelection.Refresh()
+	teamSubstitutionUI.show()
+	teamSubstitutionUI.Refresh()
 
 func _on_ChooseOtherSide_pressed():
 	toss.hide()
 	lostToss.hide()
 	Console.AddNewLine("Changing sides like a dickhead")
 	mManager.RotateTheBoard()
-	teamSelection.show()
-	teamSelection.Refresh()
+	teamSubstitutionUI.show()
+	teamSubstitutionUI.Refresh()
 
 func _on_ChooseSide_pressed():
 	$Toss/WonToss/ChooseOtherSide.show()

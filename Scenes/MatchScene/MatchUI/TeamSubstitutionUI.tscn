@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://c0t3dj6fskv0t"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/TeamSelectionUI.gd" id="1"]
+[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/TeamSubstitutionUI.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://c62uwhs35dmk" path="res://Scenes/MatchScene/MatchUI/NameCard.tscn" id="3"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PlayerStatsViewer.gd" id="5"]
 [ext_resource type="Texture2D" uid="uid://ckc4aneaqrwrv" path="res://Textures/AntiClockwiseArrow.png" id="6"]
@@ -11,7 +11,7 @@ GridContainer/constants/h_separation = 50
 GridContainer/constants/v_separation = 20
 VBoxContainer/constants/separation = 20
 
-[node name="TeamSelectionUI" type="ColorRect"]
+[node name="TeamSubstitutionUI" type="ColorRect"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

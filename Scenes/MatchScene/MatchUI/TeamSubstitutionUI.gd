@@ -1,10 +1,11 @@
 extends ColorRect
-class_name TeamSelectionUI
+class_name TeamSubstitutionUI
 
 var nameCards:Array
 var normalColour = Color.CHOCOLATE
 var mManager:MatchManager
 var athleteToBeSubbed:Athlete
+const MAXSUBSFIVB = 6
 
 func _ready() -> void:
 	mManager = get_tree().root.get_node("MatchScene")
@@ -17,7 +18,7 @@ func _ready() -> void:
 		nameCards.append(card)
 	for card in nameCards:
 		card.ChangeColour(normalColour)
-		card.teamSelectionUI = self
+		card.teamSubstitutionUI = self
 
 func CardSelected(athlete:Athlete):
 	if athlete && $PlayerStatsViewer:
@@ -25,6 +26,9 @@ func CardSelected(athlete:Athlete):
 
 func RequestSub(athlete:Athlete):
 	#Check who is allowed to sub...
+	if athlete.team.numberOfSubsUsed >= MAXSUBSFIVB:
+		Console.AddNewLine("All substitutions used as per FIVB limit")
+		return
 	
 	athleteToBeSubbed = athlete
 	
@@ -40,6 +44,8 @@ func ExecuteSub(incoming:Athlete):
 	incoming.substitutionInfo.startingRotationPosition = athleteToBeSubbed.substitutionInfo.startingRotationPosition
 	
 	incoming.team.InstantaneouslySwapPlayers(athleteToBeSubbed, incoming)
+	incoming.team.numberOfSubsUsed += 1
+	
 	Refresh(incoming.team)
 	
 	for card in $HumanTeamBench.get_children():
@@ -48,6 +54,7 @@ func ExecuteSub(incoming:Athlete):
 		card.ChangeColour(normalColour)
 	
 	incoming.team.CachePlayers()
+
 
 func RotateClockwise(team:Team):
 	#can only rotate before the serve
@@ -75,6 +82,8 @@ func RotateAntiClockwise(team:Team):
 		
 func Refresh(team:Team = mManager.teamA):
 	$TeamName.text = team.teamName
+	if !mManager.preSet:
+		$SubsRemainingLabel.text = str(MAXSUBSFIVB - team.numberOfSubsUsed) + " Substitutes Remaining"
 	
 	if mManager.score.teamAScore == 0 && mManager.score.teamBScore == 0:
 		EnableRotate()
@@ -131,6 +140,7 @@ func _on_CancelSubButton_pressed() -> void:
 	pass # Replace with function body.
 
 func SelectCaptain(athlete:Athlete):
+	athlete.team.teamCaptain = athlete
 	for nameCard:NameCard in nameCards:
 		if nameCard.cardAthlete != athlete:
 			nameCard.get_node("CaptainIcon").visible = false

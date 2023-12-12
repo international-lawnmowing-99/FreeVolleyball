@@ -12,6 +12,8 @@ var cube
 var cylinder
 var sphere
 
+var preSet:bool = true
+
 var teamA:Team
 var teamB:Team
 
@@ -62,8 +64,9 @@ func ConfirmTeams():
 	
 	$UI/sillydebug.StartDebug(teamA)
 	
-	
 func StartGame():
+	preSet = false
+	
 	for athlete:Athlete in teamA.courtPlayers:
 		if athlete.role != Enums.Role.Libero:
 			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
@@ -202,13 +205,21 @@ func PointToTeamB():
 
 
 func SetToTeamA():
-	$UI/TeamInfoUI/TeamSelectionUI/TeamSelectionUI.EnableRotate()
+	camera._gui.LockCamera()
+	preSet = true
+	teamA.numberOfSubsUsed = 0
+	teamB.numberOfSubsUsed = 0
+	$UI/TeamInfoUI/TeamSubstitutionUI/TeamSubstitutionUI.EnableRotate()
 	RotateTheBoard()
 	#reset everyone and allow lineup changes
 	pass
 
 func SetToTeamB():
-	$UI/TeamInfoUI/TeamSelectionUI/TeamSelectionUI.EnableRotate()
+	camera._gui.LockCamera()
+	preSet = true
+	teamA.numberOfSubsUsed = 0
+	teamB.numberOfSubsUsed = 0
+	$UI/TeamInfoUI/TeamSubstitutionUI/TeamSubstitutionUI.EnableRotate()
 	RotateTheBoard()
 	pass
 

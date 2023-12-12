@@ -5,7 +5,7 @@ class_name NameCard
 var Enums = preload("res://Scripts/World/Enums.gd")
 var isMouseHovering:bool
 var cardAthlete:Athlete
-var teamSelectionUI:TeamSelectionUI
+var teamSubstitutionUI:TeamSubstitutionUI
 var state = Enums.NameCardState.UNDEFINED
 var previousColour:Color
 
@@ -28,6 +28,12 @@ func DisplayStats(athlete:Athlete):
 #		skillText.modulate(Color.CHARTREUSE)
 	$Height.text = str("%.0f" % (athlete.stats.height *100)) + "cm"
 	$Role.text = Enums.Role.keys()[athlete.role]
+	
+	if athlete.team:
+		if athlete.team.teamCaptain == athlete:
+			$CaptainIcon.show()
+		else:
+			$CaptainIcon.hide()
 
 func DisplayEssentials():
 	$LiberoIcon.hide()
@@ -44,8 +50,8 @@ func _on_NameCard_mouse_entered() -> void:
 	isMouseHovering = true
 	#ChangeColour(Color(0,1,1))
 	#selectable = true
-	if teamSelectionUI:
-		teamSelectionUI.CardSelected(cardAthlete)
+	if teamSubstitutionUI:
+		teamSubstitutionUI.CardSelected(cardAthlete)
 	pass # Replace with function body.
 
 
@@ -57,10 +63,11 @@ func _on_NameCard_mouse_exited() -> void:
 
 
 func _on_SubstituteButton_pressed() -> void:
-	if teamSelectionUI:
+	if teamSubstitutionUI:
 		
-		teamSelectionUI.RequestSub(cardAthlete)
-		ChangeColour(Color.PURPLE)
+		teamSubstitutionUI.RequestSub(cardAthlete)
+		if cardAthlete.team.numberOfSubsUsed < teamSubstitutionUI.MAXSUBSFIVB:
+			ChangeColour(Color.PURPLE)
 	pass # Replace with function body.
 
 func Benched():
@@ -74,8 +81,8 @@ func Benched():
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("LMB"):
 		if state == Enums.NameCardState.Substitutable && isMouseHovering:
-			teamSelectionUI.ExecuteSub(cardAthlete)
+			teamSubstitutionUI.ExecuteSub(cardAthlete)
 
 
 func _on_captain_button_pressed():
-	teamSelectionUI.SelectCaptain(cardAthlete)
+	teamSubstitutionUI.SelectCaptain(cardAthlete)

@@ -31,7 +31,8 @@ func PointToTeamA():
 		teamAScore = 0
 		
 		if teamASetScore > 2:
-			print("game over. Team A won")
+			for i in range(40):
+				Console.AddNewLine("game over. Team A won", Color(randf(), randf(), randf(), randf()*255))
 			mManager.GameOver(true)
 		
 		else:
@@ -50,7 +51,8 @@ func PointToTeamB():
 		teamBScore = 0
 		
 		if teamBSetScore > 2:
-			print("game over. team B won well done chaps")
+			for i in range(40):
+				Console.AddNewLine("game over. team B won well done chaps", Color(randf(), randf(), randf(), 1.0))
 			mManager.GameOver(false)
 			
 		else:

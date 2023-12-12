@@ -25,6 +25,7 @@ var oppositeHitter:Athlete
 var middleFront:Athlete
 var outsideFront:Athlete
 var libero:Athlete
+var teamCaptain:Athlete
 var originalRotation1Player:Athlete
 var rotationsElapsed:int = 0
 
@@ -35,6 +36,7 @@ var chosenReceiver:Athlete
 var receiveRotations
 
 var server:int = 0
+var numberOfSubsUsed:int = 0
 
 var flip = 1
 
