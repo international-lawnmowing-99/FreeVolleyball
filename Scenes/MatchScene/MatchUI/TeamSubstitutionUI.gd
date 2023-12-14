@@ -35,16 +35,22 @@ func RequestSub(athlete:Athlete):
 	for card in nameCards:
 		card.ChangeColour(Color.RED)
 	for card:NameCard in $HumanTeamBench.get_children():
-		if !card.cardAthlete.substitutionInfo.hasEnteredCourtFromBenchThisSet:
+		# Players can only reenter the court to their original rotation position
+		if card.cardAthlete.substitutionInfo.startingRotationPosition != -1:
+			if athleteToBeSubbed.substitutionInfo.startingRotationPosition != card.cardAthlete.substitutionInfo.startingRotationPosition:
+				Console.AddNewLine(card.cardAthlete.stats.lastName + " not able to sub on as started on court in position " + str(card.cardAthlete.substitutionInfo.startingRotationPosition))
+
+		elif !card.cardAthlete.substitutionInfo.hasEnteredCourtFromBenchThisSet:
 			card.state = Enums.NameCardState.Substitutable
 			card.ChangeColour(Color.CHARTREUSE)
 
 func ExecuteSub(incoming:Athlete):
-	incoming.substitutionInfo.hasEnteredCourtFromBenchThisSet = true
-	incoming.substitutionInfo.startingRotationPosition = athleteToBeSubbed.substitutionInfo.startingRotationPosition
+	if !mManager.preSet:
+		incoming.substitutionInfo.hasEnteredCourtFromBenchThisSet = true
+		incoming.substitutionInfo.startingRotationPosition = athleteToBeSubbed.substitutionInfo.startingRotationPosition
+		incoming.team.numberOfSubsUsed += 1
 	
 	incoming.team.InstantaneouslySwapPlayers(athleteToBeSubbed, incoming)
-	incoming.team.numberOfSubsUsed += 1
 	
 	Refresh(incoming.team)
 	
@@ -81,6 +87,7 @@ func RotateAntiClockwise(team:Team):
 		RotateClockwise(team)
 		
 func Refresh(team:Team = mManager.teamA):
+	
 	$TeamName.text = team.teamName
 	if !mManager.preSet:
 		$SubsRemainingLabel.text = str(MAXSUBSFIVB - team.numberOfSubsUsed) + " Substitutes Remaining"
@@ -111,13 +118,11 @@ func Refresh(team:Team = mManager.teamA):
 			4: $HumanTeam/NameCard4.DisplayStats(athlete)
 			5: $HumanTeam/NameCard5.DisplayStats(athlete)
 			6: $HumanTeam/NameCard6.DisplayStats(athlete)
-
-
-func IsValid():
 	
-	
-	return true
-
+	if team.teamCaptain:
+		for nameCard:NameCard in nameCards:
+			nameCard.get_node("CaptainButton").hide()
+		
 func EnableRotate():
 	$RotationControl.show()
 
@@ -146,4 +151,3 @@ func SelectCaptain(athlete:Athlete):
 			nameCard.get_node("CaptainIcon").visible = false
 		else:
 			nameCard.get_node("CaptainIcon").visible = true
-	

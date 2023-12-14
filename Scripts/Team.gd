@@ -289,6 +289,9 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	incoming.model.rotation = outgoing.model.rotation
 	outgoing.model.rotation = tempRot
 	
+	if outgoing.rotationPosition == 1 && stateMachine.currentState == serveState:
+		incoming.stateMachine.SetCurrentState(incoming.serveState)
+	
 	outgoing.stateMachine.SetCurrentState(outgoing.chillState)
 	incoming.ReEvaluateState()
 	
@@ -482,7 +485,7 @@ func AttemptBlock(spiker:Athlete):
 func Populate(firstNames, lastNames):
 	if matchPlayers.size() != 0:
 		for i in range (32):
-			Console.AddNewLine("!Not Generating additional unnecessary players!!")
+			Console.AddNewLine("!Not Generating additional unnecessary players!! " + teamName)
 		return
 			
 	for _j in range(12):

@@ -6,7 +6,7 @@ var gameWorld:GameWorld
 var mManager:MatchManager
 
 @onready var matchIntro = $ColourRectIntro
-@onready var teamSubstitutionUI = $TeamSubstitutionUI
+@onready var teamSubstitutionUI:TeamSubstitutionUI = $TeamSubstitutionUI
 @onready var teamLineups = $TeamLineUpsUI
 @onready var toss = $Toss
 @onready var wonToss = $Toss/WonToss
@@ -67,11 +67,15 @@ func _Lineup_Button_pressed():
 
 
 func TeamSubstitutionAcceptButton_pressed():
-	if teamSubstitutionUI.IsValid():
-		teamSubstitutionUI.hide()
-		mManager.StartGame()
-	else:
-		Console.AddNewLine("Must choose a valid rotation")
+	if !mManager.teamA.teamCaptain:
+		Console.AddNewLine("Must designate a captain!")
+		return
+		
+	for namecard:NameCard in teamSubstitutionUI.nameCards:
+		if mManager.teamA.teamCaptain != namecard.cardAthlete:
+			namecard.get_node("CaptainButton").hide()
+	teamSubstitutionUI.hide()
+	mManager.StartGame()
 
 func PopulateUI(team:Team, otherTeam:Team):
 	$ColourRectIntro/Label.text = team.teamName + " vs " + otherTeam.teamName
@@ -182,7 +186,7 @@ func _on_ChooseReceive_pressed():
 func _on_ChooseCurrentSide_pressed():
 	toss.hide()
 	lostToss.hide()
-	Console.AddNewLine("Staying checked same side")
+	Console.AddNewLine("Staying on the same side")
 	teamSubstitutionUI.show()
 	teamSubstitutionUI.Refresh()
 
@@ -248,6 +252,11 @@ func _on_instant_start_button_pressed():
 func _on_full_start_confirm_button_pressed():
 	if teamAChooser.ValidChoice() && teamBChooser.ValidChoice():
 		SyncroniseClubOrInternational(teamAChooser.clubOrInternationalMode)
+		
+		newMatchData.aChoiceState = teamAChooser.choiceState
+		newMatchData.bChoiceState = teamBChooser.choiceState
+		newMatchData.clubOrInternational = teamAChooser.clubOrInternationalMode
+		
 		fullStartMenu.hide()
 		athletesTableMenu.show()
 		mManager.PrepareLocalTeamObjects(newMatchData)
