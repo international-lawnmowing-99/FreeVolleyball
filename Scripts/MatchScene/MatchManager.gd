@@ -68,6 +68,9 @@ func StartGame():
 	preSet = false
 	
 	for athlete:Athlete in teamA.courtPlayers:
+		if athlete.rotationPosition == 1:
+			teamA.originalRotation1Player = athlete
+			
 		if athlete.role != Enums.Role.Libero:
 			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
 			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.substitutionInfo.startingRotationPosition))
@@ -76,6 +79,9 @@ func StartGame():
 			#Console.AddNewLine(teamA.benchPlayers[0].stats.lastName + " starting in position " + str(athlete.rotationPosition))
 	
 	for athlete:Athlete in teamB.courtPlayers:
+		if athlete.rotationPosition == 1:
+			teamB.originalRotation1Player = athlete
+		
 		if athlete.role != Enums.Role.Libero:
 			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
 			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.substitutionInfo.startingRotationPosition))

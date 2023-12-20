@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://c0t3dj6fskv0t"]
+[gd_scene load_steps=8 format=3 uid="uid://c0t3dj6fskv0t"]
 
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/TeamSubstitutionUI.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://duemdswibod36" path="res://Scenes/MatchScene/MatchUI/LiberoOptionsPanel.tscn" id="2_0atft"]
 [ext_resource type="PackedScene" uid="uid://c62uwhs35dmk" path="res://Scenes/MatchScene/MatchUI/NameCard.tscn" id="3"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PlayerStatsViewer.gd" id="5"]
 [ext_resource type="Texture2D" uid="uid://ckc4aneaqrwrv" path="res://Textures/AntiClockwiseArrow.png" id="6"]
@@ -281,6 +282,8 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_constants/shadow_outline_size = 3
 theme_override_font_sizes/font_size = 21
 text = "Substitutions remaining: Unlimited (Pre Set)"
+
+[node name="LiberoOptionsPanel" parent="." instance=ExtResource("2_0atft")]
 
 [connection signal="pressed" from="CancelSubButton" to="." method="_on_CancelSubButton_pressed"]
 [connection signal="pressed" from="RotationControl/ClockwiseButton" to="." method="_on_ClockwiseButton_pressed"]

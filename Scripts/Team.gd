@@ -167,7 +167,7 @@ func PlaceTeam():
 		else:
 			lad.serveState = load("res://Scripts/State/Athlete/AthleteComputer/AthleteComputerServeState.gd").new()
 
-		originalRotation1Player = courtPlayers[0]
+
 
 func UpdateTimeTillDigTarget():
 	

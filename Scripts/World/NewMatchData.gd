@@ -40,7 +40,7 @@ func ChooseRandom(gameWorld:GameWorld):
 	bChoiceState = PlayerChoiceState.new(gameWorld)
 	aChoiceState = aChoiceState.ChooseRandom(gameWorld, clubOrInternational)
 	bChoiceState = bChoiceState.ChooseRandom(gameWorld, clubOrInternational)
-	bChoiceState = aChoiceState
+	#bChoiceState = aChoiceState
 
 	var teamA:Team = gameWorld.GetTeam(aChoiceState, clubOrInternational)
 	var teamB:Team = gameWorld.GetTeam(bChoiceState, clubOrInternational)

@@ -68,17 +68,6 @@ func RotateClockwise(team:Team):
 	Refresh(team)
 	team.stateMachine.SetCurrentState(team.preserviceState)
 	Console.AddNewLine("-")
-	#Console.AddNewLine("orig rot 1: " + team.originalRotation1Player.stats.lastName)
-	## remember the original rotaion 1 player for later designation of rotations
-	#if team.originalRotation1Player == team.courtPlayers[5]:
-		## I believe that courtPlayers[0] is the original
-		#team.originalRotation1Player = team.courtPlayers[0]
-		#Console.AddNewLine("Back to start of rotation")
-	#else:
-		#var origRot1Index = team.courtPlayers.find(team.originalRotation1Player)
-			#
-		#Console.AddNewLine("team.courtPlayers.find(team.originalRotation1Player) + 1 = " + str(team.courtPlayers.find(team.originalRotation1Player) + 1))
-		#team.originalRotation1Player = team.courtPlayers[team.courtPlayers.find(team.originalRotation1Player) + 1]
 	Console.AddNewLine("rotated orig rot 1: " + team.originalRotation1Player.stats.lastName)
 	Console.AddNewLine("Orig rot 1 in position " + str(team.originalRotation1Player.rotationPosition))
 	
@@ -99,7 +88,7 @@ func Refresh(team:Team = mManager.teamA):
 	
 	var playerNotAppearingOnBench
 	if team.isLiberoOnCourt:
-		$LiberoNameCard.DisplayStats(team.middleBack)
+		$LiberoNameCard.DisplayStats(team.libero)
 		playerNotAppearingOnBench = team.middleBack
 	else:
 		$LiberoNameCard.DisplayStats(team.libero)

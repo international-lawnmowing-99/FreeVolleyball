@@ -468,7 +468,6 @@ offset_left = 0.0
 offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
-color = Color(1, 1, 1, 0.443137)
 
 [node name="TeamLineUpsUI" type="ColorRect" parent="."]
 visible = false

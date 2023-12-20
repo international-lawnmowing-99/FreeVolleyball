@@ -1,0 +1,255 @@
+[gd_scene load_steps=2 format=3 uid="uid://duemdswibod36"]
+
+[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/LiberoOptionsPanel.gd" id="1_ysemm"]
+
+[node name="LiberoOptionsPanel" type="Node2D"]
+script = ExtResource("1_ysemm")
+
+[node name="ColourRect" type="ColorRect" parent="."]
+offset_right = 900.0
+offset_bottom = 500.0
+
+[node name="RotationSelect" type="HBoxContainer" parent="ColourRect"]
+layout_mode = 0
+offset_right = 900.0
+offset_bottom = 31.0
+theme_override_constants/separation = 20
+
+[node name="VSeparator1" type="VSeparator" parent="ColourRect/RotationSelect"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Rotation1" type="Button" parent="ColourRect/RotationSelect"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 1"
+
+[node name="Rotation2" type="Button" parent="ColourRect/RotationSelect"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 2"
+
+[node name="Rotation3" type="Button" parent="ColourRect/RotationSelect"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 3"
+
+[node name="Rotation4" type="Button" parent="ColourRect/RotationSelect"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 4"
+
+[node name="Rotation5" type="Button" parent="ColourRect/RotationSelect"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 5"
+
+[node name="Rotation6" type="Button" parent="ColourRect/RotationSelect"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotation 6"
+
+[node name="VSeparator2" type="VSeparator" parent="ColourRect/RotationSelect"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="RotationSelect2" type="HBoxContainer" parent="ColourRect"]
+layout_mode = 0
+offset_left = 225.0
+offset_top = 80.0
+offset_right = 675.0
+offset_bottom = 111.0
+theme_override_constants/separation = 20
+
+[node name="Serve" type="Button" parent="ColourRect/RotationSelect2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Serve"
+
+[node name="Receive" type="Button" parent="ColourRect/RotationSelect2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Receive"
+
+[node name="CourtPlayers" type="GridContainer" parent="ColourRect"]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 130.0
+offset_right = 850.0
+offset_bottom = 388.0
+theme_override_constants/h_separation = 50
+theme_override_constants/v_separation = 50
+columns = 3
+
+[node name="Position4Info" type="ColorRect" parent="ColourRect/CourtPlayers"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.188235, 0.298039, 1, 1)
+
+[node name="PositionLabel" type="Label" parent="ColourRect/CourtPlayers/Position4Info"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Position 4:"
+
+[node name="PlayerLabel" type="Label" parent="ColourRect/CourtPlayers/Position4Info"]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 168.0
+offset_bottom = 63.0
+text = "Player: Giba (Outside)"
+
+[node name="Position3Info" type="ColorRect" parent="ColourRect/CourtPlayers"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.188235, 0.298039, 1, 1)
+
+[node name="PositionLabel" type="Label" parent="ColourRect/CourtPlayers/Position3Info"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Position 3:"
+
+[node name="PlayerLabel" type="Label" parent="ColourRect/CourtPlayers/Position3Info"]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 168.0
+offset_bottom = 63.0
+text = "Player: Giba (Outside)"
+
+[node name="Position2Info" type="ColorRect" parent="ColourRect/CourtPlayers"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.188235, 0.298039, 1, 1)
+
+[node name="PositionLabel" type="Label" parent="ColourRect/CourtPlayers/Position2Info"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Position 2:"
+
+[node name="PlayerLabel" type="Label" parent="ColourRect/CourtPlayers/Position2Info"]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 168.0
+offset_bottom = 63.0
+text = "Player: Giba (Outside)"
+
+[node name="Position5Info" type="ColorRect" parent="ColourRect/CourtPlayers"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.188235, 0.298039, 1, 1)
+
+[node name="PositionLabel" type="Label" parent="ColourRect/CourtPlayers/Position5Info"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Position 5:"
+
+[node name="PlayerLabel" type="Label" parent="ColourRect/CourtPlayers/Position5Info"]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 168.0
+offset_bottom = 63.0
+text = "Player: Giba (Outside)"
+
+[node name="Position6Info" type="ColorRect" parent="ColourRect/CourtPlayers"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.188235, 0.298039, 1, 1)
+
+[node name="PositionLabel" type="Label" parent="ColourRect/CourtPlayers/Position6Info"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Positon 6:"
+
+[node name="PlayerLabel" type="Label" parent="ColourRect/CourtPlayers/Position6Info"]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 168.0
+offset_bottom = 63.0
+text = "Player: Giba (Outside)"
+
+[node name="Position1Info" type="ColorRect" parent="ColourRect/CourtPlayers"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.188235, 0.298039, 1, 1)
+
+[node name="PositionLabel" type="Label" parent="ColourRect/CourtPlayers/Position1Info"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Position 1:"
+
+[node name="PlayerLabel" type="Label" parent="ColourRect/CourtPlayers/Position1Info"]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 168.0
+offset_bottom = 63.0
+text = "Player: Giba (Outside)"
+
+[node name="ServeStatusLabel" type="Label" parent="ColourRect/CourtPlayers/Position1Info"]
+layout_mode = 0
+offset_top = 64.0
+offset_right = 168.0
+offset_bottom = 87.0
+text = "On court serve"
+
+[node name="ReceiveStatusLabel" type="Label" parent="ColourRect/CourtPlayers/Position1Info"]
+layout_mode = 0
+offset_top = 80.0
+offset_right = 168.0
+offset_bottom = 103.0
+text = "On court receive"
+
+[node name="Libero1Info" type="ColorRect" parent="ColourRect"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 410.0
+offset_right = 196.0
+offset_bottom = 450.0
+color = Color(0.19, 1, 0.298, 1)
+
+[node name="Label" type="Label" parent="ColourRect/Libero1Info"]
+layout_mode = 0
+offset_right = 194.0
+offset_bottom = 40.0
+theme_override_colors/font_color = Color(0.188067, 0.297993, 1, 1)
+text = "Libero 1: Sergio"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Libero2Info" type="ColorRect" parent="ColourRect"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 454.0
+offset_right = 196.0
+offset_bottom = 494.0
+color = Color(0.917647, 0.827451, 0.0392157, 1)
+
+[node name="Label" type="Label" parent="ColourRect/Libero2Info"]
+layout_mode = 0
+offset_right = 194.0
+offset_bottom = 40.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Libero 2: Lorry"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="ColourRect/RotationSelect/Rotation1" to="." method="_on_rotation_1_pressed"]
+[connection signal="pressed" from="ColourRect/RotationSelect/Rotation2" to="." method="_on_rotation_2_pressed"]
+[connection signal="pressed" from="ColourRect/RotationSelect/Rotation3" to="." method="_on_rotation_3_pressed"]
+[connection signal="pressed" from="ColourRect/RotationSelect/Rotation4" to="." method="_on_rotation_4_pressed"]
+[connection signal="pressed" from="ColourRect/RotationSelect/Rotation5" to="." method="_on_rotation_5_pressed"]
+[connection signal="pressed" from="ColourRect/RotationSelect/Rotation6" to="." method="_on_rotation_6_pressed"]
+[connection signal="pressed" from="ColourRect/RotationSelect2/Serve" to="." method="_on_rotation_1_pressed"]
+[connection signal="pressed" from="ColourRect/RotationSelect2/Receive" to="." method="_on_rotation_2_pressed"]

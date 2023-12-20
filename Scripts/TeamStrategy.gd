@@ -3,7 +3,7 @@ extends Node
 #Holds all the input the user/ai has generated to direct their team
 
 func _init():
-	receiveRotations
+	#receiveRotations
 	pass
 	
 var defaultReceiveRotations =  [
@@ -74,3 +74,8 @@ var scheduledSubstitutions
 # Blocking options
 var maxCommitDistanceFromNet = 2
 
+var libero1:Athlete
+var libero2:Athlete
+
+var playerToLiberoServe = []
+var playerToLiberoReceive = []
