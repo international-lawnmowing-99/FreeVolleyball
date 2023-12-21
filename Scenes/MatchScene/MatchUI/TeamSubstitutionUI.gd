@@ -81,7 +81,7 @@ func Refresh(team:Team = mManager.teamA):
 	if !mManager.preSet:
 		$SubsRemainingLabel.text = str(MAXSUBSFIVB - team.numberOfSubsUsed) + " Substitutes Remaining"
 	
-	if mManager.score.teamAScore == 0 && mManager.score.teamBScore == 0:
+	if mManager.preSet:
 		EnableRotate()
 	else:
 		DisableRotate()

@@ -10,6 +10,8 @@ var teamA:Team
 @onready var position5Info = $ColourRect/CourtPlayers/Position5Info
 @onready var position6Info = $ColourRect/CourtPlayers/Position6Info
 
+var liberoOptionsNameCards:Array
+
 func _on_rotation_1_pressed():
 	DisplayRotation(1)
 
@@ -51,16 +53,31 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 	
 	for lad:Athlete in pseudoTeam.courtPlayers:
 		if lad.pseudoRotationPosition == 1:
-			position1Info.get_node("PlayerLabel").text = lad.stats.lastName
+			position1Info.DisplayAthlete(lad)
 		if lad.pseudoRotationPosition == 2:
-			position2Info.get_node("PlayerLabel").text = lad.stats.lastName
+			position2Info.DisplayAthlete(lad)
 		if lad.pseudoRotationPosition == 3:
-			position3Info.get_node("PlayerLabel").text = lad.stats.lastName
+			position3Info.DisplayAthlete(lad)
 		if lad.pseudoRotationPosition == 4:
-			position4Info.get_node("PlayerLabel").text = lad.stats.lastName
+			position4Info.DisplayAthlete(lad)
 		if lad.pseudoRotationPosition == 5:
-			position5Info.get_node("PlayerLabel").text = lad.stats.lastName
+			position5Info.DisplayAthlete(lad)
 		if lad.pseudoRotationPosition == 6:
-			position6Info.get_node("PlayerLabel").text = lad.stats.lastName
+			position6Info.DisplayAthlete(lad)
+			
+	if teamA.playerToBeLiberoedOnServe[positionOfOriginalRot1Player][0]:
+		var playerToLibero = teamA.playerToBeLiberoedOnServe[positionOfOriginalRot1Player][1]
+		var liberoUsed = teamA.playerToBeLiberoedOnServe[positionOfOriginalRot1Player][2]
+		for card:LiberoOptionsNameCard in liberoOptionsNameCards:
+			if card.athlete == playerToLibero:
+				card.CardAthleteWillBeLiberoedOnServe(liberoUsed)
+
+	if teamA.playerToBeLiberoedOnReceive[positionOfOriginalRot1Player][0]:
+		var playerToLibero = teamA.playerToBeLiberoedOnServe[positionOfOriginalRot1Player][1]
+		var liberoUsed = teamA.playerToBeLiberoedOnServe[positionOfOriginalRot1Player][2]
+		for card:LiberoOptionsNameCard in liberoOptionsNameCards:
+			if card.athlete == playerToLibero:
+				card.CardAthleteWillBeLiberoedOnReceive(liberoUsed)
+			
 			
 	pseudoTeam.free()

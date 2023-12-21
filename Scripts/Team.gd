@@ -34,6 +34,9 @@ var chosenSpiker:Athlete
 var chosenReceiver:Athlete
 
 var receiveRotations
+# who will be subbed for the libero in each rotation ie rot [will be subbed bool, player, libero to use if we have two (or more!)]
+var playerToBeLiberoedOnServe:Array = [[false,null,null],[false,null,null],[false,null,null],[false,null,null],[false,null,null], [false,null,null]]
+var playerToBeLiberoedOnReceive:Array = [[false,null,null],[false,null,null],[false,null,null],[false,null,null],[false,null,null], [false,null,null]]
 
 var server:int = 0
 var numberOfSubsUsed:int = 0
