@@ -284,6 +284,7 @@ theme_override_font_sizes/font_size = 21
 text = "Substitutions remaining: Unlimited (Pre Set)"
 
 [node name="LiberoOptionsPanel" parent="." instance=ExtResource("2_0atft")]
+visible = false
 
 [connection signal="pressed" from="CancelSubButton" to="." method="_on_CancelSubButton_pressed"]
 [connection signal="pressed" from="RotationControl/ClockwiseButton" to="." method="_on_ClockwiseButton_pressed"]

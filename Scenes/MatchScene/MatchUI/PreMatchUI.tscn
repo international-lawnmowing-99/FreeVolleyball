@@ -47,6 +47,7 @@ focus_mode = 0
 text = "Instant Start"
 
 [node name="FullStartColourRect" type="ColorRect" parent="."]
+visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0
 

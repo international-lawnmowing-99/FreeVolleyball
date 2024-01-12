@@ -6,6 +6,7 @@ var athlete:Athlete
 @onready var playerLabel:Label = $PlayerLabel
 @onready var serveStatusLabel:Label = $ServeStatusLabel
 @onready var receiveStatusLabel:Label = $ReceiveStatusLabel
+@onready var positionLabel:Label = $PositionLabel
 
 func DisplayAthlete(_athlete:Athlete):
 	athlete = _athlete

@@ -40,4 +40,4 @@ func _on_selected_pressed():
 		
 	if athlete: 
 		athlete.uiSelected = selected.button_pressed
-		playerStatsTable.SelectUnelectAthlete(athlete)
+		playerStatsTable.SelectUnselectAthlete(athlete)

@@ -12,7 +12,7 @@ script = ExtResource("1_tvb46")
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
-text = "Position 1:"
+text = "Position x:"
 
 [node name="PlayerLabel" type="Label" parent="."]
 layout_mode = 0
@@ -26,6 +26,10 @@ layout_mode = 0
 offset_top = 64.0
 offset_right = 168.0
 offset_bottom = 87.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
 text = "On court serve"
 
 [node name="ReceiveStatusLabel" type="Label" parent="."]
@@ -33,4 +37,8 @@ layout_mode = 0
 offset_top = 80.0
 offset_right = 168.0
 offset_bottom = 103.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
 text = "On court receive"

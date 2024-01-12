@@ -98,20 +98,36 @@ func Refresh(team:Team = mManager.teamA):
 		if athlete != playerNotAppearingOnBench:
 			$HumanTeamBench.get_child(i).DisplayStats(athlete)
 			i += 1
-
+	
+	var displayAthlete
 	for athlete in team.courtPlayers:
+		if athlete == team.libero || athlete == team.libero2:
+			displayAthlete = playerNotAppearingOnBench
+		else:
+			displayAthlete = athlete
 		match athlete.rotationPosition:
-			1: $HumanTeam/NameCard1.DisplayStats(athlete)
-			2: $HumanTeam/NameCard2.DisplayStats(athlete)
-			3: $HumanTeam/NameCard3.DisplayStats(athlete)
-			4: $HumanTeam/NameCard4.DisplayStats(athlete)
-			5: $HumanTeam/NameCard5.DisplayStats(athlete)
-			6: $HumanTeam/NameCard6.DisplayStats(athlete)
+			1: $HumanTeam/NameCard1.DisplayStats(displayAthlete)
+			2: $HumanTeam/NameCard2.DisplayStats(displayAthlete)
+			3: $HumanTeam/NameCard3.DisplayStats(displayAthlete)
+			4: $HumanTeam/NameCard4.DisplayStats(displayAthlete)
+			5: $HumanTeam/NameCard5.DisplayStats(displayAthlete)
+			6: $HumanTeam/NameCard6.DisplayStats(displayAthlete)
 	
 	if team.teamCaptain:
 		for nameCard:NameCard in nameCards:
 			nameCard.get_node("CaptainButton").hide()
-		
+			if nameCard.cardAthlete == team.teamCaptain:
+				nameCard.get_node("CaptainIcon").show()
+			else:
+				nameCard.get_node("CaptainIcon").hide()
+						
+	for nameCard:NameCard in nameCards:
+		nameCard.get_node("LiberoIcon").hide()
+		if playerNotAppearingOnBench != team.libero && playerNotAppearingOnBench != team.libero2:
+			if nameCard.cardAthlete == playerNotAppearingOnBench:
+				nameCard.get_node("LiberoIcon").show()
+				
+				
 func EnableRotate():
 	$RotationControl.show()
 

@@ -246,6 +246,11 @@ func _on_instant_start_button_pressed():
 		(mManager.teamB as NationalTeam).SelectNationalTeam()
 	
 	mManager.ConfirmTeams()
+	mManager.teamA.teamCaptain = mManager.teamA.matchPlayers[randi()%mManager.teamA.matchPlayers.size()]
+	mManager.teamB.teamCaptain = mManager.teamA.matchPlayers[randi()%mManager.teamB.matchPlayers.size()]
+	#Console.AddNewLine("Team A captain is: " + mManager.teamA.teamCaptain.stats.lastName)
+	#Console.AddNewLine("Team B captain is: " + mManager.teamB.teamCaptain.stats.lastName)
+	
 	mManager.StartGame()
 
 
@@ -325,6 +330,8 @@ func SyncroniseClubOrInternational(clubOrInternational:Enums.ClubOrInternational
 	newMatchData.clubOrInternational = clubOrInternational
 
 func _on_auto_select_pressed():
+	for athlete:Athlete in playerStatsTable.selectedPlayers:
+		athlete.uiSelected = false
 	playerStatsTable.selectedPlayers.clear()
 	
 	if newMatchData.clubOrInternational == Enums.ClubOrInternational.Club:

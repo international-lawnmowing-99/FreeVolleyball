@@ -140,7 +140,7 @@ func _on_set_pressed():
 	for i in matchPlayerstatsRows.size():
 		matchPlayerstatsRows[i].DisplayPlayer(matchPlayers[i])
 
-func SelectUnelectAthlete(athlete:Athlete):
+func SelectUnselectAthlete(athlete:Athlete):
 	if athlete in selectedPlayers:
 		selectedPlayers.erase(athlete)
 	else:

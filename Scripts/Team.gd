@@ -25,6 +25,7 @@ var oppositeHitter:Athlete
 var middleFront:Athlete
 var outsideFront:Athlete
 var libero:Athlete
+var libero2:Athlete
 var teamCaptain:Athlete
 var originalRotation1Player:Athlete
 var rotationsElapsed:int = 0
@@ -114,8 +115,11 @@ func Init(matchManager):
 	AutoSelectTeamLineup()
 	
 	PlaceTeam()
-	CachePlayers()
+
 	
+	CachePlayers()
+	CreateDefaultLiberoStrategy()
+
 func PlaceTeam():
 
 	for i in range(12):
@@ -530,3 +534,23 @@ func Populate(firstNames, lastNames):
 		#stats.dob = oldest.AddDays( r.Next(daysRange));
 
 		#team.CalculateMacroStats();
+
+func CreateDefaultLiberoStrategy():
+	# A note: the convention is that the setter is in one in the first rotation,
+	# regardless of where the player rotates them to before the set. 
+	playerToBeLiberoedOnServe[0] = [true, middleBack, libero]
+	# Middle will serve when setter in 2
+	#playerToBeLiberoedOnServe[1] = [true, middleBack, libero] 
+	playerToBeLiberoedOnServe[2] = [true, middleFront, libero]
+	playerToBeLiberoedOnServe[3] = [true, middleFront, libero]
+	# Middle will serve when setter in 5
+	#playerToBeLiberoedOnServe[4] = [true, middleFront, libero]
+	playerToBeLiberoedOnServe[5] = [true, middleBack, libero]
+	
+	playerToBeLiberoedOnReceive[0] = [true, middleBack, libero]
+	playerToBeLiberoedOnReceive[1] = [true, middleBack, libero]
+	playerToBeLiberoedOnReceive[2] = [true, middleFront, libero]
+	playerToBeLiberoedOnReceive[3] = [true, middleFront, libero]
+	playerToBeLiberoedOnReceive[4] = [true, middleFront, libero]
+	playerToBeLiberoedOnReceive[5] = [true, middleBack, libero]
+	

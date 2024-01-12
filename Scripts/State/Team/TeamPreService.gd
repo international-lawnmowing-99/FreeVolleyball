@@ -31,6 +31,7 @@ func Enter(team:Team):
 	server.stateMachine.SetCurrentState(server.serveState)
 	
 	team.chosenSetter = null
+	team.CheckForLiberoChange()
 	
 	if team.isHuman:
 		team.mManager.teamInfoUI.InitialiseOnCourtPlayerUI()

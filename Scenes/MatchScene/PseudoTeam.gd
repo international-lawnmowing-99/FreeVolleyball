@@ -55,8 +55,8 @@ func PseudoRotate():
 			
 	#CheckForScheduledSubs()
 	
-	CachePlayers()
-	CheckForLiberoChange()
+	#CachePlayers()
+	#CheckForLiberoChange()
 	CachePlayers()
 	
 	

@@ -26,6 +26,7 @@ var teamB:Team
 @onready var serveUI = $UI/ServeUI
 @onready var teamTacticsUI = $UI/TeamTacticsUICanvas/TeamTacticsUI
 @onready var camera = $Camera3D
+@onready var liberoOptionsPanel:LiberoOptionsPanel = $UI/PreMatchUI/TeamSubstitutionUI/LiberoOptionsPanel
 
 var isTeamAServing:bool
 var isPaused:bool = false
@@ -103,6 +104,7 @@ func StartGame():
 		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
 	
 	teamTacticsUI.Init(teamA, teamB)
+	liberoOptionsPanel.Init(teamA)
 	
 	$UI/TeamInfoUI.InitialiseOnCourtPlayerUI()
 	camera._gui.UnlockCamera()

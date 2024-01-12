@@ -66,100 +66,20 @@ theme_override_constants/h_separation = 50
 theme_override_constants/v_separation = 50
 columns = 3
 
-[node name="Position4Info" type="ColorRect" parent="ColourRect/CourtPlayers"]
+[node name="Position4Info" parent="ColourRect/CourtPlayers" instance=ExtResource("2_lrt3e")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color(0.188235, 0.298039, 1, 1)
 
-[node name="PositionLabel" type="Label" parent="ColourRect/CourtPlayers/Position4Info"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Position 4:"
-
-[node name="PlayerLabel" type="Label" parent="ColourRect/CourtPlayers/Position4Info"]
-layout_mode = 0
-offset_top = 40.0
-offset_right = 168.0
-offset_bottom = 63.0
-text = "Player: Giba (Outside)"
-
-[node name="Position3Info" type="ColorRect" parent="ColourRect/CourtPlayers"]
+[node name="Position3Info" parent="ColourRect/CourtPlayers" instance=ExtResource("2_lrt3e")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color(0.188235, 0.298039, 1, 1)
 
-[node name="PositionLabel" type="Label" parent="ColourRect/CourtPlayers/Position3Info"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Position 3:"
-
-[node name="PlayerLabel" type="Label" parent="ColourRect/CourtPlayers/Position3Info"]
-layout_mode = 0
-offset_top = 40.0
-offset_right = 168.0
-offset_bottom = 63.0
-text = "Player: Giba (Outside)"
-
-[node name="Position2Info" type="ColorRect" parent="ColourRect/CourtPlayers"]
+[node name="Position2Info" parent="ColourRect/CourtPlayers" instance=ExtResource("2_lrt3e")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color(0.188235, 0.298039, 1, 1)
 
-[node name="PositionLabel" type="Label" parent="ColourRect/CourtPlayers/Position2Info"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Position 2:"
-
-[node name="PlayerLabel" type="Label" parent="ColourRect/CourtPlayers/Position2Info"]
-layout_mode = 0
-offset_top = 40.0
-offset_right = 168.0
-offset_bottom = 63.0
-text = "Player: Giba (Outside)"
-
-[node name="Position5Info" type="ColorRect" parent="ColourRect/CourtPlayers"]
+[node name="Position5Info" parent="ColourRect/CourtPlayers" instance=ExtResource("2_lrt3e")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color(0.188235, 0.298039, 1, 1)
 
-[node name="PositionLabel" type="Label" parent="ColourRect/CourtPlayers/Position5Info"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Position 5:"
-
-[node name="PlayerLabel" type="Label" parent="ColourRect/CourtPlayers/Position5Info"]
-layout_mode = 0
-offset_top = 40.0
-offset_right = 168.0
-offset_bottom = 63.0
-text = "Player: Giba (Outside)"
-
-[node name="Position6Info" type="ColorRect" parent="ColourRect/CourtPlayers"]
+[node name="Position6Info" parent="ColourRect/CourtPlayers" instance=ExtResource("2_lrt3e")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color(0.188235, 0.298039, 1, 1)
-
-[node name="PositionLabel" type="Label" parent="ColourRect/CourtPlayers/Position6Info"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Positon 6:"
-
-[node name="PlayerLabel" type="Label" parent="ColourRect/CourtPlayers/Position6Info"]
-layout_mode = 0
-offset_top = 40.0
-offset_right = 168.0
-offset_bottom = 63.0
-text = "Player: Giba (Outside)"
 
 [node name="Position1Info" parent="ColourRect/CourtPlayers" instance=ExtResource("2_lrt3e")]
 layout_mode = 2
@@ -182,6 +102,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Libero2Info" type="ColorRect" parent="ColourRect"]
+visible = false
 layout_mode = 0
 offset_left = 1.0
 offset_top = 454.0
@@ -197,6 +118,16 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Libero 2: Lorry"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CurrentRotationLabel" type="Label" parent="ColourRect"]
+layout_mode = 0
+offset_top = 38.0
+offset_right = 900.0
+offset_bottom = 88.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "Rotation 1"
+horizontal_alignment = 1
 
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation1" to="." method="_on_rotation_1_pressed"]
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation2" to="." method="_on_rotation_2_pressed"]
