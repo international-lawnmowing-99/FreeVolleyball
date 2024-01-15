@@ -7,7 +7,7 @@ var mManager:MatchManager
 
 @onready var matchIntro = $ColourRectIntro
 @onready var teamSubstitutionUI:TeamSubstitutionUI = $TeamSubstitutionUI
-@onready var teamLineups = $TeamLineUpsUI
+@onready var teamLineups:TeamLineupsUI = $TeamLineUpsUI
 @onready var toss = $Toss
 @onready var wonToss = $Toss/WonToss
 @onready var lostToss = $Toss/LostToss
@@ -36,18 +36,20 @@ func Init(_mManager:MatchManager):
 	teamAChooser.Init(self, gameWorld, newMatchData.aChoiceState)
 	teamBChooser.Init(self, gameWorld, newMatchData.bChoiceState)
 
-
-func _ready():
 	matchStartMenu.show()
 	fullStartMenu.hide()
 	matchIntro.hide()
 	
 	teamSubstitutionUI.hide()
+	teamLineups.mManager = mManager
 	teamLineups.hide()
-	$TeamSubstitutionUI/AcceptButton.connect("pressed",Callable(self,"TeamSubstitutionAcceptButton_pressed"))
 	toss.hide()
 	wonToss.hide()
 	lostToss.hide()
+
+
+func _ready():
+	$TeamSubstitutionUI/AcceptButton.connect("pressed",Callable(self,"TeamSubstitutionAcceptButton_pressed"))
 
 
 func _on_Intro_Button_pressed():
@@ -56,14 +58,17 @@ func _on_Intro_Button_pressed():
 	$TeamLineUpsUI/TeamAName.text = mManager.teamA.teamName
 	$TeamLineUpsUI/TeamBName.text = mManager.teamB.teamName
 	
-	for i in range(12):
-		$TeamLineUpsUI/HumanTeam.get_child(i).DisplayStats(mManager.teamA.matchPlayers[i])
-		$TeamLineUpsUI/OppositionTeam.get_child(i).DisplayStats(mManager.teamB.matchPlayers[i])
+	teamLineups.DisplayTeams()
 
 
-func _Lineup_Button_pressed():
-	teamLineups.hide()
-	toss.show()
+func _on_TeamLineups_ContinueButton_pressed():
+	if !mManager.teamA.teamCaptain:
+		Console.AddNewLine("Must select team captain!", Color.RED)
+	#elif !mManager.teamA.libero:
+		#
+	else:
+		teamLineups.hide()
+		toss.show()
 
 
 func TeamSubstitutionAcceptButton_pressed():
@@ -77,30 +82,30 @@ func TeamSubstitutionAcceptButton_pressed():
 	teamSubstitutionUI.hide()
 	mManager.StartGame()
 
-func PopulateUI(team:Team, otherTeam:Team):
-	$ColourRectIntro/Label.text = team.teamName + " vs " + otherTeam.teamName
-	
-	var humanTeam = $TeamLineUpsUI/HumanTeam
-	if team.matchPlayers.size() > 12:
-		Console.AddNewLine("Honey, we've duplicated the players somewhere...")
-		return
-	for i in range(team.matchPlayers.size()):
-		if team.matchPlayers[i] && humanTeam.get_child(i):
-			humanTeam.get_child(i).DisplayStats(team.matchPlayers[i])
-			$TeamLineUpsUI/OppositionTeam.get_child(i).DisplayStats(otherTeam.matchPlayers[i])
-	
-	$TeamLineUpsUI/TeamAName.text = team.teamName
-	$TeamLineUpsUI/TeamBName.text = otherTeam.teamName
-	
-	$TeamSubstitutionUI/TeamName.text = team.teamName
-	
-	for i in range(6):
-		$TeamSubstitutionUI/HumanTeam.get_child(i).DisplayStats(team.matchPlayers[i])
-		
-	$TeamSubstitutionUI/LiberoNameCard.DisplayStats(team.matchPlayers[6])
-	
-	for i in range(5):
-		$TeamSubstitutionUI/HumanTeamBench.get_child(i).DisplayStats(team.matchPlayers[7 + i])
+#func PopulateUI(team:Team, otherTeam:Team):
+	##$ColourRectIntro/Label.text = team.teamName + " vs " + otherTeam.teamName
+	##
+	##var humanTeam = $TeamLineUpsUI/HumanTeam
+	##if team.matchPlayers.size() > 12:
+		##Console.AddNewLine("Honey, we've duplicated the players somewhere...")
+		##return
+	##for i in range(team.matchPlayers.size()):
+		##if team.matchPlayers[i] && humanTeam.get_child(i):
+			##humanTeam.get_child(i).DisplayStats(team.matchPlayers[i])
+			##$TeamLineUpsUI/OppositionTeam.get_child(i).DisplayStats(otherTeam.matchPlayers[i])
+	#
+	#$TeamLineUpsUI/TeamAName.text = team.teamName
+	#$TeamLineUpsUI/TeamBName.text = otherTeam.teamName
+	#
+	#$TeamSubstitutionUI/TeamName.text = team.teamName
+	#
+	#for i in range(6):
+		#$TeamSubstitutionUI/HumanTeam.get_child(i).DisplayStats(team.matchPlayers[i])
+		#
+	#$TeamSubstitutionUI/LiberoNameCard.DisplayStats(team.matchPlayers[6])
+	#
+	#for i in range(5):
+		#$TeamSubstitutionUI/HumanTeamBench.get_child(i).DisplayStats(team.matchPlayers[7 + i])
 
 
 func DoToss(choseHeads:bool):

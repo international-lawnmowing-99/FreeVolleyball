@@ -471,11 +471,10 @@ offset_right = 0.0
 offset_bottom = 0.0
 
 [node name="TeamLineUpsUI" type="ColorRect" parent="."]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.972549, 0.976471, 0.576471, 1)
+color = Color(0.972549, 0.745098, 0.576471, 0.584314)
 script = ExtResource("10")
 
 [node name="OppositionTeam" type="GridContainer" parent="TeamLineUpsUI"]
@@ -525,6 +524,12 @@ layout_mode = 2
 [node name="NameCard12" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
 layout_mode = 2
 
+[node name="NameCard13" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
+
+[node name="NameCard14" parent="TeamLineUpsUI/OppositionTeam" instance=ExtResource("7")]
+layout_mode = 2
+
 [node name="HumanTeam" type="GridContainer" parent="TeamLineUpsUI"]
 layout_mode = 0
 offset_left = 76.0
@@ -572,6 +577,12 @@ layout_mode = 2
 [node name="NameCard12" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
 layout_mode = 2
 
+[node name="NameCard13" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
+
+[node name="NameCard14" parent="TeamLineUpsUI/HumanTeam" instance=ExtResource("7")]
+layout_mode = 2
+
 [node name="TeamAName" type="Label" parent="TeamLineUpsUI"]
 layout_mode = 0
 offset_top = 21.0
@@ -601,7 +612,7 @@ theme_override_font_sizes/font_size = 40
 text = "France"
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="TeamLineUpsUI"]
+[node name="ContinueButton" type="Button" parent="TeamLineUpsUI"]
 layout_mode = 0
 offset_left = 1395.0
 offset_top = 943.0
@@ -610,6 +621,82 @@ offset_bottom = 1080.0
 text = "Continue"
 icon = ExtResource("4")
 expand_icon = true
+
+[node name="CaptainLabel" type="Label" parent="TeamLineUpsUI"]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 909.0
+offset_right = 417.0
+offset_bottom = 951.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "Captain: NOT SELECTED"
+
+[node name="SelectCaptainButton" type="Button" parent="TeamLineUpsUI/CaptainLabel"]
+layout_mode = 0
+offset_left = 430.0
+offset_top = 6.0
+offset_right = 548.0
+offset_bottom = 37.0
+text = "Select Captain
+"
+
+[node name="CaptainSelectPopupMenu" type="PopupMenu" parent="TeamLineUpsUI/CaptainLabel"]
+initial_position = 2
+size = Vector2i(267, 100)
+
+[node name="Libero1Label" type="Label" parent="TeamLineUpsUI"]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 957.0
+offset_right = 422.0
+offset_bottom = 999.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "Libero 1: NOT SELECTED"
+
+[node name="SelectLibero1Button" type="Button" parent="TeamLineUpsUI/Libero1Label"]
+offset_left = 430.0
+offset_top = 6.0
+offset_right = 548.0
+offset_bottom = 37.0
+text = "Select Libero 1
+"
+
+[node name="Libero1SelectPopupMenu" type="PopupMenu" parent="TeamLineUpsUI/Libero1Label"]
+initial_position = 2
+size = Vector2i(267, 100)
+
+[node name="Libero2Label" type="Label" parent="TeamLineUpsUI"]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 1005.0
+offset_right = 422.0
+offset_bottom = 1047.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "Libero 2: NOT SELECTED"
+
+[node name="SelectLibero2Button" type="Button" parent="TeamLineUpsUI/Libero2Label"]
+offset_left = 430.0
+offset_top = 6.0
+offset_right = 548.0
+offset_bottom = 37.0
+text = "Select Libero 2
+"
+
+[node name="Libero2SelectPopupMenu" type="PopupMenu" parent="TeamLineUpsUI/Libero2Label"]
+initial_position = 2
+size = Vector2i(267, 100)
 
 [connection signal="pressed" from="MatchStartMenu/VBoxContainer/FullStartButton" to="." method="_on_full_start_button_pressed"]
 [connection signal="pressed" from="MatchStartMenu/VBoxContainer/AcceleratedStartButton" to="." method="_on_accelerated_start_button_pressed"]
@@ -632,4 +719,10 @@ expand_icon = true
 [connection signal="pressed" from="Toss/LostToss/ChooseOtherSide" to="." method="_on_ChooseOtherSide_pressed"]
 [connection signal="pressed" from="Toss/LostToss/ChooseServe" to="." method="_on_ChooseServe_pressed"]
 [connection signal="pressed" from="Toss/LostToss/ChooseReceive" to="." method="_on_ChooseReceive_pressed"]
-[connection signal="pressed" from="TeamLineUpsUI/Button" to="." method="_Lineup_Button_pressed"]
+[connection signal="pressed" from="TeamLineUpsUI/ContinueButton" to="." method="_on_TeamLineups_ContinueButton_pressed"]
+[connection signal="pressed" from="TeamLineUpsUI/CaptainLabel/SelectCaptainButton" to="TeamLineUpsUI" method="_on_select_captain_button_pressed"]
+[connection signal="id_pressed" from="TeamLineUpsUI/CaptainLabel/CaptainSelectPopupMenu" to="TeamLineUpsUI" method="_on_CaptainSelect_popup_menu_id_pressed"]
+[connection signal="pressed" from="TeamLineUpsUI/Libero1Label/SelectLibero1Button" to="TeamLineUpsUI" method="_on_select_libero_1_button_pressed"]
+[connection signal="id_pressed" from="TeamLineUpsUI/Libero1Label/Libero1SelectPopupMenu" to="TeamLineUpsUI" method="_on_libero_1_select_popup_menu_id_pressed"]
+[connection signal="pressed" from="TeamLineUpsUI/Libero2Label/SelectLibero2Button" to="TeamLineUpsUI" method="_on_select_libero_2_button_pressed"]
+[connection signal="id_pressed" from="TeamLineUpsUI/Libero2Label/Libero2SelectPopupMenu" to="TeamLineUpsUI" method="_on_libero_2_select_popup_menu_id_pressed"]
