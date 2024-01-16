@@ -116,7 +116,10 @@ func Refresh(team:Team = mManager.teamA):
 	if team.teamCaptain:
 		for nameCard:NameCard in nameCards:
 			nameCard.get_node("CaptainButton").hide()
+			#Console.AddNewLine(team.teamCaptain.stats.lastName, Color.REBECCA_PURPLE)
+			#Console.AddNewLine(nameCard.cardAthlete.stats.lastName)
 			if nameCard.cardAthlete == team.teamCaptain:
+
 				nameCard.get_node("CaptainIcon").show()
 			else:
 				nameCard.get_node("CaptainIcon").hide()

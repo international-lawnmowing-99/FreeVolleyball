@@ -174,6 +174,8 @@ func PlaceTeam():
 		else:
 			lad.serveState = load("res://Scripts/State/Athlete/AthleteComputer/AthleteComputerServeState.gd").new()
 
+		# Hopefully this won't cause issues when playing multiple matches... 
+		matchPlayers[i] = lad
 
 
 func UpdateTimeTillDigTarget():

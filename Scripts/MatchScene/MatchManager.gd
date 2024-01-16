@@ -65,13 +65,10 @@ func ConfirmTeams():
 	
 	$UI/sillydebug.StartDebug(teamA)
 	
-func StartGame():
-	preSet = false
-	
 	for athlete:Athlete in teamA.courtPlayers:
 		if athlete.rotationPosition == 1:
 			teamA.originalRotation1Player = athlete
-			
+			#Console.AddNewLine("Orig rot 1 for teamA is: " + teamA.originalRotation1Player.stats.lastName)
 		if athlete.role != Enums.Role.Libero:
 			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
 			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.substitutionInfo.startingRotationPosition))
@@ -90,6 +87,8 @@ func StartGame():
 			teamB.benchPlayers[0].substitutionInfo.startingRotationPosition = athlete.rotationPosition
 			#Console.AddNewLine(teamB.benchPlayers[0].stats.lastName + " starting in position " + str(athlete.rotationPosition))
 	
+func StartGame():
+	preSet = false
 	
 	if newMatch.isTeamAServing:
 		isTeamAServing = true

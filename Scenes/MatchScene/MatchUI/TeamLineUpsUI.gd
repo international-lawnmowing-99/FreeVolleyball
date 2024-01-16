@@ -15,7 +15,10 @@ var mManager:MatchManager
 @onready var libero1Label:Label = $Libero1Label
 @onready var libero2Label:Label = $Libero2Label
 
+@onready var noLiberoWarning:AcceptDialog = $Libero1Label/NoLiberoWarning
+
 func _ready() -> void:
+	noLiberoWarning.add_cancel_button("Cancel")
 	for card in $OppositionTeam.get_children():
 		nameCards.append(card)
 	for card in $HumanTeam.get_children():
@@ -42,7 +45,13 @@ func DisplayTeams():
 		
 	for i in mManager.teamB.matchPlayers.size():
 		(teamBParent.get_child(i) as NameCard).DisplayStats(mManager.teamB.matchPlayers[i])
-
+	
+	if mManager.teamA.teamCaptain:
+		captainLabel.text = "Captain: " + mManager.teamA.teamCaptain.stats.lastName
+	if mManager.teamA.libero:
+		libero1Label.text = "Libero 1: " + mManager.teamA.libero.stats.lastName
+	if mManager.teamA.libero2:
+		libero2Label.text = "Libero 2: " + mManager.teamA.libero2.stats.lastName
 
 func _on_select_captain_button_pressed():
 	if !mManager.teamA:
@@ -90,3 +99,7 @@ func _on_select_libero_2_button_pressed():
 	libero2SelectPopup.show()
 	captainSelectPopup.hide()
 	libero1SelectPopup.hide()
+
+
+func _on_no_libero_warning_confirmed():
+	mManager.preMatchUI.TeamLineupsConfirmed()

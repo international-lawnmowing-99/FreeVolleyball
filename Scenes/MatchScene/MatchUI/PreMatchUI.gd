@@ -66,11 +66,17 @@ func _on_TeamLineups_ContinueButton_pressed():
 		Console.AddNewLine("Must select team captain!", Color.RED)
 	#elif !mManager.teamA.libero:
 		#
+	elif mManager.newMatch.clubOrInternational == Enums.ClubOrInternational.International && mManager.teamA.matchPlayers.size() > 12 && !mManager.teamA.libero2:
+		Console.AddNewLine("Must select two liberos when more than 12 players selected in FIVB competitions", Color.RED)
+	elif !mManager.teamA.libero:
+		teamLineups.noLiberoWarning.show()
 	else:
-		teamLineups.hide()
-		toss.show()
+		TeamLineupsConfirmed()
 
-
+func TeamLineupsConfirmed():
+	teamLineups.hide()
+	toss.show()
+ 
 func TeamSubstitutionAcceptButton_pressed():
 	if !mManager.teamA.teamCaptain:
 		Console.AddNewLine("Must designate a captain!")
@@ -286,7 +292,20 @@ func _on_back_button_table_pressed():
 
 
 func _on_table_confirm_button_pressed():
-	if playerStatsTable.selectedPlayers.size() == 12:
+	var maxPlayers = 12
+	if newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
+		maxPlayers = 14
+	
+	if playerStatsTable.selectedPlayers.size() < 6:
+		Console.AddNewLine("Number of selected players isn't even enough to fill the whole court up...")
+		
+	elif playerStatsTable.selectedPlayers.size() > maxPlayers:
+		if newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
+			Console.AddNewLine("Number of selected players is not between 6 and 14!")
+		else:
+			Console.AddNewLine("Number of selected players is not between 6 and 12!")
+
+	else:
 		mManager.PrepareLocalTeamObjects(newMatchData)
 		if newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
 			for lad in playerStatsTable.matchPlayers:
@@ -296,15 +315,12 @@ func _on_table_confirm_button_pressed():
 			mManager.teamB.SelectNationalTeam()
 		
 		mManager.ConfirmTeams()
-#		mManager.StartGame()
+	#		mManager.StartGame()
 		matchStartMenu.hide()
 		athletesTableMenu.hide()
 		$ColourRectIntro/Label.text = mManager.teamA.teamName + " vs " + mManager.teamB.teamName
 		matchIntro.show()
-		
-	else:
-		Console.AddNewLine("Number of selected players is not 12!")
-
+	
 func SyncroniseClubOrInternational(clubOrInternational:Enums.ClubOrInternational):
 	# In the future, club vs international matches will be possible, but not yet
 	# Also, matches with custom players drawn from anywhere
@@ -345,7 +361,7 @@ func _on_auto_select_pressed():
 			playerStatsTable.selectedPlayers.append(lad)
 	elif newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
 		playerStatsTable.matchPlayers.sort_custom(Callable(Athlete,"SortSkill"))
-		for i in range(12):
+		for i in range(14):
 			playerStatsTable.matchPlayers[i].uiSelected = true
 			playerStatsTable.selectedPlayers.append(playerStatsTable.matchPlayers[i])
 

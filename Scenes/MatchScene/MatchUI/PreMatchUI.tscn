@@ -474,6 +474,8 @@ offset_bottom = 0.0
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.972549, 0.745098, 0.576471, 0.584314)
 script = ExtResource("10")
 
@@ -662,6 +664,7 @@ theme_override_font_sizes/font_size = 30
 text = "Libero 1: NOT SELECTED"
 
 [node name="SelectLibero1Button" type="Button" parent="TeamLineUpsUI/Libero1Label"]
+layout_mode = 0
 offset_left = 430.0
 offset_top = 6.0
 offset_right = 548.0
@@ -672,6 +675,13 @@ text = "Select Libero 1
 [node name="Libero1SelectPopupMenu" type="PopupMenu" parent="TeamLineUpsUI/Libero1Label"]
 initial_position = 2
 size = Vector2i(267, 100)
+
+[node name="NoLiberoWarning" type="AcceptDialog" parent="TeamLineUpsUI/Libero1Label"]
+initial_position = 1
+size = Vector2i(379, 300)
+unresizable = true
+dialog_text = "WARNING: No libero selected. To proceed without a libero click ok. Otherwise close this window. "
+dialog_autowrap = true
 
 [node name="Libero2Label" type="Label" parent="TeamLineUpsUI"]
 layout_mode = 0
@@ -687,6 +697,7 @@ theme_override_font_sizes/font_size = 30
 text = "Libero 2: NOT SELECTED"
 
 [node name="SelectLibero2Button" type="Button" parent="TeamLineUpsUI/Libero2Label"]
+layout_mode = 0
 offset_left = 430.0
 offset_top = 6.0
 offset_right = 548.0
@@ -724,5 +735,6 @@ size = Vector2i(267, 100)
 [connection signal="id_pressed" from="TeamLineUpsUI/CaptainLabel/CaptainSelectPopupMenu" to="TeamLineUpsUI" method="_on_CaptainSelect_popup_menu_id_pressed"]
 [connection signal="pressed" from="TeamLineUpsUI/Libero1Label/SelectLibero1Button" to="TeamLineUpsUI" method="_on_select_libero_1_button_pressed"]
 [connection signal="id_pressed" from="TeamLineUpsUI/Libero1Label/Libero1SelectPopupMenu" to="TeamLineUpsUI" method="_on_libero_1_select_popup_menu_id_pressed"]
+[connection signal="confirmed" from="TeamLineUpsUI/Libero1Label/NoLiberoWarning" to="TeamLineUpsUI" method="_on_no_libero_warning_confirmed"]
 [connection signal="pressed" from="TeamLineUpsUI/Libero2Label/SelectLibero2Button" to="TeamLineUpsUI" method="_on_select_libero_2_button_pressed"]
 [connection signal="id_pressed" from="TeamLineUpsUI/Libero2Label/Libero2SelectPopupMenu" to="TeamLineUpsUI" method="_on_libero_2_select_popup_menu_id_pressed"]

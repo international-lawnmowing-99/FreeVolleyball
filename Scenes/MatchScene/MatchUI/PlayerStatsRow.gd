@@ -33,9 +33,15 @@ func DisplayPlayer(_athlete:Athlete):
 
 
 func _on_selected_pressed():
-	if selected.button_pressed && playerStatsTable.selectedPlayers.size() >= 12:
+	var maxPlayers = 12
+	if athlete.team.mManager.newMatch.clubOrInternational == Enums.ClubOrInternational.International:
+		maxPlayers = 14
+	if selected.button_pressed && playerStatsTable.selectedPlayers.size() >= maxPlayers:
 		selected.button_pressed = false
-		Console.AddNewLine("12 players selected already!")
+		if athlete.team.mManager.newMatch.clubOrInternational == Enums.ClubOrInternational.International:
+			Console.AddNewLine("14 players selected already!")
+		else:
+			Console.AddNewLine("12 players selected already!")
 		return
 		
 	if athlete: 
