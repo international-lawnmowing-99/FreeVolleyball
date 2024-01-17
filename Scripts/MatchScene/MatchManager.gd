@@ -73,8 +73,8 @@ func ConfirmTeams():
 			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
 			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.substitutionInfo.startingRotationPosition))
 		else:
-			teamA.benchPlayers[0].substitutionInfo.startingRotationPosition = athlete.rotationPosition
-			#Console.AddNewLine(teamA.benchPlayers[0].stats.lastName + " starting in position " + str(athlete.rotationPosition))
+			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
+			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.rotationPosition))
 	
 	for athlete:Athlete in teamB.courtPlayers:
 		if athlete.rotationPosition == 1:
@@ -84,8 +84,13 @@ func ConfirmTeams():
 			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
 			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.substitutionInfo.startingRotationPosition))
 		else:
-			teamB.benchPlayers[0].substitutionInfo.startingRotationPosition = athlete.rotationPosition
-			#Console.AddNewLine(teamB.benchPlayers[0].stats.lastName + " starting in position " + str(athlete.rotationPosition))
+			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
+			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.rotationPosition))
+	
+	if preMatchUI.usingAcceleratedStart:
+		teamA.teamCaptain = teamA.matchPlayers[randi_range(0, teamA.matchPlayers.size() - 1)]
+		
+	teamB.teamCaptain = teamB.matchPlayers[randi_range(0, teamB.matchPlayers.size() - 1)]
 	
 func StartGame():
 	preSet = false

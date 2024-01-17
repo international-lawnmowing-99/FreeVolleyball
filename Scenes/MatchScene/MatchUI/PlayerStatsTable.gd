@@ -34,6 +34,7 @@ func PopulateTable(team:Team):
 			newRow.playerStatsTable = self
 			rows.add_child(newRow)
 			newRow.DisplayPlayer(player)
+			newRow.clubOrInternational = Enums.ClubOrInternational.International
 			matchPlayerstatsRows.append(newRow)
 			
 	else:
@@ -46,6 +47,7 @@ func PopulateTable(team:Team):
 			player.uiSelected = true
 			newRow.DisplayPlayer(player)
 
+			newRow.clubOrInternational = Enums.ClubOrInternational.Club
 			matchPlayerstatsRows.append(newRow)
 			newRow._on_selected_pressed()
 

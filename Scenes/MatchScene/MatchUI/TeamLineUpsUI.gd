@@ -35,17 +35,23 @@ func DisplayTeams():
 	if mManager.newMatch.clubOrInternational == Enums.ClubOrInternational.Club:
 		$Libero2Label.hide()
 	
-	for i in mManager.teamA.matchPlayers.size():
-		(teamAParent.get_child(i) as NameCard).DisplayStats(mManager.teamA.matchPlayers[i])
+	for i in 14:
+		if i < mManager.teamA.matchPlayers.size():
+			(teamAParent.get_child(i) as NameCard).DisplayStats(mManager.teamA.matchPlayers[i])
+			
+			captainSelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
+			libero1SelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
+			libero2SelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
 		
-		captainSelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
-		libero1SelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
-		libero2SelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
+		else:
+			teamAParent.get_child(i).hide()
 		
-		
-	for i in mManager.teamB.matchPlayers.size():
-		(teamBParent.get_child(i) as NameCard).DisplayStats(mManager.teamB.matchPlayers[i])
-	
+	for i in 14:
+		if i < mManager.teamB.matchPlayers.size():
+			(teamBParent.get_child(i) as NameCard).DisplayStats(mManager.teamB.matchPlayers[i])
+		else:
+			teamBParent.get_child(i).hide()
+			
 	if mManager.teamA.teamCaptain:
 		captainLabel.text = "Captain: " + mManager.teamA.teamCaptain.stats.lastName
 	if mManager.teamA.libero:

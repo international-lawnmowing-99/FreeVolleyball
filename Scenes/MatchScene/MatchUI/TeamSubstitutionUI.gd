@@ -7,10 +7,17 @@ var mManager:MatchManager
 var athleteToBeSubbed:Athlete
 const MAXSUBSFIVB = 6
 
+@onready var libero1NameCard:NameCard = $Libero1NameCard
+@onready var libero2NameCard:NameCard = $Libero2NameCard
+
 func _ready() -> void:
 	mManager = get_tree().root.get_node("MatchScene")
 	
-	nameCards.append($LiberoNameCard)
+	nameCards.append(libero1NameCard)
+	nameCards.append(libero2NameCard)
+	$Libero1NameCard/SubstituteButton.hide()
+	$Libero2NameCard/SubstituteButton.hide()
+	
 	for card in $HumanTeamBench.get_children():
 		nameCards.append(card)
 		card.Benched()
@@ -87,12 +94,20 @@ func Refresh(team:Team = mManager.teamA):
 		DisableRotate()
 	
 	var playerNotAppearingOnBench
+	if team.libero:
+		libero1NameCard.DisplayStats(team.libero)
+	else:
+		libero1NameCard.hide()
+	if team.libero2:
+		libero2NameCard.DisplayStats(team.libero2)
+	else:
+		libero2NameCard.hide()
+		
 	if team.isLiberoOnCourt:
-		$LiberoNameCard.DisplayStats(team.libero)
 		playerNotAppearingOnBench = team.middleBack
 	else:
-		$LiberoNameCard.DisplayStats(team.libero)
 		playerNotAppearingOnBench = team.libero
+
 	var i = 0
 	for athlete in team.benchPlayers:
 		if athlete != playerNotAppearingOnBench:

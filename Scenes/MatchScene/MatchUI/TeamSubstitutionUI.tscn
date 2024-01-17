@@ -32,11 +32,12 @@ default_color = Color(0.839216, 0.623529, 0.207843, 1)
 
 [node name="HumanTeamBench" type="GridContainer" parent="."]
 layout_mode = 0
-offset_left = 190.0
+offset_left = 118.0
 offset_top = 121.0
-offset_right = 466.0
+offset_right = 668.0
 offset_bottom = 799.0
 theme = SubResource("15")
+columns = 2
 
 [node name="NameCard1" parent="HumanTeamBench" instance=ExtResource("3")]
 layout_mode = 2
@@ -58,6 +59,14 @@ size_flags_vertical = 6
 layout_mode = 2
 size_flags_vertical = 6
 
+[node name="NameCard6" parent="HumanTeamBench" instance=ExtResource("3")]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="NameCard7" parent="HumanTeamBench" instance=ExtResource("3")]
+layout_mode = 2
+size_flags_vertical = 6
+
 [node name="CourtBackground" type="ColorRect" parent="."]
 layout_mode = 0
 offset_left = 808.0
@@ -66,12 +75,19 @@ offset_right = 1796.0
 offset_bottom = 903.0
 color = Color(0.839216, 0.623529, 0.207843, 1)
 
-[node name="LiberoNameCard" parent="." instance=ExtResource("3")]
+[node name="Libero1NameCard" parent="." instance=ExtResource("3")]
 layout_mode = 0
 offset_left = 656.129
 offset_top = 646.075
 offset_right = 906.129
 offset_bottom = 746.075
+
+[node name="Libero2NameCard" parent="." instance=ExtResource("3")]
+layout_mode = 0
+offset_left = 656.129
+offset_top = 788.075
+offset_right = 906.129
+offset_bottom = 888.075
 
 [node name="Line2D2" type="Line2D" parent="."]
 position = Vector2(787.567, 382.377)

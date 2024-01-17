@@ -307,13 +307,18 @@ func _on_table_confirm_button_pressed():
 
 	else:
 		mManager.PrepareLocalTeamObjects(newMatchData)
+
+
 		if newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
 			for lad in playerStatsTable.matchPlayers:
 				if lad.uiSelected:
 					mManager.teamA.matchPlayers.append(lad)
-			
 			mManager.teamB.SelectNationalTeam()
-		
+		else:
+			mManager.teamA.matchPlayers.clear()
+			for lad in playerStatsTable.matchPlayers:
+				if lad.uiSelected:
+					mManager.teamA.matchPlayers.append(lad)
 		mManager.ConfirmTeams()
 	#		mManager.StartGame()
 		matchStartMenu.hide()

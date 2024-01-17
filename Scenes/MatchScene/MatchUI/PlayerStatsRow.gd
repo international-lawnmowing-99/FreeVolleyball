@@ -15,6 +15,7 @@ class_name PlayerStatsRow
 
 var athlete:Athlete
 var playerStatsTable:PlayerStatsTable
+var clubOrInternational:Enums.ClubOrInternational = Enums.ClubOrInternational.NotSelected
 
 func DisplayPlayer(_athlete:Athlete):
 	athlete = _athlete
@@ -34,11 +35,11 @@ func DisplayPlayer(_athlete:Athlete):
 
 func _on_selected_pressed():
 	var maxPlayers = 12
-	if athlete.team.mManager.newMatch.clubOrInternational == Enums.ClubOrInternational.International:
+	if clubOrInternational == Enums.ClubOrInternational.International:
 		maxPlayers = 14
 	if selected.button_pressed && playerStatsTable.selectedPlayers.size() >= maxPlayers:
 		selected.button_pressed = false
-		if athlete.team.mManager.newMatch.clubOrInternational == Enums.ClubOrInternational.International:
+		if clubOrInternational == Enums.ClubOrInternational.International:
 			Console.AddNewLine("14 players selected already!")
 		else:
 			Console.AddNewLine("12 players selected already!")

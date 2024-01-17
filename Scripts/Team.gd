@@ -122,7 +122,7 @@ func Init(matchManager):
 
 func PlaceTeam():
 
-	for i in range(12):
+	for i in range(matchPlayers.size()):
 		var pos
 		var rot
 
@@ -167,6 +167,8 @@ func PlaceTeam():
 			libero = lad
 			lad.get_child(0).ChangeShirtColour()
 		
+		
+		
 		lad.ball = ball
 			
 		if isHuman:
@@ -176,7 +178,9 @@ func PlaceTeam():
 
 		# Hopefully this won't cause issues when playing multiple matches... 
 		matchPlayers[i] = lad
-
+	
+	if libero2:
+		libero2.get_child(0).ChangeShirtColour()
 
 func UpdateTimeTillDigTarget():
 	
@@ -369,19 +373,23 @@ func AutoSelectTeamLineup():
 	SwapPlayer(nopposite, 3)
 	for list in aptitudeLists:
 		list.erase(nopposite)
-	var nlibero = orderedLiberoList[0]
-	nlibero.role = Enums.Role.Libero
-	SwapPlayer(nlibero, 6)
-	for list in aptitudeLists:
-		list.erase(nlibero)
-	var backupSetter = orderedSetterList[0]
-	SwapPlayer(backupSetter, 7)
-	backupSetter.role = Enums.Role.Setter
-	for list in aptitudeLists:
-		list.erase(backupSetter)
+	
+	if matchPlayers.size() > 6:
+		var nlibero = orderedLiberoList[0]
+		nlibero.role = Enums.Role.Libero
 		
-	for athlete in orderedLiberoList:
-		athlete.role = Enums.Role.UNDEFINED
+		SwapPlayer(nlibero, 6)
+		for list in aptitudeLists:
+			list.erase(nlibero)
+	if matchPlayers.size() > 7:
+		var backupSetter = orderedSetterList[0]
+		SwapPlayer(backupSetter, 7)
+		backupSetter.role = Enums.Role.Setter
+		for list in aptitudeLists:
+			list.erase(backupSetter)
+			
+		for athlete in orderedLiberoList:
+			athlete.role = Enums.Role.UNDEFINED
 
 #	nsetter.stats.verticalJump += 3
 #	nsetter.stats.jumpSetHeight += 3
