@@ -8,6 +8,8 @@ var cardAthlete:Athlete
 var teamSubstitutionUI:TeamSubstitutionUI
 var state = Enums.NameCardState.UNDEFINED
 var previousColour:Color
+@onready var captainIcon = $CaptainIcon
+@onready var liberoIcon = $LiberoIcon
 
 func _ready() -> void:
 	ChangeColour(Color.CHOCOLATE)

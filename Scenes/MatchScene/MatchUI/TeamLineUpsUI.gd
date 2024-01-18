@@ -59,6 +59,8 @@ func DisplayTeams():
 	if mManager.teamA.libero2:
 		libero2Label.text = "Libero 2: " + mManager.teamA.libero2.stats.lastName
 
+	RefreshCaptainAndLiberoIcons()
+
 func _on_select_captain_button_pressed():
 	if !mManager.teamA:
 		Console.AddNewLine("ERROR: No teamA in match manager")
@@ -68,10 +70,38 @@ func _on_select_captain_button_pressed():
 	libero1SelectPopup.hide()
 	libero2SelectPopup.hide()
 
+
+func RefreshCaptainAndLiberoIcons():
+	for card:NameCard in nameCards:
+		if card.cardAthlete == mManager.teamA.teamCaptain || card.cardAthlete == mManager.teamB.teamCaptain:
+			card.captainIcon.show()
+		else:
+			card.captainIcon.hide()
+
+		if card.cardAthlete == mManager.teamA.libero || card.cardAthlete == mManager.teamA.libero2\
+		|| card.cardAthlete == mManager.teamB.libero || card.cardAthlete == mManager.teamB.libero2:
+			card.liberoIcon.show()
+		else:
+			card.liberoIcon.hide()
+		
+	if mManager.teamA.libero:
+		mManager.teamA.libero.get_child(0).ChangeShirtColour()
+	
+	if mManager.teamA.libero2:
+		mManager.teamA.libero2.get_child(0).ChangeShirtColour()
+
+	if mManager.teamB.libero:
+		mManager.teamB.libero.get_child(0).ChangeShirtColour()
+	
+	if mManager.teamB.libero2:
+		mManager.teamB.libero2.get_child(0).ChangeShirtColour()
+
+
 func _on_CaptainSelect_popup_menu_id_pressed(id):
 	mManager.teamA.teamCaptain = mManager.teamA.matchPlayers[id]
 	captainLabel.text = "Captain: " + mManager.teamA.matchPlayers[id].stats.lastName
 
+	RefreshCaptainAndLiberoIcons()
 
 func _on_libero_1_select_popup_menu_id_pressed(id):
 	if mManager.teamA.libero2 == mManager.teamA.matchPlayers[id]:
@@ -81,6 +111,7 @@ func _on_libero_1_select_popup_menu_id_pressed(id):
 	mManager.teamA.libero = mManager.teamA.matchPlayers[id]
 	libero1Label.text = "Libero 1: " + mManager.teamA.matchPlayers[id].stats.lastName
 	
+	RefreshCaptainAndLiberoIcons()
 
 
 
@@ -92,6 +123,7 @@ func _on_libero_2_select_popup_menu_id_pressed(id):
 	mManager.teamA.libero2 = mManager.teamA.matchPlayers[id]
 	libero2Label.text = "Libero 2: " + mManager.teamA.matchPlayers[id].stats.lastName
 	
+	RefreshCaptainAndLiberoIcons()
 
 
 
