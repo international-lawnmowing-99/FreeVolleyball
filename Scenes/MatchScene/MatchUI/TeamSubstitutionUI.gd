@@ -42,6 +42,8 @@ func RequestSub(athlete:Athlete):
 	for card in nameCards:
 		card.ChangeColour(Color.RED)
 	for card:NameCard in $HumanTeamBench.get_children():
+		if !card.cardAthlete:
+			continue
 		# Players can only reenter the court to their original rotation position
 		if card.cardAthlete.substitutionInfo.startingRotationPosition != -1:
 			if athleteToBeSubbed.substitutionInfo.startingRotationPosition != card.cardAthlete.substitutionInfo.startingRotationPosition:
@@ -102,7 +104,8 @@ func Refresh(team:Team = mManager.teamA):
 		libero2NameCard.DisplayStats(team.libero2)
 	else:
 		libero2NameCard.hide()
-		
+	
+	
 	if team.isLiberoOnCourt:
 		playerNotAppearingOnBench = team.middleBack
 	else:
@@ -113,6 +116,11 @@ func Refresh(team:Team = mManager.teamA):
 		if athlete != playerNotAppearingOnBench:
 			$HumanTeamBench.get_child(i).DisplayStats(athlete)
 			i += 1
+	for card:NameCard in $HumanTeamBench.get_children():
+		if !card.cardAthlete:
+			card.hide()
+		if card.cardAthlete == team.libero2:
+			card.hide()
 	
 	var displayAthlete
 	for athlete in team.courtPlayers:

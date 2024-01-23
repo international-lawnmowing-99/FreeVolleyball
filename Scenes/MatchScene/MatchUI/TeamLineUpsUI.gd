@@ -88,13 +88,13 @@ func RefreshCaptainAndLiberoIcons():
 		mManager.teamA.libero.get_child(0).ChangeShirtColour()
 	
 	if mManager.teamA.libero2:
-		mManager.teamA.libero2.get_child(0).ChangeShirtColour()
+		mManager.teamA.libero2.get_child(0).ChangeShirtColour(Color( 1,0,4))
 
 	if mManager.teamB.libero:
 		mManager.teamB.libero.get_child(0).ChangeShirtColour()
 	
 	if mManager.teamB.libero2:
-		mManager.teamB.libero2.get_child(0).ChangeShirtColour()
+		mManager.teamB.libero2.get_child(0).ChangeShirtColour(Color(9,9,9))
 
 
 func _on_CaptainSelect_popup_menu_id_pressed(id):

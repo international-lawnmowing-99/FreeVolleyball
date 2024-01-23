@@ -162,10 +162,13 @@ func PlaceTeam():
 			courtPlayers.append(lad)
 		else:
 			benchPlayers.append(lad)
-		
-		if i == 6:
-			libero = lad
-			lad.get_child(0).ChangeShirtColour()
+			if !libero:
+				if lad.role == Enums.Role.Libero:
+					libero = lad
+			elif !libero2:
+				if lad.role == Enums.Role.Libero:
+					libero2 = lad
+
 		
 		
 		
@@ -179,8 +182,10 @@ func PlaceTeam():
 		# Hopefully this won't cause issues when playing multiple matches... 
 		matchPlayers[i] = lad
 	
+	if libero:
+		libero.get_child(0).ChangeShirtColour()
 	if libero2:
-		libero2.get_child(0).ChangeShirtColour()
+		libero2.get_child(0).ChangeShirtColour(Color(3,0,0))
 
 func UpdateTimeTillDigTarget():
 	
@@ -235,25 +240,50 @@ func CheckForLiberoChange():
 #	if isHuman:
 #		print("\nChecking for libero change \nisNextToSpike? " + str(isNextToSpike))
 # if the libero is entering the frontcourt, get rid of them
-	if isLiberoOnCourt && libero.FrontCourt():
-		InstantaneouslySwapPlayers(libero, benchPlayers[0])
-		isLiberoOnCourt = false
-		
-		
-# if the back middle isn't serving, get rid of them
-	if !isLiberoOnCourt && middleBack:
 
-		if !isNextToSpike:
-#			print(teamName + " current server: " + courtPlayers[server].stats.lastName)
-			if middleBack != courtPlayers[server]:
-#				print("\nMiddleBack: " + middleBack.stats.lastName)
-#				print("courtPlayers[server]: " + courtPlayers[server].stats.lastName + "\n")
-				InstantaneouslySwapPlayers(middleBack, libero)
+	if isLiberoOnCourt:
+		var activeLibero:Athlete
+		if libero in courtPlayers:
+			activeLibero = libero
+		elif libero2 in courtPlayers:
+			activeLibero = libero2
+
+		if !activeLibero:
+			return
+
+		if activeLibero.FrontCourt():
+			InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
+			isLiberoOnCourt = false
+	
+	if !isLiberoOnCourt:
+		if isNextToSpike: # i.e. we're receiving
+			if playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][0]:
+				var outgoingPlayer = playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][1]
+				var incomingLibero = playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][2]
+				
+				InstantaneouslySwapPlayers(outgoingPlayer, incomingLibero)
 				isLiberoOnCourt = true
-
+	# if the back middle isn't serving, get rid of them
 		else:
-			InstantaneouslySwapPlayers(middleBack, libero)
-			isLiberoOnCourt = true
+			if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][0]:
+				var outgoingPlayer = playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][1]
+				var incomingLibero = playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][2]
+				InstantaneouslySwapPlayers(outgoingPlayer, incomingLibero)
+				isLiberoOnCourt = true
+			
+	#if !isLiberoOnCourt && middleBack:
+#
+		#if !isNextToSpike:
+##			print(teamName + " current server: " + courtPlayers[server].stats.lastName)
+			#if middleBack != courtPlayers[server]:
+##				print("\nMiddleBack: " + middleBack.stats.lastName)
+##				print("courtPlayers[server]: " + courtPlayers[server].stats.lastName + "\n")
+				#InstantaneouslySwapPlayers(middleBack, libero)
+				#isLiberoOnCourt = true
+#
+		#else:
+			#InstantaneouslySwapPlayers(middleBack, libero)
+			#isLiberoOnCourt = true
 
 func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 #	if isHuman:
@@ -264,16 +294,42 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	
 	var outgoingIndex = courtPlayers.find(outgoing)
 	if outgoingIndex == -1:
-		print("Not found outgoing player: " + outgoing.name)
-		for lad in courtPlayers:
-			print ("court: " + lad.name + " " + str(lad.rotationPosition))
-		for lad in benchPlayers:
-			print ("bench: " + lad.name)
+		# maybe the player is liberoed off at the time
+		outgoingIndex = benchPlayers.find(outgoing)
+		if outgoingIndex == -1:
+			Console.AddNewLine("Player not found for substitution: " + outgoing.name)
+			print("Not found outgoing player: " + outgoing.name)
+			for lad in courtPlayers:
+				print ("court: " + lad.name + " " + str(lad.rotationPosition))
+			for lad in benchPlayers:
+				print ("bench: " + lad.name)
+
+		else:
+			var incomingIndex = benchPlayers.find(incoming)
+			if incomingIndex == -1:
+				Console.AddNewLine("Not found bench swap player: " + incoming.name)
+			else:
+				benchPlayers.erase(incoming)
+				benchPlayers.erase(outgoing)
+
+				incoming.rotationPosition = outgoing.rotationPosition
+				outgoing.rotationPosition = -1
+				
+				Console.AddNewLine("Outgoing index: " + str(outgoingIndex))
+				Console.AddNewLine("Incoming index: " + str(incomingIndex))
+				benchPlayers.insert(outgoingIndex, incoming)
+				benchPlayers.insert(incomingIndex, outgoing)
+				
+				# if a player is being liberoed, do we want to keep the new player liberoed in the same circumstances as their predecessor?
+				Console.AddNewLine("Show libero options for newly subbed player here", Color.BLUE_VIOLET)
+			return
+
+
 	courtPlayers.erase(outgoing)
 	
 	var incomingIndex = benchPlayers.find(incoming)
 	if incomingIndex == -1:
-		print("Not found outgoing player: " + incoming.name)
+		print("Not found incoming player: " + incoming.name)
 		for lad in courtPlayers:
 			print ("court: " + lad.name)
 		for lad in benchPlayers:
@@ -391,6 +447,12 @@ func AutoSelectTeamLineup():
 		for athlete in orderedLiberoList:
 			athlete.role = Enums.Role.UNDEFINED
 
+	if matchPlayers.size() > 12:
+		var nlibero2 = orderedLiberoList[0]
+		nlibero2.role = Enums.Role.Libero
+		SwapPlayer(nlibero2, matchPlayers.size() - 1)
+		for list in aptitudeLists:
+			list.erase(nlibero2)
 #	nsetter.stats.verticalJump += 3
 #	nsetter.stats.jumpSetHeight += 3
 #	nsetter.stats.spikeHeight += 3
