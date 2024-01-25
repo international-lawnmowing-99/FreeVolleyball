@@ -322,6 +322,12 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				
 				# if a player is being liberoed, do we want to keep the new player liberoed in the same circumstances as their predecessor?
 				Console.AddNewLine("Show libero options for newly subbed player here", Color.BLUE_VIOLET)
+				for subArray in playerToBeLiberoedOnServe:
+					if subArray[1] == outgoing:
+						subArray[1] = incoming
+				for subArray in playerToBeLiberoedOnReceive:
+					if subArray[1] == outgoing:
+						subArray[1] = incoming
 			return
 
 

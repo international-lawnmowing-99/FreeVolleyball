@@ -7,6 +7,8 @@ var mManager:MatchManager
 var athleteToBeSubbed:Athlete
 const MAXSUBSFIVB = 6
 
+@onready var liberoOptionsPanel:LiberoOptionsPanel = $LiberoOptionsPanel
+
 @onready var libero1NameCard:NameCard = $Libero1NameCard
 @onready var libero2NameCard:NameCard = $Libero2NameCard
 
@@ -107,7 +109,10 @@ func Refresh(team:Team = mManager.teamA):
 	
 	
 	if team.isLiberoOnCourt:
-		playerNotAppearingOnBench = team.middleBack
+		if mManager.isTeamAServing:
+			playerNotAppearingOnBench = team.playerToBeLiberoedOnServe[mManager.teamA.originalRotation1Player.rotationPosition - 1][1]
+		else:
+			playerNotAppearingOnBench = team.playerToBeLiberoedOnReceive[mManager.teamA.originalRotation1Player.rotationPosition - 1][1]
 	else:
 		playerNotAppearingOnBench = team.libero
 
@@ -182,3 +187,12 @@ func SelectCaptain(athlete:Athlete):
 			nameCard.get_node("CaptainIcon").visible = false
 		else:
 			nameCard.get_node("CaptainIcon").visible = true
+
+
+func _on_libero_options_button_pressed():
+	if liberoOptionsPanel.visible:
+		liberoOptionsPanel.hide()
+	else:
+		liberoOptionsPanel.show()
+		Console.Clear()
+		liberoOptionsPanel.DisplayRotation(mManager.teamA.originalRotation1Player.rotationPosition)

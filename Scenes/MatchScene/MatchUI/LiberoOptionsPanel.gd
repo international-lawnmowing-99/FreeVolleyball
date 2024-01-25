@@ -9,6 +9,7 @@ var teamA:Team
 @onready var position4Info:LiberoOptionsNameCard = $ColourRect/CourtPlayers/Position4Info
 @onready var position5Info:LiberoOptionsNameCard = $ColourRect/CourtPlayers/Position5Info
 @onready var position6Info:LiberoOptionsNameCard = $ColourRect/CourtPlayers/Position6Info
+@onready var libero1Info:ColorRect = $ColourRect/Libero1Info
 @onready var libero2Info:ColorRect = $ColourRect/Libero2Info
 @onready var currentRotationLabel:Label = $ColourRect/CurrentRotationLabel
 
@@ -69,7 +70,7 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 	currentRotationLabel.text = "Rotation " + str(positionOfOriginalRot1Player)
 	
 	if !teamA:
-		teamA = get_tree().root.get_node("MatchScene").teamA
+		Init(get_tree().root.get_node("MatchScene").teamA)
 	
 	var rotationDifference = teamA.originalRotation1Player.rotationPosition - positionOfOriginalRot1Player
 	if rotationDifference < 0:

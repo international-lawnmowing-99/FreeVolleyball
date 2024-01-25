@@ -68,7 +68,7 @@ func ConfirmTeams():
 	for athlete:Athlete in teamA.courtPlayers:
 		if athlete.rotationPosition == 1:
 			teamA.originalRotation1Player = athlete
-			#Console.AddNewLine("Orig rot 1 for teamA is: " + teamA.originalRotation1Player.stats.lastName)
+			Console.AddNewLine("Orig rot 1 for teamA is: " + teamA.originalRotation1Player.stats.lastName)
 		if athlete.role != Enums.Role.Libero:
 			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
 			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.substitutionInfo.startingRotationPosition))

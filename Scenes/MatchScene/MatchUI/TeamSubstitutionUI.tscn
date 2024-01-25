@@ -315,3 +315,4 @@ text = "Libero Options
 [connection signal="pressed" from="CancelSubButton" to="." method="_on_CancelSubButton_pressed"]
 [connection signal="pressed" from="RotationControl/ClockwiseButton" to="." method="_on_ClockwiseButton_pressed"]
 [connection signal="pressed" from="RotationControl/AntiClockwiseButton" to="." method="_on_AntiClockwiseButton_pressed"]
+[connection signal="pressed" from="LiberoOptionsButton" to="." method="_on_libero_options_button_pressed"]

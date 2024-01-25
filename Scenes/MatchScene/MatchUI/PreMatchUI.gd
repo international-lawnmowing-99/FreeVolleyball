@@ -199,6 +199,7 @@ func _on_ChooseCurrentSide_pressed():
 	lostToss.hide()
 	Console.AddNewLine("Staying on the same side")
 	teamSubstitutionUI.show()
+	mManager.teamA.CheckForLiberoChange()
 	teamSubstitutionUI.Refresh()
 
 func _on_ChooseOtherSide_pressed():
@@ -207,6 +208,7 @@ func _on_ChooseOtherSide_pressed():
 	Console.AddNewLine("Changing sides like a dickhead")
 	mManager.RotateTheBoard()
 	teamSubstitutionUI.show()
+	mManager.teamA.CheckForLiberoChange()
 	teamSubstitutionUI.Refresh()
 
 func _on_ChooseSide_pressed():
