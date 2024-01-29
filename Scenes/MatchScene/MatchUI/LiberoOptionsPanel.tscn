@@ -129,9 +129,39 @@ theme_override_font_sizes/font_size = 36
 text = "Rotation 1"
 horizontal_alignment = 1
 
+[node name="PlayerLiberoedOnServeButton" type="Button" parent="ColourRect"]
+layout_mode = 0
+offset_left = 227.0
+offset_top = 414.0
+offset_right = 492.0
+offset_bottom = 445.0
+text = "Change Player Liberoed On Serve"
+
+[node name="ChangePlayerLiberoedOnServePopupMenu" type="PopupMenu" parent="ColourRect/PlayerLiberoedOnServeButton"]
+visible = true
+item_count = 1
+item_0/text = "None"
+item_0/id = 0
+
+[node name="PlayerLiberoedOnReceiveButton" type="Button" parent="ColourRect"]
+layout_mode = 0
+offset_left = 219.0
+offset_top = 460.0
+offset_right = 500.0
+offset_bottom = 491.0
+text = "Change Player Liberoed On Receive"
+
+[node name="ChangePlayerLiberoedOnReceivePopupMenu" type="PopupMenu" parent="ColourRect/PlayerLiberoedOnReceiveButton"]
+visible = true
+item_count = 1
+item_0/text = "None"
+item_0/id = 0
+
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation1" to="." method="_on_rotation_1_pressed"]
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation2" to="." method="_on_rotation_2_pressed"]
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation3" to="." method="_on_rotation_3_pressed"]
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation4" to="." method="_on_rotation_4_pressed"]
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation5" to="." method="_on_rotation_5_pressed"]
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation6" to="." method="_on_rotation_6_pressed"]
+[connection signal="pressed" from="ColourRect/PlayerLiberoedOnServeButton" to="." method="_on_player_liberoed_on_serve_button_pressed"]
+[connection signal="pressed" from="ColourRect/PlayerLiberoedOnReceiveButton" to="." method="_on_player_liberoed_on_receive_button_pressed"]

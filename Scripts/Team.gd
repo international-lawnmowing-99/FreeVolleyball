@@ -305,8 +305,8 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				print ("bench: " + lad.name)
 
 		else:
-			var incomingIndex = benchPlayers.find(incoming)
-			if incomingIndex == -1:
+			var _incomingIndex = benchPlayers.find(incoming)
+			if _incomingIndex == -1:
 				Console.AddNewLine("Not found bench swap player: " + incoming.name)
 			else:
 				benchPlayers.erase(incoming)
@@ -316,9 +316,9 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				outgoing.rotationPosition = -1
 				
 				Console.AddNewLine("Outgoing index: " + str(outgoingIndex))
-				Console.AddNewLine("Incoming index: " + str(incomingIndex))
+				Console.AddNewLine("Incoming index: " + str(_incomingIndex))
 				benchPlayers.insert(outgoingIndex, incoming)
-				benchPlayers.insert(incomingIndex, outgoing)
+				benchPlayers.insert(_incomingIndex, outgoing)
 				
 				# if a player is being liberoed, do we want to keep the new player liberoed in the same circumstances as their predecessor?
 				Console.AddNewLine("Show libero options for newly subbed player here", Color.BLUE_VIOLET)
@@ -328,6 +328,13 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				for subArray in playerToBeLiberoedOnReceive:
 					if subArray[1] == outgoing:
 						subArray[1] = incoming
+				
+				if (incoming.role != Enums.Role.Libero && outgoing.role != Enums.Role.Libero):
+					incoming.role = outgoing.role
+				
+				outgoing.stateMachine.SetCurrentState(outgoing.chillState)
+				incoming.ReEvaluateState()
+				
 			return
 
 

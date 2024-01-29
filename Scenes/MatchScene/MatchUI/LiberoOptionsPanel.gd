@@ -13,6 +13,9 @@ var teamA:Team
 @onready var libero2Info:ColorRect = $ColourRect/Libero2Info
 @onready var currentRotationLabel:Label = $ColourRect/CurrentRotationLabel
 
+@onready var changePlayerLiberoedOnServePopup:PopupMenu = $ColourRect/PlayerLiberoedOnServeButton/ChangePlayerLiberoedOnServePopupMenu
+@onready var changePlayerLiberoedOnReceivePopup:PopupMenu = $ColourRect/PlayerLiberoedOnServeButton/ChangePlayerLiberoedOnServePopupMenu
+
 var liberoOptionsNameCards:Array
 
 func _ready():
@@ -117,3 +120,24 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 			
 			
 	pseudoTeam.free()
+
+
+func _on_player_liberoed_on_serve_button_pressed():
+	changePlayerLiberoedOnServePopup.show()
+
+	changePlayerLiberoedOnServePopup.clear()
+	
+	changePlayerLiberoedOnServePopup.add_item("None")
+	changePlayerLiberoedOnServePopup.add_item(position5Info.athlete.stats.lastName)
+	changePlayerLiberoedOnServePopup.add_item(position6Info.athlete.stats.lastName)
+
+
+func _on_player_liberoed_on_receive_button_pressed():
+	changePlayerLiberoedOnReceivePopup.show()
+	
+	changePlayerLiberoedOnReceivePopup.clear()
+
+	changePlayerLiberoedOnReceivePopup.add_item("None")
+	changePlayerLiberoedOnReceivePopup.add_item(position1Info.athlete.stats.lastName)
+	changePlayerLiberoedOnReceivePopup.add_item(position5Info.athlete.stats.lastName)
+	changePlayerLiberoedOnReceivePopup.add_item(position6Info.athlete.stats.lastName)
