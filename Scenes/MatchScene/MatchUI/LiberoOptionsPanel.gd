@@ -15,8 +15,14 @@ var teamA:Team
 
 @onready var changePlayerLiberoedOnServePopup:PopupMenu = $ColourRect/PlayerLiberoedOnServeButton/ChangePlayerLiberoedOnServePopupMenu
 @onready var changePlayerLiberoedOnReceivePopup:PopupMenu = $ColourRect/PlayerLiberoedOnServeButton/ChangePlayerLiberoedOnServePopupMenu
+@onready var whichLiberoServePopup:PopupMenu = $ColourRect/WhichLiberoServePopupMenu
+@onready var whichLiberoReceivePopup:PopupMenu = $ColourRect/WhichLiberoReceivePopupMenu
+
+var athleteToBeLiberoed:Athlete
 
 var liberoOptionsNameCards:Array
+#var tempPlayerIndex:int = -
+var rotationCurrentlyDisplayed:int = -1
 
 func _ready():
 	position1Info.positionLabel.text = "Position 1"
@@ -70,6 +76,7 @@ func _on_rotation_6_pressed():
 
 
 func DisplayRotation(positionOfOriginalRot1Player:int):
+	rotationCurrentlyDisplayed = positionOfOriginalRot1Player
 	currentRotationLabel.text = "Rotation " + str(positionOfOriginalRot1Player)
 	
 	if !teamA:
@@ -128,8 +135,8 @@ func _on_player_liberoed_on_serve_button_pressed():
 	changePlayerLiberoedOnServePopup.clear()
 	
 	changePlayerLiberoedOnServePopup.add_item("None")
-	changePlayerLiberoedOnServePopup.add_item(position5Info.athlete.stats.lastName)
-	changePlayerLiberoedOnServePopup.add_item(position6Info.athlete.stats.lastName)
+	changePlayerLiberoedOnServePopup.add_item(position5Info.athlete.stats.lastName, 5)
+	changePlayerLiberoedOnServePopup.add_item(position6Info.athlete.stats.lastName, 6)
 
 
 func _on_player_liberoed_on_receive_button_pressed():
@@ -138,6 +145,111 @@ func _on_player_liberoed_on_receive_button_pressed():
 	changePlayerLiberoedOnReceivePopup.clear()
 
 	changePlayerLiberoedOnReceivePopup.add_item("None")
-	changePlayerLiberoedOnReceivePopup.add_item(position1Info.athlete.stats.lastName)
-	changePlayerLiberoedOnReceivePopup.add_item(position5Info.athlete.stats.lastName)
-	changePlayerLiberoedOnReceivePopup.add_item(position6Info.athlete.stats.lastName)
+	changePlayerLiberoedOnReceivePopup.add_item(position1Info.athlete.stats.lastName,1)
+	changePlayerLiberoedOnReceivePopup.add_item(position5Info.athlete.stats.lastName, 5)
+	changePlayerLiberoedOnReceivePopup.add_item(position6Info.athlete.stats.lastName, 6)
+
+
+func _on_change_player_liberoed_on_serve_popup_menu_index_pressed(index):
+	if index == 0:
+		Console.AddNewLine("No Libero will be used when serving in rotation " + str(rotationCurrentlyDisplayed))
+		teamA.playerToBeLiberoedOnServe[rotationCurrentlyDisplayed - 1] = [false, null, null]
+		teamA.CheckForLiberoChange()
+		DisplayRotation(rotationCurrentlyDisplayed)
+		return
+		
+	if teamA.libero2:
+		whichLiberoServePopup.show()
+	else:
+		var id = changePlayerLiberoedOnServePopup.get_item_id(index)
+		Console.AddNewLine("ID: " + str(id))
+		
+
+		if id == 5:
+			athleteToBeLiberoed = position5Info.athlete
+		elif id == 6:
+			athleteToBeLiberoed = position6Info.athlete
+			
+		if ! athleteToBeLiberoed:
+			Console.AddNewLine("ERROR! No athlete to be liberoed")
+			return
+			
+		teamA.playerToBeLiberoedOnServe[rotationCurrentlyDisplayed - 1][0] = true
+		teamA.playerToBeLiberoedOnServe[rotationCurrentlyDisplayed - 1][1] = athleteToBeLiberoed
+		teamA.playerToBeLiberoedOnServe[rotationCurrentlyDisplayed - 1][2] = teamA.libero
+		
+		teamA.CheckForLiberoChange()
+		DisplayRotation(rotationCurrentlyDisplayed)
+
+
+func _on_change_player_liberoed_on_receive_popup_menu_index_pressed(index):
+	if index == 0:
+		Console.AddNewLine("No Libero will be used when receiving in rotation " + str(rotationCurrentlyDisplayed))
+		teamA.playerToBeLiberoedOnReceive[rotationCurrentlyDisplayed - 1] = [false, null, null]
+		teamA.CheckForLiberoChange()
+		DisplayRotation(rotationCurrentlyDisplayed)
+		return
+
+
+	var id = changePlayerLiberoedOnServePopup.get_item_id(index)
+	Console.AddNewLine("ID: " + str(id))
+	
+
+	if id == 5:
+		athleteToBeLiberoed = position5Info.athlete
+	elif id == 6:
+		athleteToBeLiberoed = position6Info.athlete
+	elif id == 1:
+		athleteToBeLiberoed = position1Info.athlete
+		
+	if ! athleteToBeLiberoed:
+		Console.AddNewLine("ERROR! No athlete to be liberoed")
+		return
+		
+	if teamA.libero2:
+		whichLiberoReceivePopup.show()
+
+	else:
+		teamA.playerToBeLiberoedOnReceive[rotationCurrentlyDisplayed - 1][0] = true
+		teamA.playerToBeLiberoedOnReceive[rotationCurrentlyDisplayed - 1][1] = athleteToBeLiberoed
+		teamA.playerToBeLiberoedOnReceive[rotationCurrentlyDisplayed - 1][2] = teamA.libero
+		
+		teamA.CheckForLiberoChange()
+		DisplayRotation(rotationCurrentlyDisplayed)
+
+
+#func _on_which_libero_popup_menu_index_pressed(index):
+
+
+func _on_which_libero_serve_popup_menu_index_pressed(index):
+	var newLibero
+	if index == 0:
+		newLibero = teamA.libero
+	elif index == 1:
+		newLibero = teamA.libero2
+	else:
+		Console.AddNewLine("ERROR! Index libero mismatch")
+		return
+	
+	teamA.playerToBeLiberoedOnServe[rotationCurrentlyDisplayed - 1] = [true, athleteToBeLiberoed, newLibero]
+	
+	teamA.CheckForLiberoChange()
+	DisplayRotation(rotationCurrentlyDisplayed)
+	athleteToBeLiberoed = null
+
+
+func _on_which_libero_receive_popup_menu_index_pressed(index):
+	var newLibero
+	if index == 0:
+		newLibero = teamA.libero
+	elif index == 1:
+		newLibero = teamA.libero2
+	else:
+		Console.AddNewLine("ERROR! Index libero mismatch")
+		return
+	
+	teamA.playerToBeLiberoedOnReceive[rotationCurrentlyDisplayed - 1] = [true, athleteToBeLiberoed, newLibero]
+	
+	teamA.CheckForLiberoChange()
+	DisplayRotation(rotationCurrentlyDisplayed)
+	athleteToBeLiberoed = null

@@ -249,12 +249,44 @@ func CheckForLiberoChange():
 			activeLibero = libero2
 
 		if !activeLibero:
+			Console.AddNewLine("ERROR! isLiberoOnCourt true, but lib not found")
 			return
 
 		if activeLibero.FrontCourt():
 			InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
 			isLiberoOnCourt = false
-	
+		
+		elif isNextToSpike: # We receive
+			if !playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][0]:
+				Console.AddNewLine("Taking off the libero, no replacement")
+				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
+				isLiberoOnCourt = false
+				
+			elif playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][1] != benchPlayers[0]:
+				Console.AddNewLine("Changed the player the libero is used for on receive")
+				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
+				isLiberoOnCourt = false
+				
+			elif playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][2] != activeLibero:
+				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
+				isLiberoOnCourt = false
+				
+		elif !isNextToSpike: # We serve
+			if !playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][0]:
+				Console.AddNewLine("Taking off the libero, no replacement")
+				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
+				isLiberoOnCourt = false
+				
+			if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][1] != benchPlayers[0]:
+				Console.AddNewLine("Changed the player the libero is used for on serve")
+				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
+				isLiberoOnCourt = false
+				
+			elif playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][2] != activeLibero:
+				Console.AddNewLine("Changing liberos on serve")
+				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
+				isLiberoOnCourt = false
+				
 	if !isLiberoOnCourt:
 		if isNextToSpike: # i.e. we're receiving
 			if playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][0]:

@@ -139,6 +139,7 @@ text = "Change Player Liberoed On Serve"
 
 [node name="ChangePlayerLiberoedOnServePopupMenu" type="PopupMenu" parent="ColourRect/PlayerLiberoedOnServeButton"]
 visible = true
+hide_on_state_item_selection = true
 item_count = 1
 item_0/text = "None"
 item_0/id = 0
@@ -153,9 +154,36 @@ text = "Change Player Liberoed On Receive"
 
 [node name="ChangePlayerLiberoedOnReceivePopupMenu" type="PopupMenu" parent="ColourRect/PlayerLiberoedOnReceiveButton"]
 visible = true
+hide_on_state_item_selection = true
 item_count = 1
 item_0/text = "None"
 item_0/id = 0
+
+[node name="WhichLiberoServePopupMenu" type="PopupMenu" parent="ColourRect"]
+title = "Choose Libero"
+position = Vector2i(350, 200)
+size = Vector2i(300, 100)
+visible = true
+borderless = false
+allow_search = false
+item_count = 2
+item_0/text = "Libero1"
+item_0/id = 0
+item_1/text = "Libero2"
+item_1/id = 1
+
+[node name="WhichLiberoReceivePopupMenu" type="PopupMenu" parent="ColourRect"]
+title = "Choose Libero"
+position = Vector2i(350, 200)
+size = Vector2i(300, 100)
+visible = true
+borderless = false
+allow_search = false
+item_count = 2
+item_0/text = "Libero1"
+item_0/id = 0
+item_1/text = "Libero2"
+item_1/id = 1
 
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation1" to="." method="_on_rotation_1_pressed"]
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation2" to="." method="_on_rotation_2_pressed"]
@@ -164,4 +192,8 @@ item_0/id = 0
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation5" to="." method="_on_rotation_5_pressed"]
 [connection signal="pressed" from="ColourRect/RotationSelect/Rotation6" to="." method="_on_rotation_6_pressed"]
 [connection signal="pressed" from="ColourRect/PlayerLiberoedOnServeButton" to="." method="_on_player_liberoed_on_serve_button_pressed"]
+[connection signal="index_pressed" from="ColourRect/PlayerLiberoedOnServeButton/ChangePlayerLiberoedOnServePopupMenu" to="." method="_on_change_player_liberoed_on_serve_popup_menu_index_pressed"]
 [connection signal="pressed" from="ColourRect/PlayerLiberoedOnReceiveButton" to="." method="_on_player_liberoed_on_receive_button_pressed"]
+[connection signal="index_pressed" from="ColourRect/PlayerLiberoedOnReceiveButton/ChangePlayerLiberoedOnReceivePopupMenu" to="." method="_on_change_player_liberoed_on_receive_popup_menu_index_pressed"]
+[connection signal="index_pressed" from="ColourRect/WhichLiberoServePopupMenu" to="." method="_on_which_libero_serve_popup_menu_index_pressed"]
+[connection signal="index_pressed" from="ColourRect/WhichLiberoReceivePopupMenu" to="." method="_on_which_libero_receive_popup_menu_index_pressed"]
