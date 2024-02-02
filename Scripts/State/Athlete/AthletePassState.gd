@@ -153,7 +153,7 @@ func PassBall(athlete:Athlete):
 		# what is the ideal height for the setter to jump set??
 		if athlete.role == Enums.Role.Setter:
 			if athlete.team.isLiberoOnCourt:
-				receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.libero.stats.jumpSetHeight, 0)
+				receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.activeLibero.stats.jumpSetHeight, 0)
 			else:
 				receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.middleBack.stats.jumpSetHeight, 0)
 		else:

@@ -30,6 +30,7 @@ var teamCaptain:Athlete
 var originalRotation1Player:Athlete
 var rotationsElapsed:int = 0
 
+var activeLibero:Athlete
 var chosenSetter:Athlete
 var chosenSpiker:Athlete
 var chosenReceiver:Athlete
@@ -187,6 +188,8 @@ func PlaceTeam():
 	if libero2:
 		libero2.get_child(0).ChangeShirtColour(Color(3,0,0))
 
+	for athlete:Athlete in benchPlayers:
+		athlete.stateMachine.SetCurrentState(athlete.chillState)
 func UpdateTimeTillDigTarget():
 	
 	if (stateMachine.currentState == setState):
@@ -242,11 +245,14 @@ func CheckForLiberoChange():
 # if the libero is entering the frontcourt, get rid of them
 
 	if isLiberoOnCourt:
-		var activeLibero:Athlete
+		var inactiveLibero:Athlete
+		
 		if libero in courtPlayers:
-			activeLibero = libero
+			if libero2:
+				inactiveLibero = libero2
+				
 		elif libero2 in courtPlayers:
-			activeLibero = libero2
+			inactiveLibero = libero
 
 		if !activeLibero:
 			Console.AddNewLine("ERROR! isLiberoOnCourt true, but lib not found")
@@ -268,8 +274,8 @@ func CheckForLiberoChange():
 				isLiberoOnCourt = false
 				
 			elif playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][2] != activeLibero:
-				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
-				isLiberoOnCourt = false
+				Console.AddNewLine("Changing liberos on serve")
+				InstantaneouslySwapPlayers(activeLibero, inactiveLibero)
 				
 		elif !isNextToSpike: # We serve
 			if !playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][0]:
@@ -284,8 +290,7 @@ func CheckForLiberoChange():
 				
 			elif playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][2] != activeLibero:
 				Console.AddNewLine("Changing liberos on serve")
-				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
-				isLiberoOnCourt = false
+				InstantaneouslySwapPlayers(activeLibero, inactiveLibero)
 				
 	if !isLiberoOnCourt:
 		if isNextToSpike: # i.e. we're receiving
@@ -295,6 +300,7 @@ func CheckForLiberoChange():
 				
 				InstantaneouslySwapPlayers(outgoingPlayer, incomingLibero)
 				isLiberoOnCourt = true
+				activeLibero = incomingLibero
 	# if the back middle isn't serving, get rid of them
 		else:
 			if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][0]:
@@ -302,6 +308,7 @@ func CheckForLiberoChange():
 				var incomingLibero = playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][2]
 				InstantaneouslySwapPlayers(outgoingPlayer, incomingLibero)
 				isLiberoOnCourt = true
+				activeLibero = incomingLibero
 			
 	#if !isLiberoOnCourt && middleBack:
 #
@@ -349,9 +356,14 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				
 				Console.AddNewLine("Outgoing index: " + str(outgoingIndex))
 				Console.AddNewLine("Incoming index: " + str(_incomingIndex))
-				benchPlayers.insert(outgoingIndex, incoming)
-				benchPlayers.insert(_incomingIndex, outgoing)
 				
+				if outgoingIndex > _incomingIndex:
+					benchPlayers.insert(_incomingIndex, outgoing)
+					benchPlayers.insert(outgoingIndex, incoming)
+				else:
+					benchPlayers.insert(outgoingIndex, incoming)
+					benchPlayers.insert(_incomingIndex, outgoing)
+					
 				# if a player is being liberoed, do we want to keep the new player liberoed in the same circumstances as their predecessor?
 				Console.AddNewLine("Show libero options for newly subbed player here", Color.BLUE_VIOLET)
 				for subArray in playerToBeLiberoedOnServe:
@@ -551,7 +563,7 @@ func GetTransitionPosition(athlete):
 func CheckUnchangingTransitionPositions(athlete):
 	if athlete == outsideBack:
 		return CheckIfFlipped(transitionPositionsSetterBack[4])
-	elif athlete == middleBack || athlete == libero:
+	elif athlete == middleBack || athlete == libero || athlete == libero2:
 		return CheckIfFlipped(transitionPositionsSetterBack[5])
 
 	elif athlete == middleFront:

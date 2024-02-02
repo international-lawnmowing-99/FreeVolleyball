@@ -15,7 +15,7 @@ func Enter(athlete:Athlete):
 func Update(athlete:Athlete):
 	if athlete.position.distance_squared_to(athlete.moveTarget) < 0.1\
 	&& athlete.rb.freeze:
-		if athlete == athlete.team.libero || athlete == athlete.team.middleBack:
+		if athlete == athlete.team.activeLibero || athlete == athlete.team.middleBack:
 			pass
 		else:
 			if athlete == athlete.team.chosenSetter:

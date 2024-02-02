@@ -253,8 +253,8 @@ func ChooseSetter(team:Team):
 	
 	if team.chosenReceiver == team.setter:
 		if team.isLiberoOnCourt:
-			if AthleteCanStandingSet(team.libero, team):
-				AssignSetter(team.libero, team, false)
+			if AthleteCanStandingSet(team.activeLibero, team):
+				AssignSetter(team.activeLibero, team, false)
 				#libero sets (if that's the plan)
 				pass
 			elif AttemptToFindSetterOutOfSystem(team):

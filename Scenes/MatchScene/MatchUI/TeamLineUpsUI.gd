@@ -88,7 +88,7 @@ func RefreshCaptainAndLiberoIcons():
 		mManager.teamA.libero.get_child(0).ChangeShirtColour()
 	
 	if mManager.teamA.libero2:
-		mManager.teamA.libero2.get_child(0).ChangeShirtColour(Color( 1,0,4))
+		mManager.teamA.libero2.get_child(0).ChangeShirtColour(Color(4,0,0))
 
 	if mManager.teamB.libero:
 		mManager.teamB.libero.get_child(0).ChangeShirtColour()
@@ -108,8 +108,13 @@ func _on_libero_1_select_popup_menu_id_pressed(id):
 		Console.AddNewLine("ERROR: must select two different liberos")
 		return
 		
+	mManager.teamA.libero.get_child(0).ChangeShirtColour(Color(0,0,0))
+	mManager.teamA.libero.role = Enums.Role.UNDEFINED
+	#What happens when we make say the outside the new lib???
+	
 	mManager.teamA.libero = mManager.teamA.matchPlayers[id]
 	libero1Label.text = "Libero 1: " + mManager.teamA.matchPlayers[id].stats.lastName
+	mManager.teamA.libero.get_child(0).ChangeShirtColour(Color(9,9,9))
 	
 	RefreshCaptainAndLiberoIcons()
 
@@ -119,10 +124,13 @@ func _on_libero_2_select_popup_menu_id_pressed(id):
 	if mManager.teamA.libero == mManager.teamA.matchPlayers[id]:
 		Console.AddNewLine("ERROR: must select two different liberos")
 		return
-		
+
+	mManager.teamA.libero2.get_child(0).ChangeShirtColour(Color(0,0,0))
+	mManager.teamA.libero2.role = Enums.Role.UNDEFINED
+	
 	mManager.teamA.libero2 = mManager.teamA.matchPlayers[id]
 	libero2Label.text = "Libero 2: " + mManager.teamA.matchPlayers[id].stats.lastName
-	
+	mManager.teamA.libero2.get_child(0).ChangeShirtColour(Color(0,8,0))
 	RefreshCaptainAndLiberoIcons()
 
 

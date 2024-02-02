@@ -154,16 +154,11 @@ text = "Change Player Liberoed On Receive"
 
 [node name="ChangePlayerLiberoedOnReceivePopupMenu" type="PopupMenu" parent="ColourRect/PlayerLiberoedOnReceiveButton"]
 visible = true
-hide_on_state_item_selection = true
-item_count = 1
-item_0/text = "None"
-item_0/id = 0
 
 [node name="WhichLiberoServePopupMenu" type="PopupMenu" parent="ColourRect"]
 title = "Choose Libero"
 position = Vector2i(350, 200)
 size = Vector2i(300, 100)
-visible = true
 borderless = false
 allow_search = false
 item_count = 2
@@ -176,7 +171,6 @@ item_1/id = 1
 title = "Choose Libero"
 position = Vector2i(350, 200)
 size = Vector2i(300, 100)
-visible = true
 borderless = false
 allow_search = false
 item_count = 2
