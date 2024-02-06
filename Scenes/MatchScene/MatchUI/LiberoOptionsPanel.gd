@@ -76,7 +76,7 @@ func _on_rotation_6_pressed():
 
 
 func DisplayRotation(positionOfOriginalRot1Player:int):
-	rotationCurrentlyDisplayed = positionOfOriginalRot1Player
+	#rotationCurrentlyDisplayed = positionOfOriginalRot1Player
 	currentRotationLabel.text = "Rotation " + str(positionOfOriginalRot1Player)
 	
 	if !teamA:
@@ -96,8 +96,11 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 	for lad:Athlete in pseudoTeam.courtPlayers:
 		var athleteToDisplay = lad
 		if lad == teamA.libero || lad == teamA.libero2:
-			athleteToDisplay = teamA.benchPlayers[0]
-			
+			if teamA.mManager.isTeamAServing:
+				athleteToDisplay = teamA.playerToBeLiberoedOnServe[positionOfOriginalRot1Player - 1][1]
+			else:
+				athleteToDisplay = teamA.playerToBeLiberoedOnReceive[positionOfOriginalRot1Player - 1][1]
+
 		if lad.pseudoRotationPosition == 1:
 			position1Info.DisplayAthlete(athleteToDisplay)
 		if lad.pseudoRotationPosition == 2:

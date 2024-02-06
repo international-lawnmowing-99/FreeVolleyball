@@ -157,7 +157,9 @@ func PlaceTeam():
 		lad.moveTarget = Vector3(pos.x,0,pos.z)
 		#matchPlayers.append(lad)
 		if !isHuman:
-			lad.get_child(0).ChangeShirtColour(Color(1,3,0))
+			#TODO~ this creates multiple materials that are the same colour - 
+			# would be much better to just have the one shared material
+			lad.model.ChangeShirtColour(Color(0,3,0))
 		if i  < 6 :
 			lad.rotationPosition = i + 1
 			courtPlayers.append(lad)
@@ -190,6 +192,9 @@ func PlaceTeam():
 
 	for athlete:Athlete in benchPlayers:
 		athlete.stateMachine.SetCurrentState(athlete.chillState)
+		
+	CachePlayers()
+	
 func UpdateTimeTillDigTarget():
 	
 	if (stateMachine.currentState == setState):
@@ -301,8 +306,7 @@ func CheckForLiberoChange():
 				InstantaneouslySwapPlayers(outgoingPlayer, incomingLibero)
 				isLiberoOnCourt = true
 				activeLibero = incomingLibero
-	# if the back middle isn't serving, get rid of them
-		else:
+		else: #serving
 			if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][0]:
 				var outgoingPlayer = playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][1]
 				var incomingLibero = playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][2]
@@ -494,6 +498,8 @@ func AutoSelectTeamLineup():
 		SwapPlayer(nlibero, 6)
 		for list in aptitudeLists:
 			list.erase(nlibero)
+		#libero = nlibero
+		
 	if matchPlayers.size() > 7:
 		var backupSetter = orderedSetterList[0]
 		SwapPlayer(backupSetter, 7)
@@ -510,6 +516,7 @@ func AutoSelectTeamLineup():
 		SwapPlayer(nlibero2, matchPlayers.size() - 1)
 		for list in aptitudeLists:
 			list.erase(nlibero2)
+		#libero2 = nlibero2
 #	nsetter.stats.verticalJump += 3
 #	nsetter.stats.jumpSetHeight += 3
 #	nsetter.stats.spikeHeight += 3
@@ -682,4 +689,9 @@ func CreateDefaultLiberoStrategy():
 	playerToBeLiberoedOnReceive[3] = [true, middleFront, libero]
 	playerToBeLiberoedOnReceive[4] = [true, middleFront, libero]
 	playerToBeLiberoedOnReceive[5] = [true, middleBack, libero]
+	
+	# Yeah, let's give libero2 a go!
+	if libero2:
+		for i in range(playerToBeLiberoedOnServe.size()):
+			playerToBeLiberoedOnServe[i][2] = libero2
 	

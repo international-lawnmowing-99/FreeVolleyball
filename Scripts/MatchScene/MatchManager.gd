@@ -53,7 +53,6 @@ func _ready():
 	camera._gui.LockCamera()
 
 func ConfirmTeams():
-	
 	teamA.Init(self)
 	teamB.Init(self)
 	

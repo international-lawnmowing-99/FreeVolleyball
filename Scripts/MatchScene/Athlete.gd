@@ -7,7 +7,7 @@ var stats:Stats = Stats.new()
 var substitutionInfo:SubstitutionInfo = SubstitutionInfo.new()
 
 var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(self)
-@onready var model:Node3D = $"new new woman import"
+@onready var model:ModelOfAthlete = $"new new woman import"
 
 @onready var animTree = $"new new woman import/AnimationTree"
 @onready var rb:RigidBody3D = $"."
