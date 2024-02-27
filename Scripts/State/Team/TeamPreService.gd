@@ -16,11 +16,11 @@ func Enter(team:Team):
 		team.courtPlayers[i].model.rotation.y = -team.flip * PI/2
 		
 	var server:Athlete = team.courtPlayers[team.server]
-#	if team.isHuman:
-#		print (team.teamName + " choosing server. Server = " + str(team.server))
-#		for i in range (6):
-#			print (team.courtPlayers[i].stats.lastName + " " + str(team.courtPlayers[i].rotationPosition))
-#		print(" ")
+	if team.isHuman:
+		Console.AddNewLine(team.teamName + " choosing server. Server = " + str(team.server))
+		for i in range (6):
+			Console.AddNewLine(team.courtPlayers[i].stats.lastName + " " + str(team.courtPlayers[i].rotationPosition))
+		Console.AddNewLine(" ")
 	server.position = team.flip * Vector3(13,0,-2)
 	server.moveTarget = server.position
 	

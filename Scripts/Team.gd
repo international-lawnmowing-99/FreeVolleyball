@@ -39,6 +39,7 @@ var receiveRotations
 # who will be subbed for the libero in each rotation ie rot [will be subbed bool, player, libero to use if we have two (or more!)]
 var playerToBeLiberoedOnServe:Array = [[false,null,null],[false,null,null],[false,null,null],[false,null,null],[false,null,null], [false,null,null]]
 var playerToBeLiberoedOnReceive:Array = [[false,null,null],[false,null,null],[false,null,null],[false,null,null],[false,null,null], [false,null,null]]
+var playerCurrentlyLiberoedOff:Athlete = null
 
 var server:int = 0
 var numberOfSubsUsed:int = 0
@@ -236,84 +237,158 @@ func Rotate():
 		server = 0
 	
 	for athlete in courtPlayers:
-		if athlete.rotationPosition == 1:
+		if athlete.rotationPosition < 1:
+			Console.AddNewLine("Court Player in odd rotationPosition: " + athlete.stats.lastName + " is in rotation: " + str(athlete.rotationPosition), Color.YELLOW)
+		elif athlete.rotationPosition == 1:
 			athlete.rotationPosition = 6
 		else:
 			athlete.rotationPosition -= 1
+		
 	CachePlayers()
 	CheckForLiberoChange()
 	CachePlayers()
 
 func CheckForLiberoChange():
-#	if isHuman:
-#		print("\nChecking for libero change \nisNextToSpike? " + str(isNextToSpike))
-# if the libero is entering the frontcourt, get rid of them
+	if isHuman:
+		Console.AddNewLine("Checking for libero change, are we serving? " + str(mManager.isTeamAServing == isHuman), Color.GREEN_YELLOW)
+		if playerCurrentlyLiberoedOff:
+			Console.AddNewLine("Player off for lib: " + playerCurrentlyLiberoedOff.name)
+		else:
+			Console.AddNewLine("Libero(s) not on court")
+	
+	#if mManager.isTeamAServing == isHuman:
+		## we are serving
+		#if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][0]:
+			#var playerToBeLiberoed = playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][1]
+			#var liberoToUse = playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][2]
+			#if isHuman:
+				#if playerToBeLiberoed in courtPlayers:
+					#Console.AddNewLine("We need to make a libero change", Color.DEEP_PINK)
+				#elif playerToBeLiberoed in benchPlayers:
+					#Console.AddNewLine("We (probably) don't need to make a libero change", Color.DEEP_PINK)
+				#else:
+					#Console.AddNewLine("Error, player to be liberoed not in bench or court players", Color.DEEP_PINK)
+				#
+	#else:
+		#if playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][0]:
+			#var playerToBeLiberoed = playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][1]
+			#var liberoToUse = playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][2]
+			#if isHuman:
+				#if playerToBeLiberoed in courtPlayers:
+					#Console.AddNewLine("We need to make a libero change", Color.DEEP_PINK)
+				#elif playerToBeLiberoed in benchPlayers:
+					#Console.AddNewLine("We (probably) don't need to make a libero change", Color.DEEP_PINK)
+				#else:
+					#Console.AddNewLine("Error, player to be liberoed not in bench or court players", Color.DEEP_PINK)
+				
 
 	if isLiberoOnCourt:
 		var inactiveLibero:Athlete
 		
 		if libero in courtPlayers:
+			if isHuman:
+				Console.AddNewLine("Active libero is: " + libero.name + " (Libero 1)")
 			if libero2:
 				inactiveLibero = libero2
+				if isHuman:
+					Console.AddNewLine("Inactive libero is: " + libero2.name)
 				
 		elif libero2 in courtPlayers:
+			if isHuman:
+				Console.AddNewLine("Active libero is: " + libero2.name + " (Libero 2)")
+				Console.AddNewLine("Inactive libero is: " + libero.name)
 			inactiveLibero = libero
 
 		if !activeLibero:
-			Console.AddNewLine("ERROR! isLiberoOnCourt true, but lib not found")
+			Console.AddNewLine("ERROR! isLiberoOnCourt true, but lib not found", Color.RED)
+			isLiberoOnCourt = false
 			return
 
 		if activeLibero.FrontCourt():
-			InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
+			if isHuman:
+				Console.AddNewLine("Swapping active libero for player liberoed off, active libero enters front court")
+			InstantaneouslySwapPlayers(activeLibero, playerCurrentlyLiberoedOff)
+			playerCurrentlyLiberoedOff = null
 			isLiberoOnCourt = false
 		
-		elif isNextToSpike: # We receive
+		elif mManager.isTeamAServing != isHuman: # We receive
 			if !playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][0]:
-				Console.AddNewLine("Taking off the libero, no replacement")
-				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
+				if isHuman:
+					Console.AddNewLine("Taking off the libero, no replacement")
+				InstantaneouslySwapPlayers(activeLibero, playerCurrentlyLiberoedOff)
+				playerCurrentlyLiberoedOff = null
 				isLiberoOnCourt = false
 				
-			elif playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][1] != benchPlayers[0]:
-				Console.AddNewLine("Changed the player the libero is used for on receive")
-				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
-				isLiberoOnCourt = false
-				
-			elif playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][2] != activeLibero:
-				Console.AddNewLine("Changing liberos on serve")
-				InstantaneouslySwapPlayers(activeLibero, inactiveLibero)
-				
-		elif !isNextToSpike: # We serve
+			else:
+				if playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][2] != activeLibero:
+					if isHuman:
+						Console.AddNewLine("Changing liberos on receive")
+					InstantaneouslySwapPlayers(activeLibero, inactiveLibero)
+					var temp = inactiveLibero
+					inactiveLibero = activeLibero
+					activeLibero = temp
+
+				if playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][1] != playerCurrentlyLiberoedOff:
+					if isHuman:
+						Console.AddNewLine("Changed the player the libero is used for on receive, step 1 - player off comes back on for libero")
+					InstantaneouslySwapPlayers(activeLibero, playerCurrentlyLiberoedOff)
+					playerCurrentlyLiberoedOff = null
+					isLiberoOnCourt = false
+					
+								
+		elif mManager.isTeamAServing == isHuman: # We serve
 			if !playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][0]:
-				Console.AddNewLine("Taking off the libero, no replacement")
-				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
+				if isHuman:
+					Console.AddNewLine("Taking off the libero, no replacement")
+				InstantaneouslySwapPlayers(activeLibero, playerCurrentlyLiberoedOff)
+				playerCurrentlyLiberoedOff = null
 				isLiberoOnCourt = false
 				
-			if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][1] != benchPlayers[0]:
-				Console.AddNewLine("Changed the player the libero is used for on serve")
-				InstantaneouslySwapPlayers(activeLibero, benchPlayers[0])
-				isLiberoOnCourt = false
-				
-			elif playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][2] != activeLibero:
-				Console.AddNewLine("Changing liberos on serve")
-				InstantaneouslySwapPlayers(activeLibero, inactiveLibero)
-				
+			else:
+				if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][2] != activeLibero:
+					if isHuman:
+						Console.AddNewLine("Changing liberos on serve")
+					InstantaneouslySwapPlayers(activeLibero, inactiveLibero)
+					var temp = inactiveLibero
+					inactiveLibero = activeLibero
+					activeLibero = temp
+					
+				if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][1] != playerCurrentlyLiberoedOff:
+					if isHuman:
+						Console.AddNewLine("Changed the player the libero is used for on serve, step 1 - player comes back on for libero")
+					InstantaneouslySwapPlayers(activeLibero, playerCurrentlyLiberoedOff)
+					playerCurrentlyLiberoedOff = null
+					isLiberoOnCourt = false
+
+
 	if !isLiberoOnCourt:
-		if isNextToSpike: # i.e. we're receiving
+		if mManager.isTeamAServing != isHuman: # i.e. we're receiving
 			if playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][0]:
 				var outgoingPlayer = playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][1]
 				var incomingLibero = playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][2]
 				
 				InstantaneouslySwapPlayers(outgoingPlayer, incomingLibero)
 				isLiberoOnCourt = true
+				playerCurrentlyLiberoedOff = outgoingPlayer
 				activeLibero = incomingLibero
+				if isHuman:
+					Console.AddNewLine("Swapping " + outgoingPlayer.name + " for " + incomingLibero.name + " on receive")
 		else: #serving
 			if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][0]:
 				var outgoingPlayer = playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][1]
 				var incomingLibero = playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][2]
 				InstantaneouslySwapPlayers(outgoingPlayer, incomingLibero)
 				isLiberoOnCourt = true
+				playerCurrentlyLiberoedOff = outgoingPlayer
 				activeLibero = incomingLibero
-			
+				if isHuman:
+					Console.AddNewLine("Swapping " + outgoingPlayer.name + " for " + incomingLibero.name + " on serve")
+	if isHuman:
+		Console.AddNewLine("End check for libero change", Color.BLUE)
+		if playerCurrentlyLiberoedOff:
+			Console.AddNewLine("playerCurrentlyLiberoedOff = " + playerCurrentlyLiberoedOff.name, Color.DARK_KHAKI)
+		else:
+			Console.AddNewLine("No player Currently Liberoed Off", Color.DARK_KHAKI)
 	#if !isLiberoOnCourt && middleBack:
 #
 		#if !isNextToSpike:
@@ -331,13 +406,25 @@ func CheckForLiberoChange():
 func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 #	if isHuman:
 #		print("Swapping " + outgoing.name + " for " + incoming.name)
+	if !outgoing:
+		Console.AddNewLine("ERROR, outgoing player does not exist", Color.RED)
+		return
+	if !incoming:
+		Console.AddNewLine("ERROR, incoming player does not exist", Color.RED)
+		return
+	
 	
 	if outgoing == originalRotation1Player:
 		originalRotation1Player = incoming
 	
+	incoming.rotationPosition = outgoing.rotationPosition
+	outgoing.rotationPosition = -1
+	
 	var outgoingIndex = courtPlayers.find(outgoing)
 	if outgoingIndex == -1:
 		# maybe the player is liberoed off at the time
+		if isHuman:
+			Console.AddNewLine("Outgoing player not found in courtPlayers", Color.LIME)
 		outgoingIndex = benchPlayers.find(outgoing)
 		if outgoingIndex == -1:
 			Console.AddNewLine("Player not found for substitution: " + outgoing.name)
@@ -355,8 +442,8 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				benchPlayers.erase(incoming)
 				benchPlayers.erase(outgoing)
 
-				incoming.rotationPosition = outgoing.rotationPosition
-				outgoing.rotationPosition = -1
+				#incoming.rotationPosition = outgoing.rotationPosition
+				#outgoing.rotationPosition = -1
 				
 				Console.AddNewLine("Outgoing index: " + str(outgoingIndex))
 				Console.AddNewLine("Incoming index: " + str(_incomingIndex))
@@ -402,8 +489,8 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	outgoing.position = tempPos
 	outgoing.moveTarget = outgoing.position
 
-	incoming.rotationPosition = outgoing.rotationPosition
-	outgoing.rotationPosition = -1
+	#incoming.rotationPosition = outgoing.rotationPosition
+	#outgoing.rotationPosition = -1
 
 	courtPlayers.insert(outgoingIndex, incoming)
 	benchPlayers.insert(incomingIndex, outgoing)
@@ -419,7 +506,7 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	incoming.model.rotation = outgoing.model.rotation
 	outgoing.model.rotation = tempRot
 	
-	if outgoing.rotationPosition == 1 && stateMachine.currentState == serveState:
+	if incoming.rotationPosition == 1 && mManager.isTeamAServing == isHuman && (stateMachine.currentState == serveState || stateMachine.currentState == prereceiveState):
 		incoming.stateMachine.SetCurrentState(incoming.serveState)
 	
 	outgoing.stateMachine.SetCurrentState(outgoing.chillState)
@@ -676,11 +763,11 @@ func CreateDefaultLiberoStrategy():
 	# regardless of where the player rotates them to before the set. 
 	playerToBeLiberoedOnServe[0] = [true, middleBack, libero]
 	# Middle will serve when setter in 2
-	#playerToBeLiberoedOnServe[1] = [true, middleBack, libero] 
+	playerToBeLiberoedOnServe[1] = [false, null, null] 
 	playerToBeLiberoedOnServe[2] = [true, middleFront, libero]
 	playerToBeLiberoedOnServe[3] = [true, middleFront, libero]
 	# Middle will serve when setter in 5
-	#playerToBeLiberoedOnServe[4] = [true, middleFront, libero]
+	playerToBeLiberoedOnServe[4] = [false, null, null]
 	playerToBeLiberoedOnServe[5] = [true, middleBack, libero]
 	
 	playerToBeLiberoedOnReceive[0] = [true, middleBack, libero]

@@ -132,11 +132,11 @@ func DoToss(choseHeads:bool):
 		lostToss.show()
 		teamAWonToss = false
 		
-		if randi()%1 == 0:
+		if randi()%2 == 0:
 			#Other team chose to serve/receive
 			$Toss/LostToss/ChooseCurrentSide.show()
 			$Toss/LostToss/ChooseOtherSide.show()
-			if randi()%1 == 0:
+			if randi()%2 == 0:
 				$Toss/LostToss/OppositionChoiceText.text = "Other team chose to serve"
 				newMatchData.isTeamAServing = false
 			else:
@@ -148,7 +148,7 @@ func DoToss(choseHeads:bool):
 			$Toss/LostToss/ChooseServe.show()
 			$Toss/LostToss/ChooseReceive.show()
 
-			if randi()%1 == 0:
+			if randi()%2 == 0:
 				$Toss/LostToss/OppositionChoiceText.text = "Other team chose to change sides of the court"
 			else:
 				$Toss/LostToss/OppositionChoiceText.text = "Other team chose to keep their side of the court"

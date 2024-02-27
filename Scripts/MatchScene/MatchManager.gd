@@ -176,10 +176,10 @@ func PointToTeamA():
 	
 	teamA.isNextToSpike = false
 	teamB.isNextToSpike = true
-
-	if !isTeamAServing:
-		teamA.Rotate()
 	isTeamAServing = true
+	
+	if isTeamAServing:
+		teamA.Rotate()
 
 	#teamA celebrate, watch the ball bounce
 	teamA.Chill()
@@ -200,10 +200,10 @@ func PointToTeamB():
 	
 	teamB.isNextToSpike = false
 	teamA.isNextToSpike = true
-	
-	if isTeamAServing:
-		teamB.Rotate()
 	isTeamAServing = false
+	
+	if !isTeamAServing:
+		teamB.Rotate()
 	
 	#teamB celebrate, watch the ball bounce
 	teamA.Chill()

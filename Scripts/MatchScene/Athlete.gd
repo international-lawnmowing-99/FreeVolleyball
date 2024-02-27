@@ -232,6 +232,10 @@ static func SortDistance(a,b):
 	return false
 
 func FrontCourt()->bool:
+	if rotationPosition < 1 || rotationPosition > 6:
+		#Console.AddNewLine("WARNING: attempting to check rotationPosition of player not in positions 1 to 6! " + name, Color.YELLOW)
+		return false
+		
 	if (rotationPosition == 1 || rotationPosition>4):
 		return false
 		
