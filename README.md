@@ -1,0 +1,3 @@
+Eventually this will be a 3D volleyball manager game with club competitions in every nation and international competitions like the VNL and Olympics. 
+You will recruit players from your youth programme and other teams, train them, watch them develop and then decline with age, and eventually unceremoniously dump them. 
+Matches will be playable or skippable, but hopefully you'll prefer the former. Within the matches you will control the lineups, substitutions, and tactics given to the players, but they will execute those tactics in a probabalistic fashion depending on their skill level and other factors including fatigue and nerves. 
