@@ -110,6 +110,8 @@ func Update(athlete:Athlete):
 			athlete.moveTarget = athlete.position
 			
 		ServeState.Aiming:
+			#athlete.team.mManager.preSet = false
+			
 			if Input.is_key_pressed(KEY_I):
 				serveTarget.position.x -= SERVETARGETSPEED * athlete.myDelta
 			if Input.is_key_pressed(KEY_J):

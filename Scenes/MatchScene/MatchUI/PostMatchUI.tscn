@@ -1,0 +1,73 @@
+[gd_scene load_steps=3 format=3 uid="uid://beajb1uwht7no"]
+
+[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PostMatchUI.gd" id="1_gs57n"]
+[ext_resource type="FontFile" uid="uid://c3ryb8bqtv4yu" path="res://Fonts/DynamicFontData_Roboto.tres" id="2_e4wjj"]
+
+[node name="PostMatchUI" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_gs57n")
+
+[node name="Background" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 1920.0
+offset_bottom = 1080.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.137255, 0.137255, 0.137255, 0.729412)
+
+[node name="ColourRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(640, 360)
+layout_mode = 1
+offset_left = 640.0
+offset_top = 360.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(1, 0.0235294, 0.0862745, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColourRect"]
+custom_minimum_size = Vector2(640, 360)
+layout_mode = 0
+offset_right = 639.0
+offset_bottom = 355.0
+alignment = 1
+
+[node name="WinnerLabel" type="Label" parent="ColourRect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_colors/font_outline_color = Color(0.360784, 0, 1, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("2_e4wjj")
+theme_override_font_sizes/font_size = 50
+text = "Team c Won!"
+horizontal_alignment = 1
+vertical_alignment = 3
+
+[node name="SetScoreLabel" type="Label" parent="ColourRect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_colors/font_outline_color = Color(0.360784, 0, 1, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("2_e4wjj")
+theme_override_font_sizes/font_size = 50
+text = "3:2"
+horizontal_alignment = 1
+vertical_alignment = 3
+
+[node name="PointScoresLabel" type="Label" parent="ColourRect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_colors/font_outline_color = Color(0.360784, 0, 1, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("2_e4wjj")
+theme_override_font_sizes/font_size = 50
+text = "25:0, 25:0, 0:25, 0:25, 15:0"
+horizontal_alignment = 1
+vertical_alignment = 3

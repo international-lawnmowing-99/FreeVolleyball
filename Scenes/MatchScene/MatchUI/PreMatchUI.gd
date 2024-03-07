@@ -126,10 +126,12 @@ func DoToss(choseHeads:bool):
 	
 	if coin == choseHeads:
 		wonToss.show()
+		lostToss.hide()
 		teamAWonToss = true
 		
 	else:
 		lostToss.show()
+		wonToss.hide()
 		teamAWonToss = false
 		
 		if randi()%2 == 0:
@@ -260,7 +262,7 @@ func _on_instant_start_button_pressed():
 	
 	mManager.ConfirmTeams()
 	mManager.teamA.teamCaptain = mManager.teamA.matchPlayers[randi()%mManager.teamA.matchPlayers.size()]
-	mManager.teamB.teamCaptain = mManager.teamA.matchPlayers[randi()%mManager.teamB.matchPlayers.size()]
+	mManager.teamB.teamCaptain = mManager.teamB.matchPlayers[randi()%mManager.teamB.matchPlayers.size()]
 	#Console.AddNewLine("Team A captain is: " + mManager.teamA.teamCaptain.stats.lastName)
 	#Console.AddNewLine("Team B captain is: " + mManager.teamB.teamCaptain.stats.lastName)
 	

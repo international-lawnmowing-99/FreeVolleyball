@@ -18,15 +18,16 @@ offset_right = 479.49
 offset_bottom = -99.8986
 theme = ExtResource("3")
 
-[node name="Label" type="Label" parent="ServerInfo"]
+[node name="ServerNameLabel" type="Label" parent="ServerInfo"]
 layout_mode = 0
 offset_left = 22.0
 offset_top = 13.0
 offset_right = 522.0
 offset_bottom = 50.0
-text = "Name"
+text = "Name: "
 
-[node name="Label2" type="Label" parent="ServerInfo"]
+[node name="ServerFavouriteColourLabel" type="Label" parent="ServerInfo"]
+visible = false
 layout_mode = 0
 offset_left = 551.765
 offset_top = 11.3181
@@ -35,6 +36,7 @@ offset_bottom = 48.3181
 text = "Favourite Colour: Fuchsia"
 
 [node name="Label3" type="Label" parent="ServerInfo"]
+visible = false
 layout_mode = 0
 offset_left = 20.3182
 offset_top = 51.681
@@ -42,21 +44,21 @@ offset_right = 520.318
 offset_bottom = 88.681
 text = "Serve Accuracy:"
 
-[node name="Label4" type="Label" parent="ServerInfo"]
+[node name="JumpServeLabel" type="Label" parent="ServerInfo"]
 layout_mode = 0
 offset_left = 27.0454
 offset_top = 85.3169
 offset_right = 527.045
 offset_bottom = 122.317
-text = "Power: "
+text = "Jump Serve: "
 
-[node name="Label5" type="Label" parent="ServerInfo"]
+[node name="FloatServeLabel" type="Label" parent="ServerInfo"]
 layout_mode = 0
 offset_left = 35.4543
 offset_top = 127.362
 offset_right = 535.454
 offset_bottom = 164.362
-text = "Float: "
+text = "Float Serve: "
 
 [node name="ServeTypeButtons" type="Control" parent="."]
 layout_mode = 3

@@ -14,6 +14,8 @@ func _input(event: InputEvent) -> void:
 		ToggleTeamInfo()
 
 func ToggleTeamInfo():
+	if mManager.preSet:
+		mManager.StartSet()
 	$TeamSubstitutionUI/TeamSubstitutionUI.Refresh()
 
 	$OnCourtPlayers.visible = !$OnCourtPlayers.visible

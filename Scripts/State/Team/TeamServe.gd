@@ -5,7 +5,8 @@ class_name TeamServe
 func Enter(team:Team):
 	super.Enter(team)
 	nameOfState = "Serve"
-	
+	var athleteToServe:Athlete = team.courtPlayers[team.server]
+	athleteToServe.stateMachine.SetCurrentState(athleteToServe.serveState)
 	
 	pass
 func Update(team:Team):

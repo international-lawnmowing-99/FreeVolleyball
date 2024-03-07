@@ -27,9 +27,11 @@ var teamB:Team
 @onready var teamTacticsUI = $UI/TeamTacticsUICanvas/TeamTacticsUI
 @onready var camera = $Camera3D
 @onready var liberoOptionsPanel:LiberoOptionsPanel = $UI/PreMatchUI/TeamSubstitutionUI/LiberoOptionsPanel
+@onready var postMatchUI:PostMatchUI = $UI/PostMatchUI
 
 var isTeamAServing:bool
 var isPaused:bool = false
+var fifthSetSwapSidesCompleted = false
 
 func _ready():
 	ball.mManager = self
@@ -111,6 +113,15 @@ func StartGame():
 	
 	$UI/TeamInfoUI.InitialiseOnCourtPlayerUI()
 	camera._gui.UnlockCamera()
+	
+func StartSet():
+	preSet = false
+	if isTeamAServing:
+		teamA.stateMachine.SetCurrentState(teamA.preserviceState)
+		teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
+	else:
+		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
+		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
 
 func BallOverNet(hitByTeamA:bool):
 	teamA.isNextToSpike = !teamA.isNextToSpike
@@ -152,9 +163,9 @@ func _input(_event):
 #	if Input.is_action_just_pressed("ui_accept"):
 #		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
 #		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
-	if Input.is_key_pressed(KEY_Z):
+	if Input.is_key_pressed(KEY_Z) && !preSet:
 		PointToTeamA()
-	elif Input.is_key_pressed(KEY_C):
+	elif Input.is_key_pressed(KEY_C) && !preSet:
 		PointToTeamB()
 	
 	if Input.is_action_just_pressed("ui_focus_next"):
@@ -176,11 +187,13 @@ func PointToTeamA():
 	
 	teamA.isNextToSpike = false
 	teamB.isNextToSpike = true
-	isTeamAServing = true
 	
-	if isTeamAServing:
+	
+	if !isTeamAServing:
 		teamA.Rotate()
 
+	isTeamAServing = true
+	
 	#teamA celebrate, watch the ball bounce
 	teamA.Chill()
 	teamB.Chill()
@@ -190,6 +203,7 @@ func PointToTeamA():
 	teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
 	ball.inPlay = false
 
+	CheckForFifthSetSideSwap()
 
 func PointToTeamB():
 	score.PointToTeamB()
@@ -200,11 +214,12 @@ func PointToTeamB():
 	
 	teamB.isNextToSpike = false
 	teamA.isNextToSpike = true
-	isTeamAServing = false
+
 	
-	if !isTeamAServing:
+	if isTeamAServing:
 		teamB.Rotate()
-	
+
+	isTeamAServing = false
 	#teamB celebrate, watch the ball bounce
 	teamA.Chill()
 	teamB.Chill()
@@ -214,31 +229,43 @@ func PointToTeamB():
 	teamB.stateMachine.SetCurrentState(teamB.preserviceState)
 	ball.inPlay = false
 
+	CheckForFifthSetSideSwap()
 
-func SetToTeamA():
+func NewSet():
+	teamA.Chill()
+	teamB.Chill()
+	
+	if score.teamASetScore == 2 && score.teamBSetScore == 2:
+		for i in range (32):
+			Console.AddNewLine("5th set, do the toss again", Color(randf(), randf(), randf()))
+	
+	# If an even number of sets have been completed, the original team serves first
+	if (score.teamASetScore + score.teamBSetScore) % 2 == 0:
+		isTeamAServing = newMatch.isTeamAServing
+	else:
+		isTeamAServing = !newMatch.isTeamAServing
+		
 	camera._gui.LockCamera()
 	preSet = true
 	teamA.numberOfSubsUsed = 0
 	teamB.numberOfSubsUsed = 0
+	$UI/TeamInfoUI/TeamSubstitutionUI.visible = true
 	$UI/TeamInfoUI/TeamSubstitutionUI/TeamSubstitutionUI.EnableRotate()
+	$UI/TeamInfoUI/TeamSubstitutionUI/TeamSubstitutionUI.Refresh()
 	RotateTheBoard()
 	#reset everyone and allow lineup changes
 	pass
 
-func SetToTeamB():
-	camera._gui.LockCamera()
-	preSet = true
-	teamA.numberOfSubsUsed = 0
-	teamB.numberOfSubsUsed = 0
-	$UI/TeamInfoUI/TeamSubstitutionUI/TeamSubstitutionUI.EnableRotate()
-	RotateTheBoard()
-	pass
-
 func GameOver(teamAWon:bool):
+	postMatchUI.Show(score)
 	if teamAWon:
 		#celebrate
+		teamA.stateMachine.SetCurrentState(teamA.celebrateState)
+		teamB.stateMachine.SetCurrentState(teamB.commiserateState)
 		pass
 	else:
+		teamB.stateMachine.SetCurrentState(teamB.celebrateState)
+		teamA.stateMachine.SetCurrentState(teamA.commiserateState)
 		pass
 
 func RotateTheBoard():
@@ -312,3 +339,12 @@ func PrepareLocalTeamObjects(newMatchData:NewMatchData):
 	
 	teamA.CopyGameWorldPlayers(gameWorld, newMatchData.aChoiceState, newMatchData.clubOrInternational)
 	teamB.CopyGameWorldPlayers(gameWorld, newMatchData.bChoiceState, newMatchData.clubOrInternational)
+
+func CheckForFifthSetSideSwap():
+	if fifthSetSwapSidesCompleted:
+		return
+	if score.teamASetScore == 2 && score.teamBSetScore == 2:
+		if score.teamAScore == 8 || score.teamBScore == 8:
+			Console.AddNewLine("It's the 5th set, swapping sides at 8 points")
+			RotateTheBoard()
+			fifthSetSwapSidesCompleted = true

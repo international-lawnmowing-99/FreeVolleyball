@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://db2fgt6mtocjw"]
+[gd_scene load_steps=39 format=3 uid="uid://db2fgt6mtocjw"]
 
 [ext_resource type="Script" path="res://Scripts/MatchScene/MatchManager.gd" id="1_mqt8k"]
 [ext_resource type="Script" path="res://Scenes/MatchScene/FrameStepper.gd" id="2_skir3"]
@@ -25,6 +25,7 @@
 [ext_resource type="PackedScene" uid="uid://cts4mqjkgj1vj" path="res://Scenes/MatchScene/MatchUI/PlayerStatsTable.tscn" id="22_osxw1"]
 [ext_resource type="PackedScene" uid="uid://bas6swl121cf5" path="res://Scenes/MatchScene/MatchUI/OnCourtPlayer.tscn" id="23_sry0n"]
 [ext_resource type="PackedScene" uid="uid://dgn1arb8c8e44" path="res://Scenes/MatchScene/MatchUI/TeamTacticsUI.tscn" id="24_v8nr8"]
+[ext_resource type="PackedScene" uid="uid://beajb1uwht7no" path="res://Scenes/MatchScene/MatchUI/PostMatchUI.tscn" id="26_hv6dw"]
 
 [sub_resource type="Sky" id="3"]
 
@@ -1006,5 +1007,8 @@ offset_left = 427.0
 offset_top = 8.0
 offset_right = -213.0
 offset_bottom = -352.0
+
+[node name="PostMatchUI" parent="UI" instance=ExtResource("26_hv6dw")]
+layout_mode = 1
 
 [connection signal="pressed" from="UI/ToggleTeamTacticsUI" to="UI" method="_on_toggle_team_tactics_ui_pressed"]

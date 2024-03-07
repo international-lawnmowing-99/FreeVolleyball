@@ -82,6 +82,8 @@ var preserviceState:TeamPreService = load("res://Scripts/State/Team/TeamPreServi
 var defendState:TeamDefend = load("res://Scripts/State/Team/TeamDefend.gd").new()
 var prereceiveState:TeamPreReceive = load("res://Scripts/State/Team/TeamPreReceive.gd").new()
 var chillState = load("res://Scripts/State/Team/TeamState.gd").new()
+var celebrateState = load("res://Scripts/State/Team/TeamState.gd").new()
+var commiserateState = load("res://Scripts/State/Team/TeamState.gd").new()
 
 func CopyGameWorldPlayers(gameWorld:GameWorld, choiceState:PlayerChoiceState, clubOrInternational:Enums.ClubOrInternational):
 	if matchPlayers.size() > 0:
@@ -506,8 +508,8 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	incoming.model.rotation = outgoing.model.rotation
 	outgoing.model.rotation = tempRot
 	
-	if incoming.rotationPosition == 1 && mManager.isTeamAServing == isHuman && (stateMachine.currentState == serveState || stateMachine.currentState == prereceiveState):
-		incoming.stateMachine.SetCurrentState(incoming.serveState)
+	#if incoming.rotationPosition == 1 && mManager.isTeamAServing == isHuman && (stateMachine.currentState == serveState || stateMachine.currentState == prereceiveState):
+		#incoming.stateMachine.SetCurrentState(incoming.serveState)
 	
 	outgoing.stateMachine.SetCurrentState(outgoing.chillState)
 	incoming.ReEvaluateState()

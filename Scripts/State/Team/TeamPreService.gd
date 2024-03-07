@@ -28,7 +28,7 @@ func Enter(team:Team):
 	team.ball.sleeping = true
 	team.ball.freeze = true
 	
-	server.stateMachine.SetCurrentState(server.serveState)
+	#server.stateMachine.SetCurrentState(server.serveState)
 	
 	team.chosenSetter = null
 	team.CheckForLiberoChange()

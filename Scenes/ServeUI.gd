@@ -1,6 +1,10 @@
 extends CanvasLayer
 class_name ServeUI
 
+@onready var serverNameLabel:Label = $ServerInfo/ServerNameLabel
+@onready var jumpServeLabel:Label = $ServerInfo/JumpServeLabel
+@onready var floatServeLabel:Label = $ServerInfo/FloatServeLabel
+
 enum UIState{
 	UNDEFINED,
 	ServeType,
@@ -13,6 +17,7 @@ var uiState = UIState.UNDEFINED
 func ShowServeChoice():
 	$ServeTypeButtons.show()
 	$ServerInfo.show()
+	UpdateServerInfo(humanServeState._athlete)
 	uiState = UIState.ServeType
 	$RememberServeOptions.show()
 	$RememberServeOptions/CheckBox.button_pressed = humanServeState.rememberSettings
@@ -109,4 +114,8 @@ func ValidLastServeOption():
 		return false
 	return true
 
+func UpdateServerInfo(athlete:Athlete):
+	serverNameLabel.text = athlete.stats.firstName + " " + athlete.stats.lastName
+	jumpServeLabel.text = "Jump Serve: " + str("%.1f" % athlete.stats.serve)
+	floatServeLabel.text = "Float Serve: " + str("%.1f" % athlete.stats.floatServe)
 	
