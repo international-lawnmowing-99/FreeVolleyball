@@ -20,7 +20,6 @@ var teamBPreviousScores:Array = []
 
 func _ready():
 	mManager = get_tree().root.get_node("MatchScene")
-	#mManager.GameOver(false)
 	teamAScoreText.text = str(teamAScore)
 	teamASetsText.text = str(teamASetScore)
 	teamBScoreText.text = str(teamBScore)

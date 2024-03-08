@@ -14,13 +14,14 @@ func _input(event: InputEvent) -> void:
 		ToggleTeamInfo()
 
 func ToggleTeamInfo():
-	if mManager.preSet:
-		mManager.StartSet()
 	$TeamSubstitutionUI/TeamSubstitutionUI.Refresh()
 
 	$OnCourtPlayers.visible = !$OnCourtPlayers.visible
 	
 	if controlNode.visible:
+		if mManager.preSet:
+			mManager.StartSet()
+			
 		controlNode.visible = false
 		if !camera.enabled: 
 			$"/root/MatchScene/Camera3D/".get_child(0).UnlockCamera()

@@ -260,8 +260,15 @@ func NewSet():
 	teamB.Chill()
 	
 	if score.teamASetScore == 2 && score.teamBSetScore == 2:
-		for i in range (32):
-			Console.AddNewLine("5th set, do the toss again", Color(randf(), randf(), randf()))
+		# Need to redo the stuff from the intro...
+		
+		if randi() % 2 == 0:
+			isTeamAServing = true
+			
+		else:
+			isTeamAServing = false
+		#for i in range (32):
+			#Console.AddNewLine("5th set, do the toss again", Color(randf(), randf(), randf()))
 	
 	# If an even number of sets have been completed, the original team serves first
 	Console.AddNewLine(str(score.teamASetScore + score.teamBSetScore) + " score.teamASetScore + score.teamBSetScore")
@@ -285,6 +292,7 @@ func NewSet():
 
 func GameOver(teamAWon:bool):
 	postMatchUI.Show(score)
+	preSet = true
 	if teamAWon:
 		#celebrate
 		teamA.stateMachine.SetCurrentState(teamA.celebrateState)

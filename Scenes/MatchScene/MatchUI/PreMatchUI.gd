@@ -149,6 +149,8 @@ func DoToss(choseHeads:bool):
 			#Other team chose side of court
 			$Toss/LostToss/ChooseServe.show()
 			$Toss/LostToss/ChooseReceive.show()
+			$Toss/LostToss/ChooseCurrentSide.hide()
+			$Toss/LostToss/ChooseOtherSide.hide()
 
 			if randi()%2 == 0:
 				$Toss/LostToss/OppositionChoiceText.text = "Other team chose to change sides of the court"
