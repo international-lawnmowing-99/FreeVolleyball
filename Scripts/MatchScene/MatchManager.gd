@@ -17,6 +17,7 @@ var preSet:bool = true
 var teamA:Team
 var teamB:Team
 
+var timer:Timer
 @onready var ball = $ball
 
 @onready var score:Score = $UI/ScoreCanvasLayer/Score
@@ -179,6 +180,16 @@ func _input(_event):
 		
 
 func PointToTeamA():
+	# We're already waiting to watch a ball go out of bounds, stop that and start waiting again
+	if timer != null:
+		CheckForFifthSetSideSwap()
+		timer.free()
+
+	if !isTeamAServing:
+		teamA.Rotate()
+	
+	isTeamAServing = true
+	
 	score.PointToTeamA()
 	
 	Console.AddNewLine("=============================================================")
@@ -188,24 +199,35 @@ func PointToTeamA():
 	teamA.isNextToSpike = false
 	teamB.isNextToSpike = true
 	
-	
-	if !isTeamAServing:
-		teamA.Rotate()
-
-	isTeamAServing = true
-	
 	#teamA celebrate, watch the ball bounce
 	teamA.Chill()
 	teamB.Chill()
-	await get_tree().create_timer(1).timeout
+	
+	timer = Timer.new()
+	add_child(timer)
+	timer.start(1.0)
+	await timer.timeout
+	if !preSet:
+		Console.AddNewLine("timeout ", Color.RED)
+		teamA.stateMachine.SetCurrentState(teamA.preserviceState)
+		teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
+		ball.inPlay = false
 
-	teamA.stateMachine.SetCurrentState(teamA.preserviceState)
-	teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
-	ball.inPlay = false
+		CheckForFifthSetSideSwap()
+	timer.queue_free()
 
-	CheckForFifthSetSideSwap()
 
 func PointToTeamB():
+	# We're already waiting to watch a ball go out of bounds, stop that and start waiting again
+	if timer != null:
+		CheckForFifthSetSideSwap()
+		timer.free()
+	
+	if isTeamAServing:
+		teamB.Rotate()
+	
+	isTeamAServing = false
+	
 	score.PointToTeamB()
 	
 	Console.AddNewLine("=============================================================")
@@ -214,22 +236,24 @@ func PointToTeamB():
 	
 	teamB.isNextToSpike = false
 	teamA.isNextToSpike = true
-
 	
-	if isTeamAServing:
-		teamB.Rotate()
-
-	isTeamAServing = false
 	#teamB celebrate, watch the ball bounce
 	teamA.Chill()
 	teamB.Chill()
-	await get_tree().create_timer(1).timeout
 	
-	teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
-	teamB.stateMachine.SetCurrentState(teamB.preserviceState)
-	ball.inPlay = false
+	timer = Timer.new()
+	add_child(timer)
+	timer.start(1.0)
+	await timer.timeout
+	
+	if !preSet:
+		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
+		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
+		ball.inPlay = false
 
-	CheckForFifthSetSideSwap()
+		CheckForFifthSetSideSwap()
+		
+	timer.queue_free()
 
 func NewSet():
 	teamA.Chill()
@@ -240,11 +264,14 @@ func NewSet():
 			Console.AddNewLine("5th set, do the toss again", Color(randf(), randf(), randf()))
 	
 	# If an even number of sets have been completed, the original team serves first
+	Console.AddNewLine(str(score.teamASetScore + score.teamBSetScore) + " score.teamASetScore + score.teamBSetScore")
+	Console.AddNewLine(str((score.teamASetScore + score.teamBSetScore) % 2) + " (score.teamASetScore + score.teamBSetScore) % 2")
 	if (score.teamASetScore + score.teamBSetScore) % 2 == 0:
 		isTeamAServing = newMatch.isTeamAServing
 	else:
 		isTeamAServing = !newMatch.isTeamAServing
 		
+	Console.AddNewLine(str(isTeamAServing) + " isTeamAServing", Color.RED)
 	camera._gui.LockCamera()
 	preSet = true
 	teamA.numberOfSubsUsed = 0
