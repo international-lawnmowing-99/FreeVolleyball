@@ -6,11 +6,9 @@ var gameWorld:GameWorld
 var mManager:MatchManager
 
 @onready var matchIntro = $ColourRectIntro
-@onready var teamSubstitutionUI:TeamSubstitutionUI = $TeamSubstitutionUI
+var teamSubstitutionUI:TeamSubstitutionUI
 @onready var teamLineups:TeamLineupsUI = $TeamLineUpsUI
-@onready var toss = $Toss
-@onready var wonToss = $Toss/WonToss
-@onready var lostToss = $Toss/LostToss
+@onready var toss:DodgyTossUI = $TossUI
 @onready var matchStartMenu = $MatchStartMenu
 @onready var fullStartMenu = $FullStartColourRect
 @onready var athletesTableMenu = $AllAthletesTableColourRect
@@ -21,7 +19,7 @@ var mManager:MatchManager
 @onready var teamBChooser:TeamChoice = $FullStartColourRect/TeamBChooser
 
 var usingAcceleratedStart:bool = false
-var teamAWonToss:bool
+
 
 func skipUI():
 	hide()
@@ -35,7 +33,9 @@ func Init(_mManager:MatchManager):
 	newMatchData.bChoiceState = PlayerChoiceState.new(gameWorld)
 	teamAChooser.Init(self, gameWorld, newMatchData.aChoiceState)
 	teamBChooser.Init(self, gameWorld, newMatchData.bChoiceState)
-
+	
+	teamSubstitutionUI = mManager.teamSubstitutionUI
+	teamSubstitutionUI.get_node("AcceptButton").connect("pressed",Callable(self,"TeamSubstitutionAcceptButton_pressed"))
 	matchStartMenu.show()
 	fullStartMenu.hide()
 	matchIntro.hide()
@@ -43,13 +43,13 @@ func Init(_mManager:MatchManager):
 	teamSubstitutionUI.hide()
 	teamLineups.mManager = mManager
 	teamLineups.hide()
+	
+	toss.Init(false, mManager)
 	toss.hide()
-	wonToss.hide()
-	lostToss.hide()
 
 
 func _ready():
-	$TeamSubstitutionUI/AcceptButton.connect("pressed",Callable(self,"TeamSubstitutionAcceptButton_pressed"))
+	pass
 
 
 func _on_Intro_Button_pressed():
@@ -78,157 +78,21 @@ func TeamLineupsConfirmed():
 	toss.show()
  
 func TeamSubstitutionAcceptButton_pressed():
-	if !mManager.teamA.teamCaptain:
-		Console.AddNewLine("Must designate a captain!")
-		return
-		
-	for namecard:NameCard in teamSubstitutionUI.nameCards:
-		if mManager.teamA.teamCaptain != namecard.cardAthlete:
-			namecard.get_node("CaptainButton").hide()
-	teamSubstitutionUI.hide()
-	mManager.StartGame()
-
-#func PopulateUI(team:Team, otherTeam:Team):
-	##$ColourRectIntro/Label.text = team.teamName + " vs " + otherTeam.teamName
-	##
-	##var humanTeam = $TeamLineUpsUI/HumanTeam
-	##if team.matchPlayers.size() > 12:
-		##Console.AddNewLine("Honey, we've duplicated the players somewhere...")
-		##return
-	##for i in range(team.matchPlayers.size()):
-		##if team.matchPlayers[i] && humanTeam.get_child(i):
-			##humanTeam.get_child(i).DisplayStats(team.matchPlayers[i])
-			##$TeamLineUpsUI/OppositionTeam.get_child(i).DisplayStats(otherTeam.matchPlayers[i])
-	#
-	#$TeamLineUpsUI/TeamAName.text = team.teamName
-	#$TeamLineUpsUI/TeamBName.text = otherTeam.teamName
-	#
-	#$TeamSubstitutionUI/TeamName.text = team.teamName
-	#
-	#for i in range(6):
-		#$TeamSubstitutionUI/HumanTeam.get_child(i).DisplayStats(team.matchPlayers[i])
-		#
-	#$TeamSubstitutionUI/LiberoNameCard.DisplayStats(team.matchPlayers[6])
-	#
-	#for i in range(5):
-		#$TeamSubstitutionUI/HumanTeamBench.get_child(i).DisplayStats(team.matchPlayers[7 + i])
-
-
-func DoToss(choseHeads:bool):
-	var coin:bool = randi() % 2
-	print("coin is heads?: " + str(coin))
-	if coin == true:
-		$Toss/WonToss/CoinResultText.text = "Coin is Heads!"
-		$Toss/LostToss/CoinResultText.text = "Coin is Heads!"
-	else:
-		$Toss/WonToss/CoinResultText.text = "Coin is Tails!"
-		$Toss/LostToss/CoinResultText.text = "Coin is Tails!"
-	
-	if coin == choseHeads:
-		wonToss.show()
-		lostToss.hide()
-		teamAWonToss = true
-		
-	else:
-		lostToss.show()
-		wonToss.hide()
-		teamAWonToss = false
-		
-		if randi()%2 == 0:
-			#Other team chose to serve/receive
-			$Toss/LostToss/ChooseCurrentSide.show()
-			$Toss/LostToss/ChooseOtherSide.show()
-			if randi()%2 == 0:
-				$Toss/LostToss/OppositionChoiceText.text = "Other team chose to serve"
-				newMatchData.isTeamAServing = false
-			else:
-				$Toss/LostToss/OppositionChoiceText.text = "Other team chose to receive"
-				newMatchData.isTeamAServing = true
-			pass
-		else:
-			#Other team chose side of court
-			$Toss/LostToss/ChooseServe.show()
-			$Toss/LostToss/ChooseReceive.show()
-			$Toss/LostToss/ChooseCurrentSide.hide()
-			$Toss/LostToss/ChooseOtherSide.hide()
-
-			if randi()%2 == 0:
-				$Toss/LostToss/OppositionChoiceText.text = "Other team chose to change sides of the court"
-			else:
-				$Toss/LostToss/OppositionChoiceText.text = "Other team chose to keep their side of the court"
-
-
-func _on_ChooseTails_pressed():
-	DoToss(false)
-
-
-func _on_ChooseHeads_pressed():
-	DoToss(true)
-
-
-func _on_ChooseServe_pressed():
-	toss.hide()
-	lostToss.hide()
-	Console.AddNewLine("Choosing to serve")
-	newMatchData.isTeamAServing = true
-	
-	if teamAWonToss:
-		if randi_range(0, 1) == 1:
-			Console.AddNewLine("Other team chose to stay on this side")
-		else:
-			Console.AddNewLine("Other team chose to change side")
-			mManager.RotateTheBoard()
-	
-	teamSubstitutionUI.show()
-	teamSubstitutionUI.Refresh()
-
-func _on_ChooseReceive_pressed():
-	toss.hide()
-	lostToss.hide()
-	Console.AddNewLine("Choosing to receive")
-	newMatchData.isTeamAServing = false
-	
-	if teamAWonToss:
-		if randi_range(0, 1) == 1:
-			Console.AddNewLine("Other team chose to stay on this side")
-		else:
-			Console.AddNewLine("Other team chose to change side")
-			mManager.RotateTheBoard()
+	if mManager.preMatch:
+		if !mManager.teamA.teamCaptain:
+			Console.AddNewLine("Must designate a captain!")
+			return
 			
-	teamSubstitutionUI.show()
-	teamSubstitutionUI.Refresh()
+		for namecard:NameCard in teamSubstitutionUI.nameCards:
+			if mManager.teamA.teamCaptain != namecard.cardAthlete:
+				namecard.get_node("CaptainButton").hide()
+		teamSubstitutionUI.hide()
+		
 
-func _on_ChooseCurrentSide_pressed():
-	toss.hide()
-	lostToss.hide()
-	Console.AddNewLine("Staying on the same side")
-	teamSubstitutionUI.show()
-	mManager.teamA.CheckForLiberoChange()
-	teamSubstitutionUI.Refresh()
-
-func _on_ChooseOtherSide_pressed():
-	toss.hide()
-	lostToss.hide()
-	Console.AddNewLine("Changing sides like a dickhead")
-	mManager.RotateTheBoard()
-	teamSubstitutionUI.show()
-	mManager.teamA.CheckForLiberoChange()
-	teamSubstitutionUI.Refresh()
-
-func _on_ChooseSide_pressed():
-	$Toss/WonToss/ChooseOtherSide.show()
-	$Toss/WonToss/ChooseCurrentSide.show()
-	
-	$Toss/WonToss/ChooseSide.hide()
-	$Toss/WonToss/ChooseServeReceive.hide()
+		mManager.StartMatch()
 
 
-func _on_ChooseServeReceive_pressed():
-	$Toss/WonToss/ChooseReceive.show()
-	$Toss/WonToss/ChooseServe.show()
-	
-	$Toss/WonToss/ChooseSide.hide()
-	$Toss/WonToss/ChooseServeReceive.hide()
+
 
 
 
@@ -268,7 +132,7 @@ func _on_instant_start_button_pressed():
 	#Console.AddNewLine("Team A captain is: " + mManager.teamA.teamCaptain.stats.lastName)
 	#Console.AddNewLine("Team B captain is: " + mManager.teamB.teamCaptain.stats.lastName)
 	
-	mManager.StartGame()
+	mManager.StartMatch()
 
 
 func _on_full_start_confirm_button_pressed():
@@ -326,7 +190,7 @@ func _on_table_confirm_button_pressed():
 				if lad.uiSelected:
 					mManager.teamA.matchPlayers.append(lad)
 		mManager.ConfirmTeams()
-	#		mManager.StartGame()
+	#		mManager.StartMatch()
 		matchStartMenu.hide()
 		athletesTableMenu.hide()
 		$ColourRectIntro/Label.text = mManager.teamA.teamName + " vs " + mManager.teamB.teamName

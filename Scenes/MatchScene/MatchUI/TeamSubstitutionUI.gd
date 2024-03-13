@@ -60,9 +60,11 @@ func ExecuteSub(incoming:Athlete):
 		incoming.substitutionInfo.hasEnteredCourtFromBenchThisSet = true
 		incoming.substitutionInfo.startingRotationPosition = athleteToBeSubbed.substitutionInfo.startingRotationPosition
 		incoming.team.numberOfSubsUsed += 1
-	
+
+
 	incoming.team.InstantaneouslySwapPlayers(athleteToBeSubbed, incoming)
-	
+	if mManager.preSet:
+			athleteToBeSubbed.substitutionInfo.startingRotationPosition = -1
 	Refresh(incoming.team)
 	
 	for card in $HumanTeamBench.get_children():

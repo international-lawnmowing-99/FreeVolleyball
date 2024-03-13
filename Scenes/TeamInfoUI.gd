@@ -1,12 +1,12 @@
 extends CanvasLayer
 
-@onready var controlNode = $TeamSubstitutionUI
 @onready var camera = $"/root/MatchScene/Camera3D"
+@onready var teamSubstitutionUI:TeamSubstitutionUI = $TeamSubstitutionUI
 
 var mManager:MatchManager
 
 func _ready() -> void:
-	$TeamSubstitutionUI/TeamSubstitutionUI/AcceptButton.connect("pressed",Callable(self,"ToggleTeamInfo"))
+	$TeamSubstitutionUI/AcceptButton.connect("pressed",Callable(self,"ToggleTeamInfo"))
 	mManager = get_tree().root.get_node("MatchScene")
 
 func _input(event: InputEvent) -> void:
@@ -14,21 +14,21 @@ func _input(event: InputEvent) -> void:
 		ToggleTeamInfo()
 
 func ToggleTeamInfo():
-	$TeamSubstitutionUI/TeamSubstitutionUI.Refresh()
+	teamSubstitutionUI.Refresh()
 
 	$OnCourtPlayers.visible = !$OnCourtPlayers.visible
 	
-	if controlNode.visible:
+	if visible:
 		if mManager.preSet:
 			mManager.StartSet()
 			
-		controlNode.visible = false
+		hide()
 		if !camera.enabled: 
 			$"/root/MatchScene/Camera3D/".get_child(0).UnlockCamera()
 	
 	else:
 		Console.Clear()
-		controlNode.visible = true
+		show()
 		if camera.enabled:
 			camera.set_enabled(false)
 			$"/root/MatchScene/Camera3D/".get_child(0).LockCamera()

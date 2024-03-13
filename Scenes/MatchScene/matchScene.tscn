@@ -855,20 +855,13 @@ offset_right = 1906.05
 offset_bottom = 1067.44
 
 [node name="ServeUI" parent="UI" instance=ExtResource("19_gfg2l")]
+visible = false
 
 [node name="TeamInfoUI" type="CanvasLayer" parent="UI"]
 layer = 2
 script = ExtResource("20_mqewi")
 
-[node name="TeamSubstitutionUI" type="Control" parent="UI/TeamInfoUI"]
-visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 1912.0
-offset_bottom = 1078.0
-
-[node name="TeamSubstitutionUI" parent="UI/TeamInfoUI/TeamSubstitutionUI" instance=ExtResource("21_mfp85")]
-layout_mode = 0
+[node name="TeamSubstitutionUI" parent="UI/TeamInfoUI" instance=ExtResource("21_mfp85")]
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0

@@ -12,6 +12,7 @@ var cube
 var cylinder
 var sphere
 
+var preMatch:bool = true
 var preSet:bool = true
 
 var teamA:Team
@@ -27,7 +28,8 @@ var timer:Timer
 @onready var serveUI = $UI/ServeUI
 @onready var teamTacticsUI = $UI/TeamTacticsUICanvas/TeamTacticsUI
 @onready var camera = $Camera3D
-@onready var liberoOptionsPanel:LiberoOptionsPanel = $UI/PreMatchUI/TeamSubstitutionUI/LiberoOptionsPanel
+@onready var teamSubstitutionUI:TeamSubstitutionUI = $UI/TeamInfoUI/TeamSubstitutionUI
+@onready var liberoOptionsPanel:LiberoOptionsPanel = $UI/TeamInfoUI/TeamSubstitutionUI/LiberoOptionsPanel
 @onready var postMatchUI:PostMatchUI = $UI/PostMatchUI
 
 var isTeamAServing:bool
@@ -94,7 +96,8 @@ func ConfirmTeams():
 		
 	teamB.teamCaptain = teamB.matchPlayers[randi_range(0, teamB.matchPlayers.size() - 1)]
 	
-func StartGame():
+func StartMatch():
+	preMatch = false
 	preSet = false
 	
 	if newMatch.isTeamAServing:
@@ -283,9 +286,9 @@ func NewSet():
 	preSet = true
 	teamA.numberOfSubsUsed = 0
 	teamB.numberOfSubsUsed = 0
-	$UI/TeamInfoUI/TeamSubstitutionUI.visible = true
-	$UI/TeamInfoUI/TeamSubstitutionUI/TeamSubstitutionUI.EnableRotate()
-	$UI/TeamInfoUI/TeamSubstitutionUI/TeamSubstitutionUI.Refresh()
+	teamSubstitutionUI.visible = true
+	teamSubstitutionUI.EnableRotate()
+	teamSubstitutionUI.Refresh()
 	RotateTheBoard()
 	#reset everyone and allow lineup changes
 	pass

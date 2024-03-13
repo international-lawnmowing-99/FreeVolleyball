@@ -1,0 +1,260 @@
+[gd_scene load_steps=3 format=3 uid="uid://biexvs3w6hs70"]
+
+[ext_resource type="Texture2D" uid="uid://browddj6fobwl" path="res://Textures/143640-allan-border-s-cricket-dos-screenshot-coin-toss.png" id="1_gojhs"]
+[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/DodgyTossUI.gd" id="1_rpwn7"]
+
+[node name="TossUI" type="ColorRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.92549, 0.811765, 0.364706, 1)
+script = ExtResource("1_rpwn7")
+
+[node name="ChooseHeads" type="Button" parent="."]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 207.5
+offset_top = -244.5
+offset_right = 864.5
+offset_bottom = -91.5
+focus_mode = 0
+text = "Choose Heads"
+expand_icon = true
+
+[node name="ChooseTails" type="Button" parent="."]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 211.385
+offset_top = 24.375
+offset_right = 868.385
+offset_bottom = 177.375
+focus_mode = 0
+text = "Choose Tails"
+expand_icon = true
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 406.25
+offset_top = 315.378
+offset_right = 1046.25
+offset_bottom = 715.378
+texture = ExtResource("1_gojhs")
+
+[node name="WonToss" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.74902, 0.92549, 0.364706, 1)
+
+[node name="ChooseServeReceive" type="Button" parent="WonToss"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 207.5
+offset_top = -244.5
+offset_right = 864.5
+offset_bottom = -91.5
+focus_mode = 0
+text = "Choose Serve/Receive"
+expand_icon = true
+
+[node name="ChooseSide" type="Button" parent="WonToss"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 211.385
+offset_top = 24.375
+offset_right = 868.385
+offset_bottom = 177.375
+focus_mode = 0
+text = "Choose Side of Court"
+expand_icon = true
+
+[node name="ChooseServe" type="Button" parent="WonToss"]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 207.5
+offset_top = -236.5
+offset_right = 864.5
+offset_bottom = -83.5
+focus_mode = 0
+text = "Choose To Serve"
+expand_icon = true
+
+[node name="ChooseReceive" type="Button" parent="WonToss"]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 211.385
+offset_top = 24.375
+offset_right = 868.385
+offset_bottom = 177.375
+focus_mode = 0
+text = "Choose To Receive"
+expand_icon = true
+
+[node name="ChooseCurrentSide" type="Button" parent="WonToss"]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 207.5
+offset_top = -236.5
+offset_right = 864.5
+offset_bottom = -83.5
+focus_mode = 0
+text = "Stay On This Side"
+expand_icon = true
+
+[node name="ChooseOtherSide" type="Button" parent="WonToss"]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 211.385
+offset_top = 24.375
+offset_right = 868.385
+offset_bottom = 177.375
+focus_mode = 0
+text = "Choose Other Side"
+expand_icon = true
+
+[node name="InfoText" type="Label" parent="WonToss"]
+layout_mode = 0
+offset_left = 245.852
+offset_top = 522.067
+offset_right = 914.852
+offset_bottom = 721.067
+text = "Won Toss"
+
+[node name="CoinResultText" type="Label" parent="WonToss"]
+layout_mode = 0
+offset_left = 201.307
+offset_top = 78.3992
+offset_right = 1164.31
+offset_bottom = 277.399
+text = "Coin is UNDEFINED!"
+
+[node name="LostToss" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.192157, 0.52549, 0.0980392, 1)
+
+[node name="ChooseCurrentSide" type="Button" parent="LostToss"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 207.5
+offset_top = -244.5
+offset_right = 864.5
+offset_bottom = -91.5
+focus_mode = 0
+text = "Choose This Side"
+expand_icon = true
+
+[node name="ChooseOtherSide" type="Button" parent="LostToss"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 211.385
+offset_top = 24.375
+offset_right = 868.385
+offset_bottom = 177.375
+focus_mode = 0
+text = "Choose The Other Side"
+expand_icon = true
+
+[node name="ChooseServe" type="Button" parent="LostToss"]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 207.5
+offset_top = -244.5
+offset_right = 864.5
+offset_bottom = -91.5
+focus_mode = 0
+text = "Choose To Serve "
+expand_icon = true
+
+[node name="ChooseReceive" type="Button" parent="LostToss"]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 211.385
+offset_top = 24.375
+offset_right = 868.385
+offset_bottom = 177.375
+focus_mode = 0
+text = "Choose To Receive"
+expand_icon = true
+
+[node name="InfoText" type="Label" parent="LostToss"]
+layout_mode = 0
+offset_left = 274.36
+offset_top = 507.812
+offset_right = 943.361
+offset_bottom = 706.812
+text = "Lost Toss"
+
+[node name="CoinResultText" type="Label" parent="LostToss"]
+layout_mode = 0
+offset_left = 124.689
+offset_top = 276.179
+offset_right = 1087.69
+offset_bottom = 475.179
+text = "Coin is Heads!"
+
+[node name="OppositionChoiceText" type="Label" parent="LostToss"]
+layout_mode = 0
+offset_left = 56.981
+offset_top = 759.046
+offset_right = 1839.98
+offset_bottom = 958.046
+text = "Other team chose to Serve"
+
+[connection signal="pressed" from="ChooseHeads" to="." method="_on_ChooseHeads_pressed"]
+[connection signal="pressed" from="ChooseTails" to="." method="_on_ChooseTails_pressed"]
+[connection signal="pressed" from="WonToss/ChooseServeReceive" to="." method="_on_ChooseServeReceive_pressed"]
+[connection signal="pressed" from="WonToss/ChooseSide" to="." method="_on_ChooseSide_pressed"]
+[connection signal="pressed" from="WonToss/ChooseServe" to="." method="_on_ChooseServe_pressed"]
+[connection signal="pressed" from="WonToss/ChooseReceive" to="." method="_on_ChooseReceive_pressed"]
+[connection signal="pressed" from="WonToss/ChooseCurrentSide" to="." method="_on_ChooseCurrentSide_pressed"]
+[connection signal="pressed" from="WonToss/ChooseOtherSide" to="." method="_on_ChooseOtherSide_pressed"]
+[connection signal="pressed" from="LostToss/ChooseCurrentSide" to="." method="_on_ChooseCurrentSide_pressed"]
+[connection signal="pressed" from="LostToss/ChooseOtherSide" to="." method="_on_ChooseOtherSide_pressed"]
+[connection signal="pressed" from="LostToss/ChooseServe" to="." method="_on_ChooseServe_pressed"]
+[connection signal="pressed" from="LostToss/ChooseReceive" to="." method="_on_ChooseReceive_pressed"]
