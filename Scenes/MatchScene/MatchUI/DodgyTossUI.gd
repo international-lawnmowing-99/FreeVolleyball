@@ -102,6 +102,7 @@ func _on_ChooseServe_pressed():
 	mManager.teamSubstitutionUI.show()
 	mManager.teamA.CheckForLiberoChange()
 	mManager.teamSubstitutionUI.Refresh()
+	mManager.preMatchUI.hide()
 
 func _on_ChooseReceive_pressed():
 	hide()
@@ -122,6 +123,7 @@ func _on_ChooseReceive_pressed():
 	mManager.teamSubstitutionUI.show()
 	mManager.teamA.CheckForLiberoChange()
 	mManager.teamSubstitutionUI.Refresh()
+	mManager.preMatchUI.hide()
 
 func _on_ChooseCurrentSide_pressed():
 	hide()
@@ -130,6 +132,7 @@ func _on_ChooseCurrentSide_pressed():
 	mManager.teamSubstitutionUI.show()
 	mManager.teamA.CheckForLiberoChange()
 	mManager.teamSubstitutionUI.Refresh()
+	mManager.preMatchUI.hide()
 
 func _on_ChooseOtherSide_pressed():
 	hide()
@@ -139,6 +142,7 @@ func _on_ChooseOtherSide_pressed():
 	mManager.teamSubstitutionUI.show()
 	mManager.teamA.CheckForLiberoChange()
 	mManager.teamSubstitutionUI.Refresh()
+	mManager.preMatchUI.hide()
 
 func _on_ChooseSide_pressed():
 	$WonToss/ChooseOtherSide.show()

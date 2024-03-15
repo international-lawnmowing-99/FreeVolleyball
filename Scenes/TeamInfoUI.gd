@@ -1,8 +1,10 @@
 extends CanvasLayer
 
+class_name TeamInfoUI
+
 @onready var camera = $"/root/MatchScene/Camera3D"
 @onready var teamSubstitutionUI:TeamSubstitutionUI = $TeamSubstitutionUI
-
+@onready var onCourPlayers = $OnCourtPlayers
 var mManager:MatchManager
 
 func _ready() -> void:
@@ -15,20 +17,20 @@ func _input(event: InputEvent) -> void:
 
 func ToggleTeamInfo():
 	teamSubstitutionUI.Refresh()
-
-	$OnCourtPlayers.visible = !$OnCourtPlayers.visible
 	
-	if visible:
+	if teamSubstitutionUI.visible:
 		if mManager.preSet:
 			mManager.StartSet()
 			
-		hide()
+		teamSubstitutionUI.hide()
+		onCourPlayers.visible = true
 		if !camera.enabled: 
 			$"/root/MatchScene/Camera3D/".get_child(0).UnlockCamera()
 	
 	else:
 		Console.Clear()
-		show()
+		teamSubstitutionUI.show()
+		onCourPlayers.visible = false
 		if camera.enabled:
 			camera.set_enabled(false)
 			$"/root/MatchScene/Camera3D/".get_child(0).LockCamera()
@@ -37,5 +39,13 @@ func ToggleTeamInfo():
 func InitialiseOnCourtPlayerUI():
 	for i in range(6):
 		var onCourtPlayer = $OnCourtPlayers/VBoxContainer.get_child(i)
-		onCourtPlayer.athlete = mManager.teamA.courtPlayers[i]
+		if mManager.teamA.courtPlayers[i] == mManager.teamA.libero || \
+			mManager.teamA.courtPlayers[i] == mManager.teamA.libero2:
+				onCourtPlayer.athlete = mManager.teamA.playerCurrentlyLiberoedOff
+		else:
+			onCourtPlayer.athlete = mManager.teamA.courtPlayers[i]
+		
 		onCourtPlayer.UpdateFields()
+	
+	$OnCourtPlayers/VBoxContainer/OnCourtPlayer7.athlete = mManager.teamA.activeLibero
+	$OnCourtPlayers/VBoxContainer/OnCourtPlayer7.UpdateFields()

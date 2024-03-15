@@ -23,7 +23,7 @@ var timer:Timer
 
 @onready var score:Score = $UI/ScoreCanvasLayer/Score
 @onready var preMatchUI:PreMatchUI = $UI/PreMatchUI
-@onready var teamInfoUI = $UI/TeamInfoUI
+@onready var teamInfoUI:TeamInfoUI = $UI/TeamInfoUI
 @onready var TESTteamRepresentation = $UI/TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
 @onready var serveUI = $UI/ServeUI
 @onready var teamTacticsUI = $UI/TeamTacticsUICanvas/TeamTacticsUI
@@ -183,6 +183,7 @@ func _input(_event):
 		
 
 func PointToTeamA():
+	ball.inPlay = false
 	# We're already waiting to watch a ball go out of bounds, stop that and start waiting again
 	if timer != null:
 		CheckForFifthSetSideSwap()
@@ -211,7 +212,7 @@ func PointToTeamA():
 	timer.start(1.0)
 	await timer.timeout
 	if !preSet:
-		Console.AddNewLine("timeout ", Color.RED)
+		#Console.AddNewLine("timeout ", Color.RED)
 		teamA.stateMachine.SetCurrentState(teamA.preserviceState)
 		teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
 		ball.inPlay = false
@@ -221,6 +222,7 @@ func PointToTeamA():
 
 
 func PointToTeamB():
+	ball.inPlay = false
 	# We're already waiting to watch a ball go out of bounds, stop that and start waiting again
 	if timer != null:
 		CheckForFifthSetSideSwap()
@@ -263,15 +265,10 @@ func NewSet():
 	teamB.Chill()
 	
 	if score.teamASetScore == 2 && score.teamBSetScore == 2:
-		# Need to redo the stuff from the intro...
+		preMatchUI.toss.Init(true, self)
+		preMatchUI.show()
+		preMatchUI.toss.show()
 		
-		if randi() % 2 == 0:
-			isTeamAServing = true
-			
-		else:
-			isTeamAServing = false
-		#for i in range (32):
-			#Console.AddNewLine("5th set, do the toss again", Color(randf(), randf(), randf()))
 	
 	# If an even number of sets have been completed, the original team serves first
 	Console.AddNewLine(str(score.teamASetScore + score.teamBSetScore) + " score.teamASetScore + score.teamBSetScore")
@@ -286,7 +283,10 @@ func NewSet():
 	preSet = true
 	teamA.numberOfSubsUsed = 0
 	teamB.numberOfSubsUsed = 0
-	teamSubstitutionUI.visible = true
+	
+	teamInfoUI.show()
+	teamInfoUI.onCourPlayers.hide()
+	teamSubstitutionUI.show()
 	teamSubstitutionUI.EnableRotate()
 	teamSubstitutionUI.Refresh()
 	RotateTheBoard()
@@ -383,6 +383,6 @@ func CheckForFifthSetSideSwap():
 		return
 	if score.teamASetScore == 2 && score.teamBSetScore == 2:
 		if score.teamAScore == 8 || score.teamBScore == 8:
-			Console.AddNewLine("It's the 5th set, swapping sides at 8 points")
+			Console.AddNewLine("\n\n\nIt's the 5th set, swapping sides at 8 points\n\n\n")
 			RotateTheBoard()
 			fifthSetSwapSidesCompleted = true

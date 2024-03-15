@@ -279,6 +279,8 @@ func BaseMove(_delta):
 		position = moveTarget
 			
 func ReEvaluateState():
+	
+	
 	if rb.freeze:
 		match team.stateMachine.currentState:
 			team.receiveState:
@@ -289,6 +291,8 @@ func ReEvaluateState():
 				else:
 					stateMachine.SetCurrentState(transitionState)
 			team.spikeState:
+				if team.chosenSpiker == self:
+					Console.AddNewLine("Ghost spike potentially incoming??")
 				if stateMachine.currentState.nameOfState == "Set":
 					model.rotation.y = -team.flip * PI/2
 					stateMachine.SetCurrentState(defendState)

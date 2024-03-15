@@ -437,28 +437,34 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				print ("bench: " + lad.name)
 
 		else:
+			Console.AddNewLine("Outgoing player was found in benchPlayers", Color.LIME)
 			var _incomingIndex = benchPlayers.find(incoming)
 			if _incomingIndex == -1:
 				Console.AddNewLine("Not found bench swap player: " + incoming.name)
 			else:
-				benchPlayers.erase(incoming)
-				benchPlayers.erase(outgoing)
-
-				#incoming.rotationPosition = outgoing.rotationPosition
-				#outgoing.rotationPosition = -1
+				playerCurrentlyLiberoedOff = incoming
 				
-				Console.AddNewLine("Outgoing index: " + str(outgoingIndex))
-				Console.AddNewLine("Incoming index: " + str(_incomingIndex))
-				
-				if outgoingIndex > _incomingIndex:
-					benchPlayers.insert(_incomingIndex, outgoing)
-					benchPlayers.insert(outgoingIndex, incoming)
-				else:
-					benchPlayers.insert(outgoingIndex, incoming)
-					benchPlayers.insert(_incomingIndex, outgoing)
+				#benchPlayers.erase(incoming)
+				#benchPlayers.erase(outgoing)
+#
+				##incoming.rotationPosition = outgoing.rotationPosition
+				##outgoing.rotationPosition = -1
+				#
+				#Console.AddNewLine("Outgoing index: " + str(outgoingIndex))
+				#Console.AddNewLine("Incoming index: " + str(_incomingIndex))
+				#
+				#if outgoingIndex > _incomingIndex:
+					#benchPlayers.insert(_incomingIndex, outgoing)
+					#benchPlayers.insert(outgoingIndex, incoming)
+				#else:
+					#benchPlayers.insert(outgoingIndex, incoming)
+					#benchPlayers.insert(_incomingIndex, outgoing)
 					
 				# if a player is being liberoed, do we want to keep the new player liberoed in the same circumstances as their predecessor?
 				Console.AddNewLine("Show libero options for newly subbed player here", Color.BLUE_VIOLET)
+				Console.AddNewLine("Show libero options for newly subbed player here", Color.BLUE_VIOLET)
+				Console.AddNewLine("Show libero options for newly subbed player here", Color.BLUE_VIOLET)
+				
 				for subArray in playerToBeLiberoedOnServe:
 					if subArray[1] == outgoing:
 						subArray[1] = incoming
@@ -470,7 +476,8 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 					incoming.role = outgoing.role
 				
 				outgoing.stateMachine.SetCurrentState(outgoing.chillState)
-				incoming.ReEvaluateState()
+				incoming.stateMachine.SetCurrentState(incoming.chillState)
+				
 				
 			return
 
