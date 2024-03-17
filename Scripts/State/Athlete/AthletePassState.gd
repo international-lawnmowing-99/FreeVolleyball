@@ -108,6 +108,9 @@ func Enter(athlete:Athlete):
 
 
 func Update(athlete:Athlete):
+	if !ball.inPlay:
+		return
+	
 #	athlete.get_node("Debug").global_transform.origin = Vector3(intersectionPointX, .5, intersectionPointZ)
 	athlete.timeTillBallReachesMe = Vector3(ball.position.x, 0, ball.position.z).distance_to(Vector3(athlete.position.x, 0, athlete.position.z))\
 				/max(Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length(), 0.001)
@@ -124,7 +127,7 @@ func Update(athlete:Athlete):
 		athlete.animTree.set("parameters/Dig/blend_amount", lerp(a, 0.0, 5*athlete.myDelta))
 		athlete.digAngle = lerp(athlete.digAngle,0.0,3*athlete.myDelta)
 		athlete.RotateDigPlatform(athlete.digAngle)
-	if !isBallAlreadyPassed && ball.inPlay && ball.position.y < athlete.stats.digHeight && ball.position.y > .35 &&\
+	if !isBallAlreadyPassed && ball.position.y < athlete.stats.digHeight && ball.position.y > .35 &&\
 		(Vector3(ball.position.x,0, ball.position.z)).distance_to(athlete.position) < 1:
 			PassBall(athlete)
 			

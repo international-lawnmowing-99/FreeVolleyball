@@ -293,6 +293,7 @@ func ReEvaluateState():
 			team.spikeState:
 				if team.chosenSpiker == self:
 					Console.AddNewLine("Ghost spike potentially incoming??")
+					team.mManager.Pause()
 				if stateMachine.currentState.nameOfState == "Set":
 					model.rotation.y = -team.flip * PI/2
 					stateMachine.SetCurrentState(defendState)

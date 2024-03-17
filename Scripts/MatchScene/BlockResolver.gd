@@ -9,10 +9,9 @@ var netPass:Vector3
 var mManager:MatchManager
 
 func KillBlock():
-	ball.linear_velocity.x *= -1
-	randomize()
-	ball.linear_velocity *= randf_range(.5,.9)
-	ball.linear_velocity.y *= 2.0
+	var normal:Vector3 = Vector3(spiker.team.flip, 0, 0).rotated(Vector3.FORWARD*spiker.team.flip, (randf_range(PI/24,PI/8))).rotated(Vector3.UP, randf_range(-PI/13, PI/13))
+	ball.linear_velocity = ball.linear_velocity.bounce(normal) * randf_range(0.5, 0.9)
+
 	ball.gravity_scale = 1.0
 	ball.topspin = 1.0
 	ball.attackTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0, 1.0)
@@ -22,11 +21,8 @@ func KillBlock():
 		ball.TouchedByB()
 	else:
 		ball.TouchedByA()
-	if ball.linear_velocity.length() * 3.6 > 100:
-		Console.AddNewLine("Extreme Kill Block! Added velocity.......", Color.RED)
-		Console.AddNewLine("Kill Block! Ball speed: " + str(ball.linear_velocity.length() * 3.6) + " kph", Color.RED)
-		Console.AddNewLine("Kill Block! Ball speed: " + str(ball.linear_velocity.length() * 3.6) + " kph", Color.WHITE)
-		Console.AddNewLine("Kill Block! Ball speed: " + str(ball.linear_velocity.length() * 3.6) + " kph", Color.BLUE)
+
+	Console.AddNewLine("Kill Block! Ball speed: " + str(ball.linear_velocity.length() * 3.6) + " kph", Color.BLUE)
 	
 	mManager.BallBlocked(spikedByA)
 	
@@ -194,17 +190,23 @@ func ResolveBlock():
 	# the other way, a kill block, and in the middle a deflection
 	var deflectGradient = .25
 	
+	Console.AddNewLine("A block will happen")
+	Console.AddNewLine("1 + deflectGradient: " + str(1 + deflectGradient))
+	Console.AddNewLine("1 - deflectGradient: " + str(1 - deflectGradient))
+	Console.AddNewLine("Attack roll: " + str(attackRoll))
+	Console.AddNewLine("Block roll: " + str(blockRoll))
+	
 	# Ineffective block
-	if attackRoll>blockRoll + (1 + deflectGradient):
-#		KillBlock()
-		SnickBlock()
+	if attackRoll>blockRoll * (1 + deflectGradient):
+		KillBlock()
+		#SnickBlock()
 			
 	elif blockRoll * (1 - deflectGradient) > attackRoll:
-#		KillBlock()
-		SnickBlock()
+		KillBlock()
+		#SnickBlock()
 	else:
-#		KillBlock()
-		SnickBlock()
+		KillBlock()
+		#SnickBlock()
 	
 	
 	

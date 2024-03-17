@@ -141,7 +141,7 @@ directional_shadow_pancake_size = 3.1
 
 [node name="DirectionalLight3" type="DirectionalLight3D" parent="Lights"]
 transform = Transform3D(-0.586371, 0.409591, -0.698859, 0.254077, 0.912204, 0.321448, 0.769164, 0.0109238, -0.638958, 0, 4.31512, 0)
-light_energy = 5.5
+light_energy = 3.0
 light_indirect_energy = 0.0
 shadow_enabled = true
 shadow_bias = 0.059
@@ -855,7 +855,6 @@ offset_right = 1906.05
 offset_bottom = 1067.44
 
 [node name="ServeUI" parent="UI" instance=ExtResource("19_gfg2l")]
-visible = false
 
 [node name="TeamInfoUI" type="CanvasLayer" parent="UI"]
 layer = 2
