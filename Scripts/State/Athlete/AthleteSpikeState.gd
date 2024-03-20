@@ -8,6 +8,9 @@ ChoiceConfirmed,
 Runup,
 Jump
 }
+
+const ballRadius = 0.13
+
 var takeOffXZ:Vector3
 var landingXZ:Vector3
 var timeTillJumpPeak
@@ -178,8 +181,8 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	# but spiking wide means that line is unavailable
 	
 	var playerToNetVector = Vector3(-athlete.setRequest.target.x, 0, 0)
-	var playerToLeftAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * 4.5 - athlete.setRequest.target.z)
-	var playerToRightAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * -4.5 - athlete.setRequest.target.z)
+	var playerToLeftAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * (4.5 - ballRadius) - athlete.setRequest.target.z)
+	var playerToRightAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * (-4.5 + ballRadius) - athlete.setRequest.target.z)
 #	athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target + playerToNetVector)
 	
 #	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target + playerToLeftAntennaVector)
@@ -190,10 +193,30 @@ func ChooseSpikingStrategy(athlete:Athlete):
 #
 #	Console.AddNewLine("Choosing an angle between the two", Color.LIME_GREEN)
 
-#	if athlete.FrontCourt():
-#		athlete.ball.attackTarget = athlete.team.CheckIfFlipped(Vector3(-randf_range(1, 9), 0, -4.5 + randf_range(0, 9)))
-#	else:
-#		athlete.ball.attackTarget = athlete.team.CheckIfFlipped(Vector3(-randf_range(6, 9), 0, -4.5 + randf_range(0, 9)))
+	
+	# We need to be able to list the angles available in terms of:
+	# a) left antenna to left blocker left hand
+	# b) left blocker right hand to middle blocker left hand
+	# c) middle blocker right hand to right blocker left hand
+	# d) right blocker right hand to right antenna
+	# (and be able to cull out non-present/ non perceived blockers)
+	
+	# Then we need to work out if a powerful spike can be attempted in each of those corridors
+	# Or do we want to use another option, probably enumerated elsewhere
+	# So we need to find the lowest possible spike for the leftmost and rightmost extremities
+	# of a, b, c, and d, should they exist
+	# if both extremities are shorter than the longest possible spike distance, then a max power
+	# - lowest netpass swing is possible between these ranges. 
+	# Then we can look at the fastest spike that will achieve max depth. This will be slower 
+	# than max power, and we scale down the expected value of the spike accordingly
+	# If only one extremity can accomodate the max power spike, we can work out the max power
+	# spike distance, and where it intersects with the court boundaries to come up with a range 
+	# of angles that we can crank in
+	
+	# Weight the desirability of each option based on a mixture of expected point scoring value
+	# plus the athlete's internal quirks, then randomly choose between the options
+	
+	
 	
 	var lineCross = randf()
 	var spikeAngleTopDown = lerp(angleToLeftAntenna, angleToRightAntenna, lineCross)
@@ -241,9 +264,13 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	var spikeDepth:float = randf_range(0.03, .97)
 	athlete.ball.attackTarget = closestPossibleSpikeTarget
 
+# if the furthest point is closer than the edge of the court, choose some depth randomly
 	if -athlete.team.flip * furthestCourtPoint.x > -athlete.team.flip * closestPossibleSpikeTarget.x:
 		if closestPossibleSpikeTarget.z > -4.5 && closestPossibleSpikeTarget.z < 4.5:
 			athlete.ball.attackTarget = lerp(closestPossibleSpikeTarget, furthestCourtPoint, spikeDepth)
+	
+	# Otherwise though, it's just flying long currently...
+	
 	
 #	athlete.team.mManager.sphere.position = closestPossibleSpikeTarget
 #	athlete.team.mManager.cube.position = athlete.ball.attackTarget

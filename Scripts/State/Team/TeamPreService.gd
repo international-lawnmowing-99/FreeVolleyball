@@ -44,6 +44,13 @@ func Enter(team:Team):
 	
 	team.middleFront.blockState.isCommitBlocking = true
 	team.middleFront.blockState.commitBlockTarget = team.defendState.otherTeam.middleFront
+	
+	EnsureBenchInPosition(team)
+
+func EnsureBenchInPosition(team:Team):
+	for i in range(team.benchPlayers.size()):
+		team.benchPlayers[i].position = Vector3(team.flip * (i + 9), 0, 10)
+		team.benchPlayers[i].moveTarget = team.benchPlayers[i].position
 
 func Update(team:Team):
 	team.stateMachine.SetCurrentState(team.serveState)
