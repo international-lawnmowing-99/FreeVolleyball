@@ -1,0 +1,78 @@
+[gd_scene load_steps=3 format=3 uid="uid://cr3p6bj8hpx8f"]
+
+[ext_resource type="Script" path="res://Scenes/CareerStartScene.gd" id="1_aik1w"]
+[ext_resource type="PackedScene" uid="uid://dia2qm24xemkg" path="res://Scenes/PreMatchUI/TeamChoice.tscn" id="2_a7fso"]
+
+[node name="CareerStartScene" type="Node2D"]
+script = ExtResource("1_aik1w")
+
+[node name="ColourRect" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.728822, 0.728822, 0.728822, 1)
+
+[node name="BackgroundTeamChoice" type="ColorRect" parent="ColourRect"]
+layout_mode = 0
+offset_left = 656.0
+offset_top = 166.0
+offset_right = 1250.0
+offset_bottom = 493.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColourRect/BackgroundTeamChoice"]
+layout_mode = 0
+offset_right = 593.0
+offset_bottom = 326.0
+
+[node name="TeamChoice" parent="ColourRect/BackgroundTeamChoice/VBoxContainer" instance=ExtResource("2_a7fso")]
+custom_minimum_size = Vector2(225, 15)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+careerMode = true
+
+[node name="AcceptButton" type="Button" parent="ColourRect/BackgroundTeamChoice/VBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+text = "Accept"
+
+[node name="Popup" type="PopupPanel" parent="ColourRect"]
+mode = 3
+title = "Lads"
+initial_position = 2
+size = Vector2i(500, 300)
+visible = true
+max_size = Vector2i(500, 300)
+keep_title_visible = true
+
+[node name="VSplitContainer" type="VSplitContainer" parent="ColourRect/Popup"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 504.0
+offset_bottom = 296.0
+
+[node name="PopupLabel" type="Label" parent="ColourRect/Popup/VSplitContainer"]
+custom_minimum_size = Vector2(500, 200)
+layout_mode = 2
+size_flags_vertical = 3
+text = "You have chosen Australia Club Team -1. Do you accept this binding choice that will haunt your destiny forever?"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="ColourRect/Popup/VSplitContainer"]
+layout_mode = 2
+
+[node name="ConfirmButton" type="Button" parent="ColourRect/Popup/VSplitContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Confirm"
+
+[node name="CancelButton" type="Button" parent="ColourRect/Popup/VSplitContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "On second thoughts, that's a silly idea"
+
+[connection signal="pressed" from="ColourRect/BackgroundTeamChoice/VBoxContainer/AcceptButton" to="." method="_on_accept_button_pressed"]
+[connection signal="pressed" from="ColourRect/Popup/VSplitContainer/HSplitContainer/ConfirmButton" to="." method="_on_confirm_button_pressed"]
+[connection signal="pressed" from="ColourRect/Popup/VSplitContainer/HSplitContainer/CancelButton" to="." method="_on_cancel_button_pressed"]

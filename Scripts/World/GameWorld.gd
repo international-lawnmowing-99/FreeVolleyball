@@ -39,7 +39,7 @@ func GenerateDefaultWorld(generatematchPlayers:bool):
 
 			currentNation.Populate(firstNames, lastNames, generatematchPlayers)
 
-func GetTeam(choiceState, mode):
+func GetTeam(choiceState, mode) -> Team:
 	if (mode == Enums.ClubOrInternational.Club):
 		return continents[choiceState.continentIndex].\
 				nations[choiceState.nationIndices[choiceState.continentIndex]].\

@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://bhlgb73abu6ax"]
+
+[node name="FinanceScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="ColorRect"]
+layout_mode = 0
+offset_left = 323.0
+offset_top = 55.0
+offset_right = 520.0
+offset_bottom = 78.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Money will disappear here"
+
+[node name="Button" type="Button" parent="ColorRect"]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 893.0
+offset_right = 381.0
+offset_bottom = 976.0
+text = "Back
+"

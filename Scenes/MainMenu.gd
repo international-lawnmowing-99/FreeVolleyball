@@ -5,12 +5,12 @@ func _on_NewGameButton_pressed() -> void:
 	$NewGameButton.hide()
 	$LoadButton.hide()
 	$QuitButton.hide()
-	pass # Replace with function body.
+
 
 
 func _on_QuitButton_pressed() -> void:
 	get_tree().quit()
-	pass # Replace with function body.
+
 
 
 func _on_HomeButton_pressed() -> void:
@@ -18,7 +18,7 @@ func _on_HomeButton_pressed() -> void:
 	$LoadButton.show()
 	$QuitButton.show()
 	$NewGameOptions.hide()
-	pass # Replace with function body.
+
 
 
 func _on_CustomMatchButton_pressed() -> void:
@@ -26,11 +26,11 @@ func _on_CustomMatchButton_pressed() -> void:
 
 
 func _on_CareerButton_pressed() -> void:
-	pass # Replace with function body.
+	get_tree().change_scene_to_file("res://Scenes/CareerStartScene.tscn")
 
 
 func _on_QuickMatchButton_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/matchScene.tscn")
+	get_tree().change_scene_to_file("res://Scenes/MatchScene/MatchScene.tscn")
 	pass # Replace with function body.
 
 

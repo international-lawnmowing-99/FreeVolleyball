@@ -1,0 +1,200 @@
+[gd_scene load_steps=5 format=3 uid="uid://mc50i6pbakuk"]
+
+[ext_resource type="Texture2D" uid="uid://bamxyyq7k8h0o" path="res://Textures/Captain.png" id="1"]
+[ext_resource type="Script" path="res://Scenes/ManagementScene/ManagementScene.gd" id="1_vgkfa"]
+[ext_resource type="Theme" uid="uid://bgukpjan5jpl6" path="res://Scenes/PanelRoundEdges.tres" id="4"]
+[ext_resource type="Texture2D" uid="uid://dopbn4dj6p3ca" path="res://Textures/warning.png" id="4_t6drj"]
+
+[node name="ManagementScene" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_vgkfa")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TeamNameBackground" type="Panel" parent="Background/VBoxContainer"]
+modulate = Color(0, 0.858824, 1, 1)
+custom_minimum_size = Vector2(1920, 100)
+layout_mode = 2
+theme = ExtResource("4")
+
+[node name="Label3" type="Label" parent="Background/VBoxContainer/TeamNameBackground"]
+custom_minimum_size = Vector2(1920, 100)
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 100.0
+text = "Team Name"
+vertical_alignment = 1
+
+[node name="TricolourContainer" type="HBoxContainer" parent="Background/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Column1" type="VBoxContainer" parent="Background/VBoxContainer/TricolourContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NotSureWhatThisIsAPlaceholderFor" type="ColorRect" parent="Background/VBoxContainer/TricolourContainer/Column1"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/VBoxContainer/TricolourContainer/Column1/NotSureWhatThisIsAPlaceholderFor"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 4.0
+offset_right = 280.0
+offset_bottom = 71.0
+text = "!    -    Alerts"
+
+[node name="CompetitionLadderBackground" type="Panel" parent="Background/VBoxContainer/TricolourContainer/Column1"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("4")
+
+[node name="CompetitionLadderLabel" type="Label" parent="Background/VBoxContainer/TricolourContainer/Column1/CompetitionLadderBackground"]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 42.0
+offset_right = 345.0
+offset_bottom = 179.0
+text = "Competition
+ Ladder"
+
+[node name="Column2" type="VBoxContainer" parent="Background/VBoxContainer/TricolourContainer"]
+custom_minimum_size = Vector2(1000, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TeamSummaryBackground" type="Panel" parent="Background/VBoxContainer/TricolourContainer/Column2"]
+modulate = Color(0, 1, 0.392157, 1)
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("4")
+
+[node name="Label3" type="Label" parent="Background/VBoxContainer/TricolourContainer/Column2/TeamSummaryBackground"]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 42.0
+offset_right = 472.0
+offset_bottom = 179.0
+text = "Team Info"
+
+[node name="Column3" type="VBoxContainer" parent="Background/VBoxContainer/TricolourContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TrainingBackground" type="Panel" parent="Background/VBoxContainer/TricolourContainer/Column3"]
+modulate = Color(1, 0.984314, 0, 1)
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme = ExtResource("4")
+
+[node name="TrainingLabel" type="Label" parent="Background/VBoxContainer/TricolourContainer/Column3/TrainingBackground"]
+layout_mode = 0
+offset_right = 439.0
+offset_bottom = 100.0
+text = "Training"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="YouthBackground" type="Panel" parent="Background/VBoxContainer/TricolourContainer/Column3"]
+modulate = Color(1, 0.513726, 0, 1)
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme = ExtResource("4")
+
+[node name="YouthLabel" type="Label" parent="Background/VBoxContainer/TricolourContainer/Column3/YouthBackground"]
+layout_mode = 0
+offset_right = 439.0
+offset_bottom = 100.0
+text = "Youth"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WorldBackground" type="Panel" parent="Background/VBoxContainer/TricolourContainer/Column3"]
+modulate = Color(0, 0.858824, 1, 1)
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme = ExtResource("4")
+
+[node name="WorldLabel" type="Label" parent="Background/VBoxContainer/TricolourContainer/Column3/WorldBackground"]
+layout_mode = 0
+offset_right = 439.0
+offset_bottom = 100.0
+text = "World3D"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CalendarManagementScene" type="VBoxContainer" parent="Background/VBoxContainer/TricolourContainer/Column3"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CalendarLabel" type="Label" parent="Background/VBoxContainer/TricolourContainer/Column3/CalendarManagementScene"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Calendar"
+
+[node name="PlaceholderIcon" type="NinePatchRect" parent="Background/VBoxContainer/TricolourContainer/Column3/CalendarManagementScene"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1")
+region_rect = Rect2(0, 0, 400, 400)
+
+[node name="NextDayButton" type="Button" parent="Background/VBoxContainer/TricolourContainer/Column3/CalendarManagementScene"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Next Day"
+
+[node name="NextMatchButton" type="Button" parent="Background/VBoxContainer/TricolourContainer/Column3/CalendarManagementScene"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Next Game"
+
+[node name="SimulatingPopup" type="PopupPanel" parent="."]
+initial_position = 1
+size = Vector2i(960, 548)
+visible = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SimulatingPopup"]
+clip_contents = true
+custom_minimum_size = Vector2(952, 540)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="WarningIcon" type="TextureRect" parent="SimulatingPopup/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("4_t6drj")
+stretch_mode = 5
+
+[node name="SimulatingLabel" type="Label" parent="SimulatingPopup/VBoxContainer"]
+custom_minimum_size = Vector2(400, 1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+text = "Simulating Ides of March 44BC (Sorry if the date is slightly off). Controls frozen while such a momentous calculation takes place"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[connection signal="pressed" from="Background/VBoxContainer/TricolourContainer/Column3/CalendarManagementScene/NextDayButton" to="." method="_on_next_day_button_pressed"]
+[connection signal="pressed" from="Background/VBoxContainer/TricolourContainer/Column3/CalendarManagementScene/NextMatchButton" to="." method="_on_next_match_button_pressed"]
+[connection signal="visibility_changed" from="SimulatingPopup" to="." method="_on_simulating_popup_visibility_changed"]

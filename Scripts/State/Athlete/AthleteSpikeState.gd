@@ -216,6 +216,11 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	# Weight the desirability of each option based on a mixture of expected point scoring value
 	# plus the athlete's internal quirks, then randomly choose between the options
 	
+	FindPermissableAnglesDisregardingBlock(athlete)
+	var leftmostPossibleSpikeAngleDisregardingBlock:float
+	var rightmostPossibleSpikeAngleDisregardingBlock:float
+	
+	
 	
 	
 	var lineCross = randf()
@@ -308,7 +313,7 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 	var middleBlockerPossiblePosition
 	var rightBlockerPossiblePosition
 	
-
+	ProduceOTTReport(athlete, oppositionLeftBlocker, oppositionMiddleBlocker, oppositionRightBlocker)
 	
 	var timeTillSpikeContact = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, athlete.stats.spikeHeight, 1.0)
 	
@@ -676,3 +681,73 @@ func CalculateTimeTillSpike(athlete:Athlete):
 	var a = timeToGround + timeToRunupStart + runupTime + jumpTime
 #	Console.AddNewLine(str(a))
 	return a
+
+func ProduceOTTReport(athlete:Athlete, oppositionLeftBlocker:Athlete, oppositionMiddleBlocker:Athlete, oppositionRightBlocker:Athlete):
+	pass
+	
+	#if thlete.stats.spikeHeight - ballRadius:
+	
+func FindPermissableAnglesDisregardingBlock(athlete:Athlete):
+	# Technically should check if they are within range of the net...
+	# IE not spiking from 20km back, or from under the net height by an unfeasible margin
+	
+	var flip = athlete.team.flip
+	
+	var contactPoint:Vector3 = athlete.setRequest.target
+	var netPass:Vector3
+	var landingPoint:Vector3
+	
+	var initialVelocityMagnitude:float = 100
+	
+	landingPoint.x = -4.5 * flip
+	netPass.y = 2.43 + ballRadius
+	
+	var yDistBallToNetpass = contactPoint.y - netPass.y
+	if yDistBallToNetpass < 0 :
+		Console.AddNewLine("Warning: spiking from below net height")
+	
+	var xDistToNet:float = abs(contactPoint.x)
+	
+	var topDownAngle:float
+	var sideOnAngle:float
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	var playerToNetVector = Vector3(-athlete.setRequest.target.x, 0, 0)
+	var playerToLeftAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * (4.5 - ballRadius) - athlete.setRequest.target.z)
+	var playerToRightAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * (-4.5 + ballRadius) - athlete.setRequest.target.z)
+	
+	var angleToLeftAntenna = Maths.SignedAngle(playerToNetVector, playerToLeftAntennaVector, Vector3.DOWN)
+	var angleToRightAntenna = Maths.SignedAngle(playerToNetVector, playerToRightAntennaVector, Vector3.DOWN)
+	
+	var xzDistanceFromNetToLandingPoint
+	
+	var xLandingPosAtLeftSideline:float
+	var xLandingPosAtRightSideline:float
+	
+	var zLandingPosAtBaseLine:float
+	
+	var initialVelocity = 100/3.6 # Good old 100kph spike
+	var timeToNetPass:float
+	
+	
+func BallPositionAfterLowestPossibleSpikeAndMostConvolutedFunctionNameGivenStartAndSomeZValue(initialSpeed:float, contactPoint:Vector3, zPos:float, netPassY:float) -> Vector3:
+	# First find top down angle
+	var playerToNetVector:Vector3 = Vector3(-contactPoint.x, 0, 0)
+	var playerToDesiredZVector:Vector3 = Vector3()
+	
+	
+	# Then find side on angle
+	# Then the velocity
+	# Then the ball pos at given z point
+	return Vector3.ZERO

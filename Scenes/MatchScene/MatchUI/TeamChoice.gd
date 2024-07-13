@@ -10,6 +10,8 @@ var clubOrInternationalMode:Enums.ClubOrInternational = Enums.ClubOrInternationa
 @onready var clubTeamLabel:Label = $ClubTeamLabel
 @onready var continentLabel:Label = $ContinentLabel
 @onready var nationLabel:Label = $NationLabel
+
+@export var careerMode:bool = false #is this picking a team in the prematchui bit that needs to be synced? Or in a more general context?
 var preMatchUI:PreMatchUI
 
 func Init(_preMatchUI, _gameWorld, _choiceState):
@@ -50,7 +52,8 @@ func _on_club_or_international_left_button_pressed():
 			if nationLabel.visible:
 				clubTeamLabel.show()
 				
-	preMatchUI.SyncroniseClubOrInternational(clubOrInternationalMode)
+	if !careerMode:
+		preMatchUI.SyncroniseClubOrInternational(clubOrInternationalMode)
 		
 func _on_club_or_international_right_button_pressed():
 	match clubOrInternationalMode:
@@ -69,7 +72,8 @@ func _on_club_or_international_right_button_pressed():
 			if nationLabel.visible:
 				clubTeamLabel.show()
 	
-	preMatchUI.SyncroniseClubOrInternational(clubOrInternationalMode)
+	if !careerMode:
+		preMatchUI.SyncroniseClubOrInternational(clubOrInternationalMode)
 	
 func _on_continent_left_button_pressed():
 	choiceState.continentIndex -= 1

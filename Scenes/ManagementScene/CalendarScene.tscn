@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://b2rwr4t4gvij3"]
+
+[node name="CalendarScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Background"]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 27.0
+offset_right = 616.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Welcome to the extended calendar, we hope you enjoy your stay!"
+
+[node name="Button" type="Button" parent="Background"]
+offset_left = 113.0
+offset_top = 893.0
+offset_right = 381.0
+offset_bottom = 976.0
+text = "Back
+"
