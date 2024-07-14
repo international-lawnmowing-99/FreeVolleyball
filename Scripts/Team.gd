@@ -4,9 +4,9 @@ class_name Team
 var AthleteScene = preload("res://Scenes/MatchScene/Athlete/Athlete.tscn")
 var teamName:String
 
-var teamStrategy = preload("res://Scripts/TeamStrategy.gd").new()
+var teamStrategy:TeamStrategy = preload("res://Scripts/TeamStrategy.gd").new()
 
-var nation
+var nation:Nation
 var mManager:MatchManager
 var isHuman:bool = false
 

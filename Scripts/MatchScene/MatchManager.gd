@@ -96,6 +96,11 @@ func ConfirmTeams():
 		
 	teamB.teamCaptain = teamB.matchPlayers[randi_range(0, teamB.matchPlayers.size() - 1)]
 	
+	var tournament = Tournament.new()
+	
+	tournament.CreateRoundRobin(teamA.nation.league, 100)
+	
+	
 func StartMatch():
 	preMatch = false
 	preSet = false

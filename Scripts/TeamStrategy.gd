@@ -1,5 +1,5 @@
 extends Node
-
+class_name TeamStrategy
 #Holds all the input the user/ai has generated to direct their team
 
 func _init():

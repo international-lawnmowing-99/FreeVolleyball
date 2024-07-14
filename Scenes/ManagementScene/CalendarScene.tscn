@@ -24,6 +24,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Welcome to the extended calendar, we hope you enjoy your stay!"
 
 [node name="Button" type="Button" parent="Background"]
+layout_mode = 0
 offset_left = 113.0
 offset_top = 893.0
 offset_right = 381.0
