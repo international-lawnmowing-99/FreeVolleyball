@@ -1,0 +1,1163 @@
+[gd_resource type="Resource" script_class="SavedCareer" load_steps=235 format=3]
+
+[ext_resource type="Script" path="res://Scripts/World/Nation.gd" id="1_qltjb"]
+[ext_resource type="Script" path="res://Scripts/World/Continent.gd" id="2_agqgg"]
+[ext_resource type="Script" path="res://Scripts/World/GameWorld.gd" id="3_jj5tu"]
+[ext_resource type="Script" path="res://Scripts/SavedCareer.gd" id="4_lyk8h"]
+
+[sub_resource type="Resource" id="Resource_yynor"]
+script = ExtResource("1_qltjb")
+countryName = "Algeria "
+population = 42228429
+
+[sub_resource type="Resource" id="Resource_xekyd"]
+script = ExtResource("1_qltjb")
+countryName = "Angola "
+population = 30809762
+
+[sub_resource type="Resource" id="Resource_01kcw"]
+script = ExtResource("1_qltjb")
+countryName = "Benin "
+population = 11485048
+
+[sub_resource type="Resource" id="Resource_wxl0d"]
+script = ExtResource("1_qltjb")
+countryName = "Botswana "
+population = 2254126
+
+[sub_resource type="Resource" id="Resource_4rrrc"]
+script = ExtResource("1_qltjb")
+countryName = "Burkina Faso "
+population = 19751535
+
+[sub_resource type="Resource" id="Resource_y21vc"]
+script = ExtResource("1_qltjb")
+countryName = "Burundi "
+population = 11175378
+
+[sub_resource type="Resource" id="Resource_mw364"]
+script = ExtResource("1_qltjb")
+countryName = "Cameroon "
+population = 25216237
+
+[sub_resource type="Resource" id="Resource_ic6a4"]
+script = ExtResource("1_qltjb")
+countryName = "Cape Verde Islands "
+population = 543767
+
+[sub_resource type="Resource" id="Resource_h86nq"]
+script = ExtResource("1_qltjb")
+countryName = "Central African Republic "
+population = 4666377
+
+[sub_resource type="Resource" id="Resource_cr0no"]
+script = ExtResource("1_qltjb")
+countryName = "Chad "
+population = 15477751
+
+[sub_resource type="Resource" id="Resource_thywe"]
+script = ExtResource("1_qltjb")
+countryName = "Comoros Islands "
+population = 832322
+
+[sub_resource type="Resource" id="Resource_u3ubk"]
+script = ExtResource("1_qltjb")
+countryName = "Congo "
+population = 5244363
+
+[sub_resource type="Resource" id="Resource_t8s3q"]
+script = ExtResource("1_qltjb")
+countryName = "Congo DR "
+population = 84068091
+
+[sub_resource type="Resource" id="Resource_3vs3s"]
+script = ExtResource("1_qltjb")
+countryName = "Cote d’Ivoire "
+population = 25069229
+
+[sub_resource type="Resource" id="Resource_ttcrv"]
+script = ExtResource("1_qltjb")
+countryName = "Djibouti "
+population = 958920
+
+[sub_resource type="Resource" id="Resource_tdkrf"]
+script = ExtResource("1_qltjb")
+countryName = "Egypt "
+population = 98423595
+
+[sub_resource type="Resource" id="Resource_utibt"]
+script = ExtResource("1_qltjb")
+countryName = "Equatorial Guinea "
+population = 1308974
+
+[sub_resource type="Resource" id="Resource_8fmby"]
+script = ExtResource("1_qltjb")
+countryName = "Eritrea "
+population = 3213972
+
+[sub_resource type="Resource" id="Resource_1lhqc"]
+script = ExtResource("1_qltjb")
+countryName = "Ethiopia "
+population = 109224559
+
+[sub_resource type="Resource" id="Resource_qt5pd"]
+script = ExtResource("1_qltjb")
+countryName = "Gabon "
+population = 2119275
+
+[sub_resource type="Resource" id="Resource_fisig"]
+script = ExtResource("1_qltjb")
+countryName = "Gambia "
+population = 2280102
+
+[sub_resource type="Resource" id="Resource_y8kng"]
+script = ExtResource("1_qltjb")
+countryName = "Ghana "
+population = 29767108
+
+[sub_resource type="Resource" id="Resource_o2qot"]
+script = ExtResource("1_qltjb")
+countryName = "Guinea "
+population = 12414318
+
+[sub_resource type="Resource" id="Resource_2dgix"]
+script = ExtResource("1_qltjb")
+countryName = "Guinea-Bissau "
+population = 1874309
+
+[sub_resource type="Resource" id="Resource_yb7io"]
+script = ExtResource("1_qltjb")
+countryName = "Kenya "
+population = 51393010
+
+[sub_resource type="Resource" id="Resource_jjxkx"]
+script = ExtResource("1_qltjb")
+countryName = "Lesotho "
+population = 2108132
+
+[sub_resource type="Resource" id="Resource_st3ts"]
+script = ExtResource("1_qltjb")
+countryName = "Liberia "
+population = 4818977
+
+[sub_resource type="Resource" id="Resource_s01st"]
+script = ExtResource("1_qltjb")
+countryName = "Libya "
+population = 6678567
+
+[sub_resource type="Resource" id="Resource_h1155"]
+script = ExtResource("1_qltjb")
+countryName = "Madagascar "
+population = 26262368
+
+[sub_resource type="Resource" id="Resource_t0jg5"]
+script = ExtResource("1_qltjb")
+countryName = "Malawi "
+population = 18143315
+
+[sub_resource type="Resource" id="Resource_6ctvc"]
+script = ExtResource("1_qltjb")
+countryName = "Mali "
+population = 19077690
+
+[sub_resource type="Resource" id="Resource_xajvh"]
+script = ExtResource("1_qltjb")
+countryName = "Mauritania "
+population = 4403319
+
+[sub_resource type="Resource" id="Resource_lrylx"]
+script = ExtResource("1_qltjb")
+countryName = "Mauritius "
+population = 1265303
+
+[sub_resource type="Resource" id="Resource_k8x7i"]
+script = ExtResource("1_qltjb")
+countryName = "Morocco "
+population = 36029138
+
+[sub_resource type="Resource" id="Resource_rgprr"]
+script = ExtResource("1_qltjb")
+countryName = "Mozambique "
+population = 29495962
+
+[sub_resource type="Resource" id="Resource_p2pb7"]
+script = ExtResource("1_qltjb")
+countryName = "Namibia "
+population = 2448255
+
+[sub_resource type="Resource" id="Resource_ikq0q"]
+script = ExtResource("1_qltjb")
+countryName = "Niger "
+population = 22442948
+
+[sub_resource type="Resource" id="Resource_87jrq"]
+script = ExtResource("1_qltjb")
+countryName = "Nigeria "
+population = 195874740
+
+[sub_resource type="Resource" id="Resource_ayket"]
+script = ExtResource("1_qltjb")
+countryName = "Rwanda "
+population = 12301939
+
+[sub_resource type="Resource" id="Resource_gvad0"]
+script = ExtResource("1_qltjb")
+countryName = "Sao Tome e Principe "
+population = 211028
+
+[sub_resource type="Resource" id="Resource_ngafm"]
+script = ExtResource("1_qltjb")
+countryName = "Senegal "
+population = 15854360
+
+[sub_resource type="Resource" id="Resource_6r4mc"]
+script = ExtResource("1_qltjb")
+countryName = "Seychelles "
+population = 96762
+
+[sub_resource type="Resource" id="Resource_jasb5"]
+script = ExtResource("1_qltjb")
+countryName = "Sierra Leone "
+population = 7650154
+
+[sub_resource type="Resource" id="Resource_kxslw"]
+script = ExtResource("1_qltjb")
+countryName = "Somalia "
+population = 15008154
+
+[sub_resource type="Resource" id="Resource_x1mxt"]
+script = ExtResource("1_qltjb")
+countryName = "South Africa "
+population = 57779622
+
+[sub_resource type="Resource" id="Resource_i5n78"]
+script = ExtResource("1_qltjb")
+countryName = "South Sudan "
+population = 10975920
+
+[sub_resource type="Resource" id="Resource_x1hdh"]
+script = ExtResource("1_qltjb")
+countryName = "Sudan "
+population = 41801533
+
+[sub_resource type="Resource" id="Resource_nop0j"]
+script = ExtResource("1_qltjb")
+countryName = "Eswatini "
+population = 1136191
+
+[sub_resource type="Resource" id="Resource_mk5wf"]
+script = ExtResource("1_qltjb")
+countryName = "Tanzania "
+population = 56318348
+
+[sub_resource type="Resource" id="Resource_of0pe"]
+script = ExtResource("1_qltjb")
+countryName = "Togo "
+population = 7889094
+
+[sub_resource type="Resource" id="Resource_irop1"]
+script = ExtResource("1_qltjb")
+countryName = "Tunisia "
+population = 11565204
+
+[sub_resource type="Resource" id="Resource_n50r2"]
+script = ExtResource("1_qltjb")
+countryName = "Uganda "
+population = 42723139
+
+[sub_resource type="Resource" id="Resource_en2p3"]
+script = ExtResource("1_qltjb")
+countryName = "Zambia "
+population = 17351822
+
+[sub_resource type="Resource" id="Resource_nejdw"]
+script = ExtResource("1_qltjb")
+countryName = "Zimbabwe "
+population = 14439018
+
+[sub_resource type="Resource" id="Resource_cmmm8"]
+script = ExtResource("2_agqgg")
+continentName = "Africa"
+nations = Array[ExtResource("1_qltjb")]([SubResource("Resource_yynor"), SubResource("Resource_xekyd"), SubResource("Resource_01kcw"), SubResource("Resource_wxl0d"), SubResource("Resource_4rrrc"), SubResource("Resource_y21vc"), SubResource("Resource_mw364"), SubResource("Resource_ic6a4"), SubResource("Resource_h86nq"), SubResource("Resource_cr0no"), SubResource("Resource_thywe"), SubResource("Resource_u3ubk"), SubResource("Resource_t8s3q"), SubResource("Resource_3vs3s"), SubResource("Resource_ttcrv"), SubResource("Resource_tdkrf"), SubResource("Resource_utibt"), SubResource("Resource_8fmby"), SubResource("Resource_1lhqc"), SubResource("Resource_qt5pd"), SubResource("Resource_fisig"), SubResource("Resource_y8kng"), SubResource("Resource_o2qot"), SubResource("Resource_2dgix"), SubResource("Resource_yb7io"), SubResource("Resource_jjxkx"), SubResource("Resource_st3ts"), SubResource("Resource_s01st"), SubResource("Resource_h1155"), SubResource("Resource_t0jg5"), SubResource("Resource_6ctvc"), SubResource("Resource_xajvh"), SubResource("Resource_lrylx"), SubResource("Resource_k8x7i"), SubResource("Resource_rgprr"), SubResource("Resource_p2pb7"), SubResource("Resource_ikq0q"), SubResource("Resource_87jrq"), SubResource("Resource_ayket"), SubResource("Resource_gvad0"), SubResource("Resource_ngafm"), SubResource("Resource_6r4mc"), SubResource("Resource_jasb5"), SubResource("Resource_kxslw"), SubResource("Resource_x1mxt"), SubResource("Resource_i5n78"), SubResource("Resource_x1hdh"), SubResource("Resource_nop0j"), SubResource("Resource_mk5wf"), SubResource("Resource_of0pe"), SubResource("Resource_irop1"), SubResource("Resource_n50r2"), SubResource("Resource_en2p3"), SubResource("Resource_nejdw")])
+
+[sub_resource type="Resource" id="Resource_cjpgh"]
+script = ExtResource("1_qltjb")
+countryName = "Antarctica "
+population = 3000
+
+[sub_resource type="Resource" id="Resource_53c5a"]
+script = ExtResource("1_qltjb")
+countryName = "Penguins "
+population = 12000000
+
+[sub_resource type="Resource" id="Resource_rwiy6"]
+script = ExtResource("2_agqgg")
+continentName = "Antarctica"
+nations = Array[ExtResource("1_qltjb")]([SubResource("Resource_cjpgh"), SubResource("Resource_53c5a")])
+
+[sub_resource type="Resource" id="Resource_r1m0k"]
+script = ExtResource("1_qltjb")
+countryName = "Afghanistan "
+population = 37172386
+
+[sub_resource type="Resource" id="Resource_pv03r"]
+script = ExtResource("1_qltjb")
+countryName = "Bahrain "
+population = 1569439
+
+[sub_resource type="Resource" id="Resource_kc0ll"]
+script = ExtResource("1_qltjb")
+countryName = "Bangladesh "
+population = 161356039
+
+[sub_resource type="Resource" id="Resource_wsq62"]
+script = ExtResource("1_qltjb")
+countryName = "Bhutan "
+population = 754394
+
+[sub_resource type="Resource" id="Resource_4irgq"]
+script = ExtResource("1_qltjb")
+countryName = "Brunei Darussalam "
+population = 428962
+
+[sub_resource type="Resource" id="Resource_nupmd"]
+script = ExtResource("1_qltjb")
+countryName = "Cambodia "
+population = 16249798
+
+[sub_resource type="Resource" id="Resource_bv1pv"]
+script = ExtResource("1_qltjb")
+countryName = "China PR "
+population = 1392730000
+
+[sub_resource type="Resource" id="Resource_7jyou"]
+script = ExtResource("1_qltjb")
+countryName = "Chinese Taipei "
+population = 23780452
+
+[sub_resource type="Resource" id="Resource_3ow3d"]
+script = ExtResource("1_qltjb")
+countryName = "East Timor "
+population = 1267972
+
+[sub_resource type="Resource" id="Resource_0aiaq"]
+script = ExtResource("1_qltjb")
+countryName = "Hong Kong "
+population = 7451000
+
+[sub_resource type="Resource" id="Resource_ebw2m"]
+script = ExtResource("1_qltjb")
+countryName = "India "
+population = 1352617328
+
+[sub_resource type="Resource" id="Resource_mnebo"]
+script = ExtResource("1_qltjb")
+countryName = "Indonesia "
+population = 267663435
+
+[sub_resource type="Resource" id="Resource_kvbn0"]
+script = ExtResource("1_qltjb")
+countryName = "Iran "
+population = 81800269
+
+[sub_resource type="Resource" id="Resource_m8ltg"]
+script = ExtResource("1_qltjb")
+countryName = "Iraq "
+population = 38433600
+
+[sub_resource type="Resource" id="Resource_i7uow"]
+script = ExtResource("1_qltjb")
+countryName = "Israel "
+population = 8882800
+
+[sub_resource type="Resource" id="Resource_igmkv"]
+script = ExtResource("1_qltjb")
+countryName = "Japan "
+population = 126529100
+
+[sub_resource type="Resource" id="Resource_2n207"]
+script = ExtResource("1_qltjb")
+countryName = "Jordan "
+population = 9956011
+
+[sub_resource type="Resource" id="Resource_jmsni"]
+script = ExtResource("1_qltjb")
+countryName = "Korea DPR "
+population = 25549819
+
+[sub_resource type="Resource" id="Resource_hi1ry"]
+script = ExtResource("1_qltjb")
+countryName = "Korea Republic "
+population = 51606633
+
+[sub_resource type="Resource" id="Resource_blkbm"]
+script = ExtResource("1_qltjb")
+countryName = "Kuwait "
+population = 4137309
+
+[sub_resource type="Resource" id="Resource_dagbb"]
+script = ExtResource("1_qltjb")
+countryName = "Kyrgyzstan "
+population = 6322800
+
+[sub_resource type="Resource" id="Resource_nlgdb"]
+script = ExtResource("1_qltjb")
+countryName = "Laos "
+population = 7061507
+
+[sub_resource type="Resource" id="Resource_pc1yk"]
+script = ExtResource("1_qltjb")
+countryName = "Lebanon "
+population = 6848925
+
+[sub_resource type="Resource" id="Resource_djfwy"]
+script = ExtResource("1_qltjb")
+countryName = "Macao "
+population = 631636
+
+[sub_resource type="Resource" id="Resource_f4ww5"]
+script = ExtResource("1_qltjb")
+countryName = "Malaysia "
+population = 31528585
+
+[sub_resource type="Resource" id="Resource_ccv6k"]
+script = ExtResource("1_qltjb")
+countryName = "Maldives "
+population = 515696
+
+[sub_resource type="Resource" id="Resource_qgwjb"]
+script = ExtResource("1_qltjb")
+countryName = "Mongolia "
+population = 3170208
+
+[sub_resource type="Resource" id="Resource_4ayy5"]
+script = ExtResource("1_qltjb")
+countryName = "Myanmar "
+population = 53708395
+
+[sub_resource type="Resource" id="Resource_anfp0"]
+script = ExtResource("1_qltjb")
+countryName = "Nepal "
+population = 28087871
+
+[sub_resource type="Resource" id="Resource_vwh51"]
+script = ExtResource("1_qltjb")
+countryName = "Oman "
+population = 4829483
+
+[sub_resource type="Resource" id="Resource_3qbw8"]
+script = ExtResource("1_qltjb")
+countryName = "Pakistan "
+population = 212215030
+
+[sub_resource type="Resource" id="Resource_2w6u0"]
+script = ExtResource("1_qltjb")
+countryName = "Palestine "
+population = 5000000
+
+[sub_resource type="Resource" id="Resource_7n8os"]
+script = ExtResource("1_qltjb")
+countryName = "Philippines "
+population = 106651922
+
+[sub_resource type="Resource" id="Resource_28unl"]
+script = ExtResource("1_qltjb")
+countryName = "Qatar "
+population = 2781677
+
+[sub_resource type="Resource" id="Resource_mo3yl"]
+script = ExtResource("1_qltjb")
+countryName = "Saudi Arabia "
+population = 33699947
+
+[sub_resource type="Resource" id="Resource_7ofal"]
+script = ExtResource("1_qltjb")
+countryName = "Singapore "
+population = 5638676
+
+[sub_resource type="Resource" id="Resource_x1hgm"]
+script = ExtResource("1_qltjb")
+countryName = "Sri Lanka "
+population = 21670000
+
+[sub_resource type="Resource" id="Resource_l434n"]
+script = ExtResource("1_qltjb")
+countryName = "Syria "
+population = 16906283
+
+[sub_resource type="Resource" id="Resource_1rfbt"]
+script = ExtResource("1_qltjb")
+countryName = "Tajikistan "
+population = 9100837
+
+[sub_resource type="Resource" id="Resource_gacct"]
+script = ExtResource("1_qltjb")
+countryName = "Thailand "
+population = 69428524
+
+[sub_resource type="Resource" id="Resource_i4pkc"]
+script = ExtResource("1_qltjb")
+countryName = "Turkmenistan "
+population = 5850908
+
+[sub_resource type="Resource" id="Resource_8cpo3"]
+script = ExtResource("1_qltjb")
+countryName = "United Arab Emirates "
+population = 9630959
+
+[sub_resource type="Resource" id="Resource_evak2"]
+script = ExtResource("1_qltjb")
+countryName = "Uzbekistan "
+population = 32955400
+
+[sub_resource type="Resource" id="Resource_u0gti"]
+script = ExtResource("1_qltjb")
+countryName = "Vietnam "
+population = 95540395
+
+[sub_resource type="Resource" id="Resource_1tpch"]
+script = ExtResource("1_qltjb")
+countryName = "Yemen "
+population = 28498687
+
+[sub_resource type="Resource" id="Resource_e7px5"]
+script = ExtResource("2_agqgg")
+continentName = "Asia"
+nations = Array[ExtResource("1_qltjb")]([SubResource("Resource_r1m0k"), SubResource("Resource_pv03r"), SubResource("Resource_kc0ll"), SubResource("Resource_wsq62"), SubResource("Resource_4irgq"), SubResource("Resource_nupmd"), SubResource("Resource_bv1pv"), SubResource("Resource_7jyou"), SubResource("Resource_3ow3d"), SubResource("Resource_0aiaq"), SubResource("Resource_ebw2m"), SubResource("Resource_mnebo"), SubResource("Resource_kvbn0"), SubResource("Resource_m8ltg"), SubResource("Resource_i7uow"), SubResource("Resource_igmkv"), SubResource("Resource_2n207"), SubResource("Resource_jmsni"), SubResource("Resource_hi1ry"), SubResource("Resource_blkbm"), SubResource("Resource_dagbb"), SubResource("Resource_nlgdb"), SubResource("Resource_pc1yk"), SubResource("Resource_djfwy"), SubResource("Resource_f4ww5"), SubResource("Resource_ccv6k"), SubResource("Resource_qgwjb"), SubResource("Resource_4ayy5"), SubResource("Resource_anfp0"), SubResource("Resource_vwh51"), SubResource("Resource_3qbw8"), SubResource("Resource_2w6u0"), SubResource("Resource_7n8os"), SubResource("Resource_28unl"), SubResource("Resource_mo3yl"), SubResource("Resource_7ofal"), SubResource("Resource_x1hgm"), SubResource("Resource_l434n"), SubResource("Resource_1rfbt"), SubResource("Resource_gacct"), SubResource("Resource_i4pkc"), SubResource("Resource_8cpo3"), SubResource("Resource_evak2"), SubResource("Resource_u0gti"), SubResource("Resource_1tpch")])
+
+[sub_resource type="Resource" id="Resource_yeg3c"]
+script = ExtResource("1_qltjb")
+countryName = "Albania "
+population = 2866376
+
+[sub_resource type="Resource" id="Resource_80bn8"]
+script = ExtResource("1_qltjb")
+countryName = "Andorra "
+population = 77006
+
+[sub_resource type="Resource" id="Resource_xaes5"]
+script = ExtResource("1_qltjb")
+countryName = "Armenia "
+population = 2951776
+
+[sub_resource type="Resource" id="Resource_eae13"]
+script = ExtResource("1_qltjb")
+countryName = "Austria "
+population = 8840521
+
+[sub_resource type="Resource" id="Resource_rgkdp"]
+script = ExtResource("1_qltjb")
+countryName = "Azerbaijan "
+population = 9939800
+
+[sub_resource type="Resource" id="Resource_otld1"]
+script = ExtResource("1_qltjb")
+countryName = "Belarus "
+population = 9483499
+
+[sub_resource type="Resource" id="Resource_4a1o8"]
+script = ExtResource("1_qltjb")
+countryName = "Belgium "
+population = 11433256
+
+[sub_resource type="Resource" id="Resource_ft7ec"]
+script = ExtResource("1_qltjb")
+countryName = "Bosnia Herzegovina "
+population = 3323929
+
+[sub_resource type="Resource" id="Resource_tfk81"]
+script = ExtResource("1_qltjb")
+countryName = "Bulgaria "
+population = 7025037
+
+[sub_resource type="Resource" id="Resource_aq4tt"]
+script = ExtResource("1_qltjb")
+countryName = "Croatia "
+population = 4087843
+
+[sub_resource type="Resource" id="Resource_gwyfh"]
+script = ExtResource("1_qltjb")
+countryName = "Cyprus "
+population = 1189265
+
+[sub_resource type="Resource" id="Resource_uywa8"]
+script = ExtResource("1_qltjb")
+countryName = "Czech Republic "
+population = 10629928
+
+[sub_resource type="Resource" id="Resource_rgg7r"]
+script = ExtResource("1_qltjb")
+countryName = "Denmark "
+population = 5793636
+
+[sub_resource type="Resource" id="Resource_fuoyt"]
+script = ExtResource("1_qltjb")
+countryName = "England "
+population = 56000000
+
+[sub_resource type="Resource" id="Resource_p78ou"]
+script = ExtResource("1_qltjb")
+countryName = "Estonia "
+population = 1321977
+
+[sub_resource type="Resource" id="Resource_wfd76"]
+script = ExtResource("1_qltjb")
+countryName = "Faeroe Islands "
+population = 48497
+
+[sub_resource type="Resource" id="Resource_wbd5e"]
+script = ExtResource("1_qltjb")
+countryName = "Finland "
+population = 5515525
+
+[sub_resource type="Resource" id="Resource_xdxxf"]
+script = ExtResource("1_qltjb")
+countryName = "France "
+population = 66977107
+
+[sub_resource type="Resource" id="Resource_i8bp4"]
+script = ExtResource("1_qltjb")
+countryName = "Georgia "
+population = 3726549
+
+[sub_resource type="Resource" id="Resource_qnl0u"]
+script = ExtResource("1_qltjb")
+countryName = "Germany "
+population = 82905782
+
+[sub_resource type="Resource" id="Resource_l2gtq"]
+script = ExtResource("1_qltjb")
+countryName = "Gibraltar "
+population = 33718
+
+[sub_resource type="Resource" id="Resource_eflnm"]
+script = ExtResource("1_qltjb")
+countryName = "Great Britain "
+population = 66650000
+
+[sub_resource type="Resource" id="Resource_snqxk"]
+script = ExtResource("1_qltjb")
+countryName = "Greece "
+population = 10731726
+
+[sub_resource type="Resource" id="Resource_o2usi"]
+script = ExtResource("1_qltjb")
+countryName = "Netherlands "
+population = 17231624
+
+[sub_resource type="Resource" id="Resource_dbngk"]
+script = ExtResource("1_qltjb")
+countryName = "Hungary "
+population = 9775564
+
+[sub_resource type="Resource" id="Resource_6qk6v"]
+script = ExtResource("1_qltjb")
+countryName = "Iceland "
+population = 352721
+
+[sub_resource type="Resource" id="Resource_iqs7w"]
+script = ExtResource("1_qltjb")
+countryName = "Italy "
+population = 60421760
+
+[sub_resource type="Resource" id="Resource_m0c26"]
+script = ExtResource("1_qltjb")
+countryName = "Kazakhstan "
+population = 18272430
+
+[sub_resource type="Resource" id="Resource_l5mam"]
+script = ExtResource("1_qltjb")
+countryName = "Kosovo "
+population = 1845300
+
+[sub_resource type="Resource" id="Resource_rblv8"]
+script = ExtResource("1_qltjb")
+countryName = "Latvia "
+population = 1927174
+
+[sub_resource type="Resource" id="Resource_hdbo0"]
+script = ExtResource("1_qltjb")
+countryName = "Liechtenstein "
+population = 37910
+
+[sub_resource type="Resource" id="Resource_peutr"]
+script = ExtResource("1_qltjb")
+countryName = "Lithuania "
+population = 2801543
+
+[sub_resource type="Resource" id="Resource_nfh7q"]
+script = ExtResource("1_qltjb")
+countryName = "Luxembourg "
+population = 607950
+
+[sub_resource type="Resource" id="Resource_snobs"]
+script = ExtResource("1_qltjb")
+countryName = "Macedonia "
+population = 2082958
+
+[sub_resource type="Resource" id="Resource_12ya4"]
+script = ExtResource("1_qltjb")
+countryName = "Malta "
+population = 484630
+
+[sub_resource type="Resource" id="Resource_h6mye"]
+script = ExtResource("1_qltjb")
+countryName = "Moldova "
+population = 2706049
+
+[sub_resource type="Resource" id="Resource_88i5o"]
+script = ExtResource("1_qltjb")
+countryName = "Monaco "
+population = 38682
+
+[sub_resource type="Resource" id="Resource_ua4u5"]
+script = ExtResource("1_qltjb")
+countryName = "Montenegro "
+population = 622227
+
+[sub_resource type="Resource" id="Resource_wrhh6"]
+script = ExtResource("1_qltjb")
+countryName = "Northern Ireland "
+population = 1882000
+
+[sub_resource type="Resource" id="Resource_61m44"]
+script = ExtResource("1_qltjb")
+countryName = "Norway "
+population = 5311916
+
+[sub_resource type="Resource" id="Resource_t7w23"]
+script = ExtResource("1_qltjb")
+countryName = "Poland "
+population = 37974750
+
+[sub_resource type="Resource" id="Resource_7b0w8"]
+script = ExtResource("1_qltjb")
+countryName = "Portugal "
+population = 10283822
+
+[sub_resource type="Resource" id="Resource_ypbu4"]
+script = ExtResource("1_qltjb")
+countryName = "Republic of Ireland "
+population = 4867309
+
+[sub_resource type="Resource" id="Resource_xsbf5"]
+script = ExtResource("1_qltjb")
+countryName = "Romania "
+population = 19466145
+
+[sub_resource type="Resource" id="Resource_8cqk4"]
+script = ExtResource("1_qltjb")
+countryName = "Russia "
+population = 144478050
+
+[sub_resource type="Resource" id="Resource_kthof"]
+script = ExtResource("1_qltjb")
+countryName = "San Marino "
+population = 33785
+
+[sub_resource type="Resource" id="Resource_bm0ot"]
+script = ExtResource("1_qltjb")
+countryName = "Scotland "
+population = 5454000
+
+[sub_resource type="Resource" id="Resource_0r5ai"]
+script = ExtResource("1_qltjb")
+countryName = "Serbia "
+population = 6982604
+
+[sub_resource type="Resource" id="Resource_ga0om"]
+script = ExtResource("1_qltjb")
+countryName = "Slovakia "
+population = 5446771
+
+[sub_resource type="Resource" id="Resource_nd2we"]
+script = ExtResource("1_qltjb")
+countryName = "Slovenia "
+population = 2073894
+
+[sub_resource type="Resource" id="Resource_fqrhe"]
+script = ExtResource("1_qltjb")
+countryName = "Spain "
+population = 46796540
+
+[sub_resource type="Resource" id="Resource_twv02"]
+script = ExtResource("1_qltjb")
+countryName = "Sweden "
+population = 10175214
+
+[sub_resource type="Resource" id="Resource_4rsno"]
+script = ExtResource("1_qltjb")
+countryName = "Switzerland "
+population = 8513227
+
+[sub_resource type="Resource" id="Resource_3dl42"]
+script = ExtResource("1_qltjb")
+countryName = "Turkey "
+population = 82319724
+
+[sub_resource type="Resource" id="Resource_kg85a"]
+script = ExtResource("1_qltjb")
+countryName = "Ukraine "
+population = 44622516
+
+[sub_resource type="Resource" id="Resource_wpxrx"]
+script = ExtResource("1_qltjb")
+countryName = "Wales "
+population = 3136000
+
+[sub_resource type="Resource" id="Resource_a8r02"]
+script = ExtResource("1_qltjb")
+countryName = "Vatican "
+population = 900
+
+[sub_resource type="Resource" id="Resource_c0h44"]
+script = ExtResource("2_agqgg")
+continentName = "Europe"
+nations = Array[ExtResource("1_qltjb")]([SubResource("Resource_yeg3c"), SubResource("Resource_80bn8"), SubResource("Resource_xaes5"), SubResource("Resource_eae13"), SubResource("Resource_rgkdp"), SubResource("Resource_otld1"), SubResource("Resource_4a1o8"), SubResource("Resource_ft7ec"), SubResource("Resource_tfk81"), SubResource("Resource_aq4tt"), SubResource("Resource_gwyfh"), SubResource("Resource_uywa8"), SubResource("Resource_rgg7r"), SubResource("Resource_fuoyt"), SubResource("Resource_p78ou"), SubResource("Resource_wfd76"), SubResource("Resource_wbd5e"), SubResource("Resource_xdxxf"), SubResource("Resource_i8bp4"), SubResource("Resource_qnl0u"), SubResource("Resource_l2gtq"), SubResource("Resource_eflnm"), SubResource("Resource_snqxk"), SubResource("Resource_o2usi"), SubResource("Resource_dbngk"), SubResource("Resource_6qk6v"), SubResource("Resource_iqs7w"), SubResource("Resource_m0c26"), SubResource("Resource_l5mam"), SubResource("Resource_rblv8"), SubResource("Resource_hdbo0"), SubResource("Resource_peutr"), SubResource("Resource_nfh7q"), SubResource("Resource_snobs"), SubResource("Resource_12ya4"), SubResource("Resource_h6mye"), SubResource("Resource_88i5o"), SubResource("Resource_ua4u5"), SubResource("Resource_wrhh6"), SubResource("Resource_61m44"), SubResource("Resource_t7w23"), SubResource("Resource_7b0w8"), SubResource("Resource_ypbu4"), SubResource("Resource_xsbf5"), SubResource("Resource_8cqk4"), SubResource("Resource_kthof"), SubResource("Resource_bm0ot"), SubResource("Resource_0r5ai"), SubResource("Resource_ga0om"), SubResource("Resource_nd2we"), SubResource("Resource_fqrhe"), SubResource("Resource_twv02"), SubResource("Resource_4rsno"), SubResource("Resource_3dl42"), SubResource("Resource_kg85a"), SubResource("Resource_wpxrx"), SubResource("Resource_a8r02")])
+
+[sub_resource type="Resource" id="Resource_b4n6j"]
+script = ExtResource("1_qltjb")
+countryName = "Anguilla "
+population = 15094
+
+[sub_resource type="Resource" id="Resource_bgfdq"]
+script = ExtResource("1_qltjb")
+countryName = "Antigua & Barbuda "
+population = 96286
+
+[sub_resource type="Resource" id="Resource_dujig"]
+script = ExtResource("1_qltjb")
+countryName = "Aruba "
+population = 105845
+
+[sub_resource type="Resource" id="Resource_i3414"]
+script = ExtResource("1_qltjb")
+countryName = "Bahamas "
+population = 385640
+
+[sub_resource type="Resource" id="Resource_g4epa"]
+script = ExtResource("1_qltjb")
+countryName = "Barbados "
+population = 286641
+
+[sub_resource type="Resource" id="Resource_2oga4"]
+script = ExtResource("1_qltjb")
+countryName = "Belize "
+population = 383071
+
+[sub_resource type="Resource" id="Resource_j3vgc"]
+script = ExtResource("1_qltjb")
+countryName = "Bermuda "
+population = 63973
+
+[sub_resource type="Resource" id="Resource_462fj"]
+script = ExtResource("1_qltjb")
+countryName = "British Virgin Islands "
+population = 29802
+
+[sub_resource type="Resource" id="Resource_xin3m"]
+script = ExtResource("1_qltjb")
+countryName = "Canada "
+population = 37057765
+
+[sub_resource type="Resource" id="Resource_3qksq"]
+script = ExtResource("1_qltjb")
+countryName = "Cayman Islands "
+population = 64174
+
+[sub_resource type="Resource" id="Resource_ydeeb"]
+script = ExtResource("1_qltjb")
+countryName = "Costa Rica "
+population = 4999441
+
+[sub_resource type="Resource" id="Resource_7d1ml"]
+script = ExtResource("1_qltjb")
+countryName = "Cuba "
+population = 11338138
+
+[sub_resource type="Resource" id="Resource_pir63"]
+script = ExtResource("1_qltjb")
+countryName = "Curaçao "
+population = 159800
+
+[sub_resource type="Resource" id="Resource_ajoqm"]
+script = ExtResource("1_qltjb")
+countryName = "Dominica "
+population = 71625
+
+[sub_resource type="Resource" id="Resource_cujwm"]
+script = ExtResource("1_qltjb")
+countryName = "Dominican Republic "
+population = 10627165
+
+[sub_resource type="Resource" id="Resource_aqmoy"]
+script = ExtResource("1_qltjb")
+countryName = "El Salvador "
+population = 6420744
+
+[sub_resource type="Resource" id="Resource_b8l5r"]
+script = ExtResource("1_qltjb")
+countryName = "Grenada "
+population = 111454
+
+[sub_resource type="Resource" id="Resource_mmetb"]
+script = ExtResource("1_qltjb")
+countryName = "Guatemala "
+population = 17247807
+
+[sub_resource type="Resource" id="Resource_ic6ug"]
+script = ExtResource("1_qltjb")
+countryName = "Guyana "
+population = 779004
+
+[sub_resource type="Resource" id="Resource_vhcec"]
+script = ExtResource("1_qltjb")
+countryName = "Haiti "
+population = 11123176
+
+[sub_resource type="Resource" id="Resource_nnqwq"]
+script = ExtResource("1_qltjb")
+countryName = "Honduras "
+population = 9587522
+
+[sub_resource type="Resource" id="Resource_wom6o"]
+script = ExtResource("1_qltjb")
+countryName = "Jamaica "
+population = 2934855
+
+[sub_resource type="Resource" id="Resource_nukp7"]
+script = ExtResource("1_qltjb")
+countryName = "Mexico "
+population = 126190788
+
+[sub_resource type="Resource" id="Resource_epxj2"]
+script = ExtResource("1_qltjb")
+countryName = "Montserrat "
+population = 5900
+
+[sub_resource type="Resource" id="Resource_43u2c"]
+script = ExtResource("1_qltjb")
+countryName = "Nicaragua "
+population = 6465513
+
+[sub_resource type="Resource" id="Resource_6i7lu"]
+script = ExtResource("1_qltjb")
+countryName = "Panama "
+population = 4176873
+
+[sub_resource type="Resource" id="Resource_4spt3"]
+script = ExtResource("1_qltjb")
+countryName = "Puerto Rico "
+population = 3195153
+
+[sub_resource type="Resource" id="Resource_35ipd"]
+script = ExtResource("1_qltjb")
+countryName = "St Kitts & Nevis "
+population = 52441
+
+[sub_resource type="Resource" id="Resource_qdoo1"]
+script = ExtResource("1_qltjb")
+countryName = "St Lucia "
+population = 181889
+
+[sub_resource type="Resource" id="Resource_mln0o"]
+script = ExtResource("1_qltjb")
+countryName = "St Vincent & The Grenadines "
+population = 110210
+
+[sub_resource type="Resource" id="Resource_bhxh8"]
+script = ExtResource("1_qltjb")
+countryName = "Surinam "
+population = 575991
+
+[sub_resource type="Resource" id="Resource_eun75"]
+script = ExtResource("1_qltjb")
+countryName = "Trinidad & Tobago "
+population = 1389858
+
+[sub_resource type="Resource" id="Resource_xpq8e"]
+script = ExtResource("1_qltjb")
+countryName = "Turks & Caicos Islands "
+population = 37665
+
+[sub_resource type="Resource" id="Resource_7a2y3"]
+script = ExtResource("1_qltjb")
+countryName = "United States of America "
+population = 326687501
+
+[sub_resource type="Resource" id="Resource_gnuui"]
+script = ExtResource("1_qltjb")
+countryName = "United States Virgin Islands "
+population = 106977
+
+[sub_resource type="Resource" id="Resource_i712n"]
+script = ExtResource("2_agqgg")
+continentName = "North America"
+nations = Array[ExtResource("1_qltjb")]([SubResource("Resource_b4n6j"), SubResource("Resource_bgfdq"), SubResource("Resource_dujig"), SubResource("Resource_i3414"), SubResource("Resource_g4epa"), SubResource("Resource_2oga4"), SubResource("Resource_j3vgc"), SubResource("Resource_462fj"), SubResource("Resource_xin3m"), SubResource("Resource_3qksq"), SubResource("Resource_ydeeb"), SubResource("Resource_7d1ml"), SubResource("Resource_pir63"), SubResource("Resource_ajoqm"), SubResource("Resource_cujwm"), SubResource("Resource_aqmoy"), SubResource("Resource_b8l5r"), SubResource("Resource_mmetb"), SubResource("Resource_ic6ug"), SubResource("Resource_vhcec"), SubResource("Resource_nnqwq"), SubResource("Resource_wom6o"), SubResource("Resource_nukp7"), SubResource("Resource_epxj2"), SubResource("Resource_43u2c"), SubResource("Resource_6i7lu"), SubResource("Resource_4spt3"), SubResource("Resource_35ipd"), SubResource("Resource_qdoo1"), SubResource("Resource_mln0o"), SubResource("Resource_bhxh8"), SubResource("Resource_eun75"), SubResource("Resource_xpq8e"), SubResource("Resource_7a2y3"), SubResource("Resource_gnuui")])
+
+[sub_resource type="Resource" id="Resource_2lrd2"]
+script = ExtResource("1_qltjb")
+countryName = "American Samoa "
+population = 55465
+
+[sub_resource type="Resource" id="Resource_5ogcx"]
+script = ExtResource("1_qltjb")
+countryName = "Australia "
+population = 24982688
+
+[sub_resource type="Resource" id="Resource_eqoyy"]
+script = ExtResource("1_qltjb")
+countryName = "Cook Islands "
+population = 17379
+
+[sub_resource type="Resource" id="Resource_mts51"]
+script = ExtResource("1_qltjb")
+countryName = "Fiji "
+population = 883483
+
+[sub_resource type="Resource" id="Resource_ajeuu"]
+script = ExtResource("1_qltjb")
+countryName = "Guam "
+population = 165768
+
+[sub_resource type="Resource" id="Resource_f8tdk"]
+script = ExtResource("1_qltjb")
+countryName = "Kiribati "
+population = 115847
+
+[sub_resource type="Resource" id="Resource_eut0p"]
+script = ExtResource("1_qltjb")
+countryName = "Marshall Islands "
+population = 58413
+
+[sub_resource type="Resource" id="Resource_slx2i"]
+script = ExtResource("1_qltjb")
+countryName = "Micronesia "
+population = 112640
+
+[sub_resource type="Resource" id="Resource_5bi75"]
+script = ExtResource("1_qltjb")
+countryName = "Nauru "
+population = 12704
+
+[sub_resource type="Resource" id="Resource_exjuc"]
+script = ExtResource("1_qltjb")
+countryName = "New Caledonia "
+population = 284060
+
+[sub_resource type="Resource" id="Resource_bvwi8"]
+script = ExtResource("1_qltjb")
+countryName = "New Zealand "
+population = 4841000
+
+[sub_resource type="Resource" id="Resource_l8d0m"]
+script = ExtResource("1_qltjb")
+countryName = "Palau "
+population = 17907
+
+[sub_resource type="Resource" id="Resource_25yrp"]
+script = ExtResource("1_qltjb")
+countryName = "Papua New Guinea "
+population = 8606316
+
+[sub_resource type="Resource" id="Resource_f6q7w"]
+script = ExtResource("1_qltjb")
+countryName = "Samoa "
+population = 196130
+
+[sub_resource type="Resource" id="Resource_g0e1h"]
+script = ExtResource("1_qltjb")
+countryName = "Solomon Islands "
+population = 652858
+
+[sub_resource type="Resource" id="Resource_k43cp"]
+script = ExtResource("1_qltjb")
+countryName = "Tahiti "
+population = 189517
+
+[sub_resource type="Resource" id="Resource_xul0t"]
+script = ExtResource("1_qltjb")
+countryName = "Tonga "
+population = 103197
+
+[sub_resource type="Resource" id="Resource_eohkv"]
+script = ExtResource("1_qltjb")
+countryName = "Tuvalu "
+population = 11508
+
+[sub_resource type="Resource" id="Resource_pjfm0"]
+script = ExtResource("1_qltjb")
+countryName = "Vanuatu "
+population = 292680
+
+[sub_resource type="Resource" id="Resource_aq48p"]
+script = ExtResource("2_agqgg")
+continentName = "Oceania"
+nations = Array[ExtResource("1_qltjb")]([SubResource("Resource_2lrd2"), SubResource("Resource_5ogcx"), SubResource("Resource_eqoyy"), SubResource("Resource_mts51"), SubResource("Resource_ajeuu"), SubResource("Resource_f8tdk"), SubResource("Resource_eut0p"), SubResource("Resource_slx2i"), SubResource("Resource_5bi75"), SubResource("Resource_exjuc"), SubResource("Resource_bvwi8"), SubResource("Resource_l8d0m"), SubResource("Resource_25yrp"), SubResource("Resource_f6q7w"), SubResource("Resource_g0e1h"), SubResource("Resource_k43cp"), SubResource("Resource_xul0t"), SubResource("Resource_eohkv"), SubResource("Resource_pjfm0")])
+
+[sub_resource type="Resource" id="Resource_dxtt5"]
+script = ExtResource("1_qltjb")
+countryName = "Argentina "
+population = 44494502
+
+[sub_resource type="Resource" id="Resource_4cs4u"]
+script = ExtResource("1_qltjb")
+countryName = "Bolivia "
+population = 11353142
+
+[sub_resource type="Resource" id="Resource_2h6x1"]
+script = ExtResource("1_qltjb")
+countryName = "Brazil "
+population = 209469333
+
+[sub_resource type="Resource" id="Resource_wfxki"]
+script = ExtResource("1_qltjb")
+countryName = "Chile "
+population = 170499
+
+[sub_resource type="Resource" id="Resource_apd41"]
+script = ExtResource("1_qltjb")
+countryName = "Colombia "
+population = 49648685
+
+[sub_resource type="Resource" id="Resource_3d388"]
+script = ExtResource("1_qltjb")
+countryName = "Ecuador "
+population = 17084357
+
+[sub_resource type="Resource" id="Resource_twrtr"]
+script = ExtResource("1_qltjb")
+countryName = "Paraguay "
+population = 6956071
+
+[sub_resource type="Resource" id="Resource_3dya0"]
+script = ExtResource("1_qltjb")
+countryName = "Peru "
+population = 31989256
+
+[sub_resource type="Resource" id="Resource_38hg0"]
+script = ExtResource("1_qltjb")
+countryName = "Uruguay "
+population = 3449299
+
+[sub_resource type="Resource" id="Resource_6pbcq"]
+script = ExtResource("1_qltjb")
+countryName = "Venezuela "
+population = 28870195
+
+[sub_resource type="Resource" id="Resource_oqxev"]
+script = ExtResource("2_agqgg")
+continentName = "South America"
+nations = Array[ExtResource("1_qltjb")]([SubResource("Resource_dxtt5"), SubResource("Resource_4cs4u"), SubResource("Resource_2h6x1"), SubResource("Resource_wfxki"), SubResource("Resource_apd41"), SubResource("Resource_3d388"), SubResource("Resource_twrtr"), SubResource("Resource_3dya0"), SubResource("Resource_38hg0"), SubResource("Resource_6pbcq")])
+
+[sub_resource type="Resource" id="Resource_4v2f1"]
+script = ExtResource("3_jj5tu")
+continents = Array[ExtResource("2_agqgg")]([SubResource("Resource_cmmm8"), SubResource("Resource_rwiy6"), SubResource("Resource_e7px5"), SubResource("Resource_c0h44"), SubResource("Resource_i712n"), SubResource("Resource_aq48p"), SubResource("Resource_oqxev")])
+
+[resource]
+script = ExtResource("4_lyk8h")
+path = "res://save_test.tres"
+inGameUnixTime = 0
+gameWorld = SubResource("Resource_4v2f1")
+number = 13
+string = "blah blah"

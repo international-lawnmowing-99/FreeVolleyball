@@ -2,7 +2,6 @@ extends Node3D
 class_name Athlete
 
 var g = ProjectSettings.get_setting("physics/3d/default_gravity")
-var role
 var stats:Stats = Stats.new()
 var substitutionInfo:SubstitutionInfo = SubstitutionInfo.new()
 
@@ -22,6 +21,7 @@ var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(
 var team: Team
 var myDelta:float
 var serveState
+
 @onready var defendState:AthleteDefendState = load("res://Scripts/State/Athlete/AthleteDefendState.gd").new()
 @onready var passState:AthletePassState = load("res://Scripts/State/Athlete/AthletePassState.gd").new()
 @onready var transitionState:AthleteTransitionState = load("res://Scripts/State/Athlete/AthleteTransitionState.gd").new()
@@ -81,7 +81,7 @@ func CreateSpikes():
 	middleSpikes = [ Set.new(targetXFrontcourt, stats.spikeHeight, 0.5, stats.spikeHeight + 0.05),
 Set.new(targetXFrontcourt, stats.spikeHeight, 1.5, stats.spikeHeight+ 0.05),
 Set.new(targetXFrontcourt, stats.spikeHeight, -0.5, stats.spikeHeight+ 0.05)]
-		
+
 	outsideFrontSpikes = [ Set.new(targetXFrontcourt, stats.spikeHeight, 4.2, max(6, stats.spikeHeight + 1)),
 Set.new(targetXFrontcourt, stats.spikeHeight, -2.75, 3.5),
 Set.new(targetXFrontcourt, stats.spikeHeight, -1, 3.43)]
@@ -98,35 +98,35 @@ Set.new(max(0.1 + stats.verticalJump/2, 3.1-stats.verticalJump/2), stats.spikeHe
 
 	for _set in middleSpikes:
 		_set.CheckFlipped(team)
-		
+
 	for _set in outsideBackSpikes:
 		_set.CheckFlipped(team)
-		
+
 	for _set in outsideFrontSpikes:
 		_set.CheckFlipped(team)
-		
+
 	for _set in oppositeBackSpikes:
 		_set.CheckFlipped(team)
-		
+
 	for _set in oppositeFrontSpikes:
 		_set.CheckFlipped(team)
-		
+
 func _ready():
 	#DebugOverlay.draw.add_vector(self, "basisz", 1, 4, Color(0,1,0, 0.5))
 	#DebugOverlay.draw.add_vector(self, "basisx", 1, 4, Color(1,1,0, 0.5))
 
-	
+
 	spineBone01Id = skel.find_bone("spine01")
 	spineBone02Id = skel.find_bone("spine02")
 	neckBone01Id = skel.find_bone("neck01")
 	neckBone02Id = skel.find_bone("neck02")
-	
-	
+
+
 	customPose01 = skel.get_bone_global_pose(spineBone01Id)
 	customPose02 = skel.get_bone_global_pose(spineBone02Id)
 	customPoseNeck01 = skel.get_bone_global_pose(neckBone01Id)
 	customPoseNeck02 = skel.get_bone_global_pose(neckBone02Id)
-	
+
 
 func _process(_delta):
 	myDelta = _delta
@@ -138,12 +138,12 @@ func _process(_delta):
 	BaseMove(_delta)
 	basisz = transform.basis.z
 	basisx = transform.basis.x
-	
+
 #	rb.linear_velocity = Vector3(0,-1,0)
 #	rb.freeze = false
 #	if transform.origin.y < -0.2:
 #		print(stateMachine.currentState.nameOfState)
-	
+
 func DontFallThroughFloor():
 	if !rb.freeze && position.y < 0.05 && rb.linear_velocity.y < 0:
 		rb.freeze = true
@@ -156,32 +156,32 @@ func DontFallThroughFloor():
 
 func Move(delta):
 	# For the future - measure the length, use it to determine if you should strafe or turn
-	
-	
+
+
 	var distanceToTarget = position.distance_to(moveTarget)
 	var stoppingDistance = (speed * speed) / (2*acceleration)
-	
+
 	if stoppingDistance >= distanceToTarget && speed > acceleration * delta:
 		speed -= acceleration * delta
 		#rotation.y = lerp_angle(rotation.y, atan2(servePos.x - position.x,servePos.z - position.z), delta * rotationSpeed)
-		
-	
+
+
 	elif(speed < MAXSPEED):
 		#print ("accelerating " + "%10.2f" % speed + " | " + "%10.2f" %distanceToTarget +" | " + "%4.2f" %stoppingDistance)
 		speed += acceleration * delta
 		#rotation.y = lerp_angle(rotation.y, atan2(moveTarget.x - position.x,moveTarget.z - position.z), delta * rotationSpeed)
-	
+
 	#rotation_degrees += rotationSpeed * delta
-	
-	
+
+
 	var moveVector = (moveTarget - position).normalized()
 	position += moveVector * speed * delta
-	
 
-	
+
+
 	#rotate_y(deg_to_rad(rotationSpeed))
 	pass
-	
+
 func RotateDigPlatform(angle):
 	if angle == 0.0:
 		angle = 0.01
@@ -189,7 +189,7 @@ func RotateDigPlatform(angle):
 	var acustomPose02 = customPose02.rotated(Vector3.UP, (angle/2))
 #	var acustomPoseNeck01 = customPoseNeck01.rotated(Vector3.UP, (-angle/2))
 #	var acustomPoseNeck02 = customPoseNeck02.rotated(Vector3.UP, (-angle/2))
-	
+
 	skel.set_bone_global_pose_override(spineBone01Id, acustomPose01,1.0)
 	skel.set_bone_global_pose_override(spineBone02Id, acustomPose02,1.0)
 #	skel.set_bone_global_pose_override(neckBone01Id, acustomPoseNeck01,1.0)
@@ -226,7 +226,7 @@ static func SortOutside(a,b):
 	return false
 
 static func SortDistance(a,b):
-	#It's min distance 
+	#It's min distance
 	if a.distanceHack < b.distanceHack:
 		return true
 	return false
@@ -235,21 +235,21 @@ func FrontCourt()->bool:
 	if rotationPosition < 1 || rotationPosition > 6:
 		#Console.AddNewLine("WARNING: attempting to check rotationPosition of player not in positions 1 to 6! " + name, Color.YELLOW)
 		return false
-		
+
 	if (rotationPosition == 1 || rotationPosition>4):
 		return false
-		
+
 	else:
 		return true
 
 func CalculateTimeTillJumpPeak(takeOffXZ):
 	var timeTillJumpPeak
 	if rb.freeze:
-		
+
 		var runupTime
 		var jumpTime
 		var runupDist
-		
+
 		runupDist = Vector3(position.x, 0, position.z).distance_to(takeOffXZ)
 		runupTime = runupDist / stats.speed
 
@@ -257,14 +257,14 @@ func CalculateTimeTillJumpPeak(takeOffXZ):
 		jumpTime = jumpYVel / g
 
 		timeTillJumpPeak = runupTime + jumpTime
-	
+
 	elif rb.linear_velocity.y < 0:
 		timeTillJumpPeak = -rb.linear_velocity.y / g
 	else:
 		timeTillJumpPeak = 0
-		
-	
-	
+
+
+
 	return timeTillJumpPeak
 
 func BaseMove(_delta):
@@ -277,10 +277,10 @@ func BaseMove(_delta):
 				model.look_at_from_position(Maths.XZVector(position), moveTarget, Vector3.UP, true)
 	elif rb.freeze && position != moveTarget && position.distance_to(moveTarget) <= MoveDistanceDelta:
 		position = moveTarget
-			
+
 func ReEvaluateState():
-	
-	
+
+
 	if rb.freeze:
 		match team.stateMachine.currentState:
 			team.receiveState:
@@ -307,7 +307,7 @@ func ReEvaluateState():
 					stateMachine.SetCurrentState(blockState)
 				else:
 					stateMachine.SetCurrentState(defendState)
-	else: 
+	else:
 		if position.y < 0:
 			rb.freeze = true
 			position.y = 0

@@ -32,7 +32,7 @@ func Update(team:Team):
 
 #		elif team.ball.linear_velocity.z < 0:
 #			if team.ball.position.z < team.chosenSpiker.setRequest.target.z:# &&\
-				
+
 ##				if (team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5:# &&\
 #				if Maths.XZVector(team.ball.position - team.chosenSpiker.position).length() < 0.5:
 #					SpikeBall(team)
@@ -50,7 +50,7 @@ func SpikeBall(team:Team):
 	var ball:Ball = team.ball
 
 	if team.setTarget.height > netHeightPlusBallClearance:
-		#Draw a line from the ball to the target. If the point where it crosses the 
+		#Draw a line from the ball to the target. If the point where it crosses the
 		#net is higher than said net, it can be hit, otherwise roll
 		var netPass:Vector3
 
@@ -59,16 +59,16 @@ func SpikeBall(team:Team):
 			distanceFactor *= -1;
 
 		netPass = ball.position + (ball.attackTarget - ball.position) * distanceFactor
-		
+
 		if netPass.y > 0:# netHeightPlusBallClearance:
 			#var xzDistToTarget:float = (Vector3(ball.position.x, 0, ball.position.z) - Vector3(ball.attackTarget.x, 0, ball.attackTarget.z)).length()
 			#var y = ball.position.y
 			#var g = team.chosenSpiker.g
-			
+
 			#initial velocity of spike in mps
 			var u = 27.78
 			#print("Spike Speed(m/s): " + str(u))
-			
+
 			ball.difficultyOfReception = u/37.0*team.chosenSpiker.stats.spike*2
 			ball.gravity_scale = 3.0
 			ball.topspin = 3.0
@@ -87,7 +87,7 @@ func SpikeBall(team:Team):
 			ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 			#team.setTarget = null
 			#print(ball.attackTarget)
-		
+
 		if abs(netPass.z) >= 4.49:
 			Console.AddNewLine("Ball will pass outside antennae lad", Color.CRIMSON)
 			ball.inPlay = false
@@ -100,8 +100,8 @@ func SpikeBall(team:Team):
 		ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 		ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 		team.setTarget = null
-		
+
 	team.mManager.BallSpiked(team.isHuman)
 	hit = true
-	
+
 	Console.AddNewLine(team.chosenSpiker.stats.lastName + " cranks the ball at " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")

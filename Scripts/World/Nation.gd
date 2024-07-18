@@ -1,13 +1,12 @@
-extends Node
+extends Resource
 class_name Nation
 
-var countryName
-var population:int
+@export var countryName:String
+@export var population:int
 
 var nationalTeam:NationalTeam
 #Maybe some nations will be able to support more than one sort of league??? Never!
-var league = []
-var players
+var league:Array[Te
 
 func Populate(firstNames, lastNames, generatematchPlayers:bool):
 	var numberOfTeams:int = clamp((population / 700000), 2, 30)

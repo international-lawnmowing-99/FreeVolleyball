@@ -1,9 +1,10 @@
 extends Node
 class_name Team
 
+var teamResource:TeamResource = TeamResource.new()
 var AthleteScene = preload("res://Scenes/MatchScene/Athlete/Athlete.tscn")
-var teamName:String
 
+var teamName:String
 var teamStrategy:TeamStrategy = preload("res://Scripts/TeamStrategy.gd").new()
 
 var nation:Nation
@@ -72,7 +73,7 @@ var defaultPositions = [
 #	Vector3(.5,0,3),
 #	Vector3(5.5,0,2.2),
 #	Vector3(7.5,0,0)]
-	
+
 var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(self)
 var serveState:TeamServe = load("res://Scripts/State/Team/TeamServe.gd").new()
 var receiveState:TeamReceive = load("res://Scripts/State/Team/TeamReceive.gd").new()
@@ -89,7 +90,7 @@ func CopyGameWorldPlayers(gameWorld:GameWorld, choiceState:PlayerChoiceState, cl
 	if matchPlayers.size() > 0:
 		Console.AddNewLine("ERROR! Couldn't add more players to local team from world equivalent")
 		return
-		
+
 	var team = gameWorld.GetTeam(choiceState, clubOrInternational)
 	if team is NationalTeam:
 		if team.nationalPlayers.size() == 0:
@@ -100,7 +101,7 @@ func CopyGameWorldPlayers(gameWorld:GameWorld, choiceState:PlayerChoiceState, cl
 
 	teamName = team.teamName
 	nation = team.nation
-	
+
 	if self is NationalTeam:
 		(self as NationalTeam).nationalPlayers = team.nationalPlayers.duplicate(true)
 	else:
@@ -109,18 +110,18 @@ func CopyGameWorldPlayers(gameWorld:GameWorld, choiceState:PlayerChoiceState, cl
 func Init(matchManager):
 	mManager = matchManager
 	ball = mManager.ball
-	
+
 	receiveRotations = teamStrategy.receiveRotations["default"].duplicate(true)
-	
+
 	stateMachine._init(self)
 	stateMachine.SetCurrentState(chillState)
-	
-	
+
+
 	AutoSelectTeamLineup()
-	
+
 	PlaceTeam()
 
-	
+
 	CachePlayers()
 	CreateDefaultLiberoStrategy()
 
@@ -143,15 +144,15 @@ func PlaceTeam():
 		var lad = AthleteScene.instantiate()
 		lad._ready()
 		lad.stats = matchPlayers[i].stats
-		lad.role = matchPlayers[i].role
-		
-		
+		#lad.stats.role = matchPlayers[i].stats.role
+
+
 		add_child(lad)
 		var ladscale = lad.stats.height /1.8
-		
+
 		lad.model.scale = Vector3(ladscale, ladscale, ladscale)
-		
-		lad.name = lad.stats.firstName + " " + lad.stats.lastName 
+
+		lad.name = lad.stats.firstName + " " + lad.stats.lastName
 		lad.position = pos
 		lad.model.rotation = rot
 		lad.team = self
@@ -160,7 +161,7 @@ func PlaceTeam():
 		lad.moveTarget = Vector3(pos.x,0,pos.z)
 		#matchPlayers.append(lad)
 		if !isHuman:
-			#TODO~ this creates multiple materials that are the same colour - 
+			#TODO~ this creates multiple materials that are the same colour -
 			# would be much better to just have the one shared material
 			lad.model.ChangeShirtColour(Color(0,3,0))
 		if i  < 6 :
@@ -169,25 +170,25 @@ func PlaceTeam():
 		else:
 			benchPlayers.append(lad)
 			if !libero:
-				if lad.role == Enums.Role.Libero:
+				if lad.stats.role == Enums.Role.Libero:
 					libero = lad
 			elif !libero2:
-				if lad.role == Enums.Role.Libero:
+				if lad.stats.role == Enums.Role.Libero:
 					libero2 = lad
 
-		
-		
-		
+
+
+
 		lad.ball = ball
-			
+
 		if isHuman:
 			lad.serveState = load("res://Scripts/State/Athlete/AthleteHuman/AthleteHumanServeState.gd").new()
 		else:
 			lad.serveState = load("res://Scripts/State/Athlete/AthleteComputer/AthleteComputerServeState.gd").new()
 
-		# Hopefully this won't cause issues when playing multiple matches... 
+		# Hopefully this won't cause issues when playing multiple matches...
 		matchPlayers[i] = lad
-	
+
 	if libero:
 		libero.get_child(0).ChangeShirtColour()
 	if libero2:
@@ -195,17 +196,17 @@ func PlaceTeam():
 
 	for athlete:Athlete in benchPlayers:
 		athlete.stateMachine.SetCurrentState(athlete.chillState)
-		
+
 	CachePlayers()
-	
+
 func UpdateTimeTillDigTarget():
-	
+
 	if (stateMachine.currentState == setState):
-		
-		timeTillDigTarget = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, receptionTarget.y, 1.0) # Maths.XZVector(ball.position).distance_to(Maths.XZVector(receptionTarget)) / max(Maths.XZVector(ball.linear_velocity).length(),.0001) 
+
+		timeTillDigTarget = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, receptionTarget.y, 1.0) # Maths.XZVector(ball.position).distance_to(Maths.XZVector(receptionTarget)) / max(Maths.XZVector(ball.linear_velocity).length(),.0001)
 #		if !mManager.isPaused:
 #			Console.AddNewLine(str("%.2f" % timeTillDigTarget) + " time till dig target updated")
-	
+
 	elif stateMachine.currentState == spikeState:
 		timeTillDigTarget = 0
 
@@ -214,7 +215,7 @@ func UpdateTimeTillDigTarget():
 
 	else:
 		timeTillDigTarget = 54321
-	
+
 
 
 func _process(_delta):
@@ -227,17 +228,17 @@ func Rotate():
 #		print(teamName + "  ROTATING")
 #
 #		for i in courtPlayers.size():
-#			print(courtPlayers[i].stats.lastName + "  |  " + str(Enums.Role.keys()[courtPlayers[i].role]) + " " + str(courtPlayers[i].rotationPosition))
+#			print(courtPlayers[i].stats.lastName + "  |  " + str(Enums.Role.keys()[courtPlayers[i].stats.role]) + " " + str(courtPlayers[i].rotationPosition))
 
 	if markUndoChangesToRoles:
-		outsideFront.role = Enums.Role.Outside
-		oppositeHitter.role = Enums.Role.Opposite
+		outsideFront.stats.role = Enums.Role.Outside
+		oppositeHitter.stats.role = Enums.Role.Opposite
 		markUndoChangesToRoles = false
-	
+
 	server += 1
 	if server >= 6:
 		server = 0
-	
+
 	for athlete in courtPlayers:
 		if athlete.rotationPosition < 1:
 			Console.AddNewLine("Court Player in odd rotationPosition: " + athlete.stats.lastName + " is in rotation: " + str(athlete.rotationPosition), Color.YELLOW)
@@ -245,7 +246,7 @@ func Rotate():
 			athlete.rotationPosition = 6
 		else:
 			athlete.rotationPosition -= 1
-		
+
 	CachePlayers()
 	CheckForLiberoChange()
 	CachePlayers()
@@ -257,7 +258,7 @@ func CheckForLiberoChange():
 			Console.AddNewLine("Player off for lib: " + playerCurrentlyLiberoedOff.name)
 		else:
 			Console.AddNewLine("Libero(s) not on court")
-	
+
 	#if mManager.isTeamAServing == isHuman:
 		## we are serving
 		#if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][0]:
@@ -282,11 +283,11 @@ func CheckForLiberoChange():
 					#Console.AddNewLine("We (probably) don't need to make a libero change", Color.DEEP_PINK)
 				#else:
 					#Console.AddNewLine("Error, player to be liberoed not in bench or court players", Color.DEEP_PINK)
-				
+
 
 	if isLiberoOnCourt:
 		var inactiveLibero:Athlete
-		
+
 		if libero in courtPlayers:
 			if isHuman:
 				Console.AddNewLine("Active libero is: " + libero.name + " (Libero 1)")
@@ -294,7 +295,7 @@ func CheckForLiberoChange():
 				inactiveLibero = libero2
 				if isHuman:
 					Console.AddNewLine("Inactive libero is: " + libero2.name)
-				
+
 		elif libero2 in courtPlayers:
 			if isHuman:
 				Console.AddNewLine("Active libero is: " + libero2.name + " (Libero 2)")
@@ -312,7 +313,7 @@ func CheckForLiberoChange():
 			InstantaneouslySwapPlayers(activeLibero, playerCurrentlyLiberoedOff)
 			playerCurrentlyLiberoedOff = null
 			isLiberoOnCourt = false
-		
+
 		elif mManager.isTeamAServing != isHuman: # We receive
 			if !playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][0]:
 				if isHuman:
@@ -320,7 +321,7 @@ func CheckForLiberoChange():
 				InstantaneouslySwapPlayers(activeLibero, playerCurrentlyLiberoedOff)
 				playerCurrentlyLiberoedOff = null
 				isLiberoOnCourt = false
-				
+
 			else:
 				if playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][2] != activeLibero:
 					if isHuman:
@@ -336,8 +337,8 @@ func CheckForLiberoChange():
 					InstantaneouslySwapPlayers(activeLibero, playerCurrentlyLiberoedOff)
 					playerCurrentlyLiberoedOff = null
 					isLiberoOnCourt = false
-					
-								
+
+
 		elif mManager.isTeamAServing == isHuman: # We serve
 			if !playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][0]:
 				if isHuman:
@@ -345,7 +346,7 @@ func CheckForLiberoChange():
 				InstantaneouslySwapPlayers(activeLibero, playerCurrentlyLiberoedOff)
 				playerCurrentlyLiberoedOff = null
 				isLiberoOnCourt = false
-				
+
 			else:
 				if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][2] != activeLibero:
 					if isHuman:
@@ -354,7 +355,7 @@ func CheckForLiberoChange():
 					var temp = inactiveLibero
 					inactiveLibero = activeLibero
 					activeLibero = temp
-					
+
 				if playerToBeLiberoedOnServe[originalRotation1Player.rotationPosition - 1][1] != playerCurrentlyLiberoedOff:
 					if isHuman:
 						Console.AddNewLine("Changed the player the libero is used for on serve, step 1 - player comes back on for libero")
@@ -368,7 +369,7 @@ func CheckForLiberoChange():
 			if playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][0]:
 				var outgoingPlayer = playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][1]
 				var incomingLibero = playerToBeLiberoedOnReceive[originalRotation1Player.rotationPosition - 1][2]
-				
+
 				InstantaneouslySwapPlayers(outgoingPlayer, incomingLibero)
 				isLiberoOnCourt = true
 				playerCurrentlyLiberoedOff = outgoingPlayer
@@ -414,14 +415,14 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	if !incoming:
 		Console.AddNewLine("ERROR, incoming player does not exist", Color.RED)
 		return
-	
-	
+
+
 	if outgoing == originalRotation1Player:
 		originalRotation1Player = incoming
-	
+
 	incoming.rotationPosition = outgoing.rotationPosition
 	outgoing.rotationPosition = -1
-	
+
 	var outgoingIndex = courtPlayers.find(outgoing)
 	if outgoingIndex == -1:
 		# maybe the player is liberoed off at the time
@@ -443,7 +444,7 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				Console.AddNewLine("Not found bench swap player: " + incoming.name)
 			else:
 				playerCurrentlyLiberoedOff = incoming
-				
+
 				#benchPlayers.erase(incoming)
 				#benchPlayers.erase(outgoing)
 #
@@ -459,31 +460,31 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				#else:
 					#benchPlayers.insert(outgoingIndex, incoming)
 					#benchPlayers.insert(_incomingIndex, outgoing)
-					
+
 				# if a player is being liberoed, do we want to keep the new player liberoed in the same circumstances as their predecessor?
 				Console.AddNewLine("Show libero options for newly subbed player here", Color.BLUE_VIOLET)
 				Console.AddNewLine("Show libero options for newly subbed player here", Color.BLUE_VIOLET)
 				Console.AddNewLine("Show libero options for newly subbed player here", Color.BLUE_VIOLET)
-				
+
 				for subArray in playerToBeLiberoedOnServe:
 					if subArray[1] == outgoing:
 						subArray[1] = incoming
 				for subArray in playerToBeLiberoedOnReceive:
 					if subArray[1] == outgoing:
 						subArray[1] = incoming
-				
-				if (incoming.role != Enums.Role.Libero && outgoing.role != Enums.Role.Libero):
-					incoming.role = outgoing.role
-				
+
+				if (incoming.stats.role != Enums.Role.Libero && outgoing.stats.role != Enums.Role.Libero):
+					incoming.stats.role = outgoing.stats.role
+
 				outgoing.stateMachine.SetCurrentState(outgoing.chillState)
 				incoming.stateMachine.SetCurrentState(incoming.chillState)
-				
-				
+
+
 			return
 
 
 	courtPlayers.erase(outgoing)
-	
+
 	var incomingIndex = benchPlayers.find(incoming)
 	if incomingIndex == -1:
 		print("Not found incoming player: " + incoming.name)
@@ -505,8 +506,8 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	benchPlayers.insert(incomingIndex, outgoing)
 
 
-	if (incoming.role != Enums.Role.Libero && outgoing.role != Enums.Role.Libero):
-		incoming.role = outgoing.role
+	if (incoming.stats.role != Enums.Role.Libero && outgoing.stats.role != Enums.Role.Libero):
+		incoming.stats.role = outgoing.stats.role
 
 	incoming.moveTarget = incoming.position
 	outgoing.moveTarget = outgoing.position
@@ -514,42 +515,42 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	var tempRot = incoming.model.rotation
 	incoming.model.rotation = outgoing.model.rotation
 	outgoing.model.rotation = tempRot
-	
+
 	#if incoming.rotationPosition == 1 && mManager.isTeamAServing == isHuman && (stateMachine.currentState == serveState || stateMachine.currentState == prereceiveState):
 		#incoming.stateMachine.SetCurrentState(incoming.serveState)
-	
+
 	outgoing.stateMachine.SetCurrentState(outgoing.chillState)
 	incoming.ReEvaluateState()
-	
+
 func CachePlayers():
 	for player in courtPlayers:
-		if player.role == Enums.Role.Setter:
+		if player.stats.role == Enums.Role.Setter:
 			setter = player
-		elif player.role == Enums.Role.Middle && player.FrontCourt():
+		elif player.stats.role == Enums.Role.Middle && player.FrontCourt():
 			middleFront = player
-		elif player.role == Enums.Role.Middle && !player.FrontCourt():
+		elif player.stats.role == Enums.Role.Middle && !player.FrontCourt():
 			middleBack = player
-		elif player.role == Enums.Role.Outside && player.FrontCourt():
+		elif player.stats.role == Enums.Role.Outside && player.FrontCourt():
 			outsideFront = player
-		elif player.role == Enums.Role.Outside && !player.FrontCourt():
+		elif player.stats.role == Enums.Role.Outside && !player.FrontCourt():
 			outsideBack = player
-		elif player.role == Enums.Role.Opposite:
+		elif player.stats.role == Enums.Role.Opposite:
 			oppositeHitter = player
 
 
 func AutoSelectTeamLineup():
 	matchPlayers.sort_custom(Callable(Athlete,"SortSet"))
 	var orderedSetterList =  matchPlayers.duplicate(false)
-	
+
 	matchPlayers.sort_custom(Callable(Athlete,"SortOutside"))
 	var orderedOutsideList = matchPlayers.duplicate(false)
-	
+
 	matchPlayers.sort_custom(Callable(Athlete,"SortLibero"))
 	var orderedLiberoList = matchPlayers.duplicate(false)
-	
+
 	matchPlayers.sort_custom(Callable(Athlete,"SortOpposite"))
-	var orderedOppositeList = matchPlayers.duplicate(false) 
-	
+	var orderedOppositeList = matchPlayers.duplicate(false)
+
 	matchPlayers.sort_custom(Callable(Athlete,"SortMiddle"))
 	var orderedMiddleList = matchPlayers.duplicate(false)
 
@@ -558,57 +559,57 @@ func AutoSelectTeamLineup():
 
 	var nsetter = orderedSetterList[0]
 	SwapPlayer(nsetter, 0)
-	nsetter.role = Enums.Role.Setter
+	nsetter.stats.role = Enums.Role.Setter
 	for list in aptitudeLists:
 		list.erase(nsetter)
 
 	var nmiddle1 = orderedMiddleList[0]
 	var nmiddle2 = orderedMiddleList[1]
-	nmiddle1.role = Enums.Role.Middle
-	nmiddle2.role = Enums.Role.Middle
+	nmiddle1.stats.role = Enums.Role.Middle
+	nmiddle2.stats.role = Enums.Role.Middle
 	SwapPlayer(nmiddle1, 2)
 	SwapPlayer(nmiddle2, 5)
 	for list in aptitudeLists:
 		list.erase(nmiddle1)
 		list.erase(nmiddle2)
-	
+
 	var noutside1 = orderedOutsideList[0]
 	var noutside2 = orderedOutsideList[1]
-	noutside1.role = Enums.Role.Outside
-	noutside2.role = Enums.Role.Outside
+	noutside1.stats.role = Enums.Role.Outside
+	noutside2.stats.role = Enums.Role.Outside
 	SwapPlayer(noutside1, 1)
 	SwapPlayer(noutside2, 4)
 	for list in aptitudeLists:
 		list.erase(noutside1)
 		list.erase(noutside2)
 	var nopposite = orderedOppositeList[0]
-	nopposite.role = Enums.Role.Opposite
+	nopposite.stats.role = Enums.Role.Opposite
 	SwapPlayer(nopposite, 3)
 	for list in aptitudeLists:
 		list.erase(nopposite)
-	
+
 	if matchPlayers.size() > 6:
 		var nlibero = orderedLiberoList[0]
-		nlibero.role = Enums.Role.Libero
-		
+		nlibero.stats.role = Enums.Role.Libero
+
 		SwapPlayer(nlibero, 6)
 		for list in aptitudeLists:
 			list.erase(nlibero)
 		#libero = nlibero
-		
+
 	if matchPlayers.size() > 7:
 		var backupSetter = orderedSetterList[0]
 		SwapPlayer(backupSetter, 7)
-		backupSetter.role = Enums.Role.Setter
+		backupSetter.stats.role = Enums.Role.Setter
 		for list in aptitudeLists:
 			list.erase(backupSetter)
-			
+
 		for athlete in orderedLiberoList:
-			athlete.role = Enums.Role.UNDEFINED
+			athlete.stats.role = Enums.Role.UNDEFINED
 
 	if matchPlayers.size() > 12:
 		var nlibero2 = orderedLiberoList[0]
-		nlibero2.role = Enums.Role.Libero
+		nlibero2.stats.role = Enums.Role.Libero
 		SwapPlayer(nlibero2, matchPlayers.size() - 1)
 		for list in aptitudeLists:
 			list.erase(nlibero2)
@@ -625,18 +626,18 @@ func SwapPlayer(player,newPostion):
 		if (matchPlayers[i] == player):
 			index = i
 			break
-	
+
 	#for i in range(matchPlayers.size()):
-	#	print(str(matchPlayers[i].role) + " " + str(i))
+	#	print(str(matchPlayers[i].stats.role) + " " + str(i))
 
 	#print ("")
 	var temp = matchPlayers[newPostion]
 	matchPlayers[newPostion] = player
 	matchPlayers[index] = temp
-	
+
 	#for i in range(matchPlayers.size()):
-	#	print(str(matchPlayers[i].role) + " " + str(i))
-	
+	#	print(str(matchPlayers[i].stats.role) + " " + str(i))
+
 func GetTransitionPosition(athlete):
 	if (setter.FrontCourt()):
 		if athlete == setter:
@@ -694,30 +695,30 @@ func AttemptBlock(spiker:Athlete):
 			if blocker.stateMachine.currentState.nameOfState == "Block":
 				if blocker.blockState.blockingTarget == spiker:
 					blockers.append(blocker)
-	
+
 	#No block
 	if len(blockers) == 0:
 		mManager.BallOverNet(!isHuman)
 		return
-	
+
 	# Is the spiker just too tall?
-	
+
 	var highestBlockHeight = 0
 	for blocker in blockers:
 		if blocker.stats.blockHeight > highestBlockHeight:
 			highestBlockHeight = blocker.stats.blockHeight
 
 	#the height of the ball over the net
-	
+
 	var netPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, 3.0)
-	
+
 	if netPass.y - highestBlockHeight > 0.3:
 		Console.AddNewLine("OTT!!!", Color.AZURE)
 		Console.AddNewLine("Spike height: " + str(spiker.stats.spikeHeight), Color.AZURE)
 		Console.AddNewLine("Block height: " + str(highestBlockHeight), Color.AZURE)
 		mManager.BallOverNet(!isHuman)
 		return
-	
+
 	ball.blockResolver.AddUpcomingBlock(!isHuman, blockers, spiker)
 
 
@@ -726,7 +727,7 @@ func Populate(firstNames, lastNames):
 		for i in range (32):
 			Console.AddNewLine("!Not Generating additional unnecessary players!! " + teamName)
 		return
-			
+
 	for _j in range(12):
 		var stats = Stats.new()
 		var skill = randf_range(0,10) + randf_range(0,10) + randf_range(0,10) + randf_range(0,10) + randf_range(0,10)
@@ -746,7 +747,7 @@ func Populate(firstNames, lastNames):
 		stats.spikeHeight = stats.height * (1.25) + stats.verticalJump
 		stats.blockHeight = stats.height * (1.2) + stats.verticalJump
 
-		stats.digHeight = stats.height/1.6 
+		stats.digHeight = stats.height/1.6
 		stats.standingSetHeight = stats.height * 1.2
 		stats.jumpSetHeight = stats.standingSetHeight + stats.verticalJump
 		var age = 17 + randi()%28
@@ -759,7 +760,7 @@ func Populate(firstNames, lastNames):
 		var athlete = Athlete.new()
 		athlete.stats = stats
 		matchPlayers.append(athlete)
-		
+
 		#DateTime oldest = new DateTime(1975, 1, 1);
 
 		#int daysRange = (DateTime.Today.AddYears(-17) - oldest).Days;
@@ -769,25 +770,25 @@ func Populate(firstNames, lastNames):
 
 func CreateDefaultLiberoStrategy():
 	# A note: the convention is that the setter is in one in the first rotation,
-	# regardless of where the player rotates them to before the set. 
+	# regardless of where the player rotates them to before the set.
 	playerToBeLiberoedOnServe[0] = [true, middleBack, libero]
 	# Middle will serve when setter in 2
-	playerToBeLiberoedOnServe[1] = [false, null, null] 
+	playerToBeLiberoedOnServe[1] = [false, null, null]
 	playerToBeLiberoedOnServe[2] = [true, middleFront, libero]
 	playerToBeLiberoedOnServe[3] = [true, middleFront, libero]
 	# Middle will serve when setter in 5
 	playerToBeLiberoedOnServe[4] = [false, null, null]
 	playerToBeLiberoedOnServe[5] = [true, middleBack, libero]
-	
+
 	playerToBeLiberoedOnReceive[0] = [true, middleBack, libero]
 	playerToBeLiberoedOnReceive[1] = [true, middleBack, libero]
 	playerToBeLiberoedOnReceive[2] = [true, middleFront, libero]
 	playerToBeLiberoedOnReceive[3] = [true, middleFront, libero]
 	playerToBeLiberoedOnReceive[4] = [true, middleFront, libero]
 	playerToBeLiberoedOnReceive[5] = [true, middleBack, libero]
-	
+
 	# Yeah, let's give libero2 a go!
 	if libero2:
 		for i in range(playerToBeLiberoedOnServe.size()):
 			playerToBeLiberoedOnServe[i][2] = libero2
-	
+

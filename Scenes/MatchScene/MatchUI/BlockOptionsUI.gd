@@ -22,7 +22,7 @@ func _on_rot_1_button_pressed():
 func _on_rot_2_button_pressed():
 	DisplayRotation(2)
 	displayedRotationLabel.text = "Rotation 2"
-	
+
 func _on_rot_3_button_pressed():
 	DisplayRotation(3)
 	displayedRotationLabel.text = "Rotation 3"
@@ -34,22 +34,22 @@ func _on_rot_4_button_pressed():
 func _on_rot_5_button_pressed():
 	DisplayRotation(5)
 	displayedRotationLabel.text = "Rotation 5"
-	
+
 func _on_rot_6_button_pressed():
 	DisplayRotation(6)
 	displayedRotationLabel.text = "Rotation 6"
-	
+
 func DisplayRotation(positionOfOriginalRot1Player:int):
 	var rotationDifference = teamA.originalRotation1Player.rotationPosition - positionOfOriginalRot1Player
 	if rotationDifference < 0:
 		rotationDifference = 6 + rotationDifference
-	
+
 	var pseudoTeam = PseudoTeam.new()
 	pseudoTeam.CopyTeam(teamA)
-	
+
 	for i in range(rotationDifference):
 		pseudoTeam.PseudoRotate()
-	
+
 	pseudoTeam.CachePlayers()
 	pseudoTeam.PseudoCacheBlockers(servingSelected)
 	$Blockers/LeftBlockerUI.Populate("Left Blocker", true, pseudoTeam.pseudoLeftBlocker, teamB)
@@ -68,5 +68,5 @@ func _on_serve_receive_option_button_item_selected(index):
 		pass
 	elif index == 1:
 		#Serving
-		
+
 		pass

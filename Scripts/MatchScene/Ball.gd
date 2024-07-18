@@ -31,17 +31,17 @@ func _process(_delta):
 		floatDisplacement = Vector3.ZERO
 		floating = false
 	mesh.position = lerp(mesh.position, floatDisplacement, _delta * 4.5)
-		
+
 	if position.y < -10:
 		if wasLastTouchedByA:
 			mManager.PointToTeamB()
 		else:
 			mManager.PointToTeamA()
-	
+
 func _ready():
 	add_child(blockResolver)
 	#DebugOverlay.draw.add_vector(self, "lads", 1, 4, Color(0,1,1, 0.5))
-	
+
 func SetTopspin(_topspin:float):
 	topspin = _topspin
 	gravity_scale = _topspin
@@ -58,7 +58,7 @@ func _on_ball_body_entered(body):
 			if wasLastTouchedByA:
 				Console.AddNewLine("ball out, point to b")
 				mManager.PointToTeamB()
-				
+
 			else:
 				Console.AddNewLine("ball out, point to a")
 				mManager.PointToTeamA()
@@ -80,18 +80,18 @@ func _on_ball_body_entered(body):
 			if wasLastTouchedByA:
 				Console.AddNewLine("ball under net, point to b", Color.GOLD)
 				mManager.PointToTeamB()
-				
+
 			else:
 				Console.AddNewLine("ball under net, point to a", Color.GOLD)
 				mManager.PointToTeamA()
 		elif body.is_in_group("Net"):
 			Console.AddNewLine("Netflipper", Color.CORAL)
-		
+
 func PretendToBeParented(node):
 	_parented = true
 	_pseudoParent = node
 
-	
+
 #func SetTimeWellBehavedParabolaII(startPos:Vector3, endPos:Vector3):
 #	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
 #	var yVel = sqrt(2 * g * abs(endPos.y - startPos.y))
@@ -101,18 +101,18 @@ func Serve(startPos, _attackTarget, serveHeight, _topspin):
 	mManager.cube.position = Vector3.ZERO
 	mManager.sphere.position = Vector3.ZERO
 	mManager.cylinder.position = Vector3.ZERO
-	
+
 	topspin = _topspin
 	var visualTopspin = topspin - 1
 	gravity_scale = topspin
-	
+
 	rotation = Vector3.ZERO
 	if (_attackTarget - startPos).x > 0:
 		visualTopspin *= -1
 	angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), visualTopspin * 80)
 	#linear_velocity = Vector3.ZERO
 	attackTarget = _attackTarget
-	
+
 	var impulse = Maths.CalculateBallOverNetVelocity(startPos, _attackTarget, serveHeight, gravity_scale)
 
 	# :( no fun!
@@ -126,18 +126,18 @@ func Serve(startPos, _attackTarget, serveHeight, _topspin):
 			print("serve hits net")
 			Console.AddNewLine("Serve hits net!!!!!!!", Color.BLUE_VIOLET)
 		print(str(impulse.length() * 3.6))
-		
-	
+
+
 	#impulse *= mass
 	linear_velocity = impulse
 	if impulse.length_squared() == 0:
 		attackTarget = Maths.XZVector(position)
-	
+
 
 	inPlay = true
-		
+
 func TouchedByB():
 	wasLastTouchedByA = false
-	
+
 func TouchedByA():
 	wasLastTouchedByA = true

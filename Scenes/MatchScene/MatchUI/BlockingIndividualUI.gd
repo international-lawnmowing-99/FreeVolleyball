@@ -11,7 +11,7 @@ func Populate(title:String, isPseudo:bool, _athlete:Athlete, otherTeam:Team):
 	
 	$Background/Title.text = title
 	$Background/Name.text = athlete.stats.firstName + " " + athlete.stats.lastName
-	$Background/ScrollContainer/MainContent/InfoLabels/Role.text = "Role: " + Enums.Role.keys()[athlete.role]
+	$Background/ScrollContainer/MainContent/InfoLabels/Role.text = "Role: " + Enums.Role.keys()[athlete.stats.role]
 	
 	if isPseudo:
 		$Background/ScrollContainer/MainContent/InfoLabels/RotationPosition.text = "Rotation Position: " + str(athlete.pseudoRotationPosition)

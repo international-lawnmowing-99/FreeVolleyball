@@ -15,7 +15,7 @@ func KillBlock():
 	ball.gravity_scale = 1.0
 	ball.topspin = 1.0
 	ball.attackTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0, 1.0)
-	
+
 	ball.blockWillBeAttempted = false
 	if spikedByA:
 		ball.TouchedByB()
@@ -23,30 +23,30 @@ func KillBlock():
 		ball.TouchedByA()
 
 	Console.AddNewLine("Kill Block! Ball speed: " + str(ball.linear_velocity.length() * 3.6) + " kph", Color.BLUE)
-	
+
 	mManager.BallBlocked(spikedByA)
-	
+
 func ReflectBlock():
 	# Ball loops up back on our side
 	ball.blockWillBeAttempted = false
 	ball.linear_velocity.x *= -1
 	ball.linear_velocity *= randf_range(0.05, 0.3)
 	ball.linear_velocity.y = randf_range(1.5, 5)
-	
+
 	if spikedByA:
 		ball.TouchedByB()
 	else:
 		ball.TouchedByA()
-		
+
 	Console.AddNewLine("Reflect block", Color.THISTLE)
 	ball.SetTopspin(1.0)
 	ball.attackTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0, 1.0)
 	spiker.team.stateMachine.SetCurrentState(spiker.team.receiveState)
 	blockers[0].team.stateMachine.SetCurrentState(blockers[0].team.defendState)
-	
+
 func TouchBlock():
 	pass
-	
+
 func SnickBlock():
 	Console.AddNewLine("Snick block", Color.TURQUOISE)
 	ball.blockWillBeAttempted = false
@@ -54,14 +54,14 @@ func SnickBlock():
 	ball.attackTarget.x = -spiker.team.flip * randf_range(4.5, 15.0)
 	ball.attackTarget.z = randf_range(-6.0, 6.0)
 	ball.attackTarget.y = 0
-	
+
 	var ballMaxHeight = randf_range(ball.position.y + 0.5, ball.position.y + 7.0)
-	
+
 	ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget, ballMaxHeight)
 	ball.difficultyOfReception = randf_range(0, 20)
 	mManager.BallOverNet(spiker.team.isHuman)
 	ball.wasLastTouchedByA = !spikedByA
-	
+
 func BlockFault():
 	if spikedByA:
 		Console.AddNewLine("Net Touch by team B", Color.THISTLE)
@@ -69,7 +69,7 @@ func BlockFault():
 	else:
 		Console.AddNewLine("Net Touch by team A", Color.THISTLE)
 		mManager.PointToTeamB()
-	
+
 func _init(_ball:Ball):
 	ball = _ball
 
@@ -91,14 +91,14 @@ func ResolveBlock():
 	var leftBlocker:Athlete
 	var middleBlocker:Athlete
 	var rightBlocker:Athlete
-	
+
 	var canLeftBlock:bool = false
 	var canMiddleBlock:bool = false
 	var canRightBlock:bool = false
-	
+
 	var defendingTeam:Team = blockers[0].team
 	var flip = defendingTeam.flip
-	
+
 	if blockers.has(defendingTeam.defendState.leftSideBlocker):
 		leftBlocker = defendingTeam.defendState.leftSideBlocker
 		Console.AddNewLine("Defending team's left blocker present " + leftBlocker.stats.lastName)
@@ -116,8 +116,8 @@ func ResolveBlock():
 			else:
 				Console.AddNewLine("Left blocker involved in block!", Color.MEDIUM_TURQUOISE)
 				canLeftBlock = true
-				
-	
+
+
 	if blockers.has(defendingTeam.defendState.middleBlocker):
 		middleBlocker = defendingTeam.defendState.middleBlocker
 		Console.AddNewLine("Defending team's middle blocker present " + middleBlocker.stats.lastName)
@@ -131,7 +131,7 @@ func ResolveBlock():
 			else:
 				Console.AddNewLine("Middle blocker involved in block!", Color.MEDIUM_TURQUOISE)
 				canMiddleBlock = true
-		
+
 	if blockers.has(defendingTeam.defendState.rightSideBlocker):
 		rightBlocker = defendingTeam.defendState.rightSideBlocker
 		Console.AddNewLine("Defending team's right blocker present " + rightBlocker.stats.lastName)
@@ -145,7 +145,7 @@ func ResolveBlock():
 			else:
 				Console.AddNewLine("Right blocker involved in block!", Color.MEDIUM_TURQUOISE)
 				canRightBlock = true
-				
+
 	# Choose the best available blocker to do a roll-off with
 	var chosenBlocker:Athlete
 	if canMiddleBlock:
@@ -167,7 +167,7 @@ func ResolveBlock():
 				chosenBlocker = middleBlocker
 		else:
 			chosenBlocker = middleBlocker
-			
+
 	elif canLeftBlock:
 		chosenBlocker = leftBlocker
 	elif  canRightBlock:
@@ -182,35 +182,35 @@ func ResolveBlock():
 
 	var attackRoll = randf_range(1, spiker.stats.spike)
 	var blockRoll = randf_range(1, chosenBlocker.stats.block)
-	
+
 	Console.AddNewLine("Spike Roll: : " + str(int(attackRoll)) + " || Block Roll: " + str(int(blockRoll)), Color.YELLOW_GREEN)
-	
+
 	# Imagine a graph of spike roll vs block roll, both 0-100
-	# If spike is much better than the corresponding equal block value, then it's a kill, 
+	# If spike is much better than the corresponding equal block value, then it's a kill,
 	# the other way, a kill block, and in the middle a deflection
 	var deflectGradient = .25
-	
+
 	Console.AddNewLine("A block will happen")
 	Console.AddNewLine("1 + deflectGradient: " + str(1 + deflectGradient))
 	Console.AddNewLine("1 - deflectGradient: " + str(1 - deflectGradient))
 	Console.AddNewLine("Attack roll: " + str(attackRoll))
 	Console.AddNewLine("Block roll: " + str(blockRoll))
-	
+
 	# Ineffective block
 	if attackRoll>blockRoll * (1 + deflectGradient):
 		KillBlock()
 		#SnickBlock()
-			
+
 	elif blockRoll * (1 - deflectGradient) > attackRoll:
 		KillBlock()
 		#SnickBlock()
 	else:
 		KillBlock()
 		#SnickBlock()
-	
-	
-	
-	
+
+
+
+
 func AddUpcomingBlock(_spikedByA, _blockers, _spiker):
 	ball.blockWillBeAttempted = true
 	spikedByA = _spikedByA

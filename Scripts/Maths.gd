@@ -11,14 +11,14 @@ func XZVector(vec:Vector3) -> Vector3:
 func SignedAngle(from:Vector3, to:Vector3, up:Vector3):
 	if from == to or from == up or up == to:
 		print("signed angle issue(?)")
-		print("from: " + str(from)) 
-		print("to: " + str(to)) 
-		print("up: " + str(up)) 
+		print("from: " + str(from))
+		print("to: " + str(to))
+		print("up: " + str(up))
 		return 0.001
 	var cross_to = from.cross(to)
 	var unsigned_angle = atan2(cross_to.length(), from.dot(to))
 	var theSign = cross_to.dot(up)
-	
+
 	if theSign < 0:
 		return -unsigned_angle
 	else:
@@ -35,7 +35,7 @@ func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, ai
 	var idealAngle
 	var angle1
 	var angle2
-	
+
 	var determinant = pow(speed, 4) - g * (g * xzDist * xzDist + 2 * yDist * speed * speed)
 	if determinant < 0:
 		print("Can't make that parabola work mate, giving you the best we've got")
@@ -70,7 +70,7 @@ func TimeTillBallReachesHeight(position:Vector3, linear_velocity:Vector3, height
 	var remainingTime = (finalV + linear_velocity.y) / g
 
 	return remainingTime
-	
+
 func BallPositionAtGivenHeight(position:Vector3, linear_velocity:Vector3, height:float, gravity_scale:float):
 
 	var timeOfFlight = TimeTillBallReachesHeight(position, linear_velocity, height, gravity_scale)
@@ -79,12 +79,12 @@ func BallPositionAtGivenHeight(position:Vector3, linear_velocity:Vector3, height
 	var newXZPos = xzPos + xzVel * timeOfFlight
 
 	return Vector3(newXZPos.x, height, newXZPos.y)
-	
+
 func SetTimeDownwardsParabola(startPos:Vector3, endPos:Vector3):
 	var ballVel = FindDownwardsParabola(startPos, endPos)
 	if ballVel == Vector3.ZERO:
 		return 9999.9
-		
+
 	var ballXZDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.z))
 	var ballXZVel = Vector3(ballVel.x, 0, ballVel.z).length()
 	return ballXZDist/max(ballXZVel, 0.0001)
@@ -120,7 +120,7 @@ func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNe
 	if determinant < 0:
 		print("Can't make that work chap")
 		return Vector3.ZERO
-		
+
 	var vel = sqrt(determinant)
 
 #Calculate new y vel
@@ -138,12 +138,12 @@ func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNe
 
 func TimeTillBallAtPosition(position:Vector3, linear_velocity:Vector3, receptionTarget:Vector3, _gravity_scale) -> float:
 	var ballXZVel = Vector3(linear_velocity.x, 0, linear_velocity.z).length()
-	
+
 	if ballXZVel <= 0:
 		return 9999.9
-	
+
 	var ballXZDist = Vector3(position.x - receptionTarget.x, 0, position.z - receptionTarget.z).length()
-	
+
 	var time = ballXZDist/ ballXZVel
 	#print("Time till ball at reception target: " + str(time))
 	return time
@@ -152,46 +152,46 @@ func FindWellBehavedParabola(startPos:Vector3, endPos:Vector3, maxHeight:float):
 	if maxHeight <= startPos.y || maxHeight < endPos.y:
 		print("impossible parabola|| maxHeight = " + str(maxHeight) + ", startPos = " + str(startPos) + ", endPos = " + str(endPos))
 		return Vector3.ZERO
-	
+
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x,0, endPos.z))
 	var yVel = sqrt(2 * gravity * (maxHeight - startPos.y))
-	
+
 	var time = yVel / gravity + sqrt(2 * gravity * (maxHeight - endPos.y)) / gravity
 	var xzVel = xzDist / time
-	
+
 	var xzTheta = Maths.SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
-	
+
 #	print("\"Well-behaved\" parabola: " + str( Vector3(xzVel * cos(-xzTheta), yVel, xzVel * sin(-xzTheta))))
 	return Vector3(xzVel * cos(-xzTheta), yVel, xzVel * sin(-xzTheta))
 
 func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 	var maxSetVelocity = 10
-	
+
 	var yDist = startPos.y - endPos.y
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.z))
 	var xzTheta = Maths.SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
-		
-	
+
+
 	# Can the xzDistance be traversed by a ball set horizontally at the maximum allowable speed?
-	# Can the set get down fast enough if you're setting from 10 metres in the air? 
+	# Can the set get down fast enough if you're setting from 10 metres in the air?
 	# for every angle there's a corresponding velocity, should we find the most aggressive?
-	
+
 	# attempt to set horizontally, zero yVel
 	var yTravelTime = sqrt(yDist/gravity)
 	var maxXZTravelTime = xzDist/maxSetVelocity
-	
+
 	if yTravelTime <= maxXZTravelTime:
 		var xzVel = xzDist/ yTravelTime
 		return Vector3(xzVel * cos(-xzTheta), 0, xzVel * sin(-xzTheta))
-		
+
 	else:
 		# use max set speed
 		return Maths.FindParabolaForGivenSpeed(startPos, endPos, maxSetVelocity, false, 1.0)
-		
-		
+
+
 		print("downwards parabola with yVel, not sure if that's possible, yet")
 
-	
+
 func SetTimeWellBehavedParabola(startPos:Vector3, endPos:Vector3, maxHeight:float):
 	var setVelocity = FindWellBehavedParabola(startPos, endPos, maxHeight)
 	if setVelocity.length() == 0:
@@ -199,7 +199,7 @@ func SetTimeWellBehavedParabola(startPos:Vector3, endPos:Vector3, maxHeight:floa
 	var timeToPeak = setVelocity.y / gravity
 	var timeDown = sqrt(2 * gravity * abs(maxHeight - endPos.y))/gravity
 	return timeToPeak + timeDown
-	
+
 func FindNetPass(startPos:Vector3, attackTarget:Vector3, linear_velocity:Vector3, gravity_scale:float)->Vector3:
 	var g = gravity * gravity_scale
 	var distanceFactor = startPos.x / (abs(startPos.x) + abs(attackTarget.x))
@@ -209,5 +209,5 @@ func FindNetPass(startPos:Vector3, attackTarget:Vector3, linear_velocity:Vector3
 	var netPass:Vector3 = startPos + (attackTarget - startPos) * distanceFactor
 	var timeTillNet = abs(startPos.x/linear_velocity.x)
 	netPass.y = startPos.y + linear_velocity.y * timeTillNet + .5 * - g * timeTillNet * timeTillNet
-	
+
 	return netPass

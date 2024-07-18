@@ -1,4 +1,4 @@
-extends "res://Scripts/State/Team/TeamState.gd" 
+extends "res://Scripts/State/Team/TeamState.gd"
 class_name TeamPreReceive
 
 func Enter(team:Team):
@@ -10,17 +10,17 @@ func Enter(team:Team):
 		athlete.stateMachine.SetCurrentState(athlete.chillState)
 		athlete.animTree.set("parameters/state/transition_request", "digging")
 		athlete.model.rotation.y = -team.flip*PI/2
-	
 
-	
+
+
 	if !team.outsideFront || !team.oppositeHitter:
 		#It's happened again...
 		# are the two teams the same?? hence 24 players - YES!
 		var i
 		pass
 	if team.outsideFront.rotationPosition == 2 && team.oppositeHitter.rotationPosition == 4:
-		team.outsideFront.role = Enums.Role.Opposite
-		team.oppositeHitter.role = Enums.Role.Outside
+		team.outsideFront.stats.role = Enums.Role.Opposite
+		team.oppositeHitter.stats.role = Enums.Role.Outside
 		team.markUndoChangesToRoles = true
 
 	team.isNextToSpike = true
@@ -29,10 +29,10 @@ func Enter(team:Team):
 
 	if !team.isHuman:
 		team.mManager.TESTteamRepresentation.AssignCourtPlayers(team)
-		team.mManager.TESTteamRepresentation.UpdateRepresentation(get_process_delta_time())
-	
+		#team.mManager.TESTteamRepresentation.UpdateRepresentation(get_process_delta_time())
+
 #	team.CachePlayers()
-	
+
 func Update(_team:Team):
 	#Is the ball close enough
 	pass

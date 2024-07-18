@@ -26,6 +26,13 @@ func _on_CustomMatchButton_pressed() -> void:
 
 
 func _on_CareerButton_pressed() -> void:
+	var gam:GameWorld = GameWorld.new()
+	gam.GenerateDefaultWorld(true)
+	var savedGame:SavedCareer = SavedCareer.new()
+	savedGame.gameWorld = gam
+	savedGame.number = 13
+	savedGame.string = "blah blah"
+	savedGame.SaveGame()
 	get_tree().change_scene_to_file("res://Scenes/CareerStartScene.tscn")
 
 

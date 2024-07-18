@@ -1,11 +1,7 @@
-extends Node
+extends Resource
 class_name TeamStrategy
 #Holds all the input the user/ai has generated to direct their team
 
-func _init():
-	#receiveRotations
-	pass
-	
 var defaultReceiveRotations =  [
 	# Assuming setter starts in 1
 	[#setter in 1

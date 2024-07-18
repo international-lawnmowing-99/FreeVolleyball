@@ -105,10 +105,10 @@ func _input(event):
 		if freelook and _triggered:
 			if event is InputEventMouseMotion:
 				_mouse_offset = event.relative
-				
+
 			_rotation_offset.x = Input.get_action_strength(rotate_right_action) - Input.get_action_strength(rotate_left_action)
 			_rotation_offset.y = Input.get_action_strength(rotate_down_action) - Input.get_action_strength(rotate_up_action)
-	
+
 		if movement and _triggered:
 			_direction.x = Input.get_action_strength(right_action) - Input.get_action_strength(left_action)
 			_direction.y = Input.get_action_strength(up_action) - Input.get_action_strength(down_action)
@@ -163,12 +163,12 @@ func _update_movement(delta):
 
 func _update_rotation(delta):
 	var offset = Vector2()
-	
+
 	if not freelook_mode == Freelook_Modes.INPUT_ACTION:
 		offset += _mouse_offset * sensitivity
-	if not freelook_mode == Freelook_Modes.MOUSE: 
+	if not freelook_mode == Freelook_Modes.MOUSE:
 		offset += _rotation_offset * sensitivity * ROTATION_MULTIPLIER * delta
-	
+
 	_mouse_offset = Vector2()
 
 	_yaw = _yaw * smoothness + offset.x * (1.0 - smoothness)

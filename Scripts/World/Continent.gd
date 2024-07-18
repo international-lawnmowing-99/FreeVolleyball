@@ -1,9 +1,9 @@
-extends Node
+extends Resource
 
 class_name Continent
 
-var continentName
-var nations = []
+@export var continentName:String
+@export var nations:Array[Nation] = []
 
 func _init(nName):
 	continentName = nName

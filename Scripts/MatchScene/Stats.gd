@@ -1,53 +1,55 @@
-extends Node
+extends Resource
 class_name Stats
 
-var firstName:String
-var lastName:String
+@export var firstName:String
+@export var lastName:String
 
-var serve:float
-var reception:float
+@export var serve:float
+@export var reception:float
 @warning_ignore("shadowed_variable_base_class")
-var set:float
-var dump:float
-var spike:float
-var block:float
-var shirtNumber:int
-var imageID:int = 0
+@export var set:float
+@export var dump:float
+@export var spike:float
+@export var block:float
+@export var shirtNumber:int
+@export var imageID:int = 0
 
 
-var speed:float
-var height:float
-var digHeight:float
-var verticalJump:float
+@export var speed:float
+@export var height:float
+@export var digHeight:float
+@export var verticalJump:float
 
-var reactionTime:float
-var gameRead:float
+@export var reactionTime:float
+@export var gameRead:float
 
-var power:float
-var spikeHeight:float
+@export var power:float
+@export var spikeHeight:float
 
-var standingSetHeight:float
-var jumpSetHeight:float
-var blockHeight:float
+@export var standingSetHeight:float
+@export var jumpSetHeight:float
+@export var blockHeight:float
 
-var nation
+@export var nation:Nation
 #var role
 
-var dob = Time.get_datetime_dict_from_system(true) 
-var floatServe:float
+@export var dob:Dictionary = Time.get_datetime_dict_from_system(true)
+@export var floatServe:float
+
+@export var role:Enums.Role
 
 #public int age(System.DateTime timeNow)
 #return (int)(timeNow - dob).TotalDays/365;
 
 func SetterEvaluation()->float:
 	var eval = set
-	
+
 	if blockHeight > 2.43:
 		eval += block / 5
-	
+
 	eval += serve / 10
 	return eval
-	
+
 func LiberoEvaluation()->float:
 	var eval = reception
 	eval += set / 10
@@ -64,7 +66,7 @@ func MiddleEvaluation()->float:
 #Debug.Log("MiddleEvaluation " + eval + " " + lastName);
 
 	return eval
-	
+
 func OppositeEvaluation()->float:
 	var eval = spike
 	if spikeHeight < 2.9:

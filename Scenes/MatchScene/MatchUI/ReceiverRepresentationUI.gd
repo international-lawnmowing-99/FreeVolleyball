@@ -21,13 +21,13 @@ func _process(delta):
 		position.x = clamp(position.x, bounds[2], bounds[3] - 2 * offsetX)
 		position.y = lerp(position.y, get_global_mouse_position().y - halfCourtOffsetY - offsetY, delta * lerpSpeed)
 		position.y = clamp(position.y, bounds[0], bounds[1] - 2 * offsetY)
-		
+
 		receiveOptionsUI.UpdateDebugInfoUI(self)
 
 func _on_button_toggled(_button_pressed):
 	if selectable:
 		selected = !selected
-		
+
 		if selected:
 			receiveOptionsUI.LockReceiverUI(self)
 			self_modulate = Color.BLUE

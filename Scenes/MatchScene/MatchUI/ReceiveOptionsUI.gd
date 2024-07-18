@@ -35,7 +35,7 @@ func Init():
 	scalingFactor = 909.0/9 # where does the 9 come from? 909 is court size... (never mind, it's the ration of pixel court size to metres physical court size)
 	offsetX = receiverUIArray[0].size.x/2 * receiverUIArray[0].scale.x
 	offsetY = receiverUIArray[0].size.y/2 * receiverUIArray[0].scale.y
-	
+
 	pseudoTeam.CopyTeam(teamA)
 
 	for receiverUI in receiverUIArray:
@@ -44,7 +44,7 @@ func Init():
 		receiverUI.halfCourtOffsetY = $HalfCourtRepresentationUI/ValuedTeamMembers.global_position.y
 		receiverUI.offsetY = offsetY
 		receiverUI.offsetX = offsetX
-		
+
 func _on_rot_1_button_pressed():
 	DisplayRotation(1)
 
@@ -70,15 +70,15 @@ func _on_rot_6_button_pressed():
 
 func DisplayRotation(positionOfOriginalRot1Player:int):
 	currentRotation = positionOfOriginalRot1Player
-	
+
 	displayedRotationLabel.text = "Rotation " + str(positionOfOriginalRot1Player)
 	var rotationDifference = pseudoTeam.originalRotation1Player.pseudoRotationPosition - positionOfOriginalRot1Player
 	if rotationDifference < 0:
 		rotationDifference = 6 + rotationDifference
-	
+
 	for i in range(rotationDifference):
 		pseudoTeam.PseudoRotate()
-	
+
 	var i = 0
 	for athlete in pseudoTeam.courtPlayers:
 		var rect = $HalfCourtRepresentationUI/ValuedTeamMembers.get_child(i)
@@ -88,7 +88,7 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 		rect.position.y = scalingFactor * pos.x - offsetY
 		i += 1
 		rect.athlete = athlete
-	
+
 	currentRotationPositions = teamA.receiveRotations[pseudoTeam.server]
 
 func UpdateDebugInfoUI(selectedReceiver:ReceiverRepresentationUI):
@@ -99,11 +99,11 @@ func LockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
 	boundsUI.visible = true
 	selectedPlayerLabel.text = selectedReceiver.athlete.stats.lastName + " selected"
 
-	
+
 	for lad in receiverUIArray:
 		if lad != selectedReceiver:
 			lad.selectable = false
-			
+
 	UpdateBounds()
 	var myBounds
 	match selectedReceiver.athlete.pseudoRotationPosition:
@@ -113,27 +113,27 @@ func LockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
 		4: myBounds = position4Bounds
 		5: myBounds = position5Bounds
 		6: myBounds = position6Bounds
-		
+
 	myBounds[0] = myBounds[0] * scalingFactor
 	myBounds[1] = myBounds[1] * scalingFactor
 	myBounds[2] = myBounds[2] * scalingFactor
 	myBounds[3] = myBounds[3] * scalingFactor
-	
+
 	selectedReceiver.bounds = myBounds
-	
+
 	Console.AddNewLine(str(myBounds))
 	var lineThicknessHalf = 2.5
 	$HalfCourtRepresentationUI/Bounds/XMinBoundsLine2D.position.y = myBounds[0] - lineThicknessHalf
-	$HalfCourtRepresentationUI/Bounds/XMaxBoundsLine2D.position.y = myBounds[1] - lineThicknessHalf 
+	$HalfCourtRepresentationUI/Bounds/XMaxBoundsLine2D.position.y = myBounds[1] - lineThicknessHalf
 	$HalfCourtRepresentationUI/Bounds/ZMinBoundsLine2D.position.x = myBounds[2] - lineThicknessHalf
 	$HalfCourtRepresentationUI/Bounds/ZMaxBoundsLine2D.position.x = myBounds[3] - lineThicknessHalf
-	
+
 func UnlockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
 	boundsUI.visible = false
 	selectedPlayerLabel.text = ""
 	xPosLabel.text = ""
 	zPosLabel.text = ""
-	
+
 	for lad in receiverUIArray:
 		lad.selectable = true
 	#Console.AddNewLine("X court " + str(currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].x))
@@ -157,22 +157,22 @@ func UpdateBounds():
 	position2Bounds[1] = currentRotationPositions[0].x
 	position2Bounds[2] = -currentRotationPositions[2].z
 	position2Bounds[3] = 4.5
-	
+
 	position3Bounds[0] = 0
 	position3Bounds[1] = currentRotationPositions[5].x
 	position3Bounds[2] = -currentRotationPositions[3].z
 	position3Bounds[3] = -currentRotationPositions[1].z
-	
+
 	position4Bounds[0] = 0
 	position4Bounds[1] = currentRotationPositions[4].x
 	position4Bounds[2] = -4.5
 	position4Bounds[3] = -currentRotationPositions[2].z
-	
+
 	position5Bounds[0] = currentRotationPositions[3].x
 	position5Bounds[1] = 9
 	position5Bounds[2] = -4.5
 	position5Bounds[3] = -currentRotationPositions[5].z
-	
+
 	position6Bounds[0] = currentRotationPositions[2].x
 	position6Bounds[1] = 9
 	position6Bounds[2] = -currentRotationPositions[4].z

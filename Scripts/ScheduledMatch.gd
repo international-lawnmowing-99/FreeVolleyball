@@ -1,18 +1,20 @@
-extends Node
+extends Resource
 class_name ScheduledMatch
 
-var date:String
-var teamA:Team
-var teamB:Team
+@export var toBeSimulated:bool = false
+@export var date:String
+@export var round:int
+@export var teamA:TeamResource
+@export var teamB:TeamResource
 
-var venue
+#@export var venue:String
 
-var completed:bool = false
+@export var completed:bool = false
 
-var winner:Team
+@export var winner:TeamResource
 
-var teamASetScore:int
-var teamBSetScore:int
+@export var teamASetScore:int
+@export var teamBSetScore:int
 
-var teamACompletedScores = []
-var teamBCompletedScores = []
+@export var teamACompletedScores = []
+@export var teamBCompletedScores = []

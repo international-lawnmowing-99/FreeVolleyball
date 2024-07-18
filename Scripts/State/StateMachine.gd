@@ -1,4 +1,4 @@
-extends Node
+extends Resource
 
 class_name StateMachine
 
@@ -13,10 +13,10 @@ func SetCurrentState(newState:State):
 	if currentState:
 		previousState = currentState
 		previousState.Exit(entity)
-	
+
 	currentState = newState
 	currentState.Enter(entity)
-	
+
 func Update():
 	currentState.Update(entity)
 

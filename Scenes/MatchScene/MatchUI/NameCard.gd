@@ -29,8 +29,8 @@ func DisplayStats(athlete:Athlete):
 #	else:
 #		skillText.modulate(Color.CHARTREUSE)
 	$Height.text = str("%.0f" % (athlete.stats.height *100)) + "cm"
-	$Role.text = Enums.Role.keys()[athlete.role]
-	
+	$Role.text = Enums.Role.keys()[athlete.stats.role]
+
 	if athlete.team:
 		if athlete.team.teamCaptain == athlete:
 			$CaptainIcon.show()
@@ -66,7 +66,7 @@ func _on_NameCard_mouse_exited() -> void:
 
 func _on_SubstituteButton_pressed() -> void:
 	if teamSubstitutionUI:
-		
+
 		teamSubstitutionUI.RequestSub(cardAthlete)
 		if cardAthlete.team.numberOfSubsUsed < teamSubstitutionUI.MAXSUBSFIVB:
 			ChangeColour(Color.PURPLE)

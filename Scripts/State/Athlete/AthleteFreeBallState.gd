@@ -5,7 +5,7 @@ var digHeight:float = 0.5
 func Enter(athlete:Athlete):
 	nameOfState="FreeBall"
 	athlete.animTree.set("parameters/state/transition_request", "digging")
-	
+
 func Update(athlete:Athlete):
 	athlete.DontFallThroughFloor()
 	if athlete.ball.position.distance_to(Vector3(athlete.position.x, digHeight, athlete.position.z)) <= 0.5:

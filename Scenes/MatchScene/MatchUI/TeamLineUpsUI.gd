@@ -23,7 +23,7 @@ func _ready() -> void:
 		nameCards.append(card)
 	for card in $HumanTeam.get_children():
 		nameCards.append(card)
-	
+
 	for card:NameCard in nameCards:
 		card.DisplayEssentials()
 
@@ -31,27 +31,27 @@ func DisplayTeams():
 	if !mManager.teamA:
 		Console.AddNewLine("ERROR: No teamA in match manager")
 		return
-		
+
 	if mManager.newMatch.clubOrInternational == Enums.ClubOrInternational.Club:
 		$Libero2Label.hide()
-	
+
 	for i in 14:
 		if i < mManager.teamA.matchPlayers.size():
 			(teamAParent.get_child(i) as NameCard).DisplayStats(mManager.teamA.matchPlayers[i])
-			
+
 			captainSelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
 			libero1SelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
 			libero2SelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
-		
+
 		else:
 			teamAParent.get_child(i).hide()
-		
+
 	for i in 14:
 		if i < mManager.teamB.matchPlayers.size():
 			(teamBParent.get_child(i) as NameCard).DisplayStats(mManager.teamB.matchPlayers[i])
 		else:
 			teamBParent.get_child(i).hide()
-			
+
 	if mManager.teamA.teamCaptain:
 		captainLabel.text = "Captain: " + mManager.teamA.teamCaptain.stats.lastName
 	if mManager.teamA.libero:
@@ -65,7 +65,7 @@ func _on_select_captain_button_pressed():
 	if !mManager.teamA:
 		Console.AddNewLine("ERROR: No teamA in match manager")
 		return
-		
+
 	captainSelectPopup.show()
 	libero1SelectPopup.hide()
 	libero2SelectPopup.hide()
@@ -85,16 +85,16 @@ func RefreshCaptainAndLiberoIcons():
 			card.liberoIcon.show()
 		else:
 			card.liberoIcon.hide()
-		
+
 	if mManager.teamA.libero:
 		mManager.teamA.libero.model.ChangeShirtColour()
-	
+
 	if mManager.teamA.libero2:
 		mManager.teamA.libero2.model.ChangeShirtColour(Color(4,0,0))
 
 	if mManager.teamB.libero:
 		mManager.teamB.libero.model.ChangeShirtColour()
-	
+
 	if mManager.teamB.libero2:
 		mManager.teamB.libero2.model.ChangeShirtColour(Color(0,0,9))
 
@@ -109,42 +109,42 @@ func _on_libero_1_select_popup_menu_id_pressed(id):
 	if mManager.teamA.libero2 == mManager.teamA.matchPlayers[id]:
 		Console.AddNewLine("ERROR: must select two different liberos")
 		return
-		
+
 	var previousLibero:Athlete
 	var newLibero:Athlete = mManager.teamA.matchPlayers[id]
-	
+
 	if mManager.teamA.libero:
 		previousLibero = mManager.teamA.libero
 		previousLibero.model.RevertShirtColour()
-		previousLibero.role = newLibero.role
-	
-	
+		previousLibero.stats.role = newLibero.stats.role
+
+
 	mManager.teamA.libero = newLibero
-	newLibero.role = Enums.Role.Libero
+	newLibero.stats.role = Enums.Role.Libero
 	libero1Label.text = "Libero 1: " + newLibero.stats.lastName
-	
+
 	if previousLibero:
 		mManager.teamA.InstantaneouslySwapPlayers(newLibero, previousLibero)
 	elif newLibero in mManager.teamA.courtPlayers:
 		mManager.teamA.InstantaneouslySwapPlayers(newLibero, previousLibero)
-	
-	
+
+
 	for i in range(mManager.teamA.playerToBeLiberoedOnServe.size()):
 		if mManager.teamA.playerToBeLiberoedOnServe[i][2] == null || \
 		mManager.teamA.playerToBeLiberoedOnServe[i][2] == previousLibero:
 			mManager.teamA.playerToBeLiberoedOnServe[i][2] = newLibero
-			
-			
+
+
 		if mManager.teamA.playerToBeLiberoedOnReceive[i][2] == null || \
 		mManager.teamA.playerToBeLiberoedOnReceive[i][2] == previousLibero:
 			mManager.teamA.playerToBeLiberoedOnReceive[i][2] = newLibero
-		
+
 		if mManager.teamA.playerToBeLiberoedOnServe[i][1] == newLibero:
 			mManager.teamA.playerToBeLiberoedOnServe[i][1] = previousLibero
 
 		if mManager.teamA.playerToBeLiberoedOnReceive[i][1] == newLibero:
 			mManager.teamA.playerToBeLiberoedOnReceive[i][1] = previousLibero
-		
+
 	mManager.teamA.CachePlayers()
 	RefreshCaptainAndLiberoIcons()
 
@@ -154,42 +154,42 @@ func _on_libero_2_select_popup_menu_id_pressed(id):
 	if mManager.teamA.libero == mManager.teamA.matchPlayers[id]:
 		Console.AddNewLine("ERROR: must select two different liberos")
 		return
-	
+
 	var previousLibero2:Athlete
 	var newLibero2:Athlete = mManager.teamA.matchPlayers[id]
-	
+
 	if mManager.teamA.libero2:
 		previousLibero2 = mManager.teamA.libero2
 		previousLibero2.model.RevertShirtColour()
-		previousLibero2.role = newLibero2.role
-	
-	
+		previousLibero2.stats.role = newLibero2.stats.role
+
+
 	mManager.teamA.libero2 = newLibero2
-	newLibero2.role = Enums.Role.Libero
+	newLibero2.stats.role = Enums.Role.Libero
 	libero2Label.text = "Libero 2: " + newLibero2.stats.lastName
-	
+
 	if previousLibero2:
 		mManager.teamA.InstantaneouslySwapPlayers(newLibero2, previousLibero2)
 		# The current match creation process always makes a libero if there are enough players,
 		# so the alternative of choosing a player who may already be on the court doesn't happen
-	
-	
+
+
 	for i in range(mManager.teamA.playerToBeLiberoedOnServe.size()):
 		if mManager.teamA.playerToBeLiberoedOnServe[i][2] == null || \
 		mManager.teamA.playerToBeLiberoedOnServe[i][2] == previousLibero2:
 			mManager.teamA.playerToBeLiberoedOnServe[i][2] = newLibero2
-			
-			
+
+
 		if mManager.teamA.playerToBeLiberoedOnReceive[i][2] == null || \
 		mManager.teamA.playerToBeLiberoedOnReceive[i][2] == previousLibero2:
 			mManager.teamA.playerToBeLiberoedOnReceive[i][2] = newLibero2
-		
+
 		if mManager.teamA.playerToBeLiberoedOnServe[i][1] == newLibero2:
 			mManager.teamA.playerToBeLiberoedOnServe[i][1] = previousLibero2
 
 		if mManager.teamA.playerToBeLiberoedOnReceive[i][1] == newLibero2:
 			mManager.teamA.playerToBeLiberoedOnReceive[i][1] = previousLibero2
-		
+
 	mManager.teamA.CachePlayers()
 
 	RefreshCaptainAndLiberoIcons()

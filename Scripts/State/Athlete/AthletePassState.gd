@@ -14,31 +14,31 @@ func Enter(athlete:Athlete):
 	nameOfState="pass"
 	athlete.animTree.set("parameters/state/transition_request", "digging")
 	ball = athlete.ball
-	
+
 	#Make a determination as to whether the ball will land in the court
 	#Ideally take into account:
 	# 1: confidence that it's in
 	# 2: confidence that it's my ball to take
-	
+
 	if athlete.team.isHuman && ball.wasLastTouchedByA:
 		if ball.attackTarget.x > 9.2 || ball.attackTarget.x < 0 ||\
 		ball.attackTarget.z < -4.7 || ball.attackTarget.z > 4.7:
 			athlete.stateMachine.SetCurrentState(athlete.chillState)
 			return
-	elif !athlete.team.isHuman && !ball.wasLastTouchedByA: 
+	elif !athlete.team.isHuman && !ball.wasLastTouchedByA:
 		if ball.attackTarget.x < -9.2 || ball.attackTarget.x > 0 ||\
 		ball.attackTarget.z < -4.7 || ball.attackTarget.z > 4.7:
 			athlete.stateMachine.SetCurrentState(athlete.chillState)
 			return
 
-	
+
 	var servePos = ball.position
-	
+
 	athlete.moveTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, athlete.stats.digHeight, ball.topspin) + Vector3(0,-athlete.stats.digHeight, randf_range(-.25,.25))
 	athlete.moveTarget += (athlete.moveTarget - Vector3(servePos.x, 0, servePos.z)).normalized()/2
-	
+
 	#look_at(Vector3(servePos.x,0, servePos.z), Vector3.UP)
-	
+
 	#point where a circle will intersect with the xz vector of the ball's motion
 	#circle is (x-h)^2 + (y-k)^2 = r^2
 	var h = athlete.moveTarget.x
@@ -47,7 +47,7 @@ func Enter(athlete:Athlete):
 	#line is ...
 	var xPart = ball.linear_velocity.x
 	var zPart = ball.linear_velocity.z # (It's y!)
-	
+
 	var m
 	if xPart == 0 && zPart == 0:
 		print("no vel to work with")
@@ -59,22 +59,22 @@ func Enter(athlete:Athlete):
 		m = 999999
 		#print("m = big")
 	else:
-		m = zPart/xPart 
+		m = zPart/xPart
 	#y=mx+b
 	#b = y - mx
 	var b = servePos.z - m * servePos.x
-	
+
 	#Will the two meet??
-	# circle = line 
-	
+	# circle = line
+
 	var aDet = m*m + 1
 	var bDet = -2*h + 2*m*b - 2*k*m
 	var cDet = h*h + b*b + k*k -2*k*b - r*r
-	
+
 	var determinate = bDet * bDet - 4 *aDet * cDet
-	
-	
-	
+
+
+
 	if determinate == 0:
 		#Congrats, you have a tangent
 		intersectionPointX = (-bDet + sqrt(determinate))/(2*aDet)
@@ -90,9 +90,9 @@ func Enter(athlete:Athlete):
 		# No intersections
 		intersectionPointX = h +1
 		#print("can't make that work chap")
-		
+
 	intersectionPointZ = m*intersectionPointX + b
-	
+
 	# for now the athlete moves in a straight line to the movetarget, without rotating
 	athlete.model.look_at_from_position(Maths.XZVector(athlete.position), Vector3.ZERO, Vector3.UP, true)
 	athlete.digAngle = (Maths.SignedAngle(-athlete.model.transform.basis.z , -athlete.position + Vector3(intersectionPointX,0,intersectionPointZ), Vector3.UP))
@@ -100,8 +100,8 @@ func Enter(athlete:Athlete):
 #	athlete.team.mManager.sphere.position = athlete.position
 	#print("digAngle = " + str(athlete.digAngle))
 	#other team is rotated -90, we're 90
-	#var angle = atan2(athlete.position.z - intersectionPointZ, athlete.position.x - intersectionPointX) 
-	
+	#var angle = atan2(athlete.position.z - intersectionPointZ, athlete.position.x - intersectionPointX)
+
 	#print(str(rad_to_deg(athlete.transform.basis.z[0])))
 
 	#athlete.anglewanted = -athlete.position + Vector3(intersectionPointX,0,intersectionPointZ)
@@ -110,15 +110,15 @@ func Enter(athlete:Athlete):
 func Update(athlete:Athlete):
 	if !ball.inPlay:
 		return
-	
+
 #	athlete.get_node("Debug").global_transform.origin = Vector3(intersectionPointX, .5, intersectionPointZ)
 	athlete.timeTillBallReachesMe = Vector3(ball.position.x, 0, ball.position.z).distance_to(Vector3(athlete.position.x, 0, athlete.position.z))\
 				/max(Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length(), 0.001)
-				
+
 
 	if athlete.timeTillBallReachesMe <1.5:
 		athlete.animTree.set("parameters/state/current", 1)
-		var animFactor = min(1.0, 1.5 -  athlete.timeTillBallReachesMe) 
+		var animFactor = min(1.0, 1.5 -  athlete.timeTillBallReachesMe)
 		athlete.animTree.set("parameters/Dig/blend_amount", animFactor)
 
 		athlete.RotateDigPlatform(athlete.digAngle)#( lerp(0,athlete.digAngle,(max(1,1/athlete.timeTillBallReachesMe)))))
@@ -130,17 +130,17 @@ func Update(athlete:Athlete):
 	if !isBallAlreadyPassed && ball.position.y < athlete.stats.digHeight && ball.position.y > .35 &&\
 		(Vector3(ball.position.x,0, ball.position.z)).distance_to(athlete.position) < 1:
 			PassBall(athlete)
-			
+
 func Exit(athlete:Athlete):
 	athlete.animTree.set("parameters/state/current", 0)
 	pass
-	
+
 func PassBall(athlete:Athlete):
 	isBallAlreadyPassed = true
 	ball.floating = false
 	ball.floatDisplacement = Vector3.ZERO
 	ball.SetTopspin(1.0)
-	
+
 	#Engine.time_scale = 0.25
 	var receptionTarget
 	var ballMaxHeight
@@ -151,35 +151,35 @@ func PassBall(athlete:Athlete):
 #	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.AQUA)
 #	Console.AddNewLine( str(int(rollOffDifference)) + " roll unchecked differece ", Color.RED)
 
-	
+
 	if rollOffDifference >= 19:
 		# what is the ideal height for the setter to jump set??
-		if athlete.role == Enums.Role.Setter:
+		if athlete.stats.role == Enums.Role.Setter:
 			if athlete.team.isLiberoOnCourt:
 				receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.activeLibero.stats.jumpSetHeight, 0)
 			else:
 				receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.middleBack.stats.jumpSetHeight, 0)
 		else:
 			receptionTarget = Vector3(athlete.team.flip * 0.5, athlete.team.setter.stats.jumpSetHeight, 0)
-		
+
 		# for a perfect reception, this needs to be sufficient to give the setter time to jump set
 		# even in the unrealistic setup (setter vertical jump >3 metres) we've got now
-		
+
 		var setterJumpSetTime = athlete.team.setter.setState.TimeToJumpSet(athlete.team.setter, receptionTarget) + randf_range(.2, 1.0)
 		var heightDifferenceToReceptionTarget = receptionTarget.y - ball.position.y
 		var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-		
+
 #		initialYVel = (s - 1/2 a t^2)/t
 		var initialYVel = (heightDifferenceToReceptionTarget + .5 * gravity * setterJumpSetTime * setterJumpSetTime)/setterJumpSetTime
-		
+
 #		time for ball to peak:
 #		0 = u + at, t = u/g
-		
+
 		var timeForBallPeak = initialYVel/gravity
 		ballMaxHeight = initialYVel * initialYVel /(2 * gravity) + ball.position.y
 
 #		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
-		
+
 		Console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")
 
 	elif rollOffDifference >= -10:
@@ -189,22 +189,22 @@ func PassBall(athlete:Athlete):
 		pass
 	elif rollOffDifference >= -50:
 		receptionTarget = Vector3(athlete.position.x + randf_range(-3,3), 2.5, athlete.position.z + randf_range(-3,3))
-		
+
 		#prevent the setter chasing overpasses... by removing them! (for now)
 		if athlete.team.isHuman:
 			receptionTarget.x = max(receptionTarget.x, 0.1)
 		else:
 			receptionTarget.x = min(receptionTarget.x, -0.1)
 		######################################################################
-		
+
 		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 		Console.AddNewLine(athlete.stats.lastName + " 1-point pass")
 #		athlete.team.mManager.cube.position = receptionTarget
-		pass	
+		pass
 	else:
 		ball.linear_velocity.y *= -1
 		ball.linear_velocity *= randf_range(0.4, 1.0)
-		
+
 		if Maths.BallMaxHeight(ball.position, ball.linear_velocity, 1.0) >= 2.4:
 			receptionTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 2.5, 1.0)
 		else:
@@ -222,14 +222,14 @@ func PassBall(athlete:Athlete):
 
 	ball.gravity_scale = 1
 	ball.angular_velocity += Vector3 ( randf_range(-5,5),randf_range(-5,5), randf_range(-5,5))
-	
+
 	if athlete.team.isHuman:
 		ball.TouchedByA()
 	else:
 		ball.TouchedByB()
-	
+
 	athlete.team.receptionTarget = receptionTarget
-	
+
 ### IT'S BACK!!! --------------------- (still oddly necessary)
 	ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
 	await athlete.get_tree().process_frame
@@ -242,5 +242,5 @@ func PassBall(athlete:Athlete):
 
 	await athlete.get_tree().create_timer(.5).timeout
 	athlete.RotateDigPlatform(0)
-	
+
 	athlete.stateMachine.SetCurrentState(athlete.transitionState)

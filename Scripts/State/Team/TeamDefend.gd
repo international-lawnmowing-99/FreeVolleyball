@@ -16,10 +16,10 @@ func Enter(team:Team):
 			player.stateMachine.SetCurrentState(player.blockState)
 		else:
 			player.stateMachine.SetCurrentState(player.defendState)
-	
+
 	CacheBlockers(team)
-	
-	# What is the blocking strategy? 
+
+	# What is the blocking strategy?
 	# Can go standard spread, tight for pipe, don't rate the opposite so 2 checked setter/middle...
 	# Can go even more extravagant - triple stack checked outside
 	# In general we can have - triple checked each opposing player ~ 5 or 6 depending checked whether
@@ -30,8 +30,8 @@ func Enter(team:Team):
 	# commit to anyone)
 	# - Where to set the block ie taking out line or cross court primarily
 	# - Also whether to remove hands to avoid being tooled
-	
-	
+
+
 	if team.setter.FrontCourt():
 		team.setter.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, -3))
 #		team.oppositeHitter.moveTarget = team.CheckIfFlipped(Vector3(5.5, 0, -2.2))
@@ -57,10 +57,10 @@ func Enter(team:Team):
 
 
 	team.middleFront.blockState.blockingTarget = otherTeam.middleFront
-	
+
 func Update(team:Team):
 	if team.isHuman:
-		
+
 		#print("defend" + str(randf()))
 		if Input.is_key_pressed(KEY_LEFT):
 			#print("BlockingLeft")
@@ -81,7 +81,7 @@ func Exit(_team:Team):
 
 func CacheBlockers(team:Team):
 	middleBlocker = team.middleFront
-	
+
 	if team.setter.FrontCourt():
 		rightSideBlocker = team.setter
 		leftSideBlocker = team.outsideFront
@@ -96,32 +96,32 @@ func CacheBlockers(team:Team):
 func TripleBlockLeft(team:Team):
 	rightSideBlocker.blockState.blockingTarget = otherTeam.oppositeHitter
 	middleBlocker.blockState.blockingTarget = otherTeam.oppositeHitter
-	
+
 	leftSideBlocker.moveTarget = team.flip * Vector3(0.5, 0, 4)
 	middleBlocker.moveTarget = leftSideBlocker.moveTarget + team.flip * Vector3(0,0,-0.8)
 	rightSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,-0.8)
-	
+
 func TripleBlockRight(team:Team):
 	leftSideBlocker.blockState.blockingTarget = otherTeam.outsideFront
 	middleBlocker.blockState.blockingTarget = otherTeam.outsideFront
-	
+
 	rightSideBlocker.moveTarget = team.flip * Vector3(0.5, 0, -4)
 	middleBlocker.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0,0,0.8)
 	leftSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,0.8)
-	
+
 func DoubleBlockLeft(team:Team):
 	middleBlocker.blockState.blockingTarget = otherTeam.outsideFront
 	middleBlocker.moveTarget = leftSideBlocker.moveTarget + team.flip * Vector3(0,0,-0.8)
-	
+
 func DoubleBlockRight(team:Team):
 	middleBlocker.blockState.blockingTarget = otherTeam.oppositeHitter
 	middleBlocker.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0,0,0.8)
-	
+
 func TripleBlockPipe(team:Team):
 	rightSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
 	leftSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
 	middleBlocker.blockState.blockingTarget = otherTeam.outsideBack
-	
+
 	leftSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,0.8)
 	rightSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,-0.8)
 
@@ -130,7 +130,7 @@ func EvaluateOppositionPass(_team:Team):
 	# ie, bad pass means no middle, so stack checked actually possible hitters
 #	print("other team reception target: " + str(otherTeam.receptionTarget))
 	var dumpProbability = 0
-	
+
 	if rightSideBlocker.blockState.isCommitBlocking:
 		rightSideBlocker.blockState.ConfirmCommitBlock(rightSideBlocker, otherTeam)
 	if leftSideBlocker.blockState.isCommitBlocking:
@@ -143,10 +143,10 @@ func ReactToSet(team:Team):
 		return
 	# React blockers move to new blocking position, perhaps after a delay given by a "reaction time" stat
 	if !leftSideBlocker.blockState.isCommitBlocking:
-		
+
 		leftSideBlocker.blockState.blockState = leftSideBlocker.blockState.BlockState.Preparing
 		leftSideBlocker.blockState.blockingTarget = otherTeam.chosenSpiker
-		
+
 		if team.isHuman:
 			if otherTeam.setTarget.target.z >= 0:
 				leftSideBlocker.moveTarget = Vector3(0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z))
@@ -163,13 +163,13 @@ func ReactToSet(team:Team):
 					leftSideBlocker.moveTarget = Vector3(-0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z) - 1.5)
 				else:
 					leftSideBlocker.stateMachine.SetCurrentState(leftSideBlocker.chillState)
-		
-	
+
+
 	if !rightSideBlocker.blockState.isCommitBlocking:
-		
+
 		rightSideBlocker.blockState.blockingTarget = otherTeam.chosenSpiker
 		rightSideBlocker.blockState.blockState = rightSideBlocker.blockState.BlockState.Preparing
-			
+
 		if team.isHuman:
 			if otherTeam.setTarget.target.z <= 0:
 				rightSideBlocker.moveTarget = Vector3(0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z))
@@ -188,23 +188,23 @@ func ReactToSet(team:Team):
 					rightSideBlocker.moveTarget = Vector3(-0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z) + 1.5)
 				else:
 					rightSideBlocker.stateMachine.SetCurrentState(rightSideBlocker.chillState)
-	
+
 	if !team.middleFront.blockState.isCommitBlocking:
-		
+
 		team.middleFront.blockState.blockingTarget = otherTeam.chosenSpiker
 		team.middleFront.blockState.blockState = team.middleFront.blockState.BlockState.Preparing
-			
+
 		if team.isHuman:
 			team.middleFront.moveTarget = Vector3(0.5, 0, clamp(otherTeam.setTarget.target.z, rightSideBlocker.moveTarget.z + 0.75, leftSideBlocker.moveTarget.z - 0.75))
 		else:
 			team.middleFront.moveTarget = Vector3(-0.5, 0, clamp(otherTeam.setTarget.target.z, leftSideBlocker.moveTarget.z + 0.75, rightSideBlocker.moveTarget.z - 0.75))
-	
+
 	else:
 		if team.middleFront.blockState.blockingTarget != otherTeam.chosenSpiker:
 			team.middleFront.blockState.blockingTarget = otherTeam.chosenSpiker
 			team.middleFront.blockState.blockState = team.middleFront.blockState.BlockState.Preparing
 			team.middleFront.blockState.isCommitBlocking = false
-			
+
 			if team.flip * otherTeam.chosenSpiker.setRequest.target.z >= 0:
 				team.middleFront.moveTarget = leftSideBlocker.moveTarget - team.flip * Vector3(0, 0, .75)
 			else:

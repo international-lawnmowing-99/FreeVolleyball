@@ -17,16 +17,16 @@ func _input(event: InputEvent) -> void:
 
 func ToggleTeamInfo():
 	teamSubstitutionUI.Refresh()
-	
+
 	if teamSubstitutionUI.visible:
 		if mManager.preSet:
 			mManager.StartSet()
-			
+
 		teamSubstitutionUI.hide()
 		onCourPlayers.visible = true
-		if !camera.enabled: 
+		if !camera.enabled:
 			$"/root/MatchScene/Camera3D/".get_child(0).UnlockCamera()
-	
+
 	else:
 		Console.Clear()
 		teamSubstitutionUI.show()
@@ -34,8 +34,8 @@ func ToggleTeamInfo():
 		if camera.enabled:
 			camera.set_enabled(false)
 			$"/root/MatchScene/Camera3D/".get_child(0).LockCamera()
-			
-		
+
+
 func InitialiseOnCourtPlayerUI():
 	for i in range(6):
 		var onCourtPlayer = $OnCourtPlayers/VBoxContainer.get_child(i)
@@ -44,8 +44,8 @@ func InitialiseOnCourtPlayerUI():
 				onCourtPlayer.athlete = mManager.teamA.playerCurrentlyLiberoedOff
 		else:
 			onCourtPlayer.athlete = mManager.teamA.courtPlayers[i]
-		
+
 		onCourtPlayer.UpdateFields()
-	
+
 	$OnCourtPlayers/VBoxContainer/OnCourtPlayer7.athlete = mManager.teamA.activeLibero
 	$OnCourtPlayers/VBoxContainer/OnCourtPlayer7.UpdateFields()

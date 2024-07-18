@@ -53,20 +53,20 @@ const WALKBOUNDS = [9.25, 15.5, -4.25, 4.25]
 
 const SERVETARGETSPEED = 6
 
-	
+
 func Enter(athlete:Athlete):
 	nameOfState="HumanServe"
 	athlete.animTree.set("parameters/state/transition_request", "moving")
-	
+
 	ball = athlete.ball
 	serveState = ServeState.Walking
 	serveTarget = athlete.team.mManager.get_node("ServeTarget")
 	serveUI = athlete.team.mManager.get_node("UI/ServeUI")
-	
+
 	serveUI.humanServeState = self
 	_athlete = athlete
-	
-	
+
+
 	if rememberSettings:
 		if rememberedServeTarget:
 			serveTarget.position = rememberedServeTarget
@@ -82,18 +82,18 @@ func Enter(athlete:Athlete):
 	else:
 		serveAggression = ServeAggression.UNDEFINED
 		serveType = ServeType.UNDEFINED
-		
+
 	serveState = ServeState.Walking
 	serveUI.ShowServeChoice()
-		
+
 #	if randi()%2 == 1:
 #		serveType = ServeType.Float
 #	else:
 #		serveType = ServeType.Jump
 	serveTarget.visible = false
-	
+
 func Update(athlete:Athlete):
-	
+
 	match serveState:
 		ServeState.Walking:
 			if Input.is_key_pressed(KEY_I):
@@ -104,14 +104,14 @@ func Update(athlete:Athlete):
 				athlete.position.z -= athlete.myDelta * athlete.stats.speed
 			if Input.is_key_pressed(KEY_K):
 				athlete.position.x += athlete.myDelta * athlete.stats.speed
-			
+
 			athlete.position.x = clamp(athlete.position.x, WALKBOUNDS[0],WALKBOUNDS[1])
 			athlete.position.z = clamp(athlete.position.z, WALKBOUNDS[2],WALKBOUNDS[3])
 			athlete.moveTarget = athlete.position
-			
+
 		ServeState.Aiming:
 			#athlete.team.mManager.preSet = false
-			
+
 			if Input.is_key_pressed(KEY_I):
 				serveTarget.position.x -= SERVETARGETSPEED * athlete.myDelta
 			if Input.is_key_pressed(KEY_J):
@@ -120,7 +120,7 @@ func Update(athlete:Athlete):
 				serveTarget.position.z -= SERVETARGETSPEED * athlete.myDelta
 			if Input.is_key_pressed(KEY_K):
 				serveTarget.position.x += SERVETARGETSPEED * athlete.myDelta
-			
+
 			#Aggressive jump serve can only be in the back 3 metres if you're not jumping a km into the air
 			#Float and soft jump can realistically be anywhere past the 3 metre line
 			#Underarm can go anywhere except the first 50cm without the Magnus Effect
@@ -132,23 +132,23 @@ func Update(athlete:Athlete):
 					else:
 						serveTarget.position.x = clamp(serveTarget.position.x, AGGRESSIVEJUMPBOUNDS[0], AGGRESSIVEJUMPBOUNDS[1])
 						serveTarget.position.z = clamp(serveTarget.position.z, AGGRESSIVEJUMPBOUNDS[2], AGGRESSIVEJUMPBOUNDS[3])
-				
+
 				ServeType.Float:
 					serveTarget.position.x = clamp(serveTarget.position.x, FLOATANDSOFTJUMPBOUNDS[0], FLOATANDSOFTJUMPBOUNDS[1])
 					serveTarget.position.z = clamp(serveTarget.position.z, FLOATANDSOFTJUMPBOUNDS[2], FLOATANDSOFTJUMPBOUNDS[3])
-				
+
 				ServeType.Underarm:
 					serveTarget.position.x = clamp(serveTarget.position.x, UNDERARMBOUNDS[0], UNDERARMBOUNDS[1])
 					serveTarget.position.z = clamp(serveTarget.position.z, UNDERARMBOUNDS[2], UNDERARMBOUNDS[3])
 
-			
+
 
 			if Input.is_action_just_pressed("ui_accept"):
-				
+
 				CommenceServe()
 
 		ServeState.Tossing:
-			
+
 			match serveType:
 				ServeType.Jump:
 					var runupLength = 2.75
@@ -165,12 +165,12 @@ func Update(athlete:Athlete):
 					ball.freeze = false
 					ball.position = Vector3(athlete.position.x, ball.position.y, athlete.position.z)
 					ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, tossTarget, athlete.stats.spikeHeight + 5)
-					
+
 					ball.rotation = Vector3.ZERO
 					ball.angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), randf_range(10,30))
-					
+
 					serveState = ServeState.WatchingTheBallInTheAir
-				
+
 				ServeType.Float:
 					var runupLength = 1.25
 					var runup = Vector2(attackTarget.x - athlete.position.x, attackTarget.z - athlete.position.z).normalized() * runupLength
@@ -184,15 +184,15 @@ func Update(athlete:Athlete):
 					ball.freeze = false
 					ball.position = Vector3(athlete.position.x, ball.position.y, athlete.position.z)
 					ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, tossTarget, athlete.stats.spikeHeight + 5)
-					
+
 					ball.rotation = Vector3.ZERO
 					ball.angular_velocity = Vector3 ( randf_range(-.5,.5),randf_range(-.5,.5), randf_range(10,30))
-					
+
 					serveState = ServeState.WatchingTheBallInTheAir
-				
+
 				ServeType.Underarm:
 					ball.freeze = false
-					
+
 					HitBall(athlete)
 					serveState = ServeState.NotServing
 
@@ -203,7 +203,7 @@ func Update(athlete:Athlete):
 			if (Maths.TimeTillBallReachesHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.spikeHeight, 1.0) <= athlete.CalculateTimeTillJumpPeak(takeOffTarget)):
 				serveState = ServeState.Runup
 				athlete.moveTarget = takeOffTarget
-		
+
 		ServeState.Runup:
 			var distanceToTakeoff = athlete.position.distance_to(takeOffTarget)
 			if (distanceToTakeoff >= .1):
@@ -215,12 +215,12 @@ func Update(athlete:Athlete):
 				athlete.rb.gravity_scale = 1
 
 				var landing = athlete.position + Vector3(attackTarget.x - athlete.position.x, 0, attackTarget.z - athlete.position.z).normalized() * athlete.stats.verticalJump
-				
+
 				#Again, don't ask me why this is needed
 				athlete.rb.apply_central_impulse(Maths.FindWellBehavedParabola(athlete.position, landing, athlete.stats.verticalJump))
 #				await athlete.get_tree().idle_frame
 #				athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, landing, athlete.stats.verticalJump)
-				
+
 				serveState = ServeState.Jump
 				#if (timeTillJumpPeak<= jumpAnimationTime)
 				#anim.SetTrigger("jump");
@@ -237,20 +237,20 @@ func Update(athlete:Athlete):
 			if (athlete.position.y <= 0.01 && athlete.rb.linear_velocity.y < 0):
 				athlete.rb.freeze = true
 				athlete.rb.gravity_scale = 0
-				
+
 				athlete.position.y = 0
 				serveState = ServeState.NotServing
 				athlete.stateMachine.SetCurrentState(athlete.defendState)
 
 func HitBall(athlete:Athlete):
 	var serveRoll = randf_range(0, athlete.stats.serve)
-	
+
 	ball.topspin = 1.0
-	
-	# did they stuff up the serve?? 
+
+	# did they stuff up the serve??
 	# skill ~ 30 - 70 ~.5
 	# expecting 5 - 30% error rate, depending checked aggro, avg 10%
-	
+
 	var fuckupProb = 0# .075
 	match serveAggression:
 		ServeAggression.Aggressive:
@@ -272,14 +272,14 @@ func HitBall(athlete:Athlete):
 			ball.floating = true
 		elif serveType == ServeType.Jump:
 			ball.topspin = 1 + randf_range(.5, 1.8)
-		
+
 		if serveType == ServeType.Underarm:
 			ball.Serve(ball.position, attackTarget, 3.6, ball.topspin)
 		else:
 			ball.Serve(ball.position, attackTarget, 2.8, ball.topspin)
 #		Console.AddNewLine("Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 		athlete.team.mManager.BallOverNet(true)
-		
+
 		var difficultyOfReception = 0
 		match serveAggression:
 			ServeAggression.Aggressive:
@@ -288,7 +288,7 @@ func HitBall(athlete:Athlete):
 				difficultyOfReception = randf_range(athlete.stats.serve/3, athlete.stats.serve * 2/3)
 			ServeAggression.Safety:
 				difficultyOfReception = randf_range(0, athlete.stats.serve/3)
-		
+
 		ball.difficultyOfReception = difficultyOfReception
 #		Console.AddNewLine("Difficulty of serve: " + str(int(difficultyOfReception)), Color.DARK_SALMON)
 	ball.TouchedByA()
@@ -298,26 +298,26 @@ func ChooseServeType(type):
 	if rememberSettings:
 		rememberedServeType = type
 		rememberedWalkPosition = _athlete.moveTarget
-	
-	serveState = ServeState.ChoosingServeAggression
-	
 
-	
+	serveState = ServeState.ChoosingServeAggression
+
+
+
 	serveUI.HideServeChoice()
-	
+
 
 func ChooseServeAggression(aggression):
 	serveAggression = aggression
-	
+
 	var serveInaccuracy = (100.0 - _athlete.stats.serve)/25
-	
+
 	if rememberSettings:
 		rememberedServeAggression = aggression
 
 	serveTarget.visible = true
 	serveTarget.mesh.top_radius = serveInaccuracy
 	serveTarget.mesh.bottom_radius = serveTarget.mesh.top_radius
-	
+
 	serveState = ServeState.Aiming
 	if !rememberSettings || rememberedServeTarget == null:
 
@@ -342,7 +342,7 @@ func ChooseServeAggression(aggression):
 					serveTarget.position.z = randf_range(UNDERARMBOUNDS[2] + 0.5 + serveInaccuracy, UNDERARMBOUNDS[3] - 0.5 - serveInaccuracy)
 	else:
 		serveTarget.position = rememberedServeTarget
-	
+
 func CommenceServe():
 	if rememberSettings:
 		rememberedServeTarget = serveTarget.position
@@ -351,20 +351,20 @@ func CommenceServe():
 	var inaccuracy = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 	var inaccuracyLength = randf_range(0, serveTarget.mesh.top_radius) # !!This is our nicely stored serveInaccuracy variable hashtag cleancode
 	inaccuracy *= inaccuracyLength
-	
+
 	attackTarget = Vector3(serveTarget.position.x, 0, serveTarget.position.z)
 	attackTarget.x += inaccuracy[0]
 	attackTarget.z += inaccuracy[1]
-	
-	#If the ball is landing checked our side of the court? 
+
+	#If the ball is landing checked our side of the court?
 	#Players will expect it to occur given the target shows it as a possibility
 	#For now just stop it happening
-	
+
 	attackTarget.x = clamp(attackTarget.x, -9999, -0.25)
 
 	serveState = ServeState.Tossing
 	serveTarget.visible = false
-	
+
 func Exit(athlete:Athlete):
 	athlete.rightIK.stop()
 	athlete.rightIK.interpolation = 0

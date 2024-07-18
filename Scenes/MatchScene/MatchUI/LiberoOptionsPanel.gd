@@ -31,22 +31,22 @@ func _ready():
 	position4Info.positionLabel.text = "Position 4"
 	position5Info.positionLabel.text = "Position 5"
 	position6Info.positionLabel.text = "Position 6"
-	
+
 	liberoOptionsNameCards.append(position1Info)
 	liberoOptionsNameCards.append(position2Info)
 	liberoOptionsNameCards.append(position3Info)
 	liberoOptionsNameCards.append(position4Info)
 	liberoOptionsNameCards.append(position5Info)
 	liberoOptionsNameCards.append(position6Info)
-	
+
 func Init(_teamA:Team):
 	teamA = _teamA
-	
+
 	$ColourRect/Libero1Info/Label.text = "Libero 1: " + teamA.libero.stats.lastName
 	if teamA.libero2:
 		libero2Info.visible = true
 		libero2Info.get_node("Label").text = "Libero 2: " + teamA.libero2.stats.lastName
-	
+
 	var currentRotation = teamA.originalRotation1Player.rotationPosition
 
 
@@ -78,21 +78,21 @@ func _on_rotation_6_pressed():
 func DisplayRotation(positionOfOriginalRot1Player:int):
 	#rotationCurrentlyDisplayed = positionOfOriginalRot1Player
 	currentRotationLabel.text = "Rotation " + str(positionOfOriginalRot1Player)
-	
+
 	if !teamA:
 		Init(get_tree().root.get_node("MatchScene").teamA)
-	
+
 	var rotationDifference = teamA.originalRotation1Player.rotationPosition - positionOfOriginalRot1Player
 	if rotationDifference < 0:
 		rotationDifference = 6 + rotationDifference
-	
+
 	var pseudoTeam = PseudoTeam.new()
 	pseudoTeam.CopyTeam(teamA)
-	
+
 	for i in range(rotationDifference):
 		pseudoTeam.PseudoRotate()
-	
-	
+
+
 	for lad:Athlete in pseudoTeam.courtPlayers:
 		var athleteToDisplay = lad
 		if lad == teamA.libero || lad == teamA.libero2:
@@ -113,7 +113,7 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 			position5Info.DisplayAthlete(athleteToDisplay)
 		if lad.pseudoRotationPosition == 6:
 			position6Info.DisplayAthlete(athleteToDisplay)
-			
+
 	if teamA.playerToBeLiberoedOnServe[positionOfOriginalRot1Player-1][0]:
 		var playerToLibero = teamA.playerToBeLiberoedOnServe[positionOfOriginalRot1Player - 1][1]
 		var liberoUsed = teamA.playerToBeLiberoedOnServe[positionOfOriginalRot1Player - 1][2]
@@ -127,8 +127,8 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 		for card:LiberoOptionsNameCard in liberoOptionsNameCards:
 			if card.athlete == playerToLibero:
 				card.CardAthleteWillBeLiberoedOnReceive(liberoUsed)
-			
-			
+
+
 	pseudoTeam.free()
 
 
@@ -136,7 +136,7 @@ func _on_player_liberoed_on_serve_button_pressed():
 	changePlayerLiberoedOnServePopup.show()
 
 	changePlayerLiberoedOnServePopup.clear()
-	
+
 	changePlayerLiberoedOnServePopup.add_item("None")
 	changePlayerLiberoedOnServePopup.add_item(position5Info.athlete.stats.lastName, 5)
 	changePlayerLiberoedOnServePopup.add_item(position6Info.athlete.stats.lastName, 6)
@@ -144,7 +144,7 @@ func _on_player_liberoed_on_serve_button_pressed():
 
 func _on_player_liberoed_on_receive_button_pressed():
 	changePlayerLiberoedOnReceivePopup.show()
-	
+
 	changePlayerLiberoedOnReceivePopup.clear()
 
 	changePlayerLiberoedOnReceivePopup.add_item("None")
@@ -160,11 +160,11 @@ func _on_change_player_liberoed_on_serve_popup_menu_index_pressed(index):
 		teamA.CheckForLiberoChange()
 		DisplayRotation(rotationCurrentlyDisplayed)
 		return
-		
+
 
 	var id = changePlayerLiberoedOnServePopup.get_item_id(index)
 	Console.AddNewLine("ID: " + str(id))
-	
+
 
 	if id == 5:
 		athleteToBeLiberoed = position5Info.athlete
@@ -173,15 +173,15 @@ func _on_change_player_liberoed_on_serve_popup_menu_index_pressed(index):
 	if !athleteToBeLiberoed:
 		Console.AddNewLine("ERROR! No athlete to be liberoed")
 		return
-		
+
 	if teamA.libero2:
 		whichLiberoServePopup.show()
-	
+
 	else:
 		teamA.playerToBeLiberoedOnServe[rotationCurrentlyDisplayed - 1][0] = true
 		teamA.playerToBeLiberoedOnServe[rotationCurrentlyDisplayed - 1][1] = athleteToBeLiberoed
 		teamA.playerToBeLiberoedOnServe[rotationCurrentlyDisplayed - 1][2] = teamA.libero
-		
+
 		teamA.CheckForLiberoChange()
 		DisplayRotation(rotationCurrentlyDisplayed)
 
@@ -197,7 +197,7 @@ func _on_change_player_liberoed_on_receive_popup_menu_index_pressed(index):
 
 	var id = changePlayerLiberoedOnReceivePopup.get_item_id(index)
 	Console.AddNewLine("ID: " + str(id))
-	
+
 
 	if id == 5:
 		athleteToBeLiberoed = position5Info.athlete
@@ -205,11 +205,11 @@ func _on_change_player_liberoed_on_receive_popup_menu_index_pressed(index):
 		athleteToBeLiberoed = position6Info.athlete
 	elif id == 1:
 		athleteToBeLiberoed = position1Info.athlete
-		
+
 	if ! athleteToBeLiberoed:
 		Console.AddNewLine("ERROR! No athlete to be liberoed")
 		return
-		
+
 	if teamA.libero2:
 		whichLiberoReceivePopup.show()
 
@@ -217,7 +217,7 @@ func _on_change_player_liberoed_on_receive_popup_menu_index_pressed(index):
 		teamA.playerToBeLiberoedOnReceive[rotationCurrentlyDisplayed - 1][0] = true
 		teamA.playerToBeLiberoedOnReceive[rotationCurrentlyDisplayed - 1][1] = athleteToBeLiberoed
 		teamA.playerToBeLiberoedOnReceive[rotationCurrentlyDisplayed - 1][2] = teamA.libero
-		
+
 		teamA.CheckForLiberoChange()
 		DisplayRotation(rotationCurrentlyDisplayed)
 
@@ -233,9 +233,9 @@ func _on_which_libero_serve_popup_menu_index_pressed(index):
 	else:
 		Console.AddNewLine("ERROR! Index libero mismatch")
 		return
-	
+
 	teamA.playerToBeLiberoedOnServe[rotationCurrentlyDisplayed - 1] = [true, athleteToBeLiberoed, newLibero]
-	
+
 	teamA.CheckForLiberoChange()
 	DisplayRotation(rotationCurrentlyDisplayed)
 	athleteToBeLiberoed = null
@@ -250,9 +250,9 @@ func _on_which_libero_receive_popup_menu_index_pressed(index):
 	else:
 		Console.AddNewLine("ERROR! Index libero mismatch")
 		return
-	
+
 	teamA.playerToBeLiberoedOnReceive[rotationCurrentlyDisplayed - 1] = [true, athleteToBeLiberoed, newLibero]
-	
+
 	teamA.CheckForLiberoChange()
 	DisplayRotation(rotationCurrentlyDisplayed)
 	athleteToBeLiberoed = null

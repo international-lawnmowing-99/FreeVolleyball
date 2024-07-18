@@ -7,7 +7,7 @@ func Enter(team:Team):
 	nameOfState = "Serve"
 	var athleteToServe:Athlete = team.courtPlayers[team.server]
 	athleteToServe.stateMachine.SetCurrentState(athleteToServe.serveState)
-	
+
 	pass
 func Update(team:Team):
 	if team.ball.get_parent():

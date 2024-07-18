@@ -10,10 +10,10 @@ var athlete:Athlete
 
 func DisplayAthlete(_athlete:Athlete):
 	athlete = _athlete
-	playerLabel.text = athlete.stats.lastName + " (" + Enums.Role.keys()[athlete.role] + ")"
+	playerLabel.text = athlete.stats.lastName + " (" + Enums.Role.keys()[athlete.stats.role] + ")"
 	receiveStatusLabel.text = "On court for receive"
 	serveStatusLabel.text = "On court for serve"
-	
+
 func CardAthleteWillBeLiberoedOnReceive(libero:Athlete):
 	receiveStatusLabel.text = libero.stats.lastName + " will substitute on receive"
 func CardAthleteWillBeLiberoedOnServe(libero:Athlete):

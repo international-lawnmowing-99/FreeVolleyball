@@ -18,7 +18,7 @@ func Init(_isFifthSetToss:bool, _mManager:MatchManager):
 	isFifthSetToss = _isFifthSetToss
 	mManager = _mManager
 	newMatchData = mManager.newMatch
-	
+
 	wonToss.hide()
 	lostToss.hide()
 
@@ -32,17 +32,17 @@ func DoToss(choseHeads:bool):
 	else:
 		wonTossCoinResultText.text = "Coin is Tails!"
 		lostTossCoinResultText.text = "Coin is Tails!"
-	
+
 	if coin == choseHeads:
 		wonToss.show()
 		lostToss.hide()
 		teamAWonToss = true
-		
+
 	else:
 		lostToss.show()
 		wonToss.hide()
 		teamAWonToss = false
-		
+
 		if randi()%2 == 0:
 			#Other team chose to serve/receive
 			$LostToss/ChooseCurrentSide.show()
@@ -91,14 +91,14 @@ func _on_ChooseServe_pressed():
 		mManager.isTeamAServing = true
 	else:
 		newMatchData.isTeamAServing = true
-	
+
 	if teamAWonToss:
 		if randi_range(0, 1) == 1:
 			Console.AddNewLine("Other team chose to stay on this side")
 		else:
 			Console.AddNewLine("Other team chose to change side")
 			mManager.RotateTheBoard()
-	
+
 	mManager.teamSubstitutionUI.show()
 	mManager.teamA.CheckForLiberoChange()
 	mManager.teamSubstitutionUI.Refresh()
@@ -112,14 +112,14 @@ func _on_ChooseReceive_pressed():
 		mManager.isTeamAServing = false
 	else:
 		newMatchData.isTeamAServing = false
-	
+
 	if teamAWonToss:
 		if randi_range(0, 1) == 1:
 			Console.AddNewLine("Other team chose to stay on this side")
 		else:
 			Console.AddNewLine("Other team chose to change side")
 			mManager.RotateTheBoard()
-			
+
 	mManager.teamSubstitutionUI.show()
 	mManager.teamA.CheckForLiberoChange()
 	mManager.teamSubstitutionUI.Refresh()
@@ -147,7 +147,7 @@ func _on_ChooseOtherSide_pressed():
 func _on_ChooseSide_pressed():
 	$WonToss/ChooseOtherSide.show()
 	$WonToss/ChooseCurrentSide.show()
-	
+
 	$WonToss/ChooseSide.hide()
 	$WonToss/ChooseServeReceive.hide()
 
@@ -155,6 +155,6 @@ func _on_ChooseSide_pressed():
 func _on_ChooseServeReceive_pressed():
 	$WonToss/ChooseReceive.show()
 	$WonToss/ChooseServe.show()
-	
+
 	$WonToss/ChooseSide.hide()
 	$WonToss/ChooseServeReceive.hide()

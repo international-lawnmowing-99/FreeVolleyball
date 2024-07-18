@@ -28,7 +28,7 @@ func DisplayPlayer(_athlete:Athlete):
 	receive.text = str(int(athlete.stats.reception))
 	setLabel.text = str(int(athlete.stats.set))
 	stamina.text = str(int(athlete.stats.serve))
-	
+
 	selected.button_pressed = athlete.uiSelected
 
 
@@ -44,7 +44,7 @@ func _on_selected_pressed():
 		else:
 			Console.AddNewLine("12 players selected already!")
 		return
-		
-	if athlete: 
+
+	if athlete:
 		athlete.uiSelected = selected.button_pressed
 		playerStatsTable.SelectUnselectAthlete(athlete)

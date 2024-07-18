@@ -31,7 +31,7 @@ func HideServeChoice():
 	$ServerInfo.hide()
 	$RememberServeOptions.hide()
 	uiState = UIState.UNDEFINED
-	
+
 func ShowServeAggressionChoice():
 	$ServeAggressionButtons.show()
 	uiState = UIState.ServeAggression
@@ -92,7 +92,7 @@ func _on_CheckBox_toggled(button_pressed: bool) -> void:
 	if button_pressed:
 		# Settings will be remembered
 		humanServeState.rememberSettings = true
-		
+
 	else:
 		humanServeState.rememberSettings = false
 
@@ -118,4 +118,4 @@ func UpdateServerInfo(athlete:Athlete):
 	serverNameLabel.text = athlete.stats.firstName + " " + athlete.stats.lastName
 	jumpServeLabel.text = "Jump Serve: " + str("%.1f" % athlete.stats.serve)
 	floatServeLabel.text = "Float Serve: " + str("%.1f" % athlete.stats.floatServe)
-	
+

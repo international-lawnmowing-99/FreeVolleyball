@@ -14,12 +14,12 @@ const MAXSUBSFIVB = 6
 
 func _ready() -> void:
 	mManager = get_tree().root.get_node("MatchScene")
-	
+
 	nameCards.append(libero1NameCard)
 	nameCards.append(libero2NameCard)
 	$Libero1NameCard/SubstituteButton.hide()
 	$Libero2NameCard/SubstituteButton.hide()
-	
+
 	for card in $HumanTeamBench.get_children():
 		nameCards.append(card)
 		card.Benched()
@@ -38,9 +38,9 @@ func RequestSub(athlete:Athlete):
 	if athlete.team.numberOfSubsUsed >= MAXSUBSFIVB:
 		Console.AddNewLine("All substitutions used as per FIVB limit")
 		return
-	
+
 	athleteToBeSubbed = athlete
-	
+
 	for card in nameCards:
 		card.ChangeColour(Color.RED)
 	for card:NameCard in $HumanTeamBench.get_children():
@@ -66,12 +66,12 @@ func ExecuteSub(incoming:Athlete):
 	if mManager.preSet:
 			athleteToBeSubbed.substitutionInfo.startingRotationPosition = -1
 	Refresh(incoming.team)
-	
+
 	for card in $HumanTeamBench.get_children():
 		card.state = Enums.NameCardState.UNDEFINED
 	for card in nameCards:
 		card.ChangeColour(normalColour)
-	
+
 	incoming.team.CachePlayers()
 
 
@@ -83,22 +83,22 @@ func RotateClockwise(team:Team):
 	Console.AddNewLine("-")
 	Console.AddNewLine("rotated orig rot 1: " + team.originalRotation1Player.stats.lastName)
 	Console.AddNewLine("Orig rot 1 in position " + str(team.originalRotation1Player.rotationPosition))
-	
+
 func RotateAntiClockwise(team:Team):
 	for i in range(5):
 		RotateClockwise(team)
-		
+
 func Refresh(team:Team = mManager.teamA):
-	
+
 	$TeamName.text = team.teamName
 	if !mManager.preSet:
 		$SubsRemainingLabel.text = str(MAXSUBSFIVB - team.numberOfSubsUsed) + " Substitutes Remaining"
-	
+
 	if mManager.preSet:
 		EnableRotate()
 	else:
 		DisableRotate()
-	
+
 	var playerNotAppearingOnBench
 	if team.libero:
 		libero1NameCard.DisplayStats(team.libero)
@@ -108,8 +108,8 @@ func Refresh(team:Team = mManager.teamA):
 		libero2NameCard.DisplayStats(team.libero2)
 	else:
 		libero2NameCard.hide()
-	
-	
+
+
 	if team.isLiberoOnCourt:
 		if mManager.isTeamAServing:
 			playerNotAppearingOnBench = team.playerToBeLiberoedOnServe[mManager.teamA.originalRotation1Player.rotationPosition - 1][1]
@@ -128,7 +128,7 @@ func Refresh(team:Team = mManager.teamA):
 			card.hide()
 		if card.cardAthlete == team.libero2:
 			card.hide()
-	
+
 	var displayAthlete
 	for athlete in team.courtPlayers:
 		if athlete == team.libero || athlete == team.libero2:
@@ -142,7 +142,7 @@ func Refresh(team:Team = mManager.teamA):
 			4: $HumanTeam/NameCard4.DisplayStats(displayAthlete)
 			5: $HumanTeam/NameCard5.DisplayStats(displayAthlete)
 			6: $HumanTeam/NameCard6.DisplayStats(displayAthlete)
-	
+
 	if team.teamCaptain:
 		for nameCard:NameCard in nameCards:
 			nameCard.get_node("CaptainButton").hide()
@@ -153,14 +153,14 @@ func Refresh(team:Team = mManager.teamA):
 				nameCard.get_node("CaptainIcon").show()
 			else:
 				nameCard.get_node("CaptainIcon").hide()
-						
+
 	for nameCard:NameCard in nameCards:
 		nameCard.get_node("LiberoIcon").hide()
 		if playerNotAppearingOnBench != team.libero && playerNotAppearingOnBench != team.libero2:
 			if nameCard.cardAthlete == playerNotAppearingOnBench:
 				nameCard.get_node("LiberoIcon").show()
-				
-				
+
+
 func EnableRotate():
 	$RotationControl.show()
 

@@ -7,7 +7,7 @@ class_name PostMatchUI
 
 #func _ready():
 
-	
+
 func Show(score:Score):
 	visible = true
 	winnerLabel.text = score.teamANameText.text + " Won!"
