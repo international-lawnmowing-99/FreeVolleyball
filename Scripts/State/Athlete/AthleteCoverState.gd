@@ -8,7 +8,7 @@ func Enter(athlete:Athlete):
 	if athlete.team.setTarget:
 		athlete.moveTarget = (athlete.team.setTarget.target + athlete.position) /2
 		athlete.moveTarget.y = 0
-		if athlete.team.isHuman:
+		if athlete.team.data.isHuman:
 			athlete.moveTarget.x = max(athlete.moveTarget.x, 0.5)
 		else:
 			athlete.moveTarget.x = min(athlete.moveTarget.x, -0.5)

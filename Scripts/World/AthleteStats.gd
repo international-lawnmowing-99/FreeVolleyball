@@ -1,5 +1,5 @@
 extends Resource
-class_name Stats
+class_name AthleteStats
 
 @export var firstName:String
 @export var lastName:String
@@ -31,13 +31,16 @@ class_name Stats
 @export var blockHeight:float
 
 @export var nation:Nation
-#var role
+@export var team:TeamData
 
-@export var dob:Dictionary = Time.get_datetime_dict_from_system(true)
+
+@export var dob:Dictionary
 @export var floatServe:float
 
 @export var role:Enums.Role
-
+@export var rotationPosition:int
+@export var uiSelected:bool = false
+@export var salary:int
 #public int age(System.DateTime timeNow)
 #return (int)(timeNow - dob).TotalDays/365;
 
@@ -88,3 +91,34 @@ func OutsideEvaluation()->float:
 
 func SkillTotal()->float:
 	return spike + block + set + reception + serve + spikeHeight*100
+
+
+static func SortSet(a,b):
+	if a.SetterEvaluation() > b.SetterEvaluation():
+		return true
+	return false
+
+static func SortLibero(a,b):
+	if a.LiberoEvaluation() > b.LiberoEvaluation():
+		return true
+	return false
+
+static func SortSkill(a,b):
+	if a.SkillTotal() > b.SkillTotal():
+		return true
+	return false
+
+static func SortMiddle(a,b):
+	if a.MiddleEvaluation() > b.MiddleEvaluation():
+		return true
+	return false
+
+static func SortOpposite(a,b):
+	if a.OppositeEvaluation() > b.OppositeEvaluation():
+		return true
+	return false
+
+static func SortOutside(a,b):
+	if a.OutsideEvaluation() > b.OutsideEvaluation():
+		return true
+	return false

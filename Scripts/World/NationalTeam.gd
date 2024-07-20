@@ -1,4 +1,4 @@
-extends "res://Scripts/Team.gd"
+extends "res://Scripts/World/TeamData.gd"
 
 class_name NationalTeam
 var nationalPlayers = []
@@ -10,6 +10,6 @@ func SelectNationalTeam():
 		return
 
 	var orderedPlayers = nationalPlayers.duplicate(false)
-	orderedPlayers.sort_custom(Callable(Athlete,"SortSkill"))
+	orderedPlayers.sort_custom(Callable(AthleteStats,"SortSkill"))
 	for i in range(randi_range(10, 14)):
 		matchPlayers.append(orderedPlayers[i])

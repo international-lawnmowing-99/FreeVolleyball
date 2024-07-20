@@ -14,10 +14,10 @@ func _ready():
 func _process(_delta):
 	var screen_pos = camera.unproject_position(global_transform.origin)
 	text.set_position(screen_pos+Vector2.ONE)
-	if !athlete.team.isHuman:
+	if !athlete.team.data.isHuman:
 		text.set("custom_colors/default_color",Color(1,1,0))
 	if athlete.stats.role && athlete.stateMachine.currentState:
-		text.text = athlete.stats.lastName + " " +  str(athlete.rotationPosition) + "\n"  +\
+		text.text = athlete.stats.lastName + " " +  str(athlete.stats.rotationPosition) + "\n"  +\
 		"role: " + Enums.Role.keys()[athlete.stats.role] + "\n" + \
 		"state: " + str(athlete.stateMachine.currentState.nameOfState)
 		if athlete.stateMachine.currentState == athlete.spikeState:

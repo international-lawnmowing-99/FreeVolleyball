@@ -4,7 +4,7 @@ extends Resource
 @export var path:String = "res://save_test.tres"
 
 @export var inGameUnixTime:int
-
+@export var cash:int
 @export var gameWorld:GameWorld
 
 @export var number:int = 0
@@ -15,7 +15,7 @@ func SaveGame():
 	ResourceSaver.save(self, path, ResourceSaver.FLAG_NONE)
 	pass
 
-func LoadGame(_path = path) -> Resource:
+static func LoadGame(_path:String) -> Resource:
 	if ResourceLoader.exists(_path):
-		return ResourceLoader.load(_path)
+		return ResourceLoader.load(_path, "", ResourceLoader.CACHE_MODE_REPLACE)
 	return null

@@ -2,7 +2,7 @@ extends Resource
 class_name TeamStrategy
 #Holds all the input the user/ai has generated to direct their team
 
-var defaultReceiveRotations =  [
+@export var defaultReceiveRotations =  [
 	# Assuming setter starts in 1
 	[#setter in 1
 		Vector3(5.5, 0, -4), # pos 1
@@ -54,24 +54,24 @@ var defaultReceiveRotations =  [
 	]
 ]
 
-var freeBallTarget:Vector3 = Vector3(4.5, 0, 0)
-var preferredSettingWeights
-var preferredReceptionWeights
-var receiveRotations = {
+@export var freeBallTarget:Vector3 = Vector3(4.5, 0, 0)
+@export var preferredSettingWeights:Array
+@export var preferredReceptionWeights:Array
+@export var receiveRotations = {
 	"default" : defaultReceiveRotations
 }
-var servingTargets
-var substitutionTirednessThresholds
+@export var servingTargets:Array
+@export var substitutionTirednessThresholds:Array
 
-var setOptionWeights
+@export var setOptionWeights:Array
 
-var scheduledSubstitutions
+@export var scheduledSubstitutions:Array
 
 # Blocking options
-var maxCommitDistanceFromNet = 2
+@export var maxCommitDistanceFromNet = 2
 
 var libero1:Athlete
 var libero2:Athlete
 
-var playerToLiberoServe = []
-var playerToLiberoReceive = []
+@export var playerToLiberoServe = []
+@export var playerToLiberoReceive = []

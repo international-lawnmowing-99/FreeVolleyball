@@ -4,8 +4,8 @@ class_name PlayerStatsTable
 var playerStatsRow = preload("res://Scenes/MatchScene/MatchUI/PlayerStatsRow.tscn")
 @onready var rows = $ScrollContainer/Rows
 var matchPlayerstatsRows = []
-var matchPlayers = []
-var selectedPlayers = []
+var matchPlayers:Array[AthleteStats] = []
+var selectedPlayers:Array[AthleteStats] = []
 
 var firstNamesAscending:bool = false
 var lastNamesAscending:bool = false
@@ -26,7 +26,7 @@ func clear():
 	for entry in rows.get_children():
 		entry.queue_free()
 
-func PopulateTable(team:Team):
+func PopulateTable(team:TeamData):
 	if team is NationalTeam:
 		for player in team.nationalPlayers:
 			matchPlayers.append(player)
@@ -59,9 +59,9 @@ func _on_selected_pressed():
 
 func _on_first_name_pressed():
 	if firstNamesAscending:
-		matchPlayers.sort_custom(func(a,b): return a.stats.firstName > b.stats.firstName)
+		matchPlayers.sort_custom(func(a,b): return a.firstName > b.firstName)
 	else:
-		matchPlayers.sort_custom(func(a,b): return a.stats.firstName < b.stats.firstName)
+		matchPlayers.sort_custom(func(a,b): return a.firstName < b.firstName)
 
 	firstNamesAscending = !firstNamesAscending
 
@@ -71,9 +71,9 @@ func _on_first_name_pressed():
 
 func _on_last_name_pressed():
 	if lastNamesAscending:
-		matchPlayers.sort_custom(func(a,b): return a.stats.lastName > b.stats.lastName)
+		matchPlayers.sort_custom(func(a,b): return a.lastName > b.lastName)
 	else:
-		matchPlayers.sort_custom(func(a,b): return a.stats.lastName < b.stats.lastName)
+		matchPlayers.sort_custom(func(a,b): return a.lastName < b.lastName)
 
 	lastNamesAscending = !lastNamesAscending
 
@@ -83,9 +83,9 @@ func _on_last_name_pressed():
 
 func _on_spike_height_pressed():
 	if spikeHeightAscending:
-		matchPlayers.sort_custom(func(a,b): return a.stats.spikeHeight > b.stats.spikeHeight)
+		matchPlayers.sort_custom(func(a,b): return a.spikeHeight > b.spikeHeight)
 	else:
-		matchPlayers.sort_custom(func(a,b): return a.stats.spikeHeight < b.stats.spikeHeight)
+		matchPlayers.sort_custom(func(a,b): return a.spikeHeight < b.spikeHeight)
 
 	spikeHeightAscending = !spikeHeightAscending
 	for i in matchPlayerstatsRows.size():
@@ -93,9 +93,9 @@ func _on_spike_height_pressed():
 
 func _on_block_height_pressed():
 	if blockHeightAscending:
-		matchPlayers.sort_custom(func(a,b): return a.stats.blockHeight > b.stats.blockHeight)
+		matchPlayers.sort_custom(func(a,b): return a.blockHeight > b.blockHeight)
 	else:
-		matchPlayers.sort_custom(func(a,b): return a.stats.blockHeight < b.stats.blockHeight)
+		matchPlayers.sort_custom(func(a,b): return a.blockHeight < b.blockHeight)
 
 	blockHeightAscending = !blockHeightAscending
 	for i in matchPlayerstatsRows.size():
@@ -103,9 +103,9 @@ func _on_block_height_pressed():
 
 func _on_serve_pressed():
 	if serveAscending:
-		matchPlayers.sort_custom(func(a,b): return a.stats.serve > b.stats.serve)
+		matchPlayers.sort_custom(func(a,b): return a.serve > b.serve)
 	else:
-		matchPlayers.sort_custom(func(a,b): return a.stats.serve < b.stats.serve)
+		matchPlayers.sort_custom(func(a,b): return a.serve < b.serve)
 
 	serveAscending = !serveAscending
 	for i in matchPlayerstatsRows.size():
@@ -113,9 +113,9 @@ func _on_serve_pressed():
 
 func _on_spike_pressed():
 	if spikeAscending:
-		matchPlayers.sort_custom(func(a,b): return a.stats.spike > b.stats.spike)
+		matchPlayers.sort_custom(func(a,b): return a.spike > b.spike)
 	else:
-		matchPlayers.sort_custom(func(a,b): return a.stats.spike < b.stats.spike)
+		matchPlayers.sort_custom(func(a,b): return a.spike < b.spike)
 
 	spikeAscending = !spikeAscending
 	for i in matchPlayerstatsRows.size():
@@ -123,9 +123,9 @@ func _on_spike_pressed():
 
 func _on_receive_pressed():
 	if receiveAscending:
-		matchPlayers.sort_custom(func(a,b): return a.stats.reception > b.stats.reception)
+		matchPlayers.sort_custom(func(a,b): return a.reception > b.reception)
 	else:
-		matchPlayers.sort_custom(func(a,b): return a.stats.reception < b.stats.reception)
+		matchPlayers.sort_custom(func(a,b): return a.reception < b.reception)
 
 	receiveAscending = !receiveAscending
 	for i in matchPlayerstatsRows.size():
@@ -134,15 +134,15 @@ func _on_receive_pressed():
 
 func _on_set_pressed():
 	if setAscending:
-		matchPlayers.sort_custom(func(a,b): return a.stats.set > b.stats.set)
+		matchPlayers.sort_custom(func(a,b): return a.set > b.set)
 	else:
-		matchPlayers.sort_custom(func(a,b): return a.stats.set < b.stats.set)
+		matchPlayers.sort_custom(func(a,b): return a.set < b.set)
 
 	setAscending = !setAscending
 	for i in matchPlayerstatsRows.size():
 		matchPlayerstatsRows[i].DisplayPlayer(matchPlayers[i])
 
-func SelectUnselectAthlete(athlete:Athlete):
+func SelectUnselectAthlete(athlete:AthleteStats):
 	if athlete in selectedPlayers:
 		selectedPlayers.erase(athlete)
 	else:

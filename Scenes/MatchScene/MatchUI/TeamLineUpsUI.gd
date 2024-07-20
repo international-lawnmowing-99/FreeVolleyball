@@ -36,19 +36,19 @@ func DisplayTeams():
 		$Libero2Label.hide()
 
 	for i in 14:
-		if i < mManager.teamA.matchPlayers.size():
-			(teamAParent.get_child(i) as NameCard).DisplayStats(mManager.teamA.matchPlayers[i])
+		if i < mManager.teamA.matchPlayerNodes.size():
+			(teamAParent.get_child(i) as NameCard).DisplayStats(mManager.teamA.matchPlayerNodes[i])
 
-			captainSelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
-			libero1SelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
-			libero2SelectPopup.add_item(mManager.teamA.matchPlayers[i].stats.lastName, i)
+			captainSelectPopup.add_item(mManager.teamA.matchPlayerNodes[i].stats.lastName, i)
+			libero1SelectPopup.add_item(mManager.teamA.matchPlayerNodes[i].stats.lastName, i)
+			libero2SelectPopup.add_item(mManager.teamA.matchPlayerNodes[i].stats.lastName, i)
 
 		else:
 			teamAParent.get_child(i).hide()
 
 	for i in 14:
-		if i < mManager.teamB.matchPlayers.size():
-			(teamBParent.get_child(i) as NameCard).DisplayStats(mManager.teamB.matchPlayers[i])
+		if i < mManager.teamB.matchPlayerNodes.size():
+			(teamBParent.get_child(i) as NameCard).DisplayStats(mManager.teamB.matchPlayerNodes[i])
 		else:
 			teamBParent.get_child(i).hide()
 
@@ -100,18 +100,18 @@ func RefreshCaptainAndLiberoIcons():
 
 
 func _on_CaptainSelect_popup_menu_id_pressed(id):
-	mManager.teamA.teamCaptain = mManager.teamA.matchPlayers[id]
-	captainLabel.text = "Captain: " + mManager.teamA.matchPlayers[id].stats.lastName
+	mManager.teamA.teamCaptain = mManager.teamA.matchPlayerNodes[id]
+	captainLabel.text = "Captain: " + mManager.teamA.matchPlayerNodes[id].stats.lastName
 
 	RefreshCaptainAndLiberoIcons()
 
 func _on_libero_1_select_popup_menu_id_pressed(id):
-	if mManager.teamA.libero2 == mManager.teamA.matchPlayers[id]:
+	if mManager.teamA.libero2 == mManager.teamA.matchPlayerNodes[id]:
 		Console.AddNewLine("ERROR: must select two different liberos")
 		return
 
 	var previousLibero:Athlete
-	var newLibero:Athlete = mManager.teamA.matchPlayers[id]
+	var newLibero:Athlete = mManager.teamA.matchPlayerNodes[id]
 
 	if mManager.teamA.libero:
 		previousLibero = mManager.teamA.libero
@@ -125,7 +125,7 @@ func _on_libero_1_select_popup_menu_id_pressed(id):
 
 	if previousLibero:
 		mManager.teamA.InstantaneouslySwapPlayers(newLibero, previousLibero)
-	elif newLibero in mManager.teamA.courtPlayers:
+	elif newLibero in mManager.teamA.courtPlayerNodes:
 		mManager.teamA.InstantaneouslySwapPlayers(newLibero, previousLibero)
 
 
@@ -151,12 +151,12 @@ func _on_libero_1_select_popup_menu_id_pressed(id):
 
 
 func _on_libero_2_select_popup_menu_id_pressed(id):
-	if mManager.teamA.libero == mManager.teamA.matchPlayers[id]:
+	if mManager.teamA.libero == mManager.teamA.matchPlayerNodes[id]:
 		Console.AddNewLine("ERROR: must select two different liberos")
 		return
 
 	var previousLibero2:Athlete
-	var newLibero2:Athlete = mManager.teamA.matchPlayers[id]
+	var newLibero2:Athlete = mManager.teamA.matchPlayerNodes[id]
 
 	if mManager.teamA.libero2:
 		previousLibero2 = mManager.teamA.libero2

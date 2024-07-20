@@ -10,8 +10,8 @@ func UpdateFields():
 	nameTextHolder.text = athlete.stats.lastName
 	roleTextHolder.text = Enums.Role.keys()[athlete.stats.role]
 
-	if athlete.rotationPosition && athlete.rotationPosition > 0 && athlete.rotationPosition <= 6:
-		rotationPositionTextHolder.text = str(athlete.rotationPosition)
+	if athlete.stats.rotationPosition && athlete.stats.rotationPosition > 0 && athlete.stats.rotationPosition <= 6:
+		rotationPositionTextHolder.text = str(athlete.stats.rotationPosition)
 
 	else:
 		rotationPositionTextHolder.text = ""

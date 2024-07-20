@@ -60,7 +60,7 @@ func Update(athlete:Athlete):
 		athlete.leftIKTarget.global_transform.origin = athlete.model.position + athlete.model.transform.basis.x/4.0 + Vector3.UP * 2 + athlete.model.transform.basis.z * 2
 		athlete.rightIKTarget.global_transform.origin = athlete.model.position + - athlete.model.transform.basis.x/4.0 + Vector3.UP * 2 + athlete.model.transform.basis.z * 2
 
-#		if athlete.team.isHuman && athlete == athlete.team.middleFront:
+#		if athlete.team.data.isHuman && athlete == athlete.team.middleFront:
 #			Console.AddNewLine(blockingTarget.stats.lastName + " blocking target")
 
 #		athlete.leftIK.interpolation = lerp(athlete.leftIK.interpolation, 1.0, athlete.myDelta)
@@ -136,7 +136,7 @@ func Exit(athlete:Athlete):
 	athlete.debug2.visible = false
 	pass
 
-func ConfirmCommitBlock(athlete:Athlete, otherTeam:Team):
+func ConfirmCommitBlock(athlete:Athlete, otherTeam:TeamNode):
 	#	Console.AddNewLine(athlete.stats.lastName + " reconsidering whether to commit block, along with several other life choices")
 	# If I'm commit blocking and the ball is passed, check the following to
 	# see if I can ignore my commit target:
@@ -146,7 +146,7 @@ func ConfirmCommitBlock(athlete:Athlete, otherTeam:Team):
 	# Balance personal embarassment at leaving the net undefended against maximising
 	# defensive expected value of reacting to the other options that are now more likely
 
-	if otherTeam.receptionTarget.x * otherTeam.flip > athlete.team.teamStrategy.maxCommitDistanceFromNet:
+	if otherTeam.receptionTarget.x * otherTeam.flip > athlete.team.data.teamStrategy.maxCommitDistanceFromNet:
 		isCommitBlocking = false
 		Console.AddNewLine("The set will take place too far from the net for our tastes")
 		return

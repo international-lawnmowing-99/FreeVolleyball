@@ -42,7 +42,6 @@ mode = 3
 title = "Lads"
 initial_position = 2
 size = Vector2i(500, 300)
-visible = true
 max_size = Vector2i(500, 300)
 keep_title_visible = true
 

@@ -1,25 +1,25 @@
 extends "res://Scripts/State/Team/TeamState.gd"
 class_name TeamPreService
 
-func Enter(team:Team):
+func Enter(team:TeamNode):
 	nameOfState = "Pre Service"
 
-#	if team.isHuman:
+#	if team.data.isHuman:
 #		print("Human team about to serve ----------------------------")
-	team.isNextToSpike = false
+	team.data.isNextToSpike = false
 #	team.CachePlayers()
 	for i in range(6):
 		#	var pos = team.defaultPositions[team.courtPlayers[i].rotationPosition -1]
-		team.courtPlayers[i].position = team.defaultPositions[team.courtPlayers[i].rotationPosition -1] * team.flip
-		team.courtPlayers[i].moveTarget = team.courtPlayers[i].position
-		team.courtPlayers[i].stateMachine.SetCurrentState(team.courtPlayers[i].chillState)
-		team.courtPlayers[i].model.rotation.y = -team.flip * PI/2
+		team.courtPlayerNodes[i].position = team.defaultPositions[team.courtPlayerNodes[i].stats.rotationPosition -1] * team.flip
+		team.courtPlayerNodes[i].moveTarget = team.courtPlayerNodes[i].position
+		team.courtPlayerNodes[i].stateMachine.SetCurrentState(team.courtPlayerNodes[i].chillState)
+		team.courtPlayerNodes[i].model.rotation.y = -team.flip * PI/2
 
-	var server:Athlete = team.courtPlayers[team.server]
-	if team.isHuman:
-		Console.AddNewLine(team.teamName + " choosing server. Server = " + str(team.server))
+	var server:Athlete = team.courtPlayerNodes[team.server]
+	if team.data.isHuman:
+		Console.AddNewLine(team.data.teamName + " choosing server. Server = " + str(team.server))
 		for i in range (6):
-			Console.AddNewLine(team.courtPlayers[i].stats.lastName + " " + str(team.courtPlayers[i].rotationPosition))
+			Console.AddNewLine(team.courtPlayerNodes[i].stats.lastName + " " + str(team.courtPlayerNodes[i].stats.rotationPosition))
 		Console.AddNewLine(" ")
 	server.position = team.flip * Vector3(13,0,-2)
 	server.moveTarget = server.position
@@ -33,12 +33,12 @@ func Enter(team:Team):
 	team.chosenSetter = null
 	team.CheckForLiberoChange()
 
-	if team.isHuman:
+	if team.data.isHuman:
 		team.mManager.teamInfoUI.InitialiseOnCourtPlayerUI()
 	else:
 		team.mManager.serveUI.HideServeChoice()
 
-	if !team.isHuman:
+	if !team.data.isHuman:
 		team.mManager.TESTteamRepresentation.AssignCourtPlayers(team)
 		#team.mManager.TESTteamRepresentation.UpdateRepresentation(get_process_delta_time())
 
@@ -47,13 +47,13 @@ func Enter(team:Team):
 
 	EnsureBenchInPosition(team)
 
-func EnsureBenchInPosition(team:Team):
-	for i in range(team.benchPlayers.size()):
-		team.benchPlayers[i].position = Vector3(team.flip * (i + 9), 0, 10)
-		team.benchPlayers[i].moveTarget = team.benchPlayers[i].position
+func EnsureBenchInPosition(team:TeamNode):
+	for i in range(team.benchPlayerNodes.size()):
+		team.benchPlayerNodes[i].position = Vector3(team.flip * (i + 9), 0, 10)
+		team.benchPlayerNodes[i].moveTarget = team.benchPlayerNodes[i].position
 
-func Update(team:Team):
+func Update(team:TeamNode):
 	team.stateMachine.SetCurrentState(team.serveState)
 	pass
-func Exit(_team:Team):
+func Exit(_team:TeamNode):
 	pass

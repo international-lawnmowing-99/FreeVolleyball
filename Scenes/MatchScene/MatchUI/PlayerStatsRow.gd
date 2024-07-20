@@ -13,21 +13,21 @@ class_name PlayerStatsRow
 
 @onready var selected:CheckBox = $AllItems/Selected
 
-var athlete:Athlete
+var athlete:AthleteStats
 var playerStatsTable:PlayerStatsTable
 var clubOrInternational:Enums.ClubOrInternational = Enums.ClubOrInternational.NotSelected
 
-func DisplayPlayer(_athlete:Athlete):
+func DisplayPlayer(_athlete:AthleteStats):
 	athlete = _athlete
-	firstName.text = athlete.stats.firstName
-	lastName.text = athlete.stats.lastName
-	spikeHeight.text = str(int(athlete.stats.spikeHeight * 100))
-	blockHeight.text = str(int(athlete.stats.blockHeight * 100))
-	serve.text = str(int(athlete.stats.serve))
-	spike.text = str(int(athlete.stats.spike))
-	receive.text = str(int(athlete.stats.reception))
-	setLabel.text = str(int(athlete.stats.set))
-	stamina.text = str(int(athlete.stats.serve))
+	firstName.text = athlete.firstName
+	lastName.text = athlete.lastName
+	spikeHeight.text = str(int(athlete.spikeHeight * 100))
+	blockHeight.text = str(int(athlete.blockHeight * 100))
+	serve.text = str(int(athlete.serve))
+	spike.text = str(int(athlete.spike))
+	receive.text = str(int(athlete.reception))
+	setLabel.text = str(int(athlete.set))
+	stamina.text = str(int(athlete.serve))
 
 	selected.button_pressed = athlete.uiSelected
 

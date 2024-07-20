@@ -1,13 +1,13 @@
 extends Control
 class_name BlockOptionsUI
 
-var teamA:Team
-var teamB:Team
+var teamA:TeamNode
+var teamB:TeamNode
 
 var servingSelected:bool = true
 @onready var displayedRotationLabel = $DisplayedRotationLabel
 
-func UpdateBlockers(team:Team, otherTeam:Team):
+func UpdateBlockers(team:TeamNode, otherTeam:TeamNode):
 	team.defendState.CacheBlockers(team)
 	$Blockers/LeftBlockerUI.Populate("Left Blocker", false, team.defendState.leftSideBlocker, otherTeam)
 	$Blockers/MiddleBlockerUI.Populate("Middle Blocker", false, team.middleFront, otherTeam)
@@ -40,7 +40,7 @@ func _on_rot_6_button_pressed():
 	displayedRotationLabel.text = "Rotation 6"
 
 func DisplayRotation(positionOfOriginalRot1Player:int):
-	var rotationDifference = teamA.originalRotation1Player.rotationPosition - positionOfOriginalRot1Player
+	var rotationDifference = teamA.originalRotation1Player.stats.rotationPosition - positionOfOriginalRot1Player
 	if rotationDifference < 0:
 		rotationDifference = 6 + rotationDifference
 
@@ -58,8 +58,8 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 
 
 func _on_current_rotation_button_pressed():
-	DisplayRotation(teamA.originalRotation1Player.rotationPosition)
-	displayedRotationLabel.text = "Rotation " + str(teamA.originalRotation1Player.rotationPosition)
+	DisplayRotation(teamA.originalRotation1Player.stats.rotationPosition)
+	displayedRotationLabel.text = "Rotation " + str(teamA.originalRotation1Player.stats.rotationPosition)
 
 
 func _on_serve_receive_option_button_item_selected(index):

@@ -7,8 +7,10 @@ var lastNames = []
 var nationsText = []
 #There are players, organised in teams, in competitions, national teams, national competitions, and it's organised by continent for ease of navigation
 @export var continents:Array[Continent] = []
-@export var previousGames:Array[ScheduledMatch] = []
 
+@export var inGameDate:String
+
+@export var previousGames:Array[ScheduledMatch] = []
 # Imagining this should be kept sorted in order of date
 @export var upcomingGames:Array[ScheduledMatch] = []
 
@@ -41,7 +43,7 @@ func GenerateDefaultWorld(generatematchPlayers:bool):
 
 			currentNation.Populate(firstNames, lastNames, generatematchPlayers)
 
-func GetTeam(choiceState:PlayerChoiceState, mode) -> Team:
+func GetTeam(choiceState:PlayerChoiceState, mode) -> TeamData:
 	if (mode == Enums.ClubOrInternational.Club):
 		return continents[choiceState.continentIndex].\
 				nations[choiceState.nationIndices[choiceState.continentIndex]].\
@@ -85,13 +87,17 @@ func split(s: String, delimeters, allow_empty: bool = false) -> Array:
 
 	return parts
 
-func PopulateTeam(team:Team):
+## Maybe this doesn't really belong here, and should be left to the team
+func PopulateTeam(team:TeamData):
 	if team is NationalTeam:
 		for clubTeam in team.nation.league:
 			if clubTeam.matchPlayers.size() > 0:
 				Console.AddNewLine("ERROR! Couldn't add more players to full club team!")
 			else:
 				clubTeam.Populate(firstNames, lastNames)
+
+			if clubTeam.matchPlayers[0] in team.nationalPlayers:
+				print("ERROR! Previously generated club players inserted twice+ into national player list")
 			team.nationalPlayers += clubTeam.matchPlayers
 	else:
 		if team.matchPlayers.size() > 0:
@@ -104,4 +110,43 @@ func SimulateDay():
 	# Find all the games that need to be simulated
 	#
 	for i in upcomingGames.size():
-		if upcomingGames[i].simulate
+		if upcomingGames[i].date == inGameDate:
+			if upcomingGames[i].toBeSimulated:
+				simulatedGames.append(upcomingGames[i])
+		elif false: # if the date is greater than the current date then stop
+			break
+		else: # catch errors
+			pass
+
+	for game:ScheduledMatch in simulatedGames:
+		SimulateMatch(game)
+
+func SimulateMatch(game:ScheduledMatch):
+	##Perform pre-match stuff.
+	#game.teamA.AssessRival(game.teamB)
+	#game.teamB.AssessRival(game.teamA)
+	#game.teamA.SelectSquad()
+	#game.teamB.SelectSquad()
+
+	var matchWon:bool = false
+	while !matchWon:
+		##Perform pre-set stuff
+		#game.teamA.AssignStartingRoles()
+		#game.teamA.ChooseStartingRotation()
+
+		var setWon:bool = false
+		while !setWon:
+			##Do pre-point stuff
+			#game.teamA.ConsiderSubstitutes()
+			#game.teamA.ConsiderLiberoUse()
+			#game.teamA.GenerateAttackStrategy() # This is going to be complicated!
+			#game.teamA.GenerateServeStrategy()
+			#game.teamA.GenerateReceiveStrategy()
+			#game.teamA.GenerateBlockStrategy()
+			#game.teamA.GenerateDefenceStrategy()
+
+			##Finally actually play a point!
+			#SimulatePoint()
+			#CheckForWin()
+			setWon = true
+		matchWon = true

@@ -2,7 +2,7 @@ extends Node2D
 
 class_name LiberoOptionsPanel
 
-var teamA:Team
+var teamA:TeamNode
 @onready var position1Info:LiberoOptionsNameCard = $ColourRect/CourtPlayers/Position1Info
 @onready var position2Info:LiberoOptionsNameCard = $ColourRect/CourtPlayers/Position2Info
 @onready var position3Info:LiberoOptionsNameCard = $ColourRect/CourtPlayers/Position3Info
@@ -39,7 +39,7 @@ func _ready():
 	liberoOptionsNameCards.append(position5Info)
 	liberoOptionsNameCards.append(position6Info)
 
-func Init(_teamA:Team):
+func Init(_teamA:TeamNode):
 	teamA = _teamA
 
 	$ColourRect/Libero1Info/Label.text = "Libero 1: " + teamA.libero.stats.lastName
@@ -47,7 +47,7 @@ func Init(_teamA:Team):
 		libero2Info.visible = true
 		libero2Info.get_node("Label").text = "Libero 2: " + teamA.libero2.stats.lastName
 
-	var currentRotation = teamA.originalRotation1Player.rotationPosition
+	var currentRotation = teamA.originalRotation1Player.stats.rotationPosition
 
 
 
@@ -82,7 +82,7 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 	if !teamA:
 		Init(get_tree().root.get_node("MatchScene").teamA)
 
-	var rotationDifference = teamA.originalRotation1Player.rotationPosition - positionOfOriginalRot1Player
+	var rotationDifference = teamA.originalRotation1Player.stats.rotationPosition - positionOfOriginalRot1Player
 	if rotationDifference < 0:
 		rotationDifference = 6 + rotationDifference
 

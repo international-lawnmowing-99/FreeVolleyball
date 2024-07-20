@@ -11,7 +11,7 @@ func Update(athlete:Athlete):
 	if athlete.ball.position.distance_to(Vector3(athlete.position.x, digHeight, athlete.position.z)) <= 0.5:
 		athlete.ball.attackTarget = Vector3(athlete.team.flip * randf_range(-2,-9), 0, randf_range(-4.5, 4.5))
 		athlete.ball.linear_velocity = Maths.CalculateBallOverNetVelocity(athlete.ball.position, athlete.ball.attackTarget, 3.1, 1.0)
-		athlete.team.mManager.BallOverNet(athlete.team.isHuman)
+		athlete.team.mManager.BallOverNet(athlete.team.data.isHuman)
 		athlete.ball.difficultyOfReception = 1.3
 
 func Exit(_athlete:Athlete):

@@ -48,4 +48,9 @@ func _on_LoadButton_pressed() -> void:
 
 func _on_FileDialog_file_selected(path: String) -> void:
 	print(path)
+	var loadedCareer:SavedCareer = SavedCareer.LoadGame(path)
+
+
+	print(loadedCareer.gameWorld.continents[3].nations[9].countryName)
+
 	pass # Replace with function body.

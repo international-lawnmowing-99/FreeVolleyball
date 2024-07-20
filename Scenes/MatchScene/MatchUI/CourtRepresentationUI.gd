@@ -10,8 +10,8 @@ const yScaleAir = 0.15*1.5
 
 const lerpSpeed = 5
 
-func AssignCourtPlayers(team:Team):
-	courtPlayers = team.courtPlayers
+func AssignCourtPlayers(team:TeamNode):
+	courtPlayers = team.courtPlayerNodes
 
 func UpdateRepresentation(delta):
 	# mapping the players into 2d

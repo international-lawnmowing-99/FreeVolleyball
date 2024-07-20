@@ -55,8 +55,8 @@ func _ready():
 func _on_Intro_Button_pressed():
 	matchIntro.hide()
 	teamLineups.show()
-	$TeamLineUpsUI/TeamAName.text = mManager.teamA.teamName
-	$TeamLineUpsUI/TeamBName.text = mManager.teamB.teamName
+	$TeamLineUpsUI/TeamAName.text = mManager.teamA.data.teamName
+	$TeamLineUpsUI/TeamBName.text = mManager.teamB.data.teamName
 
 	teamLineups.DisplayTeams()
 
@@ -66,7 +66,7 @@ func _on_TeamLineups_ContinueButton_pressed():
 		Console.AddNewLine("Must select team captain!", Color.RED)
 	#elif !mManager.teamA.libero:
 		#
-	elif mManager.newMatch.clubOrInternational == Enums.ClubOrInternational.International && mManager.teamA.matchPlayers.size() > 12 && !mManager.teamA.libero2:
+	elif mManager.newMatch.clubOrInternational == Enums.ClubOrInternational.International && mManager.teamA.data.matchPlayers.size() > 12 && !mManager.teamA.libero2:
 		Console.AddNewLine("Must select two liberos when more than 12 players selected in FIVB competitions", Color.RED)
 	elif !mManager.teamA.libero:
 		teamLineups.noLiberoWarning.show()
@@ -123,12 +123,12 @@ func _on_instant_start_button_pressed():
 	mManager.PrepareLocalTeamObjects(newMatchData)
 
 	if newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
-		(mManager.teamA as NationalTeam).SelectNationalTeam()
-		(mManager.teamB as NationalTeam).SelectNationalTeam()
+		(mManager.teamA.data as NationalTeam).SelectNationalTeam()
+		(mManager.teamB.data as NationalTeam).SelectNationalTeam()
 
 	mManager.ConfirmTeams()
-	mManager.teamA.teamCaptain = mManager.teamA.matchPlayers[randi()%mManager.teamA.matchPlayers.size()]
-	mManager.teamB.teamCaptain = mManager.teamB.matchPlayers[randi()%mManager.teamB.matchPlayers.size()]
+	mManager.teamA.teamCaptain = mManager.teamA.matchPlayerNodes[randi()%mManager.teamA.matchPlayerNodes.size()]
+	mManager.teamB.teamCaptain = mManager.teamB.matchPlayerNodes[randi()%mManager.teamB.matchPlayerNodes.size()]
 	#Console.AddNewLine("Team A captain is: " + mManager.teamA.teamCaptain.stats.lastName)
 	#Console.AddNewLine("Team B captain is: " + mManager.teamB.teamCaptain.stats.lastName)
 
@@ -182,18 +182,18 @@ func _on_table_confirm_button_pressed():
 		if newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
 			for lad in playerStatsTable.matchPlayers:
 				if lad.uiSelected:
-					mManager.teamA.matchPlayers.append(lad)
+					mManager.teamA.data.matchPlayers.append(lad)
 			mManager.teamB.SelectNationalTeam()
 		else:
-			mManager.teamA.matchPlayers.clear()
+			mManager.teamA.data.matchPlayers.clear()
 			for lad in playerStatsTable.matchPlayers:
 				if lad.uiSelected:
-					mManager.teamA.matchPlayers.append(lad)
+					mManager.teamA.data.matchPlayers.append(lad)
 		mManager.ConfirmTeams()
 	#		mManager.StartMatch()
 		matchStartMenu.hide()
 		athletesTableMenu.hide()
-		$ColourRectIntro/Label.text = mManager.teamA.teamName + " vs " + mManager.teamB.teamName
+		$ColourRectIntro/Label.text = mManager.teamA.data.teamName + " vs " + mManager.teamB.data.teamName
 		matchIntro.show()
 
 func SyncroniseClubOrInternational(clubOrInternational:Enums.ClubOrInternational):
@@ -226,7 +226,7 @@ func SyncroniseClubOrInternational(clubOrInternational:Enums.ClubOrInternational
 	newMatchData.clubOrInternational = clubOrInternational
 
 func _on_auto_select_pressed():
-	for athlete:Athlete in playerStatsTable.selectedPlayers:
+	for athlete:AthleteStats in playerStatsTable.selectedPlayers:
 		athlete.uiSelected = false
 	playerStatsTable.selectedPlayers.clear()
 
@@ -235,7 +235,7 @@ func _on_auto_select_pressed():
 			lad.uiSelected = true
 			playerStatsTable.selectedPlayers.append(lad)
 	elif newMatchData.clubOrInternational == Enums.ClubOrInternational.International:
-		playerStatsTable.matchPlayers.sort_custom(Callable(Athlete,"SortSkill"))
+		playerStatsTable.matchPlayers.sort_custom(Callable(AthleteStats,"SortSkill"))
 		for i in range(14):
 			playerStatsTable.matchPlayers[i].uiSelected = true
 			playerStatsTable.selectedPlayers.append(playerStatsTable.matchPlayers[i])

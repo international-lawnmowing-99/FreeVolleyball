@@ -6,7 +6,7 @@ class_name Nation
 
 var nationalTeam:NationalTeam
 #Maybe some nations will be able to support more than one sort of league??? Never!
-var league:Array[Te
+@export var league:Array[TeamData]
 
 func Populate(firstNames, lastNames, generatematchPlayers:bool):
 	var numberOfTeams:int = clamp((population / 700000), 2, 30)
@@ -15,7 +15,7 @@ func Populate(firstNames, lastNames, generatematchPlayers:bool):
 	nationalTeam.nation = self
 
 	for i in range(numberOfTeams):
-		var team = Team.new()
+		var team = TeamData.new()
 		team.nation = self
 		team.teamName = countryName + " Club Team " + str(i + 1)
 #List<int> shirtNumbers = new List<int>(), images = new List<int>()
@@ -33,6 +33,6 @@ func Populate(firstNames, lastNames, generatematchPlayers:bool):
 		league.append(team)
 
 #nationalTeam.CalculateMacroStats();
-func _init(nam,_pop):
+func _init(nam = "",_pop = 0):
 	countryName = nam
 	population = _pop

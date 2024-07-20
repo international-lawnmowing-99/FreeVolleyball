@@ -4,11 +4,11 @@ class_name Tournament
 var listOfMatches:Array[ScheduledMatch] = []
 var standings
 
-func CreateRoundRobin(teams:Array, maxRounds:int):
-	var amendedTeams = teams
+func CreateRoundRobin(teams:Array[TeamData], maxRounds:int):
+	var amendedTeams:Array[TeamData] = teams
 
 	if (teams.size()%2): # ie there are odd teams
-		var bye = Team.new()
+		var bye = TeamData.new()
 		bye.teamName = "Bye"
 		amendedTeams.append(bye)
 
@@ -31,10 +31,10 @@ func CreateRoundRobin(teams:Array, maxRounds:int):
 
 		for j in numberOfTeams/2:
 			var scheduledMatch:ScheduledMatch = ScheduledMatch.new()
-			var teamA:Team = grid2D[0][j]
-			var teamB:Team = grid2D[1][j]
-			scheduledMatch.teamA = teamA.teamResource
-			scheduledMatch.teamB = teamB.teamResource
+			var teamA:TeamData = grid2D[0][j]
+			var teamB:TeamData = grid2D[1][j]
+			scheduledMatch.teamA = teamA
+			scheduledMatch.teamB = teamB
 			scheduledMatch.round = i
 
 			listOfMatches.append(scheduledMatch)

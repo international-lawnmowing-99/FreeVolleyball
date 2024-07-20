@@ -39,7 +39,7 @@ func Enter(athlete:Athlete):
 	spikeState = SpikeState.ChoiceConfirmed
 
 func Update(athlete:Athlete):
-	#if athlete.team.flip == 1 && athlete.rotationPosition == 2:
+	#if athlete.team.flip == 1 && athlete.stats.rotationPosition == 2:
 		#print(spikeState)
 	match spikeState:
 		SpikeState.NotSpiking:
@@ -300,7 +300,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	Console.AddNewLine("End choice of initial spiking plan", Color.TOMATO)
 	Console.AddNewLine("_____________________________________________________________", Color.TOMATO)
 
-func ReadBlock(athlete:Athlete, otherTeam:Team):
+func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 	var ball = athlete.ball
 	Console.AddNewLine("Reading block")
 
@@ -626,10 +626,10 @@ func ReadBlock(athlete:Athlete, otherTeam:Team):
 #	if athlete.stats.spikeHeight - ballRadius > blockMaximumHeight:
 #		Console.AddNewLine("Spiker will OTT block")
 
-func ReadDefence(athlete:Athlete, otherTeam:Team):
-	Console.AddNewLine("Reading defence " + athlete.stats.lastName + " " + otherTeam.teamName)
+func ReadDefence(athlete:Athlete, otherTeam:TeamNode):
+	Console.AddNewLine("Reading defence " + athlete.stats.lastName + " " + otherTeam.data.teamName)
 	var defenders:Array = []
-	for lad in otherTeam.courtPlayers:
+	for lad in otherTeam.courtPlayerNodes:
 		if !lad.FrontCourt():
 			defenders.append(lad)
 	defenders.sort_custom(func(a,b): return otherTeam.flip * a.moveTarget.z > otherTeam.flip * b.moveTarget.z)

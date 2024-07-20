@@ -6,8 +6,8 @@ class_name TeamTacticsUI
 @onready var setOptionsUI = $SetOptionsUI
 @onready var blockOptionsUI = $BlockOptionsUI
 
-var teamA:Team
-var teamB:Team
+var teamA:TeamNode
+var teamB:TeamNode
 
 func _on_ServeUIButton_pressed() -> void:
 	ShowServeOptions()
@@ -17,23 +17,23 @@ func ShowServeOptions():
 	serveOptionsUI.visible = true
 	setOptionsUI.visible = false
 	blockOptionsUI.visible = false
-	
+
 func ShowReceiveOptions():
 	receiveOptionsUI.visible = true
 	serveOptionsUI.visible = false
 	setOptionsUI.visible = false
 	blockOptionsUI.visible = false
-	
+
 	if $ReceiveOptionsUI/DisplayedRotationLabel.text == "":
 		receiveOptionsUI._on_current_rotation_button_pressed()
-		
-	
+
+
 func ShowSetOptions():
 	receiveOptionsUI.visible = false
 	serveOptionsUI.visible = false
 	setOptionsUI.visible = true
 	blockOptionsUI.visible = false
-	
+
 func ShowBlockOptions():
 	receiveOptionsUI.visible = false
 	serveOptionsUI.visible = false
@@ -51,14 +51,14 @@ func _on_set_ui_button_pressed():
 
 func _on_block_ui_button_pressed():
 	ShowBlockOptions()
-	
+
 func Init(_teamA, _teamB):
 	teamA = _teamA
 	teamB = _teamB
-	
+
 	blockOptionsUI.teamA = teamA
 	blockOptionsUI.teamB = teamB
-	
+
 	receiveOptionsUI.teamA = teamA
 	receiveOptionsUI.teamB = teamB
 	receiveOptionsUI.Init()

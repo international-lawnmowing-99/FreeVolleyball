@@ -75,22 +75,22 @@ func ExecuteSub(incoming:Athlete):
 	incoming.team.CachePlayers()
 
 
-func RotateClockwise(team:Team):
+func RotateClockwise(team:TeamNode):
 	#can only rotate before the serve
 	team.Rotate()
 	Refresh(team)
 	team.stateMachine.SetCurrentState(team.preserviceState)
 	Console.AddNewLine("-")
 	Console.AddNewLine("rotated orig rot 1: " + team.originalRotation1Player.stats.lastName)
-	Console.AddNewLine("Orig rot 1 in position " + str(team.originalRotation1Player.rotationPosition))
+	Console.AddNewLine("Orig rot 1 in position " + str(team.originalRotation1Player.stats.rotationPosition))
 
-func RotateAntiClockwise(team:Team):
+func RotateAntiClockwise(team:TeamNode):
 	for i in range(5):
 		RotateClockwise(team)
 
-func Refresh(team:Team = mManager.teamA):
+func Refresh(team:TeamNode = mManager.teamA):
 
-	$TeamName.text = team.teamName
+	$TeamName.text = team.data.teamName
 	if !mManager.preSet:
 		$SubsRemainingLabel.text = str(MAXSUBSFIVB - team.numberOfSubsUsed) + " Substitutes Remaining"
 
@@ -110,16 +110,16 @@ func Refresh(team:Team = mManager.teamA):
 		libero2NameCard.hide()
 
 
-	if team.isLiberoOnCourt:
+	if team.data.isLiberoOnCourt:
 		if mManager.isTeamAServing:
-			playerNotAppearingOnBench = team.playerToBeLiberoedOnServe[mManager.teamA.originalRotation1Player.rotationPosition - 1][1]
+			playerNotAppearingOnBench = team.playerToBeLiberoedOnServe[mManager.teamA.originalRotation1Player.stats.rotationPosition - 1][1]
 		else:
-			playerNotAppearingOnBench = team.playerToBeLiberoedOnReceive[mManager.teamA.originalRotation1Player.rotationPosition - 1][1]
+			playerNotAppearingOnBench = team.playerToBeLiberoedOnReceive[mManager.teamA.originalRotation1Player.stats.rotationPosition - 1][1]
 	else:
 		playerNotAppearingOnBench = team.libero
 
 	var i = 0
-	for athlete in team.benchPlayers:
+	for athlete in team.benchPlayerNodes:
 		if athlete != playerNotAppearingOnBench:
 			$HumanTeamBench.get_child(i).DisplayStats(athlete)
 			i += 1
@@ -130,12 +130,12 @@ func Refresh(team:Team = mManager.teamA):
 			card.hide()
 
 	var displayAthlete
-	for athlete in team.courtPlayers:
+	for athlete in team.courtPlayerNodes:
 		if athlete == team.libero || athlete == team.libero2:
 			displayAthlete = playerNotAppearingOnBench
 		else:
 			displayAthlete = athlete
-		match athlete.rotationPosition:
+		match athlete.stats.rotationPosition:
 			1: $HumanTeam/NameCard1.DisplayStats(displayAthlete)
 			2: $HumanTeam/NameCard2.DisplayStats(displayAthlete)
 			3: $HumanTeam/NameCard3.DisplayStats(displayAthlete)
@@ -197,4 +197,4 @@ func _on_libero_options_button_pressed():
 	else:
 		liberoOptionsPanel.show()
 		Console.Clear()
-		liberoOptionsPanel.DisplayRotation(mManager.teamA.originalRotation1Player.rotationPosition)
+		liberoOptionsPanel.DisplayRotation(mManager.teamA.originalRotation1Player.stats.rotationPosition)

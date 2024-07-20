@@ -8,8 +8,8 @@ class_name ReceiveOptionsUI
 @onready var xPosLabel = $HalfCourtRepresentationUI/DebugInfo/XPosLabel
 @onready var zPosLabel = $HalfCourtRepresentationUI/DebugInfo/ZPosLabel
 
-var teamA:Team
-var teamB:Team
+var teamA:TeamNode
+var teamB:TeamNode
 
 var pseudoTeam = PseudoTeam.new()
 
@@ -144,8 +144,8 @@ func UnlockReceiverUI(selectedReceiver:ReceiverRepresentationUI):
 	#Console.AddNewLine(str(currentRotationPositions[selectedReceiver.athlete.pseudoRotationPosition - 1].x))
 
 func _on_current_rotation_button_pressed():
-	DisplayRotation(teamA.originalRotation1Player.rotationPosition)
-	displayedRotationLabel.text = "Rotation " + str(teamA.originalRotation1Player.rotationPosition)
+	DisplayRotation(teamA.originalRotation1Player.stats.rotationPosition)
+	displayedRotationLabel.text = "Rotation " + str(teamA.originalRotation1Player.stats.rotationPosition)
 
 func UpdateBounds():
 	position1Bounds[0] = currentRotationPositions[1].x

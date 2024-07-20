@@ -1,19 +1,19 @@
 extends "res://Scripts/State/Team/TeamState.gd"
 class_name TeamReceive
 
-func Enter(team:Team):
+func Enter(team:TeamNode):
 	nameOfState = "Receive"
-	Console.AddNewLine(team.teamName + " " + nameOfState)
+	Console.AddNewLine(team.data.teamName + " " + nameOfState)
 	#ChooseReceiver
 
-	for lad in team.courtPlayers:
+	for lad in team.courtPlayerNodes:
 		lad.distanceHack = team.ball.attackTarget.distance_squared_to(lad.position)
 		if !lad.rb.freeze:
 			lad.distanceHack = 9999
 		if lad == team.setter:
 			lad.distanceHack*=3
 
-	var orderedList = team.courtPlayers.duplicate(false)
+	var orderedList = team.courtPlayerNodes.duplicate(false)
 	orderedList.sort_custom(Callable(Athlete,"SortDistance"))
 
 	team.chosenReceiver = orderedList[0]
@@ -31,7 +31,7 @@ func Enter(team:Team):
 	team.outsideBack.setRequest =  team.outsideBack.outsideBackSpikes[0].Duplicate()
 	if team.oppositeHitter.FrontCourt():
 		team.setter.setRequest = team.setter.oppositeBackSpikes[0].Duplicate()
-		if team.markUndoChangesToRoles:
+		if team.data.markUndoChangesToRoles:
 			team.oppositeHitter.setRequest = team.oppositeHitter.outsideFrontSpikes[0].Duplicate()
 			team.outsideFront.setRequest = team.outsideFront.oppositeFrontSpikes[0].Duplicate()
 
@@ -53,10 +53,10 @@ func Enter(team:Team):
 	team.chosenReceiver.stateMachine.SetCurrentState(team.chosenReceiver.passState)
 #	Console.AddNewLine("Outside front spike[0] = " + str(team.outsideFront.outsideFrontSpikes[0].target))
 
-func Update(_team:Team):
+func Update(_team:TeamNode):
 	#Is the ball close enough
 	pass
-func Exit(team:Team):
+func Exit(team:TeamNode):
 	#Discard receiver info?
 	team.UpdateTimeTillDigTarget()
 	pass

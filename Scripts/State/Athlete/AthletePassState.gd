@@ -20,12 +20,12 @@ func Enter(athlete:Athlete):
 	# 1: confidence that it's in
 	# 2: confidence that it's my ball to take
 
-	if athlete.team.isHuman && ball.wasLastTouchedByA:
+	if athlete.team.data.isHuman && ball.wasLastTouchedByA:
 		if ball.attackTarget.x > 9.2 || ball.attackTarget.x < 0 ||\
 		ball.attackTarget.z < -4.7 || ball.attackTarget.z > 4.7:
 			athlete.stateMachine.SetCurrentState(athlete.chillState)
 			return
-	elif !athlete.team.isHuman && !ball.wasLastTouchedByA:
+	elif !athlete.team.data.isHuman && !ball.wasLastTouchedByA:
 		if ball.attackTarget.x < -9.2 || ball.attackTarget.x > 0 ||\
 		ball.attackTarget.z < -4.7 || ball.attackTarget.z > 4.7:
 			athlete.stateMachine.SetCurrentState(athlete.chillState)
@@ -82,7 +82,7 @@ func Enter(athlete:Athlete):
 		# Choose t
 		var point1x =  (-bDet + sqrt(determinate))/(2*aDet)
 		var point2x = (-bDet - sqrt(determinate))/(2*aDet)
-		if athlete.team.isHuman:
+		if athlete.team.data.isHuman:
 			intersectionPointX = max(point1x, point2x)
 		else:
 			intersectionPointX = min(point1x, point2x)
@@ -155,7 +155,7 @@ func PassBall(athlete:Athlete):
 	if rollOffDifference >= 19:
 		# what is the ideal height for the setter to jump set??
 		if athlete.stats.role == Enums.Role.Setter:
-			if athlete.team.isLiberoOnCourt:
+			if athlete.team.data.isLiberoOnCourt:
 				receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.activeLibero.stats.jumpSetHeight, 0)
 			else:
 				receptionTarget = Vector3(athlete.team.flip * 3.13, athlete.team.middleBack.stats.jumpSetHeight, 0)
@@ -191,7 +191,7 @@ func PassBall(athlete:Athlete):
 		receptionTarget = Vector3(athlete.position.x + randf_range(-3,3), 2.5, athlete.position.z + randf_range(-3,3))
 
 		#prevent the setter chasing overpasses... by removing them! (for now)
-		if athlete.team.isHuman:
+		if athlete.team.data.isHuman:
 			receptionTarget.x = max(receptionTarget.x, 0.1)
 		else:
 			receptionTarget.x = min(receptionTarget.x, -0.1)
@@ -223,7 +223,7 @@ func PassBall(athlete:Athlete):
 	ball.gravity_scale = 1
 	ball.angular_velocity += Vector3 ( randf_range(-5,5),randf_range(-5,5), randf_range(-5,5))
 
-	if athlete.team.isHuman:
+	if athlete.team.data.isHuman:
 		ball.TouchedByA()
 	else:
 		ball.TouchedByB()
@@ -238,7 +238,7 @@ func PassBall(athlete:Athlete):
 #	var receptionTime = Maths.SetTimeWellBehavedParabola(ball.position, receptionTarget, ballMaxHeight)
 #	Console.AddNewLine("Time till ball at reception target: " + str(receptionTime))
 
-	athlete.team.mManager.BallReceived(athlete.team.isHuman)
+	athlete.team.mManager.BallReceived(athlete.team.data.isHuman)
 
 	await athlete.get_tree().create_timer(.5).timeout
 	athlete.RotateDigPlatform(0)

@@ -2,7 +2,7 @@ extends Node3D
 
 class_name MatchManager
 
-var gameWorld:GameWorld = load("res://Scripts/World/GameWorld.gd").new()
+var gameWorld:GameWorld
 var newMatch:NewMatchData = preload("res://Scripts/World/NewMatchData.gd").new()
 
 @export var debugCylinder:PackedScene
@@ -15,8 +15,8 @@ var sphere
 var preMatch:bool = true
 var preSet:bool = true
 
-var teamA:Team
-var teamB:Team
+@onready var teamA:TeamNode = $TeamA
+@onready var teamB:TeamNode = $TeamB
 
 var timer:Timer
 @onready var ball = $ball
@@ -36,6 +36,10 @@ var isTeamAServing:bool
 var isPaused:bool = false
 var fifthSetSwapSidesCompleted = false
 
+func _init(_gameWorld:GameWorld = null):
+	gameWorld = _gameWorld
+	print("Match Manager Constructor")
+
 func _ready():
 	ball.mManager = self
 	ball.blockResolver.mManager = self
@@ -47,58 +51,61 @@ func _ready():
 	add_child(sphere)
 	add_child(cylinder)
 
-	var now = Time.get_ticks_msec()
-	gameWorld.GenerateDefaultWorld(false)
-	var later = Time.get_ticks_msec()
-	print(str(later - now) + "ms generate world")
+	if !gameWorld:
+		gameWorld = GameWorld.new()
+		var now = Time.get_ticks_msec()
+		gameWorld.GenerateDefaultWorld(false)
+		var later = Time.get_ticks_msec()
+		print(str(later - now) + "ms generate world")
 
 
 	preMatchUI.Init(self)
 
 	camera._gui.LockCamera()
 
+	print("Match Manager ready")
+
 func ConfirmTeams():
+	print("Confirm Teams Called")
 	teamA.Init(self)
 	teamB.Init(self)
 
+	teamA.process_mode = Node.PROCESS_MODE_INHERIT
+	teamB.process_mode = Node.PROCESS_MODE_INHERIT
 	teamA.set_process(true)
 	teamB.set_process(true)
 
-	score.teamANameText.text = teamA.teamName
-	score.teamBNameText.text = teamB.teamName
+	score.teamANameText.text = teamA.data.teamName
+	score.teamBNameText.text = teamB.data.teamName
 
 	$UI/sillydebug.StartDebug(teamA)
 
-	for athlete:Athlete in teamA.courtPlayers:
-		if athlete.rotationPosition == 1:
+	for athlete:Athlete in teamA.courtPlayerNodes:
+		if athlete.stats.rotationPosition == 1:
 			teamA.originalRotation1Player = athlete
 			Console.AddNewLine("Orig rot 1 for teamA is: " + teamA.originalRotation1Player.stats.lastName)
 		if athlete.stats.role != Enums.Role.Libero:
-			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
+			athlete.substitutionInfo.startingRotationPosition = athlete.stats.rotationPosition
 			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.substitutionInfo.startingRotationPosition))
 		else:
-			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
-			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.rotationPosition))
+			athlete.substitutionInfo.startingRotationPosition = athlete.stats.rotationPosition
+			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.stats.rotationPosition))
 
-	for athlete:Athlete in teamB.courtPlayers:
-		if athlete.rotationPosition == 1:
+	for athlete:Athlete in teamB.courtPlayerNodes:
+		if athlete.stats.rotationPosition == 1:
 			teamB.originalRotation1Player = athlete
 
 		if athlete.stats.role != Enums.Role.Libero:
-			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
+			athlete.substitutionInfo.startingRotationPosition = athlete.stats.rotationPosition
 			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.substitutionInfo.startingRotationPosition))
 		else:
-			athlete.substitutionInfo.startingRotationPosition = athlete.rotationPosition
-			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.rotationPosition))
+			athlete.substitutionInfo.startingRotationPosition = athlete.stats.rotationPosition
+			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.stats.rotationPosition))
 
 	if preMatchUI.usingAcceleratedStart:
-		teamA.teamCaptain = teamA.matchPlayers[randi_range(0, teamA.matchPlayers.size() - 1)]
+		teamA.teamCaptain = teamA.matchPlayerNodes[randi_range(0, teamA.matchPlayerNodes.size() - 1)]
 
-	teamB.teamCaptain = teamB.matchPlayers[randi_range(0, teamB.matchPlayers.size() - 1)]
-
-	var tournament = Tournament.new()
-
-	tournament.CreateRoundRobin(teamA.nation.league, 100)
+	teamB.teamCaptain = teamB.matchPlayerNodes[randi_range(0, teamB.matchPlayerNodes.size() - 1)]
 
 
 func StartMatch():
@@ -107,13 +114,13 @@ func StartMatch():
 
 	if newMatch.isTeamAServing:
 		isTeamAServing = true
-		teamA.isNextToSpike = true
-		teamB.isNextToSpike = false
+		teamA.data.isNextToSpike = true
+		teamB.data.isNextToSpike = false
 		teamA.stateMachine.SetCurrentState(teamA.preserviceState)
 		teamB.stateMachine.SetCurrentState(teamB.prereceiveState)
 	else:
-		teamA.isNextToSpike = false
-		teamB.isNextToSpike = true
+		teamA.data.isNextToSpike = false
+		teamB.data.isNextToSpike = true
 		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
 		teamB.stateMachine.SetCurrentState(teamB.preserviceState)
 
@@ -133,8 +140,8 @@ func StartSet():
 		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
 
 func BallOverNet(hitByTeamA:bool):
-	teamA.isNextToSpike = !teamA.isNextToSpike
-	teamB.isNextToSpike = !teamB.isNextToSpike
+	teamA.data.isNextToSpike = !teamA.data.isNextToSpike
+	teamB.data.isNextToSpike = !teamB.data.isNextToSpike
 
 	if hitByTeamA:
 		ball.wasLastTouchedByA = true
@@ -205,8 +212,8 @@ func PointToTeamA():
 	Console.AddNewLine("Point: Score is " + score.teamAScoreText.text + ":" + score.teamBScoreText.text)
 	Console.AddNewLine("=============================================================")
 
-	teamA.isNextToSpike = false
-	teamB.isNextToSpike = true
+	teamA.data.isNextToSpike = false
+	teamB.data.isNextToSpike = true
 
 	#teamA celebrate, watch the ball bounce
 	teamA.Chill()
@@ -244,8 +251,8 @@ func PointToTeamB():
 	Console.AddNewLine("Point: Score is " + score.teamAScoreText.text + ":" + score.teamBScoreText.text)
 	Console.AddNewLine("=============================================================")
 
-	teamB.isNextToSpike = false
-	teamA.isNextToSpike = true
+	teamB.data.isNextToSpike = false
+	teamA.data.isNextToSpike = true
 
 	#teamB celebrate, watch the ball bounce
 	teamA.Chill()
@@ -326,7 +333,7 @@ func RotateAroundOrigin(node3D, angle):
 	# rotation has been applied.
 	var pivot_radius = node3D.position - pivot_point
 	# create a transform centred at the pivot
-	var pivot_transform = Transform3D(transform.basis, pivot_point)
+	var pivot_transform = Transform3D(transform.basis, pivot_point) #Is this constructor right?? Or just lucky because this object is at (0,0,0)?
 	# first we rotate our transform.
 	# Because the axes are rotated,
 	# translations will happen along those rotated axes.
@@ -357,31 +364,19 @@ func BallBlocked(spikedByA:bool):
 		teamA.stateMachine.SetCurrentState(teamA.defendState)
 
 func PrepareLocalTeamObjects(newMatchData:NewMatchData):
-	var teamANode = $TeamA
-	var teamBNode = $TeamB
+	teamA.data = gameWorld.GetTeam(newMatch.aChoiceState, newMatch.clubOrInternational)
+	teamB.data = gameWorld.GetTeam(newMatch.bChoiceState, newMatch.clubOrInternational)
 
-	var natTeamScript = load("res://Scripts/World/NationalTeam.gd")
-	var teamScript = load("res://Scripts/Team.gd")
+	gameWorld.PopulateTeam(teamA.data)
+	gameWorld.PopulateTeam(teamB.data)
 
-	if newMatch.clubOrInternational == Enums.ClubOrInternational.International:
-		teamANode.set_script(natTeamScript)
-		teamBNode.set_script(natTeamScript)
-	else:
-		teamANode.set_script(teamScript)
-		teamBNode.set_script(teamScript)
-
-	teamA = teamANode
-	teamB = teamBNode
-
-	teamA.isHuman = true
-	teamB.isHuman = false
+	teamA.data.isHuman = true
+	teamB.data.isHuman = false
 	teamB.flip = -1
 
 	teamA.defendState.otherTeam = teamB
 	teamB.defendState.otherTeam = teamA
 
-	teamA.CopyGameWorldPlayers(gameWorld, newMatchData.aChoiceState, newMatchData.clubOrInternational)
-	teamB.CopyGameWorldPlayers(gameWorld, newMatchData.bChoiceState, newMatchData.clubOrInternational)
 
 func CheckForFifthSetSideSwap():
 	if fifthSetSwapSidesCompleted:

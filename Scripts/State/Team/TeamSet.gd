@@ -6,7 +6,7 @@ var ballWillBeDumped:bool = false
 var possibleSpikers = []
 
 
-func Enter(team:Team):
+func Enter(team:TeamNode):
 	nameOfState = "Set"
 	ballWillBeDumped = false
 
@@ -17,7 +17,7 @@ func Enter(team:Team):
 		ChooseSpiker(team)
 	#Can the spiker get back to their runup and if not, how will that affect their spike?
 #	team.mManager.sphere.position = team.setTarget.target
-func Update(team:Team):
+func Update(team:TeamNode):
 	team.UpdateTimeTillDigTarget()
 
 	var setHeight
@@ -35,10 +35,10 @@ func Update(team:Team):
 				SetBall(team)
 	#CheckForSpikeDistance(team)
 
-func Exit(_team:Team):
+func Exit(_team:TeamNode):
 	pass
 
-func DumpBall(team:Team):
+func DumpBall(team:TeamNode):
 	team.ball.attackTarget = team.CheckIfFlipped(Vector3(randf_range(-1, -4.5), 0, -4.5 + randf_range(0, 9)))
 	team.ball.difficultyOfReception = randf_range(0, team.chosenSetter.stats.dump)
 
@@ -53,9 +53,9 @@ func DumpBall(team:Team):
 #	team.ball.linear_velocity = team.ball.FindParabolaForGivenSpeed(team.ball.position, team.ball.attackTarget, randf_range(5,10), false)
 #	if team.ball.FindNetPass().y <= 2.5:
 #		team.ball.linear_velocity = team.ball.CalculateBallOverNetVelocity(team.ball.position, team.ball.attackTarget, 2.5)
-	team.mManager.BallOverNet(team.isHuman)
+	team.mManager.BallOverNet(team.data.isHuman)
 
-func SetBall(team:Team):
+func SetBall(team:TeamNode):
 
 	# mint set, poor set (short, long, mis-timed, tight, over, or some combo thereof - so many ways to set poorly!), 2 hits/carry ("setting error")
 	randomize()
@@ -78,7 +78,7 @@ func SetBall(team:Team):
 		team.ball.inPlay = false
 		team.ball.linear_velocity = Vector3.ZERO
 		team.Chill()
-		if team.isHuman:
+		if team.data.isHuman:
 			team.mManager.PointToTeamB()
 		else:
 			team.mManager.PointToTeamA()
@@ -100,7 +100,7 @@ func SetBall(team:Team):
 		var difference = 100.0 - perfectThreshold - setExecution
 		# smaller difference = smaller error
 		var error = randf_range(0, difference) /30
-		if team.isHuman:
+		if team.data.isHuman:
 			team.setTarget.target.x += abs(error)
 		else:
 			team.setTarget.target.x -= abs(error)
@@ -124,7 +124,7 @@ func SetBall(team:Team):
 			Console.AddNewLine("__________________________________________===============================================================================================================================")
 			team.ball.attackTarget = Maths.BallPositionAtGivenHeight(team.ball.position, team.ball.linear_velocity, 0, 1.0)
 			team.ball.difficultyOfReception = 1.3
-			team.mManager.BallOverNet(team.isHuman)
+			team.mManager.BallOverNet(team.data.isHuman)
 			return
 		elif team.setTarget.target.x * team.flip < 0:
 			# Tight set on other side of court, might be able to block
@@ -175,7 +175,7 @@ func SetBall(team:Team):
 
 		team.chosenSetter.setState.WaitThenDefend(team.chosenSetter, 0.5)
 		team.chosenSetter = null
-		if (team.markUndoChangesToRoles):
+		if (team.data.markUndoChangesToRoles):
 			team.setTarget = team.oppositeHitter.outsideFrontSpikes[0]
 
 			team.chosenSpiker = team.oppositeHitter
@@ -198,16 +198,16 @@ func SetBall(team:Team):
 
 
 
-	team.mManager.BallSet(team.isHuman)
+	team.mManager.BallSet(team.data.isHuman)
 
 func AthleteCanStandingRollBadSet(_athlete:Athlete) -> bool:
 	return false
 
-func ScrambleForBadSet(team:Team):
+func ScrambleForBadSet(team:TeamNode):
 	# Find someone to roll/push the set over if possible, or else give a free ball
 	var ballDigHeight = 0.5
 	var ballPositionAtDig = Maths.BallPositionAtGivenHeight(team.ball.position, team.ball.linear_velocity, ballDigHeight, 1.0)
-	for athlete in team.courtPlayers:
+	for athlete in team.courtPlayerNodes:
 		athlete.distanceHack = 9999
 
 		if athlete == team.chosenSpiker || athlete == team.chosenSetter:
@@ -225,7 +225,7 @@ func ScrambleForBadSet(team:Team):
 				timeToReachGround = sqrt(2 * athlete.g * athlete.position.y)
 			athlete.distanceHack += timeToReachGround
 
-	var orderedList = team.courtPlayers.duplicate(false)
+	var orderedList = team.courtPlayerNodes.duplicate(false)
 	orderedList.sort_custom(Callable(Athlete,"SortDistance"))
 	if orderedList[0].distanceHack >= 9999:
 		Console.AddNewLine("No one could reach the ball")
@@ -237,7 +237,7 @@ func ScrambleForBadSet(team:Team):
 	team.stateMachine.SetCurrentState(team.chillState)
 	team.chosenSpiker = null
 
-func CheckForSpikeDistance(team:Team):
+func CheckForSpikeDistance(team:TeamNode):
 	if !team.chosenSpiker:
 		print("Error inbound")
 		#Log(setTarget.target)
@@ -245,14 +245,14 @@ func CheckForSpikeDistance(team:Team):
 	&& abs(team.ball.position.z) >= abs(team.setTarget.z) && team.ball.linear_velocity.y <= 0:
 		team.stateMachine.SetCurrentState(team.spikeState)
 
-func ChooseSetter(team:Team):
+func ChooseSetter(team:TeamNode):
 #	var timeTillBallAtReceptionTarget = TimeTillBallAtReceptionTarget(team.ball, team.receptionTarget)
 	# Who will set?
 	# Who will hit?
 	# Who is out of the picture and will sit around looking pretty?
 
 	if team.chosenReceiver == team.setter:
-		if team.isLiberoOnCourt:
+		if team.data.isLiberoOnCourt:
 			if AthleteCanStandingSet(team.activeLibero, team):
 				AssignSetter(team.activeLibero, team, false)
 				#libero sets (if that's the plan)
@@ -264,7 +264,7 @@ func ChooseSetter(team:Team):
 				#team.SendMultipleChasersAfterBall()
 				pass
 			else:
-				team.chosenSetter = team.courtPlayers[1]
+				team.chosenSetter = team.courtPlayerNodes[1]
 				team.Chill()
 		else:
 			if AttemptToFindSetterOutOfSystem(team):
@@ -273,7 +273,7 @@ func ChooseSetter(team:Team):
 				#team.SendMultipleChasersAfterBall()
 				pass
 			else:
-				team.chosenSetter = team.courtPlayers[1]
+				team.chosenSetter = team.courtPlayerNodes[1]
 				team.Chill()
 
 			#can someone else do it?
@@ -293,10 +293,10 @@ func ChooseSetter(team:Team):
 			#team.SendMultipleChasersAfterBall()
 
 		else:
-			team.chosenSetter = team.courtPlayers[1]
+			team.chosenSetter = team.courtPlayerNodes[1]
 			team.Chill()
 
-func AssignSetter(athlete:Athlete, team:Team, isJumpSetting:bool):
+func AssignSetter(athlete:Athlete, team:TeamNode, isJumpSetting:bool):
 	if isJumpSetting:
 		athlete.setState.internalSetState = athlete.setState.InternalSetState.JumpSet
 		athlete.setState.jumpSetState = athlete.setState.JumpSetState.PreSet
@@ -314,10 +314,10 @@ func AssignSetter(athlete:Athlete, team:Team, isJumpSetting:bool):
 #	team.mManager.sphere.position = athlete.moveTarget
 #	team.mManager.cylinder.position = team.receptionTarget
 
-func AthleteCanJumpSet(athlete:Athlete, team:Team)->bool:
+func AthleteCanJumpSet(athlete:Athlete, team:TeamNode)->bool:
 	var athleteSetPosition:Vector3 = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.jumpSetHeight, 1.0)
 
-	if team.isHuman:
+	if team.data.isHuman:
 		if athleteSetPosition.x < 0.1:
 			return false
 	else:
@@ -329,10 +329,10 @@ func AthleteCanJumpSet(athlete:Athlete, team:Team)->bool:
 	return timeTillBallAtSetPosition >= athlete.setState.TimeToJumpSet(athlete, athleteSetPosition)
 
 
-func AthleteCanStandingSet(athlete:Athlete, team:Team)->bool:
+func AthleteCanStandingSet(athlete:Athlete, team:TeamNode)->bool:
 	var athleteSetPosition:Vector3 = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.standingSetHeight, 1.0)
 
-	if team.isHuman:
+	if team.data.isHuman:
 		if athleteSetPosition.x < 0.1:
 			return false
 		if athlete.stats.role == Enums.Role.Libero:
@@ -349,10 +349,10 @@ func AthleteCanStandingSet(athlete:Athlete, team:Team)->bool:
 
 	return timeTillBallAtSetPosition >= athlete.setState.TimeToStandingSet(athlete, athleteSetPosition)
 
-func AttemptToFindSetterOutOfSystem(team:Team)->bool:
+func AttemptToFindSetterOutOfSystem(team:TeamNode)->bool:
 	# Has the person chosen a dedicated reserve setter?
 	# Defaulting to standard 2022 play style
-	for lad in team.courtPlayers:
+	for lad in team.courtPlayerNodes:
 		if !AthleteCanStandingSet(lad, lad.team):
 			lad.distanceHack = 9999
 			continue
@@ -369,7 +369,7 @@ func AttemptToFindSetterOutOfSystem(team:Team)->bool:
 		if lad == team.chosenReceiver:
 			lad.distanceHack = 99999
 
-	var orderedList = team.courtPlayers.duplicate(false)
+	var orderedList = team.courtPlayerNodes.duplicate(false)
 	orderedList.sort_custom(Callable(Athlete,"SortDistance"))
 
 	print(str(orderedList[0].distanceHack) + " time for quickest option to set ball")
@@ -379,8 +379,8 @@ func AttemptToFindSetterOutOfSystem(team:Team)->bool:
 
 	return false
 
-func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:Team)->bool:
-	for lad in team.courtPlayers:
+func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:TeamNode)->bool:
+	for lad in team.courtPlayerNodes:
 		if !AthleteCanStandingSet(lad, lad.team):
 			lad.distanceHack = 9999
 			continue
@@ -399,7 +399,7 @@ func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:Team)->bool:
 		if lad == team.chosenReceiver:
 			lad.distanceHack = 9999
 
-	var orderedList = team.courtPlayers.duplicate(false)
+	var orderedList = team.courtPlayerNodes.duplicate(false)
 	orderedList.sort_custom(Callable(Athlete,"SortDistance"))
 	AssignSetter(orderedList[0], team, false)
 
@@ -408,7 +408,7 @@ func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:Team)->bool:
 
 	return false
 
-func ThinkAboutDumping(team:Team):
+func ThinkAboutDumping(team:TeamNode):
 	if team.chosenSetter && team.chosenSetter.FrontCourt():
 		var dump = !bool(randi()%30)
 		if dump && abs(team.receptionTarget.x) < 2:
@@ -416,7 +416,7 @@ func ThinkAboutDumping(team:Team):
 			ballWillBeDumped = true
 			return
 
-func ChooseSpiker(team:Team):
+func ChooseSpiker(team:TeamNode):
 	# can the potential spiker get back to their runup location?
 	# if not, can they still get to planned spike contact location by running checked an angle?
 	# does the setter know that they aren't in the play?
@@ -424,7 +424,7 @@ func ChooseSpiker(team:Team):
 
 	possibleSpikers = []
 
-	for athlete in team.courtPlayers:
+	for athlete in team.courtPlayerNodes:
 		if athlete!= team.chosenSetter && athlete.stats.role != Enums.Role.Libero && athlete != team.middleBack:
 			if team.receptionTarget.x == NAN:
 				var dfsdfds = 1

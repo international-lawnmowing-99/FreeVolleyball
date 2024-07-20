@@ -6,12 +6,12 @@ var hit = false
 var timeStart = 0
 var timeEnd = 0
 
-func Enter(_team:Team):
+func Enter(_team:TeamNode):
 	nameOfState = "Spike"
 	rng.randomize()
 	hit = false
 	pass
-func Update(team:Team):
+func Update(team:TeamNode):
 	if !team.chosenSpiker:
 		return
 
@@ -42,10 +42,10 @@ func Update(team:Team):
 #			(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5:
 #				SpikeBall(team)
 
-func Exit(_team:Team):
+func Exit(_team:TeamNode):
 	pass
 
-func SpikeBall(team:Team):
+func SpikeBall(team:TeamNode):
 	var netHeightPlusBallClearance:float = 2.43 + .13
 	var ball:Ball = team.ball
 
@@ -91,7 +91,7 @@ func SpikeBall(team:Team):
 		if abs(netPass.z) >= 4.49:
 			Console.AddNewLine("Ball will pass outside antennae lad", Color.CRIMSON)
 			ball.inPlay = false
-			if team.isHuman:
+			if team.data.isHuman:
 				team.mManager.PointToTeamB()
 			else:
 				team.mManager.PointToTeamA()
@@ -101,7 +101,7 @@ func SpikeBall(team:Team):
 		ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 		team.setTarget = null
 
-	team.mManager.BallSpiked(team.isHuman)
+	team.mManager.BallSpiked(team.data.isHuman)
 	hit = true
 
 	Console.AddNewLine(team.chosenSpiker.stats.lastName + " cranks the ball at " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")

@@ -3,47 +3,47 @@ class_name BlockingIndividualUI
 
 var athlete:Athlete
 
-func Populate(title:String, isPseudo:bool, _athlete:Athlete, otherTeam:Team):
+func Populate(title:String, isPseudo:bool, _athlete:Athlete, otherTeam:TeamNode):
 	if !_athlete || !otherTeam:
 		Console.AddNewLine("!!! ERROR: blocker does not exist from UI's perspective !!!")
 		return
 	athlete = _athlete
-	
+
 	$Background/Title.text = title
 	$Background/Name.text = athlete.stats.firstName + " " + athlete.stats.lastName
 	$Background/ScrollContainer/MainContent/InfoLabels/Role.text = "Role: " + Enums.Role.keys()[athlete.stats.role]
-	
+
 	if isPseudo:
 		$Background/ScrollContainer/MainContent/InfoLabels/RotationPosition.text = "Rotation Position: " + str(athlete.pseudoRotationPosition)
 	else:
-		$Background/ScrollContainer/MainContent/InfoLabels/RotationPosition.text = "Rotation Position: " + str(athlete.rotationPosition)
-	
+		$Background/ScrollContainer/MainContent/InfoLabels/RotationPosition.text = "Rotation Position: " + str(athlete.stats.rotationPosition)
+
 	$Background/ScrollContainer/MainContent/InfoLabels/BlockSkill.text = "Block: " + str("%.0f" %athlete.stats.block)
 	$Background/ScrollContainer/MainContent/InfoLabels/BlockReach.text = "Block Reach: " + str(roundf(athlete.stats.blockHeight *100))+ "cm"
 	$Background/ScrollContainer/MainContent/InfoLabels/Speed.text = "Speed: " + str("%.0f" %athlete.stats.speed)
-	
+
 	var i:int = 0
 	$Background/ScrollContainer/MainContent/CommitBlockOptionsUI/CommitBlockTargetOptionButton.clear()
 	$Background/ScrollContainer/MainContent/AnticipateAttacker/AnticipateAttackerOptionButton.clear()
 	$Background/ScrollContainer/MainContent/AnticipateAttacker/AnticipateAttackerOptionButton.add_item("None")
-	for oppositionPlayer in otherTeam.courtPlayers:
+	for oppositionPlayer in otherTeam.courtPlayerNodes:
 		$Background/ScrollContainer/MainContent/CommitBlockOptionsUI/CommitBlockTargetOptionButton.add_item(oppositionPlayer.stats.firstName + " " + oppositionPlayer.stats.lastName, i)
 		$Background/ScrollContainer/MainContent/AnticipateAttacker/AnticipateAttackerOptionButton.add_item(oppositionPlayer.stats.firstName + " " + oppositionPlayer.stats.lastName, i + 1)
 		i += 1
-		
+
 	if athlete.blockState.isCommitBlocking:
 		$Background/ScrollContainer/MainContent/BlockType/BlockTypeOptionButton.select(0)
-		var commitTargetIndex = otherTeam.courtPlayers.find(athlete.blockState.commitBlockTarget)
+		var commitTargetIndex = otherTeam.courtPlayerNodes.find(athlete.blockState.commitBlockTarget)
 		$Background/ScrollContainer/MainContent/CommitBlockOptionsUI/CommitBlockTargetOptionButton.select(commitTargetIndex)
 		$Background/ScrollContainer/MainContent/CommitBlockOptionsUI.show()
 	else:
 		$Background/ScrollContainer/MainContent/BlockType/BlockTypeOptionButton.select(1)
 		$Background/ScrollContainer/MainContent/CommitBlockOptionsUI.hide()
-	
+
 	$Background/ScrollContainer/MainContent/ExcludeFromBlockCheckBox.set_pressed_no_signal(athlete.blockState.excludedFromBlock)
 	$Background/ScrollContainer/MainContent/StartingPosition/StartingPositionHSlider.value = athlete.blockState.startingWidth
-	
-	
+
+
 func _on_block_type_option_button_item_selected(index):
 	# 0 is commit, 1 is react
 	match index:

@@ -39,11 +39,11 @@ func ToggleTeamInfo():
 func InitialiseOnCourtPlayerUI():
 	for i in range(6):
 		var onCourtPlayer = $OnCourtPlayers/VBoxContainer.get_child(i)
-		if mManager.teamA.courtPlayers[i] == mManager.teamA.libero || \
-			mManager.teamA.courtPlayers[i] == mManager.teamA.libero2:
+		if mManager.teamA.courtPlayerNodes[i] == mManager.teamA.libero || \
+			mManager.teamA.courtPlayerNodes[i] == mManager.teamA.libero2:
 				onCourtPlayer.athlete = mManager.teamA.playerCurrentlyLiberoedOff
 		else:
-			onCourtPlayer.athlete = mManager.teamA.courtPlayers[i]
+			onCourtPlayer.athlete = mManager.teamA.courtPlayerNodes[i]
 
 		onCourtPlayer.UpdateFields()
 

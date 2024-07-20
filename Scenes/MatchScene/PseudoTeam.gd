@@ -1,4 +1,4 @@
-extends Node
+extends RefCounted
 class_name  PseudoTeam
 
 # a team that copies the information of another team so it can rotate without
@@ -26,21 +26,21 @@ var isNextToSpike:bool
 var courtPlayers = []
 var benchPlayers = []
 
-func CopyTeam(team:Team):
-	courtPlayers = team.courtPlayers.duplicate(false)
-	benchPlayers = team.benchPlayers.duplicate(false)
+func CopyTeam(team:TeamNode):
+	courtPlayers = team.courtPlayerNodes.duplicate(false)
+	benchPlayers = team.benchPlayerNodes.duplicate(false)
 
 	libero = team.libero
 
 	server = team.server
 	originalRotation1Player = team.originalRotation1Player
-	isLiberoOnCourt = team.isLiberoOnCourt
+	isLiberoOnCourt = team.data.isLiberoOnCourt
 
 	for athlete in courtPlayers:
-		athlete.pseudoRotationPosition = athlete.rotationPosition
+		athlete.pseudoRotationPosition = athlete.stats.rotationPosition
 
 	for athlete in benchPlayers:
-		athlete.pseudoRotationPosition = athlete.rotationPosition
+		athlete.pseudoRotationPosition = athlete.stats.rotationPosition
 
 func PseudoRotate():
 	server += 1
@@ -85,7 +85,7 @@ func PseudoSub(outgoing:Athlete, incoming:Athlete):
 	if outgoingIndex == -1:
 		print("Not found outgoing player: " + outgoing.name)
 		for lad in courtPlayers:
-			print ("court: " + lad.name + " " + str(lad.rotationPosition))
+			print ("court: " + lad.name + " " + str(lad.stats.rotationPosition))
 		for lad in benchPlayers:
 			print ("bench: " + lad.name)
 	courtPlayers.erase(outgoing)

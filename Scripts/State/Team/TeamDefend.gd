@@ -1,14 +1,14 @@
 extends "res://Scripts/State/Team/TeamState.gd"
 class_name TeamDefend
 
-var otherTeam:Team
+var otherTeam:TeamNode
 var leftSideBlocker:Athlete
 var rightSideBlocker:Athlete
 var middleBlocker:Athlete
 
-func Enter(team:Team):
+func Enter(team:TeamNode):
 	nameOfState = "Defend"
-	for player in team.courtPlayers:
+	for player in team.courtPlayerNodes:
 #		print(player.stats.lastName)
 #		if player.rb.freeze:
 #			print(player.stats.lastName + "Changing")
@@ -37,7 +37,7 @@ func Enter(team:Team):
 #		team.oppositeHitter.moveTarget = team.CheckIfFlipped(Vector3(5.5, 0, -2.2))
 		team.outsideFront.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, 3))
 	else:
-		if team.markUndoChangesToRoles:
+		if team.data.markUndoChangesToRoles:
 			team.oppositeHitter.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, 3))
 			team.outsideFront.moveTarget = team.CheckIfFlipped(Vector3(0.5, 0, -3))
 		else:
@@ -48,7 +48,7 @@ func Enter(team:Team):
 
 
 
-	if otherTeam.markUndoChangesToRoles:
+	if otherTeam.data.markUndoChangesToRoles:
 		leftSideBlocker.blockState.blockingTarget = otherTeam.outsideFront
 		rightSideBlocker.blockState.blockingTarget = otherTeam.oppositeHitter
 	else:
@@ -58,8 +58,8 @@ func Enter(team:Team):
 
 	team.middleFront.blockState.blockingTarget = otherTeam.middleFront
 
-func Update(team:Team):
-	if team.isHuman:
+func Update(team:TeamNode):
+	if team.data.isHuman:
 
 		#print("defend" + str(randf()))
 		if Input.is_key_pressed(KEY_LEFT):
@@ -76,24 +76,24 @@ func Update(team:Team):
 		elif Input.is_key_pressed(KEY_DOWN):
 			TripleBlockPipe(team)
 	pass
-func Exit(_team:Team):
+func Exit(_team:TeamNode):
 	pass
 
-func CacheBlockers(team:Team):
+func CacheBlockers(team:TeamNode):
 	middleBlocker = team.middleFront
 
 	if team.setter.FrontCourt():
 		rightSideBlocker = team.setter
 		leftSideBlocker = team.outsideFront
 	else:
-		if team.markUndoChangesToRoles:
+		if team.data.markUndoChangesToRoles:
 			rightSideBlocker = team.outsideFront
 			leftSideBlocker = team.oppositeHitter
 		else:
 			rightSideBlocker = team.oppositeHitter
 			leftSideBlocker = team.outsideFront
 
-func TripleBlockLeft(team:Team):
+func TripleBlockLeft(team:TeamNode):
 	rightSideBlocker.blockState.blockingTarget = otherTeam.oppositeHitter
 	middleBlocker.blockState.blockingTarget = otherTeam.oppositeHitter
 
@@ -101,7 +101,7 @@ func TripleBlockLeft(team:Team):
 	middleBlocker.moveTarget = leftSideBlocker.moveTarget + team.flip * Vector3(0,0,-0.8)
 	rightSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,-0.8)
 
-func TripleBlockRight(team:Team):
+func TripleBlockRight(team:TeamNode):
 	leftSideBlocker.blockState.blockingTarget = otherTeam.outsideFront
 	middleBlocker.blockState.blockingTarget = otherTeam.outsideFront
 
@@ -109,15 +109,15 @@ func TripleBlockRight(team:Team):
 	middleBlocker.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0,0,0.8)
 	leftSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,0.8)
 
-func DoubleBlockLeft(team:Team):
+func DoubleBlockLeft(team:TeamNode):
 	middleBlocker.blockState.blockingTarget = otherTeam.outsideFront
 	middleBlocker.moveTarget = leftSideBlocker.moveTarget + team.flip * Vector3(0,0,-0.8)
 
-func DoubleBlockRight(team:Team):
+func DoubleBlockRight(team:TeamNode):
 	middleBlocker.blockState.blockingTarget = otherTeam.oppositeHitter
 	middleBlocker.moveTarget = rightSideBlocker.moveTarget + team.flip * Vector3(0,0,0.8)
 
-func TripleBlockPipe(team:Team):
+func TripleBlockPipe(team:TeamNode):
 	rightSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
 	leftSideBlocker.blockState.blockingTarget = otherTeam.outsideBack
 	middleBlocker.blockState.blockingTarget = otherTeam.outsideBack
@@ -125,7 +125,7 @@ func TripleBlockPipe(team:Team):
 	leftSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,0.8)
 	rightSideBlocker.moveTarget = team.middleFront.moveTarget + team.flip * Vector3(0,0,-0.8)
 
-func EvaluateOppositionPass(_team:Team):
+func EvaluateOppositionPass(_team:TeamNode):
 	# make a list of available options for the other team's attack
 	# ie, bad pass means no middle, so stack checked actually possible hitters
 #	print("other team reception target: " + str(otherTeam.receptionTarget))
@@ -138,7 +138,7 @@ func EvaluateOppositionPass(_team:Team):
 	if middleBlocker.blockState.isCommitBlocking:
 		middleBlocker.blockState.ConfirmCommitBlock(middleBlocker, otherTeam)
 
-func ReactToSet(team:Team):
+func ReactToSet(team:TeamNode):
 	if !otherTeam.chosenSpiker:
 		return
 	# React blockers move to new blocking position, perhaps after a delay given by a "reaction time" stat
@@ -147,7 +147,7 @@ func ReactToSet(team:Team):
 		leftSideBlocker.blockState.blockState = leftSideBlocker.blockState.BlockState.Preparing
 		leftSideBlocker.blockState.blockingTarget = otherTeam.chosenSpiker
 
-		if team.isHuman:
+		if team.data.isHuman:
 			if otherTeam.setTarget.target.z >= 0:
 				leftSideBlocker.moveTarget = Vector3(0.5, 0, min(4.25, otherTeam.chosenSpiker.setRequest.target.z))
 			else:
@@ -170,7 +170,7 @@ func ReactToSet(team:Team):
 		rightSideBlocker.blockState.blockingTarget = otherTeam.chosenSpiker
 		rightSideBlocker.blockState.blockState = rightSideBlocker.blockState.BlockState.Preparing
 
-		if team.isHuman:
+		if team.data.isHuman:
 			if otherTeam.setTarget.target.z <= 0:
 				rightSideBlocker.moveTarget = Vector3(0.5, 0, max(-4.25, otherTeam.chosenSpiker.setRequest.target.z))
 			else:
@@ -194,7 +194,7 @@ func ReactToSet(team:Team):
 		team.middleFront.blockState.blockingTarget = otherTeam.chosenSpiker
 		team.middleFront.blockState.blockState = team.middleFront.blockState.BlockState.Preparing
 
-		if team.isHuman:
+		if team.data.isHuman:
 			team.middleFront.moveTarget = Vector3(0.5, 0, clamp(otherTeam.setTarget.target.z, rightSideBlocker.moveTarget.z + 0.75, leftSideBlocker.moveTarget.z - 0.75))
 		else:
 			team.middleFront.moveTarget = Vector3(-0.5, 0, clamp(otherTeam.setTarget.target.z, leftSideBlocker.moveTarget.z + 0.75, rightSideBlocker.moveTarget.z - 0.75))

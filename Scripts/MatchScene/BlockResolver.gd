@@ -59,7 +59,7 @@ func SnickBlock():
 
 	ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget, ballMaxHeight)
 	ball.difficultyOfReception = randf_range(0, 20)
-	mManager.BallOverNet(spiker.team.isHuman)
+	mManager.BallOverNet(spiker.team.data.isHuman)
 	ball.wasLastTouchedByA = !spikedByA
 
 func BlockFault():
@@ -96,7 +96,7 @@ func ResolveBlock():
 	var canMiddleBlock:bool = false
 	var canRightBlock:bool = false
 
-	var defendingTeam:Team = blockers[0].team
+	var defendingTeam:TeamNode = blockers[0].team
 	var flip = defendingTeam.flip
 
 	if blockers.has(defendingTeam.defendState.leftSideBlocker):
@@ -176,7 +176,7 @@ func ResolveBlock():
 		Console.AddNewLine("Queued block, but noone could reach ball!", Color.RED)
 		ball.blockWillBeAttempted = false
 		if ball.inPlay:
-			spiker.team.mManager.BallOverNet(spiker.team.isHuman)
+			spiker.team.mManager.BallOverNet(spiker.team.data.isHuman)
 		return
 
 

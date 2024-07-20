@@ -1,4 +1,4 @@
-extends Node
+extends RefCounted
 
 class_name NewMatchData
 
@@ -42,14 +42,17 @@ func ChooseRandom(gameWorld:GameWorld):
 	bChoiceState = bChoiceState.ChooseRandom(gameWorld, clubOrInternational)
 	#bChoiceState = aChoiceState
 
-	var teamA:Team = gameWorld.GetTeam(aChoiceState, clubOrInternational)
-	var teamB:Team = gameWorld.GetTeam(bChoiceState, clubOrInternational)
+
+	var teamA:TeamData = gameWorld.GetTeam(aChoiceState, clubOrInternational)
+	var teamB:TeamData = gameWorld.GetTeam(bChoiceState, clubOrInternational)
 
 	if clubOrInternational == Enums.ClubOrInternational.Club:
 		var now = Time.get_ticks_msec()
 		teamA.Populate(gameWorld.firstNames, gameWorld.lastNames)
 		if teamA != teamB:
 			teamB.Populate(gameWorld.firstNames, gameWorld.lastNames)
+		else:
+			print("Team A and Team B are the same, though chosen randomly!")
 		var later = Time.get_ticks_msec()
 		print(str((later-now)) + " make 2 team(s)")
 
@@ -62,5 +65,7 @@ func ChooseRandom(gameWorld:GameWorld):
 			for team in teamB.nation.league:
 				team.Populate(gameWorld.firstNames, gameWorld.lastNames)
 				teamB.nation.nationalTeam.nationalPlayers += team.matchPlayers
+		else:
+			print("Team A and Team B are the same national teams! Randomly chosen. ")
 		var later = Time.get_ticks_msec()
 		print(str((later-now)) + " make all teams in nation(s)")

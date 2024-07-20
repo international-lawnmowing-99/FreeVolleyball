@@ -1,9 +1,9 @@
 extends Label
 
-var teamA:Team
+var teamA:TeamNode
 var running:bool = false
 # Called when the node enters the scene tree for the first time.
-func StartDebug(team:Team):
+func StartDebug(team:TeamNode):
 	teamA = team
 	running = true
 

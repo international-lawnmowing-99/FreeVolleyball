@@ -2,7 +2,7 @@ extends Node3D
 class_name Athlete
 
 var g = ProjectSettings.get_setting("physics/3d/default_gravity")
-var stats:Stats = Stats.new()
+var stats:AthleteStats = AthleteStats.new()
 var substitutionInfo:SubstitutionInfo = SubstitutionInfo.new()
 
 var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(self)
@@ -18,7 +18,7 @@ var stateMachine:StateMachine = load("res://Scripts/State/StateMachine.gd").new(
 @onready var debug1 = $Debug
 @onready var debug2 = $Debug2
 
-var team: Team
+var team: TeamNode
 var myDelta:float
 var serveState
 
@@ -58,7 +58,7 @@ var acceleration = 10
 
 var rotationSpeed = 8
 
-var rotationPosition:int
+#var rotationPosition:int
 var pseudoRotationPosition:int
 
 var digAngle = 0
@@ -74,7 +74,7 @@ var oppositeFrontSpikes
 var oppositeBackSpikes
 
 var distanceHack
-var uiSelected:bool = false
+#var uiSelected:bool = false
 
 func CreateSpikes():
 	var targetXFrontcourt = stats.spikeHeight/2 + 0.15
@@ -195,36 +195,6 @@ func RotateDigPlatform(angle):
 #	skel.set_bone_global_pose_override(neckBone01Id, acustomPoseNeck01,1.0)
 #	skel.set_bone_global_pose_override(neckBone02Id, acustomPoseNeck02,1.0)
 
-static func SortSet(a,b):
-	if a.stats.SetterEvaluation() > b.stats.SetterEvaluation():
-		return true
-	return false
-
-static func SortLibero(a,b):
-	if a.stats.LiberoEvaluation() > b.stats.LiberoEvaluation():
-		return true
-	return false
-
-static func SortSkill(a,b):
-	if a.stats.SkillTotal() > b.stats.SkillTotal():
-		return true
-	return false
-
-static func SortMiddle(a,b):
-	if a.stats.MiddleEvaluation() > b.stats.MiddleEvaluation():
-		return true
-	return false
-
-static func SortOpposite(a,b):
-	if a.stats.OppositeEvaluation() > b.stats.OppositeEvaluation():
-		return true
-	return false
-
-static func SortOutside(a,b):
-	if a.stats.OutsideEvaluation() > b.stats.OutsideEvaluation():
-		return true
-	return false
-
 static func SortDistance(a,b):
 	#It's min distance
 	if a.distanceHack < b.distanceHack:
@@ -232,11 +202,11 @@ static func SortDistance(a,b):
 	return false
 
 func FrontCourt()->bool:
-	if rotationPosition < 1 || rotationPosition > 6:
+	if stats.rotationPosition < 1 || stats.rotationPosition > 6:
 		#Console.AddNewLine("WARNING: attempting to check rotationPosition of player not in positions 1 to 6! " + name, Color.YELLOW)
 		return false
 
-	if (rotationPosition == 1 || rotationPosition>4):
+	if (stats.rotationPosition == 1 || stats.rotationPosition>4):
 		return false
 
 	else:
