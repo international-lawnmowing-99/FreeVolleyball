@@ -37,6 +37,13 @@ size_flags_horizontal = 4
 size_flags_vertical = 6
 text = "Accept"
 
+[node name="RandomButton" type="Button" parent="ColourRect/BackgroundTeamChoice/VBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+text = "Random Team"
+
 [node name="Popup" type="PopupPanel" parent="ColourRect"]
 mode = 3
 title = "Lads"
@@ -73,5 +80,6 @@ size_flags_horizontal = 4
 text = "On second thoughts, that's a silly idea"
 
 [connection signal="pressed" from="ColourRect/BackgroundTeamChoice/VBoxContainer/AcceptButton" to="." method="_on_accept_button_pressed"]
+[connection signal="pressed" from="ColourRect/BackgroundTeamChoice/VBoxContainer/RandomButton" to="." method="_on_random_button_pressed"]
 [connection signal="pressed" from="ColourRect/Popup/VSplitContainer/HSplitContainer/ConfirmButton" to="." method="_on_confirm_button_pressed"]
 [connection signal="pressed" from="ColourRect/Popup/VSplitContainer/HSplitContainer/CancelButton" to="." method="_on_cancel_button_pressed"]

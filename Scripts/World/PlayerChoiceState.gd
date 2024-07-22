@@ -1,16 +1,18 @@
-extends Node
+extends Resource
 
 class_name PlayerChoiceState
 
 #var clubOrInternational:Enums.ClubOrInternational = Enums.ClubOrInternational.NotSelected
-var continentIndex:int = -1
+@export var continentIndex:int = -1
 
 # for every continent, which team is selected?
-var nationIndices:Array = []
+@export var nationIndices:Array = []
 # for every [continent][nation on that continent], which club is selected
-var clubTeamIndices:Array[Array] = []
+@export var clubTeamIndices:Array[Array] = []
 
-func _init(gameWorld):
+func _init(gameWorld = GameWorld.new()):
+	if !gameWorld.continents:
+		gameWorld.GenerateDefaultWorld(false)
 	nationIndices.resize(7)
 	for i in range(7):
 		nationIndices[i] = -1

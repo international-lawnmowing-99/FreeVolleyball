@@ -4,7 +4,7 @@ class_name TeamData
 # Anything we might want to save goes in here
 @export var teamName:String
 @export var teamStrategy:TeamStrategy = TeamStrategy.new()
-@export var nation:Nation
+#@export var nation:String
 @export var isHuman:bool = false
 @export var isLiberoOnCourt:bool
 @export var isNextToSpike:bool
@@ -26,7 +26,7 @@ func Populate(firstNames, lastNames):
 		var skill = randf_range(0,10) + randf_range(0,10) + randf_range(0,10) + randf_range(0,10) + randf_range(0,10)
 		stats.firstName = firstNames[randi_range(0, firstNames.size() - 1)]
 		stats.lastName = lastNames[randi_range(0, lastNames.size() - 1)]
-		stats.nation = nation
+		#stats.nation = nation
 		stats.serve = skill + randf_range(0,25) + randf_range(0,25)
 		stats.reception = skill + randf_range(0,25) + randf_range(0,25)
 		stats.block = skill + randf_range(0,25) + randf_range(0,25)

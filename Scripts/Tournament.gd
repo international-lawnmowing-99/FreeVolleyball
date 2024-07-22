@@ -1,10 +1,10 @@
-extends Node
+extends RefCounted
 class_name Tournament
 
 var listOfMatches:Array[ScheduledMatch] = []
 var standings
 
-func CreateRoundRobin(teams:Array[TeamData], maxRounds:int):
+func CreateRoundRobin(teams:Array[TeamData], maxRounds:int, daysBetweenRounds:int, startDateUnix:int):
 	var amendedTeams:Array[TeamData] = teams
 
 	if (teams.size()%2): # ie there are odd teams
@@ -27,16 +27,18 @@ func CreateRoundRobin(teams:Array[TeamData], maxRounds:int):
 		print("\n")
 
 
+	var dateOfCurrentRoundUnix:int = startDateUnix
 	for i in numberOfRounds:
-
+		print("Current round date: " + str(Time.get_date_dict_from_unix_time(dateOfCurrentRoundUnix)))
 		for j in numberOfTeams/2:
 			var scheduledMatch:ScheduledMatch = ScheduledMatch.new()
 			var teamA:TeamData = grid2D[0][j]
 			var teamB:TeamData = grid2D[1][j]
 			scheduledMatch.teamA = teamA
 			scheduledMatch.teamB = teamB
-			scheduledMatch.round = i
-
+			scheduledMatch.tournamentRound = i
+			scheduledMatch.unixDate = dateOfCurrentRoundUnix
+			scheduledMatch.toBeSimulated = true
 			listOfMatches.append(scheduledMatch)
 			print("Creating new game, " + teamA.teamName + " vs " + teamB.teamName)
 		# Rotate the grid clockwise, holding the top left
@@ -57,3 +59,4 @@ func CreateRoundRobin(teams:Array[TeamData], maxRounds:int):
 					print(str(q) + ", " + str(w) + ": " + grid2D[q][w].teamName)
 				print("\n")
 
+		dateOfCurrentRoundUnix += 24*60*60 * daysBetweenRounds

@@ -26,31 +26,39 @@ func _on_CustomMatchButton_pressed() -> void:
 
 
 func _on_CareerButton_pressed() -> void:
+	Console.AddNewLine("Generating A Game World, have patience")
+	await get_tree().create_timer(0.05).timeout
 	var gam:GameWorld = GameWorld.new()
 	gam.GenerateDefaultWorld(true)
 	var savedGame:SavedCareer = SavedCareer.new()
+
+
 	savedGame.gameWorld = gam
+	savedGame.myTeamChoiceState = PlayerChoiceState.new(savedGame.gameWorld)
+
+
 	savedGame.number = 13
 	savedGame.string = "blah blah"
-	savedGame.SaveGame()
+
+	GlobalVariables.savedGam = savedGame
 	get_tree().change_scene_to_file("res://Scenes/CareerStartScene.tscn")
 
 
 func _on_QuickMatchButton_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/MatchScene/MatchScene.tscn")
-	pass # Replace with function body.
+
 
 
 func _on_LoadButton_pressed() -> void:
 	$LoadButton/FileDialog.popup_centered()
-	pass # Replace with function body.
+
 
 
 func _on_FileDialog_file_selected(path: String) -> void:
 	print(path)
 	var loadedCareer:SavedCareer = SavedCareer.LoadGame(path)
 
+	GlobalVariables.savedGam = loadedCareer
 
-	print(loadedCareer.gameWorld.continents[3].nations[9].countryName)
+	get_tree().change_scene_to_file("res://Scenes/ManagementScene/ManagementScene.tscn")
 
-	pass # Replace with function body.

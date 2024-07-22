@@ -3,9 +3,13 @@ extends Resource
 
 @export var path:String = "res://save_test.tres"
 
-@export var inGameUnixTime:int
+#@export var inGameUnixTime:int
 @export var cash:int
 @export var gameWorld:GameWorld
+
+#Can't have circular refs, need to store the index in gameWorld...
+@export var myTeamChoiceState:PlayerChoiceState
+@export var isClubOrInternational:Enums.ClubOrInternational
 
 @export var number:int = 0
 @export var string = "blah"

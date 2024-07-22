@@ -364,6 +364,7 @@ func BallBlocked(spikedByA:bool):
 		teamA.stateMachine.SetCurrentState(teamA.defendState)
 
 func PrepareLocalTeamObjects(newMatchData:NewMatchData):
+	newMatch = newMatchData
 	teamA.data = gameWorld.GetTeam(newMatch.aChoiceState, newMatch.clubOrInternational)
 	teamB.data = gameWorld.GetTeam(newMatch.bChoiceState, newMatch.clubOrInternational)
 

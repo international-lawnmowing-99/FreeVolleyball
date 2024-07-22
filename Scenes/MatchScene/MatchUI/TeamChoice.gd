@@ -72,6 +72,7 @@ func _on_club_or_international_right_button_pressed():
 			if nationLabel.visible:
 				clubTeamLabel.show()
 
+#Shouldn't this be a signal?
 	if !careerMode:
 		preMatchUI.SyncroniseClubOrInternational(clubOrInternationalMode)
 
@@ -171,3 +172,24 @@ func _on_club_team_right_button_pressed():
 	clubTeamLabel.text = gameWorld.continents[choiceState.continentIndex].\
 				nations[choiceState.nationIndices[choiceState.continentIndex]].\
 				league[choiceState.clubTeamIndices[choiceState.continentIndex][choiceState.nationIndices[choiceState.continentIndex]]].teamName
+
+func DisplayNewChoiceState(newChoiceState:PlayerChoiceState, isClubOrInternational:Enums.ClubOrInternational):
+	clubOrInternationalMode = isClubOrInternational
+	choiceState.continentIndex = newChoiceState.continentIndex
+	choiceState.nationIndices[newChoiceState.continentIndex] = newChoiceState.nationIndices[newChoiceState.continentIndex]
+	if clubOrInternationalMode == Enums.ClubOrInternational.Club:
+		choiceState.clubTeamIndices[newChoiceState.continentIndex][newChoiceState.nationIndices[newChoiceState.continentIndex]] = newChoiceState.clubTeamIndices[newChoiceState.continentIndex][newChoiceState.nationIndices[newChoiceState.continentIndex]]
+
+	_on_club_or_international_left_button_pressed()
+	_on_club_or_international_left_button_pressed()
+
+	continentLabel.show()
+	_on_continent_left_button_pressed()
+	_on_continent_right_button_pressed()
+
+	_on_nation_left_button_pressed()
+	_on_nation_right_button_pressed()
+
+	if clubOrInternationalMode == Enums.ClubOrInternational.Club:
+		_on_club_team_left_button_pressed()
+		_on_club_team_right_button_pressed()

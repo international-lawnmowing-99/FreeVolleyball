@@ -313,7 +313,7 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 	var middleBlockerPossiblePosition
 	var rightBlockerPossiblePosition
 
-	ProduceOTTReport(athlete, oppositionLeftBlocker, oppositionMiddleBlocker, oppositionRightBlocker)
+	#ProduceOTTReport(athlete, oppositionLeftBlocker, oppositionMiddleBlocker, oppositionRightBlocker)
 
 	var timeTillSpikeContact = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, athlete.stats.spikeHeight, 1.0)
 
@@ -682,8 +682,8 @@ func CalculateTimeTillSpike(athlete:Athlete):
 #	Console.AddNewLine(str(a))
 	return a
 
-func ProduceOTTReport(athlete:Athlete, oppositionLeftBlocker:Athlete, oppositionMiddleBlocker:Athlete, oppositionRightBlocker:Athlete):
-	pass
+#func ProduceOTTReport(athlete:Athlete, oppositionLeftBlocker:Athlete, oppositionMiddleBlocker:Athlete, oppositionRightBlocker:Athlete):
+	#pass
 
 	#if thlete.stats.spikeHeight - ballRadius:
 
@@ -694,8 +694,8 @@ func FindPermissableAnglesDisregardingBlock(athlete:Athlete):
 	var flip = athlete.team.flip
 
 	var contactPoint:Vector3 = athlete.setRequest.target
-	var netPass:Vector3
-	var landingPoint:Vector3
+	var netPass:Vector3 = Vector3.ZERO
+	var landingPoint:Vector3 = Vector3.ZERO
 
 	var initialVelocityMagnitude:float = 100
 
@@ -741,13 +741,13 @@ func FindPermissableAnglesDisregardingBlock(athlete:Athlete):
 	var timeToNetPass:float
 
 
-func BallPositionAfterLowestPossibleSpikeAndMostConvolutedFunctionNameGivenStartAndSomeZValue(initialSpeed:float, contactPoint:Vector3, zPos:float, netPassY:float) -> Vector3:
-	# First find top down angle
-	var playerToNetVector:Vector3 = Vector3(-contactPoint.x, 0, 0)
-	var playerToDesiredZVector:Vector3 = Vector3()
-
-
-	# Then find side on angle
-	# Then the velocity
-	# Then the ball pos at given z point
-	return Vector3.ZERO
+#func BallPositionAfterLowestPossibleSpikeAndMostConvolutedFunctionNameGivenStartAndSomeZValue(initialSpeed:float, contactPoint:Vector3, zPos:float, netPassY:float) -> Vector3:
+	## First find top down angle
+	#var playerToNetVector:Vector3 = Vector3(-contactPoint.x, 0, 0)
+	#var playerToDesiredZVector:Vector3 = Vector3()
+#
+#
+	## Then find side on angle
+	## Then the velocity
+	## Then the ball pos at given z point
+	#return Vector3.ZERO

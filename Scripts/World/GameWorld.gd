@@ -2,17 +2,19 @@ extends Resource
 class_name GameWorld
 const Enums = preload("res://Scripts/World/Enums.gd")
 
-var firstNames = []
-var lastNames = []
-var nationsText = []
+var firstNames:Array[String] = []
+var lastNames:Array[String] = []
+var nationsText:Array[String] = []
 #There are players, organised in teams, in competitions, national teams, national competitions, and it's organised by continent for ease of navigation
 @export var continents:Array[Continent] = []
 
-@export var inGameDate:String
+@export var inGameUnixDate:int = 0
 
-@export var previousGames:Array[ScheduledMatch] = []
+@export var previousMatches:Array[ScheduledMatch] = []
 # Imagining this should be kept sorted in order of date
-@export var upcomingGames:Array[ScheduledMatch] = []
+@export var upcomingMatches:Array[ScheduledMatch] = []
+
+var matchesToSimulate:Array[ScheduledMatch] = []
 
 func GenerateDefaultWorld(generatematchPlayers:bool):
 	LoadText()
@@ -42,6 +44,9 @@ func GenerateDefaultWorld(generatematchPlayers:bool):
 			var currentNation:Nation = continents[continents.size() - 1].nations[continents[continents.size() - 1].nations.size() - 1]
 
 			currentNation.Populate(firstNames, lastNames, generatematchPlayers)
+
+func GetNation(choiceState:PlayerChoiceState) -> Nation:
+	return continents[choiceState.continentIndex].nations[choiceState.nationIndices[choiceState.continentIndex]]
 
 func GetTeam(choiceState:PlayerChoiceState, mode) -> TeamData:
 	if (mode == Enums.ClubOrInternational.Club):
@@ -106,22 +111,33 @@ func PopulateTeam(team:TeamData):
 			team.Populate(firstNames, lastNames)
 
 func SimulateDay():
-	var simulatedGames:Array = []
 	# Find all the games that need to be simulated
 	#
-	for i in upcomingGames.size():
-		if upcomingGames[i].date == inGameDate:
-			if upcomingGames[i].toBeSimulated:
-				simulatedGames.append(upcomingGames[i])
+	for i in upcomingMatches.size():
+		if upcomingMatches[i].unixDate == inGameUnixDate:
+			if upcomingMatches[i].toBeSimulated:
+				matchesToSimulate.append(upcomingMatches[i])
 		elif false: # if the date is greater than the current date then stop
 			break
 		else: # catch errors
 			pass
 
-	for game:ScheduledMatch in simulatedGames:
-		SimulateMatch(game)
+	var now = Time.get_ticks_msec()
 
-func SimulateMatch(game:ScheduledMatch):
+#
+	for i in range (matchesToSimulate.size()):
+		SimulateMatch(i)
+	#var taskID = WorkerThreadPool.add_group_task(SimulateMatch,matchesToSimulate.size())
+	#WorkerThreadPool.wait_for_group_task_completion(taskID)
+
+	var later = Time.get_ticks_msec()
+	Console.AddNewLine(str(later - now) + "ms simulate " + str(matchesToSimulate.size()) + "match(es)")
+
+	matchesToSimulate.clear()
+
+func SimulateMatch(scheduledMatchIndex:int):
+	var scheduledMatch:ScheduledMatch = matchesToSimulate[scheduledMatchIndex]
+	print("Simulating: " + scheduledMatch.teamA.teamName + " vs " + scheduledMatch.teamB.teamName + " on " + str(Time.get_date_dict_from_unix_time(scheduledMatch.unixDate)))
 	##Perform pre-match stuff.
 	#game.teamA.AssessRival(game.teamB)
 	#game.teamB.AssessRival(game.teamA)
@@ -129,12 +145,16 @@ func SimulateMatch(game:ScheduledMatch):
 	#game.teamB.SelectSquad()
 
 	var matchWon:bool = false
+	var teamASetScore:int = 0
+	var teamBSetScore:int = 0
 	while !matchWon:
 		##Perform pre-set stuff
 		#game.teamA.AssignStartingRoles()
 		#game.teamA.ChooseStartingRotation()
 
 		var setWon:bool = false
+		var teamAScore:int = 0
+		var teamBScore:int = 0
 		while !setWon:
 			##Do pre-point stuff
 			#game.teamA.ConsiderSubstitutes()
@@ -147,6 +167,34 @@ func SimulateMatch(game:ScheduledMatch):
 
 			##Finally actually play a point!
 			#SimulatePoint()
+			if randi()%2 == 1:
+				teamAScore += 1
+			else:
+				teamBScore += 1
+
+
 			#CheckForWin()
-			setWon = true
-		matchWon = true
+			if teamAScore >= 25 && teamAScore - 2 >= teamBScore:
+				scheduledMatch.teamACompletedScores.append(teamAScore)
+				scheduledMatch.teamBCompletedScores.append(teamBScore)
+				setWon = true
+				teamASetScore += 1
+
+			elif teamBScore >= 25 && teamBScore - 2 >= teamAScore:
+				scheduledMatch.teamACompletedScores.append(teamAScore)
+				scheduledMatch.teamBCompletedScores.append(teamBScore)
+				setWon = true
+				teamBSetScore += 1
+
+		if teamASetScore >= 3:
+			matchWon = true
+			scheduledMatch.winner = scheduledMatch.teamA
+		elif teamBSetScore >= 3:
+			matchWon = true
+			scheduledMatch.winner = scheduledMatch.teamB
+
+	scheduledMatch.completed = true
+	previousMatches.append(scheduledMatch)
+	upcomingMatches.erase(scheduledMatch)
+
+	print("Match over, " + scheduledMatch.winner.teamName + " won! " + str(max(teamASetScore, teamBSetScore)) + ":" + str(min(teamASetScore, teamBSetScore)))

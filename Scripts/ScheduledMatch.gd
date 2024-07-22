@@ -2,8 +2,8 @@ extends Resource
 class_name ScheduledMatch
 
 @export var toBeSimulated:bool = false
-@export var date:String
-@export var round:int
+@export var unixDate:int
+@export var tournamentRound:int
 @export var teamA:TeamData
 @export var teamB:TeamData
 

@@ -10,17 +10,17 @@ func AddNewLine(text:String, colour:Color = Color.WHITE):
 	lineOfSuspiciousPowder.position = Vector2(50,841)
 	lineOfSuspiciousPowder.text = text
 	lineOfSuspiciousPowder.modulate = colour
-	
+
 	for line in get_children():
 		line.position = Vector2(line.position.x, line.position.y - 20)
 	add_child(lineOfSuspiciousPowder)
-	
+
 	if existingLines.size() > MAXLINES:
 		#Don't have too many array elements...
 		var lineToDelete = existingLines.pop_front()
 		if is_instance_valid(lineToDelete):
 			lineToDelete.queue_free()
-		
+
 func Clear():
 	for child in get_children():
 		child.queue_free()
