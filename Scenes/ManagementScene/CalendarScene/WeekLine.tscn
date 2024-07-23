@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://d3yb8xhfckmp6"]
+
+[node name="WeekLine" type="VSplitContainer"]
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "first date  to first date plus 7"
+
+[node name="Line2D" type="Line2D" parent="."]
+position = Vector2(0, 15)
+points = PackedVector2Array(0, 0, 600, 0)
+width = 1.0

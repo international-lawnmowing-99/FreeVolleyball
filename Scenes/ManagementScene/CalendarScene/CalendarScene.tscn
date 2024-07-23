@@ -1,0 +1,323 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2rwr4t4gvij3"]
+
+[ext_resource type="Script" path="res://Scenes/ManagementScene/CalendarScene/CalendarScene.gd" id="1_qe6pp"]
+[ext_resource type="PackedScene" uid="uid://d3yb8xhfckmp6" path="res://Scenes/ManagementScene/CalendarScene/WeekLine.tscn" id="2_thhmf"]
+[ext_resource type="PackedScene" uid="uid://bq4hoos7b0x0i" path="res://Scenes/ManagementScene/CalendarScene/MonthLine.tscn" id="3_dopjb"]
+
+[node name="CalendarScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qe6pp")
+
+[node name="Background" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Background"]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 27.0
+offset_right = 616.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Welcome to the extended calendar, we hope you enjoy your stay!"
+
+[node name="CurrentDateLabel" type="Label" parent="Background"]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 83.0
+offset_right = 616.0
+offset_bottom = 106.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Welcome to the extended calendar, we hope you enjoy your stay!"
+
+[node name="Button" type="Button" parent="Background"]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 893.0
+offset_right = 381.0
+offset_bottom = 976.0
+text = "Back
+"
+
+[node name="SeasonOverviewBackground" type="ColorRect" parent="Background"]
+layout_mode = 0
+offset_left = 1267.0
+offset_top = 16.0
+offset_right = 1867.0
+offset_bottom = 1016.0
+color = Color(0.0241079, 4.33177e-07, 0.218099, 1)
+
+[node name="WeekLines" type="VBoxContainer" parent="Background/SeasonOverviewBackground"]
+layout_mode = 0
+offset_right = 600.0
+offset_bottom = 1000.0
+
+[node name="WeekLine" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine2" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine3" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine4" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine5" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine6" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine7" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine8" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine9" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine10" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine11" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine12" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine13" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine14" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine15" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine16" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine17" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine18" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine19" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine20" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine21" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine22" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine23" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine24" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine25" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine26" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine27" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine28" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine29" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine30" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine31" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine32" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine33" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine34" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine35" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine36" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine37" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine38" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine39" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine40" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine41" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine42" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine43" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine44" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine45" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine46" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine47" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine48" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine49" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine50" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine51" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine52" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="WeekLine53" parent="Background/SeasonOverviewBackground/WeekLines" instance=ExtResource("2_thhmf")]
+layout_mode = 2
+
+[node name="MonthLines" type="VBoxContainer" parent="Background/SeasonOverviewBackground"]
+visible = false
+layout_mode = 0
+offset_right = 625.0
+offset_bottom = 929.0
+
+[node name="MonthLine" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="MonthLine2" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="Label" parent="Background/SeasonOverviewBackground/MonthLines/MonthLine2" index="0"]
+text = "Feb"
+
+[node name="MonthLine3" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="Label" parent="Background/SeasonOverviewBackground/MonthLines/MonthLine3" index="0"]
+text = "Mar"
+
+[node name="MonthLine4" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="Label" parent="Background/SeasonOverviewBackground/MonthLines/MonthLine4" index="0"]
+text = "Apr"
+
+[node name="MonthLine5" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="Label" parent="Background/SeasonOverviewBackground/MonthLines/MonthLine5" index="0"]
+text = "May"
+
+[node name="MonthLine6" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="Label" parent="Background/SeasonOverviewBackground/MonthLines/MonthLine6" index="0"]
+text = "Jun"
+
+[node name="MonthLine7" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="Label" parent="Background/SeasonOverviewBackground/MonthLines/MonthLine7" index="0"]
+text = "Jul"
+
+[node name="MonthLine8" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="Label" parent="Background/SeasonOverviewBackground/MonthLines/MonthLine8" index="0"]
+text = "Aug"
+
+[node name="MonthLine9" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="Label" parent="Background/SeasonOverviewBackground/MonthLines/MonthLine9" index="0"]
+text = "Sep"
+
+[node name="MonthLine10" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="Label" parent="Background/SeasonOverviewBackground/MonthLines/MonthLine10" index="0"]
+text = "Oct"
+
+[node name="MonthLine11" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="Label" parent="Background/SeasonOverviewBackground/MonthLines/MonthLine11" index="0"]
+text = "Nov"
+
+[node name="MonthLine12" parent="Background/SeasonOverviewBackground/MonthLines" instance=ExtResource("3_dopjb")]
+layout_mode = 2
+
+[node name="Label" parent="Background/SeasonOverviewBackground/MonthLines/MonthLine12" index="0"]
+text = "Dec"
+
+[node name="SeasonOverviewButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 955.0
+offset_top = 28.0
+offset_right = 1092.0
+offset_bottom = 59.0
+text = "Season overview"
+
+[node name="InjuryViewButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 777.0
+offset_top = 32.0
+offset_right = 914.0
+offset_bottom = 63.0
+text = "Injuries"
+
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine"]
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine2"]
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine3"]
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine4"]
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine5"]
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine6"]
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine7"]
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine8"]
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine9"]
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine10"]
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine11"]
+[editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine12"]

@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bq4hoos7b0x0i"]
+
+[node name="MonthLine" type="VSplitContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 6
+text = "Jan"
+horizontal_alignment = 2
+
+[node name="Line2D" type="Line2D" parent="."]
+position = Vector2(136, 40)
+points = PackedVector2Array(0, 0, 500, 0)
+width = 5.0
+default_color = Color(0.965868, 0.713109, 0.761256, 1)

@@ -1,10 +1,27 @@
-extends RefCounted
+extends Resource
 class_name Tournament
 
-var listOfMatches:Array[ScheduledMatch] = []
-var standings
+@export var listOfMatches:Array[ScheduledMatch] = []
+@export var standings:Array = []
+@export var startDateUnix:int
+@export var endDateUnix:int
+@export var tournamentName:String
+@export var mainColour:Color
 
-func CreateRoundRobin(teams:Array[TeamData], maxRounds:int, daysBetweenRounds:int, startDateUnix:int):
+@export var numberOfParticipants:int
+@export var participants:Array[TeamData]
+@export var isMultiNationalTournament:bool = false
+@export var homeNation:Nation
+@export var poolSize:int
+
+enum FinalsType {
+	UNDEFINED,
+	NONE,
+	KNOCKOUT,
+	SECONDCHANCEFORTOPTEAM
+}
+@export var finalsType:FinalsType
+func CreateRoundRobin(teams:Array[TeamData], maxRounds:int, daysBetweenRounds:int, _startDateUnix:int):
 	var amendedTeams:Array[TeamData] = teams
 
 	if (teams.size()%2): # ie there are odd teams
@@ -27,7 +44,7 @@ func CreateRoundRobin(teams:Array[TeamData], maxRounds:int, daysBetweenRounds:in
 		print("\n")
 
 
-	var dateOfCurrentRoundUnix:int = startDateUnix
+	var dateOfCurrentRoundUnix:int = _startDateUnix
 	for i in numberOfRounds:
 		print("Current round date: " + str(Time.get_date_dict_from_unix_time(dateOfCurrentRoundUnix)))
 		for j in numberOfTeams/2:

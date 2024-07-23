@@ -6,7 +6,8 @@ class_name ScheduledMatch
 @export var tournamentRound:int
 @export var teamA:TeamData
 @export var teamB:TeamData
-
+var string1:String
+var string2:String
 #@export var venue:String
 
 @export var completed:bool = false

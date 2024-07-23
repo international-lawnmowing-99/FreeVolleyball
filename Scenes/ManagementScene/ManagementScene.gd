@@ -29,7 +29,6 @@ func _on_next_match_button_pressed():
 
 func _on_next_day_button_pressed():
 	SimulateDay()
-	pass # Replace with function body.
 
 func SimulateDay():
 	savedCareer.gameWorld.SimulateDay()
