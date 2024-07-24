@@ -1,7 +1,10 @@
-[gd_scene format=3 uid="uid://d3yb8xhfckmp6"]
+[gd_scene load_steps=2 format=3 uid="uid://d3yb8xhfckmp6"]
+
+[ext_resource type="Script" path="res://Scenes/ManagementScene/CalendarScene/WeekLine.gd" id="1_o7dgd"]
 
 [node name="WeekLine" type="VSplitContainer"]
 size_flags_vertical = 3
+script = ExtResource("1_o7dgd")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
@@ -9,6 +12,6 @@ theme_override_font_sizes/font_size = 10
 text = "first date  to first date plus 7"
 
 [node name="Line2D" type="Line2D" parent="."]
-position = Vector2(0, 15)
+position = Vector2(0, 17)
 points = PackedVector2Array(0, 0, 600, 0)
 width = 1.0

@@ -5,6 +5,8 @@ const Enums = preload("res://Scripts/World/Enums.gd")
 var firstNames:Array[String] = []
 var lastNames:Array[String] = []
 var nationsText:Array[String] = []
+
+var worldRankings:Array[NationalTeam]
 #There are players, organised in teams, in competitions, national teams, national competitions, and it's organised by continent for ease of navigation
 @export var continents:Array[Continent] = []
 
@@ -246,3 +248,7 @@ func CreateYearlyTournaments():
 	print("The VNL will happen this year")
 	print("The Club World Championships will happen this year")
 	print("Everyone's local leagues will happen, as every year")
+
+
+func UpdateWorldRankings():
+	worldRankings.sort_custom(func(a,b):return a.rankingPoints > b.rankingPoints )

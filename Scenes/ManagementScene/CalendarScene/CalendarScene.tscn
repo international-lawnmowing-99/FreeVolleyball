@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://b2rwr4t4gvij3"]
+[gd_scene load_steps=5 format=3 uid="uid://b2rwr4t4gvij3"]
 
 [ext_resource type="Script" path="res://Scenes/ManagementScene/CalendarScene/CalendarScene.gd" id="1_qe6pp"]
+[ext_resource type="Script" path="res://Scenes/ManagementScene/CalendarScene/SeasonOverviewBackground.gd" id="2_04m5v"]
 [ext_resource type="PackedScene" uid="uid://d3yb8xhfckmp6" path="res://Scenes/ManagementScene/CalendarScene/WeekLine.tscn" id="2_thhmf"]
 [ext_resource type="PackedScene" uid="uid://bq4hoos7b0x0i" path="res://Scenes/ManagementScene/CalendarScene/MonthLine.tscn" id="3_dopjb"]
 
@@ -53,6 +54,7 @@ offset_top = 16.0
 offset_right = 1867.0
 offset_bottom = 1016.0
 color = Color(0.0241079, 4.33177e-07, 0.218099, 1)
+script = ExtResource("2_04m5v")
 
 [node name="WeekLines" type="VBoxContainer" parent="Background/SeasonOverviewBackground"]
 layout_mode = 0
@@ -295,19 +297,27 @@ text = "Dec"
 
 [node name="SeasonOverviewButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 955.0
-offset_top = 28.0
-offset_right = 1092.0
-offset_bottom = 59.0
+offset_left = 1075.0
+offset_top = 13.0
+offset_right = 1212.0
+offset_bottom = 44.0
 text = "Season overview"
 
 [node name="InjuryViewButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 777.0
-offset_top = 32.0
-offset_right = 914.0
-offset_bottom = 63.0
+offset_left = 924.0
+offset_top = 14.0
+offset_right = 1061.0
+offset_bottom = 45.0
 text = "Injuries"
+
+[node name="FixturesViewButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 763.0
+offset_top = 12.0
+offset_right = 900.0
+offset_bottom = 43.0
+text = "Fixtures"
 
 [editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine"]
 [editable path="Background/SeasonOverviewBackground/MonthLines/MonthLine2"]

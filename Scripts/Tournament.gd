@@ -5,13 +5,13 @@ class_name Tournament
 @export var standings:Array = []
 @export var startDateUnix:int
 @export var endDateUnix:int
-@export var tournamentName:String
+@export var tournamentName:String = "Default Tournament"
 @export var mainColour:Color
 
 @export var numberOfParticipants:int
 @export var participants:Array[TeamData]
 @export var isMultiNationalTournament:bool = false
-@export var homeNation:Nation
+@export var homeTeams:Array[TeamData]
 @export var poolSize:int
 
 enum FinalsType {
@@ -77,3 +77,15 @@ func CreateRoundRobin(teams:Array[TeamData], maxRounds:int, daysBetweenRounds:in
 				print("\n")
 
 		dateOfCurrentRoundUnix += 24*60*60 * daysBetweenRounds
+
+func FillHomeTeams():
+	for team:TeamData in homeTeams:
+		participants.append(team)
+
+func FillPreviousWinners(lastTournament:Tournament, numberToFill:int):
+	for i in numberToFill:
+		participants.append(lastTournament.standings[i])
+
+func FillByWorldRankings(gameWorld:GameWorld, numberToFill:int):
+	for i in numberToFill:
+		participants.append(gameWorld.worldRankings[i])

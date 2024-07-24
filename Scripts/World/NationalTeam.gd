@@ -1,7 +1,9 @@
 extends "res://Scripts/World/TeamData.gd"
 
 class_name NationalTeam
-var nationalPlayers = []
+@export var nationalPlayers = []
+@export var rankingPoints:int
+
 func _init():
 	pass
 func SelectNationalTeam():
