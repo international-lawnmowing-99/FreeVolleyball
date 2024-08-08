@@ -42,10 +42,18 @@ func GenerateDefaultWorld(generatematchPlayers:bool):
 			pop =  int(_split[_split.size() - 3])
 
 			continents[continents.size() - 1].nations.append(Nation.new(finalName, pop))
+			#var continentIndex:int = continents.size() - 1
+			#var nationIndex:int = continents[continents.size() - 1].nations.size() - 1
 
-			var currentNation:Nation = continents[continents.size() - 1].nations[continents[continents.size() - 1].nations.size() - 1]
+	for continentIndex:int in continents.size():
+		for nationIndex:int in continents[continentIndex].nations.size():
+			var currentNation:Nation = continents[continentIndex].nations[nationIndex]
 
-			currentNation.Populate(firstNames, lastNames, generatematchPlayers)
+			var choiceState:PlayerChoiceState = PlayerChoiceState.new(self)
+			choiceState.continentIndex = continentIndex
+			choiceState.nationIndices[choiceState.continentIndex] = nationIndex
+
+			currentNation.Populate(choiceState, firstNames, lastNames, generatematchPlayers)
 
 func GetNation(choiceState:PlayerChoiceState) -> Nation:
 	return continents[choiceState.continentIndex].nations[choiceState.nationIndices[choiceState.continentIndex]]
@@ -95,13 +103,16 @@ func split(s: String, delimeters, allow_empty: bool = false) -> Array:
 	return parts
 
 ## Maybe this doesn't really belong here, and should be left to the team
-func PopulateTeam(team:TeamData):
+func PopulateTeam(playerChoiceState:PlayerChoiceState, team:TeamData):
 	if team is NationalTeam:
-		for clubTeam in team.nation.league:
+		for clubTeamIndex in GetNation(playerChoiceState).league.size():
+			var clubTeam:TeamData = GetNation(playerChoiceState).league[clubTeamIndex]
 			if clubTeam.matchPlayers.size() > 0:
 				Console.AddNewLine("ERROR! Couldn't add more players to full club team!")
 			else:
-				clubTeam.Populate(firstNames, lastNames)
+				var clubTeamChoiceState:PlayerChoiceState = playerChoiceState.duplicate(false)
+				clubTeamChoiceState.clubTeamIndices[clubTeamChoiceState.continentIndex][clubTeamChoiceState.nationIndices[clubTeamChoiceState.continentIndex]] = clubTeamIndex
+				clubTeam.Populate(clubTeamChoiceState, firstNames, lastNames)
 
 			if clubTeam.matchPlayers[0] in team.nationalPlayers:
 				print("ERROR! Previously generated club players inserted twice+ into national player list")
@@ -110,7 +121,7 @@ func PopulateTeam(team:TeamData):
 		if team.matchPlayers.size() > 0:
 			Console.AddNewLine("ERROR! Couldn't add more players to full team!")
 		else:
-			team.Populate(firstNames, lastNames)
+			team.Populate(playerChoiceState, firstNames, lastNames)
 
 func SimulateDay():
 	# Find all the games that need to be simulated

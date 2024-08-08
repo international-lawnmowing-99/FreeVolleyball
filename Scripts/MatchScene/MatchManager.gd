@@ -368,8 +368,8 @@ func PrepareLocalTeamObjects(newMatchData:NewMatchData):
 	teamA.data = gameWorld.GetTeam(newMatch.aChoiceState, newMatch.clubOrInternational)
 	teamB.data = gameWorld.GetTeam(newMatch.bChoiceState, newMatch.clubOrInternational)
 
-	gameWorld.PopulateTeam(teamA.data)
-	gameWorld.PopulateTeam(teamB.data)
+	gameWorld.PopulateTeam(newMatch.aChoiceState, teamA.data)
+	gameWorld.PopulateTeam(newMatch.bChoiceState, teamB.data)
 
 	teamA.data.isHuman = true
 	teamB.data.isHuman = false

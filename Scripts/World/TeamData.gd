@@ -14,8 +14,14 @@ class_name TeamData
 @export var benchPlayers:Array[AthleteStats] = []
 @export var rotationsElapsed:int = 0
 
+@export var playerChoiceState:PlayerChoiceState
 
-func Populate(firstNames, lastNames):
+func Populate(_playerChoiceState, firstNames:Array[String], lastNames:Array[String]):
+	playerChoiceState = _playerChoiceState
+	#.continentIndex = continentIndex
+	#playerChoiceState.nationIndices[continentIndex] = nationIndex
+	#playerChoiceState.clubTeamIndices[continentIndex][nationIndex] = clubTeamIndex
+
 	if matchPlayers.size() != 0:
 		for i in range (32):
 			Console.AddNewLine("!Not Generating additional unnecessary players!! " + teamName)

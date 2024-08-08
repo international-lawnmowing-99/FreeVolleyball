@@ -6,7 +6,7 @@ class_name PlayerChoiceState
 @export var continentIndex:int = -1
 
 # for every continent, which team is selected?
-@export var nationIndices:Array = []
+@export var nationIndices:Array[int] = []
 # for every [continent][nation on that continent], which club is selected
 @export var clubTeamIndices:Array[Array] = []
 

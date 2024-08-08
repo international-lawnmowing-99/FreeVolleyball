@@ -48,9 +48,9 @@ func ChooseRandom(gameWorld:GameWorld):
 
 	if clubOrInternational == Enums.ClubOrInternational.Club:
 		var now = Time.get_ticks_msec()
-		teamA.Populate(gameWorld.firstNames, gameWorld.lastNames)
+		teamA.Populate(aChoiceState, gameWorld.firstNames, gameWorld.lastNames)
 		if teamA != teamB:
-			teamB.Populate(gameWorld.firstNames, gameWorld.lastNames)
+			teamB.Populate(bChoiceState, gameWorld.firstNames, gameWorld.lastNames)
 		else:
 			print("Team A and Team B are the same, though chosen randomly!")
 		var later = Time.get_ticks_msec()
@@ -58,13 +58,15 @@ func ChooseRandom(gameWorld:GameWorld):
 
 	if clubOrInternational == Enums.ClubOrInternational.International:
 		var now = Time.get_ticks_msec()
-		for team in teamA.nation.league:
-			team.Populate(gameWorld.firstNames, gameWorld.lastNames)
-			teamA.nation.nationalTeam.nationalPlayers += team.matchPlayers
+		var nationA:Nation = gameWorld.GetNation(aChoiceState)
+		var nationB:Nation = gameWorld.GetNation(bChoiceState)
+		for team in nationA.league:
+			team.Populate(aChoiceState, gameWorld.firstNames, gameWorld.lastNames)
+			nationA.nationalTeam.nationalPlayers += team.matchPlayers
 		if teamA != teamB:
-			for team in teamB.nation.league:
-				team.Populate(gameWorld.firstNames, gameWorld.lastNames)
-				teamB.nation.nationalTeam.nationalPlayers += team.matchPlayers
+			for team in nationB.league:
+				team.Populate(bChoiceState, gameWorld.firstNames, gameWorld.lastNames)
+				nationB.nationalTeam.nationalPlayers += team.matchPlayers
 		else:
 			print("Team A and Team B are the same national teams! Randomly chosen. ")
 		var later = Time.get_ticks_msec()
