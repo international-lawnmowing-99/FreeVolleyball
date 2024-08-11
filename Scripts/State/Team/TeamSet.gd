@@ -88,7 +88,7 @@ func SetBall(team:TeamNode):
 		await team.get_tree().process_frame
 		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
 
-		if team.ball.linear_velocity == Vector3.ZERO:
+		if team.ball.linear_velocity == Vector3.ZERO || team.ball.linear_velocity.length() > 10:
 			team.ball.linear_velocity = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
 
 	else:
@@ -110,8 +110,9 @@ func SetBall(team:TeamNode):
 		team.mManager.cylinder.position = team.setTarget.target
 
 		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
-		await team.get_tree().process_frame
-		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+
+		#await team.get_tree().process_frame
+		#team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
 
 		if team.ball.linear_velocity == Vector3.ZERO:
 			team.ball.linear_velocity = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
@@ -164,7 +165,7 @@ func SetBall(team:TeamNode):
 					Console.AddNewLine("Scrambling for bad set ===============================================================")
 					ScrambleForBadSet(team)
 
-
+	Console.AddNewLine("SET SPEED: " + str(team.ball.linear_velocity.length()) + "mps")
 #		team.chosenSpiker.spikeState.ReactToDodgySet()
 
 	if !team.setTarget:
@@ -435,6 +436,7 @@ func ChooseSpiker(team:TeamNode):
 				setSpeed = Maths.FindDownwardsParabola(team.receptionTarget, athlete.setRequest.target).length()
 				if setSpeed > 10 || setSpeed < 0.01:
 					athlete.stateMachine.SetCurrentState(athlete.coverState)
+					Console.AddNewLine(athlete.stats.lastName + " requires a set with velocity: " + str(setSpeed) + "mps, and will cover")
 					continue
 
 

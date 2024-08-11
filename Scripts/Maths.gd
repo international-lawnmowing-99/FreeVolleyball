@@ -182,14 +182,16 @@ func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 
 	if yTravelTime <= maxXZTravelTime:
 		var xzVel = xzDist/ yTravelTime
+		Console.AddNewLine("True downwards parabola")
 		return Vector3(xzVel * cos(-xzTheta), 0, xzVel * sin(-xzTheta))
+
 
 	else:
 		# use max set speed
 		return Maths.FindParabolaForGivenSpeed(startPos, endPos, maxSetVelocity, false, 1.0)
 
 
-		print("downwards parabola with yVel, not sure if that's possible, yet")
+		Console.AddNewLine("downwards parabola with yVel, not sure if that's possible, yet")
 
 
 func SetTimeWellBehavedParabola(startPos:Vector3, endPos:Vector3, maxHeight:float):

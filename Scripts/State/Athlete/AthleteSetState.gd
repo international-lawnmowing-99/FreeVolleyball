@@ -87,9 +87,17 @@ func Exit(athlete:Athlete):
 	pass
 
 func WaitThenDefend(athlete:Athlete, time:float):
-	await athlete.get_tree().create_timer(time).timeout
+	athlete.stateMachine.isStateLocked = true
 
 	athlete.stateMachine.SetCurrentState(athlete.defendState)
+	await athlete.get_tree().create_timer(time).timeout
+	if athlete.stateMachine.isStateLocked:
+		athlete.stateMachine.isStateLocked = false
+		if athlete.stateMachine.queuedState:
+			athlete.stateMachine.SetCurrentState(athlete.stateMachine.queuedState)
+		else:
+			athlete.stateMachine.SetCurrentState(athlete.defendState)
+
 
 func TimeToJumpSet(athlete:Athlete, receptionTarget:Vector3):
 	var g = ProjectSettings.get_setting("physics/3d/default_gravity")
