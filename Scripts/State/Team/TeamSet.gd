@@ -424,7 +424,7 @@ func ChooseSpiker(team:TeamNode):
 
 	possibleSpikers = []
 
-	for athlete in team.courtPlayerNodes:
+	for athlete:Athlete in team.courtPlayerNodes:
 		if athlete!= team.chosenSetter && athlete.stats.role != Enums.Role.Libero && athlete != team.middleBack:
 			if team.receptionTarget.x == NAN:
 				var dfsdfds = 1

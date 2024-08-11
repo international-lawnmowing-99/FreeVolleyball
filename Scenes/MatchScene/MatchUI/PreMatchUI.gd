@@ -183,7 +183,7 @@ func _on_table_confirm_button_pressed():
 			for lad in playerStatsTable.matchPlayers:
 				if lad.uiSelected:
 					mManager.teamA.data.matchPlayers.append(lad)
-			mManager.teamB.SelectNationalTeam()
+			mManager.teamB.data.SelectNationalTeam()
 		else:
 			mManager.teamA.data.matchPlayers.clear()
 			for lad in playerStatsTable.matchPlayers:

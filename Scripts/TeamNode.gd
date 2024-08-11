@@ -406,8 +406,8 @@ func CheckForLiberoChange():
 			#isLiberoOnCourt = true
 
 func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
-#	if isHuman:
-#		print("Swapping " + outgoing.name + " for " + incoming.name)
+	if data.isHuman:
+		Console.AddNewLine("Swapping " + outgoing.name + " for " + incoming.name)
 	if !outgoing:
 		Console.AddNewLine("ERROR, outgoing player does not exist", Color.RED)
 		return
@@ -682,11 +682,12 @@ func CheckIfFlipped(vectorToBeChecked:Vector3):
 
 func Chill():
 	stateMachine.SetCurrentState(chillState)
-	for player in courtPlayerNodes:
-		if player == chosenReceiver:
-			player.WaitThenChill(.75)
+	for athlete:Athlete in courtPlayerNodes:
+		athlete.stateMachine.isStateLocked = false
+		if athlete == chosenReceiver:
+			athlete.WaitThenChill(.75)
 			continue
-		player.stateMachine.SetCurrentState(player.chillState)
+		athlete.stateMachine.SetCurrentState(athlete.chillState)
 
 func AttemptBlock(spiker:Athlete):
 	var blockingChance:float = 0

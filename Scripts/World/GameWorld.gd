@@ -115,7 +115,8 @@ func PopulateTeam(playerChoiceState:PlayerChoiceState, team:TeamData):
 				clubTeam.Populate(clubTeamChoiceState, firstNames, lastNames)
 
 			if clubTeam.matchPlayers[0] in team.nationalPlayers:
-				print("ERROR! Previously generated club players inserted twice+ into national player list")
+				print("Stopping previously generated club players being inserted twice+ into national player list")
+				continue
 			team.nationalPlayers += clubTeam.matchPlayers
 	else:
 		if team.matchPlayers.size() > 0:

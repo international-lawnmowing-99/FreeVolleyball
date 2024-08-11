@@ -8,14 +8,14 @@ var middleBlocker:Athlete
 
 func Enter(team:TeamNode):
 	nameOfState = "Defend"
-	for player in team.courtPlayerNodes:
+	for athlete:Athlete in team.courtPlayerNodes:
 #		print(player.stats.lastName)
 #		if player.rb.freeze:
 #			print(player.stats.lastName + "Changing")
-		if player.FrontCourt():
-			player.stateMachine.SetCurrentState(player.blockState)
+		if athlete.FrontCourt():
+			athlete.stateMachine.SetCurrentState(athlete.blockState)
 		else:
-			player.stateMachine.SetCurrentState(player.defendState)
+			athlete.stateMachine.SetCurrentState(athlete.defendState)
 
 	CacheBlockers(team)
 

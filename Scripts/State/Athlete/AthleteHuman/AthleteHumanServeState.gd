@@ -29,7 +29,7 @@ enum ServeAggression{
 	Aggressive
 	}
 
-var _athlete
+var _athlete:Athlete
 var serveState = ServeState.NotServing
 var serveAggression = ServeAggression.UNDEFINED
 var serveType = ServeType.UNDEFINED
@@ -147,6 +147,7 @@ func Update(athlete:Athlete):
 
 				CommenceServe()
 
+
 		ServeState.Tossing:
 
 			match serveType:
@@ -192,8 +193,9 @@ func Update(athlete:Athlete):
 
 				ServeType.Underarm:
 					ball.freeze = false
-
+					athlete.stateMachine.isStateLocked = true
 					HitBall(athlete)
+
 					serveState = ServeState.NotServing
 
 
@@ -240,7 +242,6 @@ func Update(athlete:Athlete):
 
 				athlete.position.y = 0
 				serveState = ServeState.NotServing
-				athlete.stateMachine.SetCurrentState(athlete.defendState)
 
 func HitBall(athlete:Athlete):
 	var serveRoll = randf_range(0, athlete.stats.serve)
@@ -293,6 +294,16 @@ func HitBall(athlete:Athlete):
 #		Console.AddNewLine("Difficulty of serve: " + str(int(difficultyOfReception)), Color.DARK_SALMON)
 	ball.TouchedByA()
 	serveState = ServeState.Landing
+
+	# Wait until the ball is gone, or some animation is played before charging off
+	await ball.get_tree().create_timer(.75).timeout
+	if athlete.stateMachine.isStateLocked:
+		athlete.stateMachine.isStateLocked = false
+		if athlete.stateMachine.queuedState:
+			athlete.stateMachine.SetCurrentState(athlete.stateMachine.queuedState)
+		else:
+			athlete.stateMachine.SetCurrentState(athlete.defendState)
+
 func ChooseServeType(type):
 	serveType = type
 	if rememberSettings:
@@ -364,6 +375,7 @@ func CommenceServe():
 
 	serveState = ServeState.Tossing
 	serveTarget.visible = false
+
 
 func Exit(athlete:Athlete):
 	athlete.rightIK.stop()
