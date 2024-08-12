@@ -85,11 +85,16 @@ func SetBall(team:TeamNode):
 	elif setExecution > perfectThreshold:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " lip-smacking set", Color.LAWN_GREEN)
 		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
-		await team.get_tree().process_frame
-		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		#await team.get_tree().process_frame
+		#team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
 
 		if team.ball.linear_velocity == Vector3.ZERO || team.ball.linear_velocity.length() > 10:
-			team.ball.linear_velocity = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
+			var trialVel = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
+			if trialVel == null:
+				trialVel = Vector3.ZERO
+				Console.AddNewLine("Error!: Perfect set couldn't be produced from position requested")
+
+			team.ball.linear_velocity = trialVel
 
 	else:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " shitty set", Color.RED)
@@ -429,11 +434,17 @@ func ChooseSpiker(team:TeamNode):
 		if athlete!= team.chosenSetter && athlete.stats.role != Enums.Role.Libero && athlete != team.middleBack:
 			if team.receptionTarget.x == NAN:
 				var dfsdfds = 1
-			var setSpeed = Maths.FindWellBehavedParabola(team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height).length()
+			var potentialSet = Maths.FindWellBehavedParabola(team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
+			if potentialSet == null:
+				potentialSet = Vector3.ZERO
+			var setSpeed = potentialSet.length()
 			# Very hacky, but if no parabola is found then vector3.zero will be returned
 			if setSpeed > 10 || setSpeed < 0.01:
 				# Attempt downwards parabola
-				setSpeed = Maths.FindDownwardsParabola(team.receptionTarget, athlete.setRequest.target).length()
+				potentialSet = Maths.FindDownwardsParabola(team.receptionTarget, athlete.setRequest.target)
+				if potentialSet == null:
+					continue
+				setSpeed = potentialSet.length()
 				if setSpeed > 10 || setSpeed < 0.01:
 					athlete.stateMachine.SetCurrentState(athlete.coverState)
 					Console.AddNewLine(athlete.stats.lastName + " requires a set with velocity: " + str(setSpeed) + "mps, and will cover")

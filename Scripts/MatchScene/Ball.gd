@@ -119,6 +119,9 @@ func Serve(startPos, _attackTarget, serveHeight, _topspin):
 	if impulse.length() * 3.6 > MAX_SERVE_SPEED || impulse.length_squared() == 0:
 		print(str(impulse.length() * 3.6))
 		impulse = Maths.FindParabolaForGivenSpeed(startPos, _attackTarget, (MAX_SERVE_SPEED - randf_range(0,10))/3.6, false, topspin)
+		if impulse == null:
+			Console.AddNewLine("Impossible parabola requested")
+			impulse = Vector3.ZERO
 		linear_velocity = impulse
 		attackTarget = _attackTarget
 		print("SERVE TOO FAST, New net pass: " + str(Maths.FindNetPass(position, attackTarget, linear_velocity, gravity_scale)))

@@ -264,7 +264,11 @@ func HitBall(athlete:Athlete):
 	if roll < fuckupProb:
 		attackTarget = Vector3(randf_range(1, -8), 0, randf_range(10, 10))
 		ball.topspin = 1.0
-		ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, attackTarget, 10 + 20 * randf(), false, ball.topspin)
+		var newVel = Maths.FindParabolaForGivenSpeed(ball.position, attackTarget, 10 + 20 * randf(), false, ball.topspin)
+		if newVel == null:
+			Console.AddNewLine("ERROR! Impossible parabola requested")
+			newVel = Vector3.ZERO
+		ball.linear_velocity = newVel
 		ball.inPlay = false
 		Console.AddNewLine("BAD SERVE. Serve Stat: " + str(athlete.stats.serve) + " Serve speed: " + str("%.1f" % (ball.linear_velocity.length() * 3.6)) + "km/h")
 		ball.mManager.PointToTeamB()

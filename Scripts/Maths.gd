@@ -38,8 +38,11 @@ func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, ai
 
 	var determinant = pow(speed, 4) - g * (g * xzDist * xzDist + 2 * yDist * speed * speed)
 	if determinant < 0:
-		print("Can't make that parabola work mate, giving you the best we've got")
-		idealAngle = PI/4
+		Console.AddNewLine("Can't make that parabola work mate", Color.POWDER_BLUE)
+		return null
+		#Console.AddNewLine("Can't make that parabola work mate, giving you the best we've got", Color.POWDER_BLUE)
+#
+		#idealAngle = PI/4
 	else:
 		angle1 = atan((speed * speed + sqrt(determinant)) / (g * xzDist))
 		angle2 = atan((speed * speed - sqrt(determinant)) / (g * xzDist))
@@ -187,11 +190,11 @@ func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 
 
 	else:
-		# use max set speed
+		Console.AddNewLine("downwards parabola with yVel, not sure if that's possible, yet", Color.POWDER_BLUE)
 		return Maths.FindParabolaForGivenSpeed(startPos, endPos, maxSetVelocity, false, 1.0)
 
 
-		Console.AddNewLine("downwards parabola with yVel, not sure if that's possible, yet")
+
 
 
 func SetTimeWellBehavedParabola(startPos:Vector3, endPos:Vector3, maxHeight:float):

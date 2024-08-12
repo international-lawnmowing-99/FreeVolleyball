@@ -72,9 +72,13 @@ func SpikeBall(team:TeamNode):
 			ball.difficultyOfReception = u/37.0*team.chosenSpiker.stats.spike*2
 			ball.gravity_scale = 3.0
 			ball.topspin = 3.0
-			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 3.0)
-			await team.get_tree().process_frame
-			ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 3.0)
+			var newVel = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 3.0)
+			if newVel == null:
+				Console.AddNewLine("ERROR! Impossible parabola requested for spike")
+				newVel = Vector3.ZERO
+			ball.linear_velocity = newVel
+			#await team.get_tree().process_frame
+			#ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 3.0)
 			var realNetPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, 3.0)
 			Console.AddNewLine("Net Pass: " + str(realNetPass))
 			ball.blockResolver.netPass = realNetPass
@@ -82,8 +86,8 @@ func SpikeBall(team:TeamNode):
 			Console.AddNewLine("Ball will clip net if hit at that speed, finding easy parabola")
 			#yet again, somehow necessary
 			ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
-			await team.get_tree().process_frame
-			ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+			#await team.get_tree().process_frame
+			#ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 			ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 			#team.setTarget = null
 			#print(ball.attackTarget)

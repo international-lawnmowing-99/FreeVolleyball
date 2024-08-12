@@ -263,7 +263,9 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	var lowestNetPass = Vector3(0, 2.43 + 0.35, b)
 #	athlete.team.mManager.cylinder.position = lowestNetPass
 	var lowestPossibleSpike = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, lowestNetPass, u, false, topspin)
-
+	if lowestPossibleSpike == null:
+		Console.AddNewLine("Lowest possible spike turned out to not be possible after all. How embarrassing!")
+		lowestPossibleSpike = Vector3.ZERO
 	var closestPossibleSpikeTarget:Vector3 = Maths.BallPositionAtGivenHeight(athlete.setRequest.target, lowestPossibleSpike, 0, topspin)
 
 	var spikeDepth:float = randf_range(0.03, .97)
@@ -287,6 +289,9 @@ func ChooseSpikingStrategy(athlete:Athlete):
 #	athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target) + topDownSpikeVector
 #	Console.AddNewLine(str("%.1f" % baselineZIntercept) + " baseline z intercept")
 	var vel = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, ball.attackTarget, u, false, 3.0)
+	if vel == null:
+		Console.AddNewLine("ERROR, impossible parabola requested")
+		vel = Vector3.ZERO
 	athlete.team.mManager.cylinder.position = Maths.FindNetPass(athlete.setRequest.target, ball.attackTarget, vel, 3.0)
 #	Console.AddNewLine("Predicted net pass: " + str(athlete.team.mManager.cylinder.position))
 	var longestPossibleSpikeXZDistance = Maths.XZVector(athlete.setRequest.target).distance_to(furthestCourtPoint)
