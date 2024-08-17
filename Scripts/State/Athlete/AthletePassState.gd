@@ -151,7 +151,7 @@ func PassBall(athlete:Athlete):
 #	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.AQUA)
 #	Console.AddNewLine( str(int(rollOffDifference)) + " roll unchecked differece ", Color.RED)
 
-	rollOffDifference = -51
+	#rollOffDifference = -51
 	if rollOffDifference >= 19:
 		# what is the ideal height for the setter to jump set??
 		if athlete.stats.role == Enums.Role.Setter:
@@ -203,7 +203,7 @@ func PassBall(athlete:Athlete):
 		pass
 	else:
 		ball.linear_velocity.y *= -1
-		ball.linear_velocity *= randf_range(0.4, 1.0)
+		ball.linear_velocity *= randf_range(0.2, .8)
 
 		if Maths.BallMaxHeight(ball.position, ball.linear_velocity, 1.0) >= 2.4:
 			receptionTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 2.5, 1.0)

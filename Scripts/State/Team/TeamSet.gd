@@ -258,6 +258,9 @@ func ChooseSetter(team:TeamNode):
 	# Who is out of the picture and will sit around looking pretty?
 
 	if team.chosenReceiver == team.setter:
+		# what will the setter do now?
+		#team.setter.moveTarget = Maths.XZVector(team.setter.setRequest.target) + team.setter.team.flip * Vector3(3 + team.setter.stats.verticalJump/2, 0, 0)
+
 		if team.data.isLiberoOnCourt:
 			if AthleteCanStandingSet(team.activeLibero, team):
 				AssignSetter(team.activeLibero, team, false)

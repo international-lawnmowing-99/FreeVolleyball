@@ -616,9 +616,9 @@ func AutoSelectTeamLineup():
 		for list in aptitudeLists:
 			list.erase(nlibero2)
 		#libero2 = nlibero2
-	nsetter.verticalJump += 3
-	nsetter.jumpSetHeight += 3
-	nsetter.spikeHeight += 3
+	#nsetter.verticalJump += 3
+	#nsetter.jumpSetHeight += 3
+	#nsetter.spikeHeight += 3
 
 func SwapPlayer(player:AthleteStats,newPostion:int):
 	#print("-----------")
@@ -643,7 +643,7 @@ func SwapPlayer(player:AthleteStats,newPostion:int):
 func GetTransitionPosition(athlete):
 	if (setter.FrontCourt()):
 		if athlete == setter:
-			return CheckIfFlipped(transitionPositionsSetterBack[1])
+			return CheckIfFlipped(transitionPositionsSetterFront[3])
 		if athlete == outsideFront:
 			return CheckIfFlipped(transitionPositionsSetterFront[4])
 		if athlete == oppositeHitter:
@@ -662,7 +662,7 @@ func GetTransitionPosition(athlete):
 			if (athlete == oppositeHitter):
 				return CheckIfFlipped(transitionPositionsSetterBack[1])
 		if athlete == setter:
-			return CheckIfFlipped(transitionPositionsSetterFront[0])
+			return CheckIfFlipped(transitionPositionsSetterBack[0])
 		else:
 			return CheckUnchangingTransitionPositions(athlete)
 

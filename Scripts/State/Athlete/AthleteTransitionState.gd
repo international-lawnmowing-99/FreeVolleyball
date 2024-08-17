@@ -4,7 +4,7 @@ class_name AthleteTransitionState
 
 func Enter(athlete:Athlete):
 	nameOfState="transition"
-	if !athlete.setRequest:
+	if !athlete.setRequest || athlete == athlete.team.setter:
 		athlete.moveTarget = athlete.team.GetTransitionPosition(athlete)
 #		Console.AddNewLine(athlete.stats.lastName + " failed to transition adequately, no set target yet...", Color.AZURE)
 	else:
