@@ -42,8 +42,8 @@ func Enter(team:TeamNode):
 		team.oppositeHitter.setRequest =  team.oppositeHitter.oppositeBackSpikes[0].Duplicate()
 		team.outsideFront.setRequest = team.outsideFront.outsideFrontSpikes[0].Duplicate()
 
-		if team.setter = team.chosenReceiver:
-		team.setter.setRequest = team.setter.oppositeFrontSpikes[0].Duplicate()
+		#if team.setter = team.chosenReceiver:
+		#team.setter.setRequest = team.setter.oppositeFrontSpikes[0].Duplicate()
 
 	for i in range(1, orderedList.size()):
 		#print(team.courtPlayers[i].stats.lastName)

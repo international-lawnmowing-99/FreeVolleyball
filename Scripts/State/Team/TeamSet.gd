@@ -3,10 +3,17 @@ class_name TeamSet
 
 #can also potentially spike, dogshot
 var ballWillBeDumped:bool = false
-var possibleSpikers = []
+var possibleSpikers:Array[Athlete] = []
+var otherTeam:TeamNode
 
 
 func Enter(team:TeamNode):
+	if !otherTeam:
+		if team.data.isHuman:
+			otherTeam = team.mManager.teamB
+		else:
+			otherTeam = team.mManager.teamA
+
 	nameOfState = "Set"
 	ballWillBeDumped = false
 
@@ -56,7 +63,6 @@ func DumpBall(team:TeamNode):
 	team.mManager.BallOverNet(team.data.isHuman)
 
 func SetBall(team:TeamNode):
-
 	# mint set, poor set (short, long, mis-timed, tight, over, or some combo thereof - so many ways to set poorly!), 2 hits/carry ("setting error")
 	randomize()
 	var setExecution = randi()% 100
@@ -426,6 +432,31 @@ func ThinkAboutDumping(team:TeamNode):
 			return
 
 func ChooseSpiker(team:TeamNode):
+	Console.AddNewLine("$    " + team.name + " choosing spiker", Color.TEAL)
+	#Assess block/defence
+		#Assess our quick attack threat to other team - will they commit?
+		#Assess height/skill matchups
+	# Weight for quality of attacker, predictability of set
+	# I imagine there will be some Bayesian process of adjusting prior likelihoods based on only setting one person all around the court
+
+	# How much do they fear a quick set on a scale of 0-1?
+	var middleThreat:float = 0
+	if otherTeam.middleFront.blockState.internalBlockState == AthleteBlockState.InternalBlockState.Jump:
+		Console.AddNewLine("The opposition middle is already blocking", Color.LIGHT_BLUE)
+	elif team.middleFront.stats.spikeHeight< 2.6 || \
+		abs(team.receptionTarget.x) > 3:
+		middleThreat = 0
+		Console.AddNewLine("No middle threat", Color.TEAL)
+	else:
+		# how likely do we think they are they to commit to our middle?
+		#
+		# maybe they already have!
+		#
+		# what can they measure about our middle attack? Position of middle, position of setter, angle and distance to potential middle hits
+		# Can the middle spike? How hard will it be to set them based on distance, angle?
+		# If they do spike, how likely are they to win a point?
+		pass
+
 	# can the potential spiker get back to their runup location?
 	# if not, can they still get to planned spike contact location by running checked an angle?
 	# does the setter know that they aren't in the play?
@@ -446,14 +477,17 @@ func ChooseSpiker(team:TeamNode):
 				# Attempt downwards parabola
 				potentialSet = Maths.FindDownwardsParabola(team.receptionTarget, athlete.setRequest.target)
 				if potentialSet == null:
+					athlete.stateMachine.SetCurrentState(athlete.coverState)
+					Console.AddNewLine(athlete.stats.lastName + " requires a set with velocity: " + str(setSpeed) + "mps, and will cover - no theoretical downward set available")
+					Console.AddNewLine("reception target: " + str(team.receptionTarget) + ", setTarget: " + str(athlete.setRequest.target))
 					continue
+
 				setSpeed = potentialSet.length()
 				if setSpeed > 10 || setSpeed < 0.01:
 					athlete.stateMachine.SetCurrentState(athlete.coverState)
 					Console.AddNewLine(athlete.stats.lastName + " requires a set with velocity: " + str(setSpeed) + "mps, and will cover")
+					Console.AddNewLine("reception target: " + str(team.receptionTarget) + ", setTarget: " + str(athlete.setRequest.target))
 					continue
-
-
 
 			if AthleteCanFullyTransition(athlete):
 				athlete.spikeState.spikeValue = 1
@@ -477,6 +511,7 @@ func ChooseSpiker(team:TeamNode):
 				possibleSpikers.append(athlete)
 			else:
 				athlete.stateMachine.SetCurrentState(athlete.coverState)
+				Console.AddNewLine(athlete.stats.lastName + " couldn't transition and will cover")
 
 #	Console.AddNewLine("Choosing set option...")
 	if possibleSpikers.size() <= 0:
@@ -488,6 +523,42 @@ func ChooseSpiker(team:TeamNode):
 		return
 
 	else:
+		Console.AddNewLine("There are " + str(possibleSpikers.size()) + " possible spikers")
+		#
+		# Now, will the middle be able to close to both pin blockers, and will they be able to seal against the pipe?
+		# With this information, will the spiker have a single of double block?
+		# What are the odds of a clean kill from the spiker vs such a block?
+		# Weight and normalise these values so that they add to 1
+		# If a random float is in the range of the choice, choose that spiker
+
+		Console.AddNewLine("Assessing block...")
+		# coverage and skill of double block * odds of double block + single block * (1 - odds of double block). And triple too
+		var ourLeftBlockValue:float = otherTeam.defendState.rightSideBlocker.stats.block * middleThreat
+
+		#This is very preliminary, a more rigorous method would account for the angles possible
+		#IE if your spiike height is 6 metres, even if you're in the back court it doesn't matter
+		for spiker:Athlete in possibleSpikers:
+			if spiker.FrontCourt():
+				if spiker == team.outsideFront && spiker.setRequest.target > 1*team.flip:
+					#Set is on the left (i think), so the matchup is against the other team's right blocker
+					if spiker.stats.spikeHeight> otherTeam.defendState.rightSideBlocker.stats.blockHeight:
+						Console.AddNewLine("Might be able to OTT with left wing spiker")
+				elif spiker == team.middleFront:
+					if spiker.stats.spikeHeight> otherTeam.defendState.middleBlocker.stats.blockHeight:
+						Console.AddNewLine("Might be able to OTT with middle")
+				if spiker == team.oppositeHitter && spiker.setRequest.target > -1*team.flip:
+					if spiker.stats.spikeHeight> otherTeam.defendState.leftSideBlocker.stats.blockHeight:
+						Console.AddNewLine("Might be able to OTT with opposite")
+
+		Console.AddNewLine("Considering spiker skill...")
+		for spiker:Athlete in possibleSpikers:
+			Console.AddNewLine(spiker.stats.lastName + " spike: " + str(spiker.stats.spike))
+
+		Console.AddNewLine("How repetitive is our choice - are we predictable?")
+		Console.AddNewLine("Do we have an explicit instruction from the coach?")
+		Console.AddNewLine("Does the setter favour any set? Do they prefer to spread it around, or to set their best hitter all the time?")
+		Console.AddNewLine("Does the hitter have any connection modifier from playing with the setter for a long time?") # Maybe in version 2...
+		Console
 #		if team.outsideBack in possibleSpikers:
 #			team.chosenSpiker = team.outsideBack
 #			team.setTarget = team.outsideBack.setRequest

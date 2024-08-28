@@ -43,9 +43,11 @@ xfade_time = 0.05
 allow_transition_to_self = true
 input_0/name = "moving"
 input_0/auto_advance = false
+input_0/break_loop_at_end = false
 input_0/reset = true
 input_1/name = "digging"
 input_1/auto_advance = false
+input_1/break_loop_at_end = false
 input_1/reset = true
 
 [resource]

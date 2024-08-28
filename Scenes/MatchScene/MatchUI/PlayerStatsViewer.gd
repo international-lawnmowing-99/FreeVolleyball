@@ -10,4 +10,3 @@ func Populate(athlete:Athlete):
 	$Speed.text = "Speed: " + str(int(athlete.stats.speed))
 	$SpikeHeight.text = "Spike Height: " + str(int(athlete.stats.spikeHeight*100))
 	$BlockHeight.text = "Block Height: " + str(int(athlete.stats.blockHeight*100))
-

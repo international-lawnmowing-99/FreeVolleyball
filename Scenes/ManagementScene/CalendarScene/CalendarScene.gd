@@ -17,6 +17,3 @@ func _ready():
 func DisplayCurrentTime():
 	var dateDict = Time.get_date_dict_from_unix_time(gameWorld.inGameUnixDate)
 	$Background/CurrentDateLabel.text = str(dateDict["day"]) + " - " + str(dateDict["month"]) + " - " + str(dateDict["year"])
-
-
-

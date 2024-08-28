@@ -88,6 +88,8 @@ func ConfirmTeams():
 			athlete.substitutionInfo.startingRotationPosition = athlete.stats.rotationPosition
 			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.substitutionInfo.startingRotationPosition))
 		else:
+			#		?????????????????????????????????????????
+			#		?????????????????????????????????????????
 			athlete.substitutionInfo.startingRotationPosition = athlete.stats.rotationPosition
 			#Console.AddNewLine(athlete.stats.lastName + " starting in position " + str(athlete.stats.rotationPosition))
 
@@ -171,10 +173,9 @@ func BallSet(setByTeamA:bool):
 func BallSpiked(spikedByTeamA:bool):
 	if spikedByTeamA:
 		teamB.AttemptBlock(teamA.chosenSpiker)
-		pass
 	else:
 		teamA.AttemptBlock(teamB.chosenSpiker)
-		pass
+
 func _input(_event):
 #	if Input.is_action_just_pressed("ui_accept"):
 #		teamA.stateMachine.SetCurrentState(teamA.prereceiveState)
@@ -367,6 +368,9 @@ func PrepareLocalTeamObjects(newMatchData:NewMatchData):
 	newMatch = newMatchData
 	teamA.data = gameWorld.GetTeam(newMatch.aChoiceState, newMatch.clubOrInternational)
 	teamB.data = gameWorld.GetTeam(newMatch.bChoiceState, newMatch.clubOrInternational)
+
+	if teamA.data == teamB.data:
+		teamB.data = teamB.data.duplicate(false)
 
 	gameWorld.PopulateTeam(newMatch.aChoiceState, teamA.data)
 	gameWorld.PopulateTeam(newMatch.bChoiceState, teamB.data)

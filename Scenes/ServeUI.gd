@@ -118,4 +118,3 @@ func UpdateServerInfo(athlete:Athlete):
 	serverNameLabel.text = athlete.stats.firstName + " " + athlete.stats.lastName
 	jumpServeLabel.text = "Jump Serve: " + str("%.1f" % athlete.stats.serve)
 	floatServeLabel.text = "Float Serve: " + str("%.1f" % athlete.stats.floatServe)
-

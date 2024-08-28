@@ -151,7 +151,7 @@ func PassBall(athlete:Athlete):
 #	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.AQUA)
 #	Console.AddNewLine( str(int(rollOffDifference)) + " roll unchecked differece ", Color.RED)
 
-	#rollOffDifference = -51
+	#rollOffDifference = -510
 	if rollOffDifference >= 19:
 		# what is the ideal height for the setter to jump set??
 		if athlete.stats.role == Enums.Role.Setter:

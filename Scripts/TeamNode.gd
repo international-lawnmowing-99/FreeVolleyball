@@ -142,6 +142,9 @@ func PlaceTeam():
 
 		var lad:Athlete = AthleteScene.instantiate()
 		lad._ready()
+		# in the case that both teams are the same, don't have the players share stats, it confuses the liberos
+		if data.matchPlayers[i] == defendState.otherTeam.data.matchPlayers[i]:
+			data.matchPlayers[i] = data.matchPlayers[i].duplicate(false)
 		lad.stats = data.matchPlayers[i]
 		add_child(lad)
 		#TODO - eventually there will be a set of blendshapes that will make the people look different
@@ -363,7 +366,7 @@ func CheckForLiberoChange():
 					data.isLiberoOnCourt = false
 
 
-	if !data.isLiberoOnCourt:
+	elif !data.isLiberoOnCourt:
 		if mManager.isTeamAServing != data.isHuman: # i.e. we're receiving
 			if playerToBeLiberoedOnReceive[originalRotation1Player.stats.rotationPosition - 1][0]:
 				var outgoingPlayer = playerToBeLiberoedOnReceive[originalRotation1Player.stats.rotationPosition - 1][1]
@@ -419,6 +422,10 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	if outgoing == originalRotation1Player:
 		originalRotation1Player = incoming
 
+	if outgoing.stats.rotationPosition == -1:
+		for athlete:Athlete in courtPlayerNodes:
+			Console.AddNewLine("Position " + str(athlete.stats.rotationPosition) + ": " + athlete.stats.lastName)
+
 	incoming.stats.rotationPosition = outgoing.stats.rotationPosition
 	outgoing.stats.rotationPosition = -1
 
@@ -447,8 +454,8 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				#benchPlayers.erase(incoming)
 				#benchPlayers.erase(outgoing)
 #
-				##incoming.rotationPosition = outgoing.rotationPosition
-				##outgoing.rotationPosition = -1
+				#incoming.stats.rotationPosition = outgoing.stats.rotationPosition
+				#outgoing.stats.rotationPosition = -1
 				#
 				#Console.AddNewLine("Outgoing index: " + str(outgoingIndex))
 				#Console.AddNewLine("Incoming index: " + str(_incomingIndex))
@@ -478,7 +485,7 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				outgoing.stateMachine.SetCurrentState(outgoing.chillState)
 				incoming.stateMachine.SetCurrentState(incoming.chillState)
 
-
+			assert(incoming.stats.rotationPosition != -1)
 			return
 
 
@@ -497,13 +504,14 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	incoming.position = outgoing.position
 	outgoing.position = tempPos
 	outgoing.moveTarget = outgoing.position
-
-	#incoming.rotationPosition = outgoing.rotationPosition
-	#outgoing.rotationPosition = -1
+#
+	#incoming.stats.rotationPosition = outgoing.stats.rotationPosition
+	#outgoing.stats.rotationPosition = -1
 
 	courtPlayerNodes.insert(outgoingIndex, incoming)
 	benchPlayerNodes.insert(incomingIndex, outgoing)
 
+	assert(incoming.stats.rotationPosition != -1)
 
 	if (incoming.stats.role != Enums.Role.Libero && outgoing.stats.role != Enums.Role.Libero):
 		incoming.stats.role = outgoing.stats.role
@@ -520,6 +528,8 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 
 	outgoing.stateMachine.SetCurrentState(outgoing.chillState)
 	incoming.ReEvaluateState()
+	assert(incoming.stats.rotationPosition != -1)
+
 
 func CachePlayers():
 	for player:Athlete in courtPlayerNodes:
@@ -763,4 +773,3 @@ func CreateDefaultLiberoStrategy():
 	if libero2:
 		for i in range(playerToBeLiberoedOnServe.size()):
 			playerToBeLiberoedOnServe[i][2] = libero2
-

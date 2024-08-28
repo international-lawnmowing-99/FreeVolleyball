@@ -61,4 +61,3 @@ func _on_FileDialog_file_selected(path: String) -> void:
 	GlobalVariables.savedGam = loadedCareer
 
 	get_tree().change_scene_to_file("res://Scenes/ManagementScene/ManagementScene.tscn")
-

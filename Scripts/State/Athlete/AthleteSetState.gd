@@ -132,4 +132,3 @@ func TimeToStandingSet(athlete:Athlete, receptionTarget:Vector3):
 			timeToReachGround = sqrt(2 * athlete.g * athlete.position.y)
 	var distanceToRecetionTarget = Vector3(athlete.position.x, 0, athlete.position.z).distance_to(Vector3(receptionTarget.x, 0, receptionTarget.z))
 	return timeToReachGround + distanceToRecetionTarget / athlete.stats.speed
-

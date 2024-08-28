@@ -147,4 +147,3 @@ func SelectUnselectAthlete(athlete:AthleteStats):
 		selectedPlayers.erase(athlete)
 	else:
 		selectedPlayers.append(athlete)
-

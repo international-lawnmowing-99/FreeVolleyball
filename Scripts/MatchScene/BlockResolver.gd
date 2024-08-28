@@ -216,4 +216,3 @@ func AddUpcomingBlock(_spikedByA, _blockers, _spiker):
 	spikedByA = _spikedByA
 	blockers = _blockers
 	spiker = _spiker
-

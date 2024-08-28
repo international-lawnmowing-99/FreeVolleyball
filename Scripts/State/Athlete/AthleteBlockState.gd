@@ -4,7 +4,7 @@ class_name AthleteBlockState
 const SpikeState = preload("res://Scripts/State/Athlete/AthleteSpikeState.gd")
 const Enums = preload("res://Scripts/World/Enums.gd")
 
-enum BlockState{
+enum InternalBlockState{
 UNDEFINED,
 NotBlocking,
 Watching,
@@ -21,7 +21,7 @@ var startingWidth:float
 
 var isCommitBlocking:bool = false
 
-var blockState = BlockState.NotBlocking
+var internalBlockState = InternalBlockState.NotBlocking
 
 var blockingTarget:Athlete
 var jumpTime:float
@@ -33,7 +33,7 @@ func Enter(athlete:Athlete):
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
 	jumpTime =  jumpYVel / athlete.g
-	blockState = BlockState.Watching
+	internalBlockState = InternalBlockState.Watching
 
 	if athlete.stats.role == Enums.Role.Middle:
 		athlete.moveTarget = athlete.team.CheckIfFlipped(Vector3(0.5, 0, -0.5))
@@ -66,34 +66,34 @@ func Update(athlete:Athlete):
 #		athlete.leftIK.interpolation = lerp(athlete.leftIK.interpolation, 1.0, athlete.myDelta)
 #		athlete.rightIK.interpolation = lerp(athlete.rightIK.interpolation, 1.0, athlete.myDelta)
 
-		match blockState:
-			BlockState.Watching:
+		match internalBlockState:
+			InternalBlockState.Watching:
 				athlete.model.look_at(Maths.XZVector(athlete.ball.position) + Vector3(0, athlete.position.y, 0), Vector3.UP, true)
 
 				if isCommitBlocking:
 					if blockingTarget && (blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Runup || blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Jump):
-						blockState = BlockState.Preparing
+						internalBlockState = InternalBlockState.Preparing
 
-			BlockState.Preparing:
+			InternalBlockState.Preparing:
 #					athlete.model.rotation.slerp(Vector3(0, -athlete.team.flip * PI/2, 0), athlete.myDelta * 10)
 				athlete.model.rotation.y = -athlete.team.flip * PI/2
 				#Perhaps adding a random offset would make this look less choreographed...
 				var timeFromSpikeToNet =  blockingTarget.setRequest.target.distance_to(athlete.moveTarget + Vector3.UP * blockingTarget.setRequest.target.y)/27.7
 				if athlete.rb.freeze && blockingTarget.spikeState.CalculateTimeTillSpike(blockingTarget) + timeFromSpikeToNet <= jumpTime:
 					Console.AddNewLine(athlete.stats.lastName + " jumps to block (commit)")
-					blockState = BlockState.Jump
+					internalBlockState = InternalBlockState.Jump
 
 					athlete.rb.freeze = false
 					athlete.rb.gravity_scale = 1
 					athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
 
-			BlockState.Jump:
+			InternalBlockState.Jump:
 				if blockingTarget.setRequest.target:
 					athlete.leftIKTarget.global_transform.origin = blockingTarget.setRequest.target
 					athlete.rightIKTarget.global_transform.origin = blockingTarget.setRequest.target
 
 				if athlete.position.y < 0.1 && athlete.rb.linear_velocity.y < 0:
-					blockState = BlockState.Watching
+					internalBlockState = InternalBlockState.Watching
 					athlete.rb.freeze = true
 					athlete.position.y = 0
 					athlete.rb.gravity_scale = 0
@@ -154,4 +154,3 @@ func ConfirmCommitBlock(athlete:Athlete, otherTeam:TeamNode):
 	var timeForTargetToReachJumpPeak:float = blockingTarget.spikeState.CalculateTimeTillSpike(blockingTarget)
 	var timeToSetBlockingTarget:float = otherTeam.timeTillDigTarget
 	# Move to a more amenable position if applicable
-

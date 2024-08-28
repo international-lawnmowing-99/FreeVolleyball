@@ -7,7 +7,7 @@ func Enter(athlete:Athlete):
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	athlete.moveTarget = Vector3(athlete.position.x, 0, athlete.position.z)
 	athlete.spikeState.spikeState == athlete.spikeState.SpikeState.NotSpiking
-	athlete.blockState.blockState == athlete.blockState.BlockState.NotBlocking
+	athlete.blockState.internalBlockState == athlete.blockState.InternalBlockState.NotBlocking
 
 func Update(athlete:Athlete):
 	if !athlete.rb.freeze:
@@ -18,7 +18,7 @@ func Update(athlete:Athlete):
 			athlete.rb.angular_velocity = Vector3.ZERO
 			athlete.rb.freeze = true
 			athlete.spikeState.spikeState == athlete.spikeState.SpikeState.NotSpiking
-			athlete.blockState.blockState == athlete.blockState.BlockState.NotBlocking
+			athlete.blockState.internalBlockState == athlete.blockState.InternalBlockState.NotBlocking
 	else:
 		athlete.model.look_at(Maths.XZVector(athlete.ball.position), Vector3.UP, true)
 func Exit(_athlete:Athlete):

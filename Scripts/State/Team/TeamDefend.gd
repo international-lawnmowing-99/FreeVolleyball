@@ -144,7 +144,7 @@ func ReactToSet(team:TeamNode):
 	# React blockers move to new blocking position, perhaps after a delay given by a "reaction time" stat
 	if !leftSideBlocker.blockState.isCommitBlocking:
 
-		leftSideBlocker.blockState.blockState = leftSideBlocker.blockState.BlockState.Preparing
+		leftSideBlocker.blockState.internalBlockState = leftSideBlocker.blockState.InternalBlockState.Preparing
 		leftSideBlocker.blockState.blockingTarget = otherTeam.chosenSpiker
 
 		if team.data.isHuman:
@@ -168,7 +168,7 @@ func ReactToSet(team:TeamNode):
 	if !rightSideBlocker.blockState.isCommitBlocking:
 
 		rightSideBlocker.blockState.blockingTarget = otherTeam.chosenSpiker
-		rightSideBlocker.blockState.blockState = rightSideBlocker.blockState.BlockState.Preparing
+		rightSideBlocker.blockState.internalBlockState = rightSideBlocker.blockState.InternalBlockState.Preparing
 
 		if team.data.isHuman:
 			if otherTeam.setTarget.target.z <= 0:
@@ -192,7 +192,7 @@ func ReactToSet(team:TeamNode):
 	if !team.middleFront.blockState.isCommitBlocking:
 
 		team.middleFront.blockState.blockingTarget = otherTeam.chosenSpiker
-		team.middleFront.blockState.blockState = team.middleFront.blockState.BlockState.Preparing
+		team.middleFront.blockState.internalBlockState = team.middleFront.blockState.InternalBlockState.Preparing
 
 		if team.data.isHuman:
 			team.middleFront.moveTarget = Vector3(0.5, 0, clamp(otherTeam.setTarget.target.z, rightSideBlocker.moveTarget.z + 0.75, leftSideBlocker.moveTarget.z - 0.75))
@@ -202,7 +202,7 @@ func ReactToSet(team:TeamNode):
 	else:
 		if team.middleFront.blockState.blockingTarget != otherTeam.chosenSpiker:
 			team.middleFront.blockState.blockingTarget = otherTeam.chosenSpiker
-			team.middleFront.blockState.blockState = team.middleFront.blockState.BlockState.Preparing
+			team.middleFront.blockState.internalBlockState = team.middleFront.blockState.InternalBlockState.Preparing
 			team.middleFront.blockState.isCommitBlocking = false
 
 			if team.flip * otherTeam.chosenSpiker.setRequest.target.z >= 0:
