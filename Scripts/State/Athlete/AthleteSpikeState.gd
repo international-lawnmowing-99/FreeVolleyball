@@ -147,8 +147,13 @@ func CalculateTimeTillBallReachesSetTarget(athlete:Athlete) -> float:
 		if athlete.team.stateMachine.currentState == athlete.team.spikeState:
 			var distanceFactor:float = 1 - Vector3(athlete.ball.position.x, 0, athlete.ball.position.z).distance_to(Maths.XZVector(athlete.team.receptionTarget))/ (Maths.XZVector(athlete.team.receptionTarget).distance_to(Maths.XZVector(athlete.setRequest.target)))
 			setTime = distanceFactor * Maths.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
+			#if athlete == athlete.team.middleFront:
+				#Console.AddNewLine("middle set time(1) " + str(setTime))
 		else:
 			setTime = Maths.SetTimeDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target)
+			#if athlete == athlete.team.middleFront:
+				#Console.AddNewLine("middle set time(2) " + str(setTime), Color.WEB_PURPLE)
+				#Console.AddNewLine("middle set vel(2) " + str(Maths.FindDownwardsParabola(athlete.team.receptionTarget, athlete.setRequest.target).length()), Color.WEB_PURPLE)
 
 	else:
 		# Standard set
@@ -158,6 +163,8 @@ func CalculateTimeTillBallReachesSetTarget(athlete:Athlete) -> float:
 			setTime = distanceFactor * (yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g)
 		else:
 			setTime = yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
+	#if athlete == athlete.team.middleFront:
+		#Console.AddNewLine(athlete.stats.lastName + " pred spike time(middle) " + str(athlete.team.timeTillDigTarget + setTime))
 
 	return athlete.team.timeTillDigTarget + setTime
 

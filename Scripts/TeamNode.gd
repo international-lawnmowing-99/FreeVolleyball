@@ -125,6 +125,18 @@ func Init(matchManager):
 	CreateDefaultLiberoStrategy()
 
 func PlaceTeam():
+	# in the case that both teams are the same, don't have the players share stats, it confuses the liberos
+	if data == defendState.otherTeam.data:
+		Console.AddNewLine("The teams are the same, duplicating objects to avoid conflict")
+
+	Console.AddNewLine(str(data.matchPlayers.size()) + " players for us and " + str(defendState.otherTeam.data.matchPlayers.size()) + " players for them")
+	if defendState.otherTeam.data.matchPlayers.size() != data.matchPlayers.size():
+		Console.AddNewLine("! The teams are the same but not with the same number of players!")
+
+	for i in range(data.matchPlayers.size()):
+		if data.matchPlayers[i] in defendState.otherTeam.data.matchPlayers:
+			data.matchPlayers[i] = data.matchPlayers[i].duplicate(false)
+			Console.AddNewLine("Duplicating " + data.matchPlayers[i].lastName)
 
 	for i in range(data.matchPlayers.size()):
 		var pos:Vector3
@@ -142,9 +154,7 @@ func PlaceTeam():
 
 		var lad:Athlete = AthleteScene.instantiate()
 		lad._ready()
-		# in the case that both teams are the same, don't have the players share stats, it confuses the liberos
-		if data.matchPlayers[i] == defendState.otherTeam.data.matchPlayers[i]:
-			data.matchPlayers[i] = data.matchPlayers[i].duplicate(false)
+
 		lad.stats = data.matchPlayers[i]
 		add_child(lad)
 		#TODO - eventually there will be a set of blendshapes that will make the people look different
@@ -626,9 +636,9 @@ func AutoSelectTeamLineup():
 		for list in aptitudeLists:
 			list.erase(nlibero2)
 		#libero2 = nlibero2
-	#nsetter.verticalJump += 3
-	#nsetter.jumpSetHeight += 3
-	#nsetter.spikeHeight += 3
+	nsetter.verticalJump += 2
+	nsetter.jumpSetHeight += 2
+	nsetter.spikeHeight += 2
 
 func SwapPlayer(player:AthleteStats,newPostion:int):
 	#print("-----------")

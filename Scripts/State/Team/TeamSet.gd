@@ -95,12 +95,17 @@ func SetBall(team:TeamNode):
 		#team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
 
 		if team.ball.linear_velocity == Vector3.ZERO || team.ball.linear_velocity.length() > 10:
+			Console.AddNewLine("Perfect, downwards set", Color.DARK_ORANGE)
 			var trialVel = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
 			if trialVel == null:
 				trialVel = Vector3.ZERO
 				Console.AddNewLine("Error!: Perfect set couldn't be produced from position requested")
 
 			team.ball.linear_velocity = trialVel
+			var timeCheck = Maths.TimeTillBallReachesHeight(team.ball.position, trialVel, team.setTarget.target.y, 1)
+
+			Console.AddNewLine("Set speed: " + str(trialVel.length()), Color.POWDER_BLUE)
+			Console.AddNewLine("Predicted set time: " + str(timeCheck), Color.POWDER_BLUE)
 
 	else:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " shitty set", Color.RED)
@@ -539,14 +544,14 @@ func ChooseSpiker(team:TeamNode):
 		#IE if your spiike height is 6 metres, even if you're in the back court it doesn't matter
 		for spiker:Athlete in possibleSpikers:
 			if spiker.FrontCourt():
-				if spiker == team.outsideFront && spiker.setRequest.target > 1*team.flip:
+				if spiker == team.outsideFront && spiker.setRequest.target.z > 1*team.flip:
 					#Set is on the left (i think), so the matchup is against the other team's right blocker
 					if spiker.stats.spikeHeight> otherTeam.defendState.rightSideBlocker.stats.blockHeight:
 						Console.AddNewLine("Might be able to OTT with left wing spiker")
 				elif spiker == team.middleFront:
 					if spiker.stats.spikeHeight> otherTeam.defendState.middleBlocker.stats.blockHeight:
 						Console.AddNewLine("Might be able to OTT with middle")
-				if spiker == team.oppositeHitter && spiker.setRequest.target > -1*team.flip:
+				if spiker == team.oppositeHitter && spiker.setRequest.target.z > -1*team.flip:
 					if spiker.stats.spikeHeight> otherTeam.defendState.leftSideBlocker.stats.blockHeight:
 						Console.AddNewLine("Might be able to OTT with opposite")
 

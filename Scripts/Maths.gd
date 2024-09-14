@@ -85,12 +85,11 @@ func BallPositionAtGivenHeight(position:Vector3, linear_velocity:Vector3, height
 
 func SetTimeDownwardsParabola(startPos:Vector3, endPos:Vector3):
 	var ballVel = FindDownwardsParabola(startPos, endPos)
-	if ballVel == Vector3.ZERO:
+	if ballVel == Vector3.ZERO || null:
 		return 9999.9
 
-	var ballXZDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.z))
-	var ballXZVel = Vector3(ballVel.x, 0, ballVel.z).length()
-	return ballXZDist/max(ballXZVel, 0.0001)
+	return TimeTillBallReachesHeight(startPos, ballVel, endPos.y, 1)
+
 
 func BallMaxHeight(position:Vector3, linear_velocity:Vector3, gravity_scale:float) -> float:
 	var g = gravity * gravity_scale
@@ -171,6 +170,9 @@ func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 	var maxSetVelocity = 10
 
 	var yDist = startPos.y - endPos.y
+	if yDist < 0:
+		Console.AddNewLine("Downwards parabola requested in inappropriate situation")
+		return null
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.z))
 	var xzTheta = Maths.SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
 
@@ -185,15 +187,48 @@ func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 
 	if yTravelTime <= maxXZTravelTime:
 		var xzVel = xzDist/ yTravelTime
-		Console.AddNewLine("True downwards parabola")
+		Console.AddNewLine("Horizontal parabola")
 		return Vector3(xzVel * cos(-xzTheta), 0, xzVel * sin(-xzTheta))
 
 
 	else:
-		Console.AddNewLine("downwards parabola with yVel, not sure if that's possible, yet", Color.POWDER_BLUE)
-		return Maths.FindParabolaForGivenSpeed(startPos, endPos, maxSetVelocity, false, 1.0)
+		#Console.AddNewLine("downwards parabola with lowest possible velocity", Color.POWDER_BLUE)
+
+		#https://physics.stackexchange.com/questions/744596/calculate-the-angle-of-a-projectile-to-minimalize-the-initial-velocity
+		var theta = atan((yDist + sqrt(yDist * yDist + xzDist * xzDist))/xzDist)
+		#var theta2 = atan((yDist - sqrt(yDist * yDist + xzDist * xzDist))/xzDist)
 
 
+		#var theta:float = PI/4 + .5 * atan(yDist/xzDist)
+		#Console.AddNewLine("theta: " + str(theta))
+		#Console.AddNewLine("theta2: " + str(theta2))
+
+		var test = -gravity * xzDist * xzDist/(2*cos(theta)*cos(theta) * (yDist - xzDist*tan(theta)))
+		#var test2 = -gravity * xzDist * xzDist/(2*cos(theta2)*cos(theta2) * (yDist - xzDist*tan(theta2)))
+
+		var speed = 0
+		#var speed2 = 0
+
+		if test > 0:
+			speed = sqrt(test)
+		#if test2 > 0:
+			#speed2 = sqrt(test2)
+
+		#Console.AddNewLine("speed: " + str(speed))
+		#Console.AddNewLine("speed2: " + str(speed2))
+
+		if speed == 0:# && speed2 == 0:
+			Console.AddNewLine("Couldn't find parabola with lowest velocity")
+			return Vector3.ZERO
+
+		#var speed = gravity*xzDist*xzDist/(sqrt(xzDist*xzDist + yDist*yDist) + yDist)
+
+		var xzVel = speed * cos(theta)
+		var yvel = speed * sin(theta)
+
+		var theoreticalV = Vector3(xzVel * cos(-xzTheta), -yvel, xzVel * sin(-xzTheta))
+
+		return theoreticalV
 
 
 
