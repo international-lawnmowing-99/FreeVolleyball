@@ -12,7 +12,7 @@ config_version=5
 
 config/name="FreeVolleyball"
 run/main_scene="res://Scenes/MatchScene/MatchScene.tscn"
-config/features=PackedStringArray("4.3")
+config/features=PackedStringArray("4.4")
 boot_splash/image="res://icon.png"
 config/icon="res://icon.png"
 
@@ -40,7 +40,7 @@ gdscript/warnings/unused_argument=false
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/resizable=false
-window/stretch/mode="2d"
+window/stretch/mode="viewport"
 
 [editor]
 

@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://c0t3dj6fskv0t"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/TeamSubstitutionUI.gd" id="1"]
+[ext_resource type="Script" uid="uid://ddqv185m5xy4k" path="res://Scenes/MatchScene/MatchUI/TeamSubstitutionUI.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://duemdswibod36" path="res://Scenes/MatchScene/MatchUI/LiberoOptionsPanel.tscn" id="2_0atft"]
 [ext_resource type="PackedScene" uid="uid://c62uwhs35dmk" path="res://Scenes/MatchScene/MatchUI/NameCard.tscn" id="3"]
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PlayerStatsViewer.gd" id="5"]
+[ext_resource type="Script" uid="uid://c6dmwcl6p85ru" path="res://Scenes/MatchScene/MatchUI/PlayerStatsViewer.gd" id="5"]
 [ext_resource type="Texture2D" uid="uid://ckc4aneaqrwrv" path="res://Textures/AntiClockwiseArrow.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://b6iyrxdl4j4cm" path="res://Textures/ClockwiseArrow.png" id="7"]
 

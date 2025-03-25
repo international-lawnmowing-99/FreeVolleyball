@@ -1,41 +1,41 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://cgywh6g71eoq6"]
 
-[ext_resource path="res://Models/makehumanTest.glb" type="PackedScene" id=1]
-[ext_resource path="res://Scripts/makehumanTest.gd" type="Script" id=2]
-[ext_resource path="res://Models/EditingWaving.tres" type="Animation" id=3]
+[ext_resource type="PackedScene" uid="uid://b388fnsyipodi" path="res://Models/makehumanTest.glb" id="1"]
+[ext_resource type="Script" uid="uid://c5r4rn4mydi8g" path="res://Scripts/makehumanTest.gd" id="2"]
+[ext_resource type="Animation" path="res://Models/EditingWaving.tres" id="3"]
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="Animation" id="1"]
 resource_name = "Editable waving"
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id="2"]
 resource_name = "New Anim"
-loop = true
+loop_mode = 1
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("human:rotation_degrees")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0, 1 ),
-"transitions": PackedFloat32Array( 1, 1 ),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0, 360 ) ]
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 360)]
 }
 
-[node name="makehumanTest" instance=ExtResource( 1 )]
-transform = Transform3D( 0.987052, -0.160399, 0, 0.160399, 0.987052, 0, 0, 0, 1, 0, 0, 0 )
-script = ExtResource( 2 )
+[node name="makehumanTest" instance=ExtResource("1")]
+transform = Transform3D(0.987052, -0.160399, 0, 0.160399, 0.987052, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("2")
 
 [node name="human" parent="." index="0"]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.29965, 0 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.29965, 0)
 
 [node name="AnimationPlayer" parent="." index="1"]
 process_mode = 2
 autoplay = "Waving"
-"anims/Editable waving" = SubResource( 1 )
-anims/EditingWaving = ExtResource( 3 )
+"anims/Editable waving" = SubResource("1")
+anims/EditingWaving = ExtResource("3")
 
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="." index="2"]
 autoplay = "New Anim"
-"anims/New Anim" = SubResource( 2 )
+"anims/New Anim" = SubResource("2")

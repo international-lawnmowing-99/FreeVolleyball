@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bjvp6sd0ubyn"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PlayerStatsRow.gd" id="1_hi6h3"]
+[ext_resource type="Script" uid="uid://mhncie7vtvyx" path="res://Scenes/MatchScene/MatchUI/PlayerStatsRow.gd" id="1_hi6h3"]
 
 [node name="PlayerStatsRow" type="Control"]
 custom_minimum_size = Vector2(1280, 40)

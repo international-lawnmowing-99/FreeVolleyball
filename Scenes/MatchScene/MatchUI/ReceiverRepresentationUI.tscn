@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://6r18x6kmjjvr"]
 
 [ext_resource type="Texture2D" uid="uid://b5bxp73r55d64" path="res://icon.png" id="1_2ltrs"]
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/ReceiverRepresentationUI.gd" id="2_bbrfa"]
+[ext_resource type="Script" uid="uid://dxgchrm0tij2b" path="res://Scenes/MatchScene/MatchUI/ReceiverRepresentationUI.gd" id="2_bbrfa"]
 
 [node name="ReceiverRepresentationUI" type="TextureRect"]
 offset_left = 456.0

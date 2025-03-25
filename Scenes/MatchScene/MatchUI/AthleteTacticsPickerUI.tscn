@@ -1,14 +1,14 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://ddl3urafootyf"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/AthleteTacticsPickerUI.gd" id="1"]
+[ext_resource type="Script" uid="uid://cn45boafcqplp" path="res://Scenes/MatchScene/MatchUI/AthleteTacticsPickerUI.gd" id="1"]
 
 [node name="AthleteTacticsPickerUI" type="Control"]
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="Background" type="ColorRect" parent="."]
 offset_right = 276.0
 offset_bottom = 184.0
-color = Color( 1, 1, 1, 0.192157 )
+color = Color(1, 1, 1, 0.192157)
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background"]
 offset_right = 262.0
@@ -64,7 +64,7 @@ offset_bottom = 180.0
 text = "Receive"
 
 [node name="BlockTacticsUI" type="ScrollContainer" parent="Background"]
-self_modulate = Color( 0, 0, 0, 1 )
+self_modulate = Color(0, 0, 0, 1)
 offset_left = 298.0
 offset_top = 8.0
 offset_right = 560.0

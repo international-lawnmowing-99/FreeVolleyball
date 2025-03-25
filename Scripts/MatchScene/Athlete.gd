@@ -74,6 +74,7 @@ var oppositeFrontSpikes
 var oppositeBackSpikes
 
 var distanceHack
+@onready var blockDebug:MeshInstance3D = $BlockArea
 #var uiSelected:bool = false
 
 func CreateSpikes():
@@ -127,6 +128,11 @@ func _ready():
 	customPoseNeck01 = skel.get_bone_global_pose(neckBone01Id)
 	customPoseNeck02 = skel.get_bone_global_pose(neckBone02Id)
 
+	blockDebug.position.y = stats.blockHeight - stats.verticalJump - 0.5
+	var mesh:BoxMesh = blockDebug.mesh
+	mesh.size.x = stats.height/3 * 2
+
+	blockDebug.visible = false
 
 func _process(_delta):
 	myDelta = _delta

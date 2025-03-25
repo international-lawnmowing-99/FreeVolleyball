@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d3yb8xhfckmp6"]
 
-[ext_resource type="Script" path="res://Scenes/ManagementScene/CalendarScene/WeekLine.gd" id="1_o7dgd"]
+[ext_resource type="Script" uid="uid://64ov84fhf5a6" path="res://Scenes/ManagementScene/CalendarScene/WeekLine.gd" id="1_o7dgd"]
 
 [node name="WeekLine" type="VSplitContainer"]
 size_flags_vertical = 3

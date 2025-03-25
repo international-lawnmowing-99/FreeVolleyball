@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://biexvs3w6hs70"]
 
 [ext_resource type="Texture2D" uid="uid://browddj6fobwl" path="res://Textures/143640-allan-border-s-cricket-dos-screenshot-coin-toss.png" id="1_gojhs"]
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/DodgyTossUI.gd" id="1_rpwn7"]
+[ext_resource type="Script" uid="uid://cb21bwvaffo28" path="res://Scenes/MatchScene/MatchUI/DodgyTossUI.gd" id="1_rpwn7"]
 
 [node name="TossUI" type="ColorRect"]
 anchors_preset = 15

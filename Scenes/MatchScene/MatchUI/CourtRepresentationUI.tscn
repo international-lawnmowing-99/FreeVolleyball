@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bijxfpsspog5d" path="res://Textures/Court-Markings.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://bamxyyq7k8h0o" path="res://Textures/Captain.png" id="2"]
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/CourtRepresentationUI.gd" id="4"]
+[ext_resource type="Script" uid="uid://iwjglmlfh712" path="res://Scenes/MatchScene/MatchUI/CourtRepresentationUI.gd" id="4"]
 [ext_resource type="PackedScene" uid="uid://dqmt0xifetjx4" path="res://Scenes/MatchScene/MatchUI/2DAthleteRepresentation.tscn" id="4_hf3oi"]
 
 [sub_resource type="CanvasItemMaterial" id="1"]

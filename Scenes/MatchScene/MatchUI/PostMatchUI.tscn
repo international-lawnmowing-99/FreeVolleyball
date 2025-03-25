@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://beajb1uwht7no"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PostMatchUI.gd" id="1_gs57n"]
+[ext_resource type="Script" uid="uid://cuymmwtvuqqt" path="res://Scenes/MatchScene/MatchUI/PostMatchUI.gd" id="1_gs57n"]
 [ext_resource type="FontFile" uid="uid://c3ryb8bqtv4yu" path="res://Fonts/DynamicFontData_Roboto.tres" id="2_e4wjj"]
 
 [node name="PostMatchUI" type="Control"]

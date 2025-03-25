@@ -147,9 +147,9 @@ func _on_full_start_confirm_button_pressed():
 		athletesTableMenu.show()
 		mManager.PrepareLocalTeamObjects(newMatchData)
 
-		allAthletesTitleLabel.text = mManager.teamA.teamName + " vs " + mManager.teamB.teamName
+		allAthletesTitleLabel.text = mManager.teamA.data.teamName + " vs " + mManager.teamB.data.teamName
 
-		athletesTableMenu.get_node("PlayerStatsTable").PopulateTable(mManager.teamA)
+		athletesTableMenu.get_node("PlayerStatsTable").PopulateTable(mManager.teamA.data)
 
 
 func _on_back_button_table_pressed():

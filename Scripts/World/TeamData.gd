@@ -47,7 +47,7 @@ func Populate(_playerChoiceState, firstNames:Array[String], lastNames:Array[Stri
 		stats.blockHeight = stats.height * (1.2) + stats.verticalJump
 
 		stats.digHeight = stats.height/1.6
-		stats.standingSetHeight = stats.height * 1.2
+		stats.standingSetHeight = stats.height * 1.15
 		stats.jumpSetHeight = stats.standingSetHeight + stats.verticalJump
 		var age = 17 + randi()%28
 

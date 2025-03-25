@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cykoixxohrpxa"]
 
 [ext_resource type="StyleBox" uid="uid://cno8oj5uhwosx" path="res://Scenes/MatchScene/MatchUI/TeamSubstitutionUI_stylebox.tres" id="1_15nnd"]
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/BlockingIndividualUI.gd" id="1_sg131"]
+[ext_resource type="Script" uid="uid://b5lf6mxscfgv6" path="res://Scenes/MatchScene/MatchUI/BlockingIndividualUI.gd" id="1_sg131"]
 
 [sub_resource type="Theme" id="Theme_sqmpq"]
 Panel/styles/panel = ExtResource("1_15nnd")

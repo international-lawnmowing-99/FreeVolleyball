@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dia2qm24xemkg"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/TeamChoice.gd" id="1_0t3ah"]
+[ext_resource type="Script" uid="uid://cynffikm3yb8r" path="res://Scenes/MatchScene/MatchUI/TeamChoice.gd" id="1_0t3ah"]
 [ext_resource type="Texture2D" uid="uid://c5r216hy1gmcv" path="res://Textures/293px-Small_arrow_pointing_left.svg.png" id="2_rubhj"]
 
 [node name="TeamChoice" type="VBoxContainer"]

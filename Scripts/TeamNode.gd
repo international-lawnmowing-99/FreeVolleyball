@@ -82,11 +82,6 @@ func _init():
 	stateMachine.SetCurrentState(chillState)
 
 
-func SaveToResource():
-	pass
-
-func LoadFromResource():
-	pass#teamName = data.teamName
 
 #func CopyGameWorldPlayers(gameWorld:GameWorld, choiceState:PlayerChoiceState, clubOrInternational:Enums.ClubOrInternational):
 	#if matchPlayers.size() > 0:
@@ -636,9 +631,9 @@ func AutoSelectTeamLineup():
 		for list in aptitudeLists:
 			list.erase(nlibero2)
 		#libero2 = nlibero2
-	nsetter.verticalJump += 2
-	nsetter.jumpSetHeight += 2
-	nsetter.spikeHeight += 2
+	#nsetter.verticalJump += .5
+	#nsetter.jumpSetHeight += .5
+	#nsetter.spikeHeight += .5
 
 func SwapPlayer(player:AthleteStats,newPostion:int):
 	#print("-----------")

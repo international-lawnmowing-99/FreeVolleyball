@@ -1,34 +1,35 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=10 format=3 uid="uid://8m07urt5dqrh"]
 
-[ext_resource type="FontFile" path="res://Fonts/Roboto-Regular.ttf" id="1"]
 [ext_resource type="Environment" path="res://default_env.tres" id="2"]
 [ext_resource type="PackedScene" uid="uid://nsigouc224oy" path="res://Models/fatcylinder.glb" id="3"]
 [ext_resource type="Texture2D" uid="uid://b5bxp73r55d64" path="res://icon.png" id="4"]
-[ext_resource type="Script" path="res://Scripts/Fatness test.gd" id="5"]
+[ext_resource type="Script" uid="uid://biyc6kjdjjax2" path="res://Scripts/Fatness test.gd" id="5"]
 
-[sub_resource type="StyleBoxLine" id=1]
+[sub_resource type="StyleBoxLine" id="1"]
 thickness = 10
 
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 1, 0, 0, 1 )
+[sub_resource type="StyleBoxFlat" id="2"]
+bg_color = Color(1, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0.964706, 0.87451, 0.87451, 1 )
+[sub_resource type="StyleBoxFlat" id="3"]
+bg_color = Color(0.964706, 0.87451, 0.87451, 1)
 
-[sub_resource type="FontFile" id=4]
-size = 50
-outline_size = 3
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="4"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="FontFile" id=5]
-size = 20
-outline_size = 3
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="5"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
 [node name="Fatness test" type="Node3D"]
-script = ExtResource( 5 )
+script = ExtResource("5")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -39,12 +40,12 @@ offset_right = 588.05
 offset_bottom = 75.8873
 grow_horizontal = 2
 grow_vertical = 2
-custom_icons/grabber_disabled = ExtResource( 4 )
-custom_icons/grabber_highlight = ExtResource( 4 )
-custom_icons/grabber = ExtResource( 4 )
-custom_styles/slider = SubResource( 1 )
-custom_styles/grabber_area_highlight = SubResource( 2 )
-custom_styles/grabber_area = SubResource( 3 )
+custom_icons/grabber_disabled = ExtResource("4")
+custom_icons/grabber_highlight = ExtResource("4")
+custom_icons/grabber = ExtResource("4")
+custom_styles/slider = SubResource("1")
+custom_styles/grabber_area_highlight = SubResource("2")
+custom_styles/grabber_area = SubResource("3")
 value = 50.0
 tick_count = 10
 ticks_on_borders = true
@@ -57,7 +58,7 @@ offset_left = 133.0
 offset_top = 75.0
 offset_right = 312.0
 offset_bottom = 150.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource("4")
 text = "Fatness"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -68,23 +69,23 @@ offset_left = 164.0
 offset_top = 132.0
 offset_right = 279.0
 offset_bottom = 159.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource("5")
 text = "(Drag Slavoj)"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource( 2 )
+environment = ExtResource("2")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105382, 5.96046e-08, 3.98457 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105382, 5.96046e-08, 3.98457)
 
-[node name="fatcylinder" parent="." instance=ExtResource( 3 )]
+[node name="fatcylinder" parent="." instance=ExtResource("3")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D( 0.694223, 0.40174, -0.59721, -0.304555, 0.915754, 0.261995, 0.652151, 0, 0.758089, 0, 2.31713, 2.2938 )
-light_color = Color( 0.980392, 1, 0.792157, 1 )
+transform = Transform3D(0.694223, 0.40174, -0.59721, -0.304555, 0.915754, 0.261995, 0.652151, 0, 0.758089, 0, 2.31713, 2.2938)
+light_color = Color(0.980392, 1, 0.792157, 1)
 light_energy = 0.5
 
 [connection signal="value_changed" from="UI/HSlider" to="." method="_on_HSlider_value_changed"]

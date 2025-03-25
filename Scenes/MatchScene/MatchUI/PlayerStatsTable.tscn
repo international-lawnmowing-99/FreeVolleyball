@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cts4mqjkgj1vj"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PlayerStatsTable.gd" id="1_5cjys"]
+[ext_resource type="Script" uid="uid://bcw1kcahagpdw" path="res://Scenes/MatchScene/MatchUI/PlayerStatsTable.gd" id="1_5cjys"]
 
 [node name="PlayerStatsTable" type="ColorRect"]
 anchors_preset = 15

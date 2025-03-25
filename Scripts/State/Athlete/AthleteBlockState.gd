@@ -27,6 +27,7 @@ var blockingTarget:Athlete
 var jumpTime:float
 
 func Enter(athlete:Athlete):
+	athlete.blockDebug.visible = true
 	athlete.debug1.visible = true
 	athlete.debug2.visible = true
 	nameOfState="Block"
@@ -130,6 +131,7 @@ func Update(athlete:Athlete):
 		athlete.debug2.global_transform.origin = athlete.rightIKTarget.global_transform.origin
 
 func Exit(athlete:Athlete):
+	athlete.blockDebug.visible = false
 	athlete.leftIK.stop()
 	athlete.rightIK.stop()
 	athlete.debug1.visible = false

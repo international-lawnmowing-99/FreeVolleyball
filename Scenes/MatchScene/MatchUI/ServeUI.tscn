@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://7v1fcf4qi42l"]
 
-[ext_resource type="Script" path="res://Scenes/ServeUI.gd" id="1"]
+[ext_resource type="Script" uid="uid://cssbt2o8v2moo" path="res://Scenes/ServeUI.gd" id="1"]
 [ext_resource type="Theme" uid="uid://bgukpjan5jpl6" path="res://Scenes/PanelRoundEdges.tres" id="3"]
 
 [node name="ServeUI" type="CanvasLayer"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://cycfwen4jhh1v"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.gd" id="2"]
+[ext_resource type="Script" uid="uid://byxi7m0s33j3f" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://c5r216hy1gmcv" path="res://Textures/293px-Small_arrow_pointing_left.svg.png" id="2_5hwqb"]
 [ext_resource type="PackedScene" uid="uid://dia2qm24xemkg" path="res://Scenes/PreMatchUI/TeamChoice.tscn" id="2_kpox3"]
 [ext_resource type="Texture2D" uid="uid://b11tiqqynj7p6" path="res://Textures/net-graphic.png" id="4"]
@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://biexvs3w6hs70" path="res://Scenes/MatchScene/MatchUI/TossUI.tscn" id="5_a1nvc"]
 [ext_resource type="PackedScene" uid="uid://c62uwhs35dmk" path="res://Scenes/MatchScene/MatchUI/NameCard.tscn" id="7"]
 [ext_resource type="Theme" path="res://Scenes/MatchScene/gridTheme.tres" id="8"]
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/TeamLineUpsUI.gd" id="10"]
+[ext_resource type="Script" uid="uid://dp8pfbqmrx6pm" path="res://Scenes/MatchScene/MatchUI/TeamLineUpsUI.gd" id="10"]
 
 [node name="PreMatchUI" type="CanvasLayer"]
 script = ExtResource("2")

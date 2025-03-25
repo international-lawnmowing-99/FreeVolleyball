@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://b2rwr4t4gvij3"]
 
-[ext_resource type="Script" path="res://Scenes/ManagementScene/CalendarScene/CalendarScene.gd" id="1_qe6pp"]
-[ext_resource type="Script" path="res://Scenes/ManagementScene/CalendarScene/SeasonOverviewBackground.gd" id="2_04m5v"]
+[ext_resource type="Script" uid="uid://b70b1k50m32w2" path="res://Scenes/ManagementScene/CalendarScene/CalendarScene.gd" id="1_qe6pp"]
+[ext_resource type="Script" uid="uid://b0s61s1n34i1w" path="res://Scenes/ManagementScene/CalendarScene/SeasonOverviewBackground.gd" id="2_04m5v"]
 [ext_resource type="PackedScene" uid="uid://d3yb8xhfckmp6" path="res://Scenes/ManagementScene/CalendarScene/WeekLine.tscn" id="2_thhmf"]
 [ext_resource type="PackedScene" uid="uid://bq4hoos7b0x0i" path="res://Scenes/ManagementScene/CalendarScene/MonthLine.tscn" id="3_dopjb"]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c62uwhs35dmk"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/NameCard.gd" id="2"]
+[ext_resource type="Script" uid="uid://dg6fi20bc0khh" path="res://Scenes/MatchScene/MatchUI/NameCard.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://bamxyyq7k8h0o" path="res://Textures/Captain.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://b7ieonjvgxqyi" path="res://Textures/LiberoIcon.png" id="4"]
 

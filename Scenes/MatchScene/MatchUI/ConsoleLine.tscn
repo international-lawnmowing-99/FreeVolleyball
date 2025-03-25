@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dofruruieltc1"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/ConsoleLine.gd" id="1"]
+[ext_resource type="Script" uid="uid://csjb0y4ykboof" path="res://Scenes/MatchScene/MatchUI/ConsoleLine.gd" id="1"]
 [ext_resource type="FontFile" uid="uid://c3roosme02me5" path="res://Scenes/MatchScene/ConsoleFont.tres" id="2"]
 
 [node name="ConsoleLine" type="Label"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://mc50i6pbakuk"]
 
 [ext_resource type="Texture2D" uid="uid://bamxyyq7k8h0o" path="res://Textures/Captain.png" id="1"]
-[ext_resource type="Script" path="res://Scenes/ManagementScene/ManagementScene.gd" id="1_vgkfa"]
+[ext_resource type="Script" uid="uid://burhy5b5kyutb" path="res://Scenes/ManagementScene/ManagementScene.gd" id="1_vgkfa"]
 [ext_resource type="Theme" uid="uid://bgukpjan5jpl6" path="res://Scenes/PanelRoundEdges.tres" id="4"]
 [ext_resource type="Texture2D" uid="uid://dopbn4dj6p3ca" path="res://Textures/warning.png" id="4_t6drj"]
 

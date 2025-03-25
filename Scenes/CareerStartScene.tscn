@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cr3p6bj8hpx8f"]
 
-[ext_resource type="Script" path="res://Scenes/CareerStartScene.gd" id="1_aik1w"]
+[ext_resource type="Script" uid="uid://dnv6h383ejdrl" path="res://Scenes/CareerStartScene.gd" id="1_aik1w"]
 [ext_resource type="PackedScene" uid="uid://dia2qm24xemkg" path="res://Scenes/PreMatchUI/TeamChoice.tscn" id="2_a7fso"]
 
 [node name="CareerStartScene" type="Node2D"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c62uvhgiudgfo"]
 
-[ext_resource type="Script" path="res://Scenes/TeamPicker.gd" id="1"]
+[ext_resource type="Script" uid="uid://c3axfybj1neu8" path="res://Scenes/TeamPicker.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://bohxkkb71fd34" path="res://Textures/headIcon.jpg" id="3"]
 
 [node name="Node2D" type="Node2D"]

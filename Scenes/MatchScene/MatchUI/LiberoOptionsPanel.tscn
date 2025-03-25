@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://duemdswibod36"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/LiberoOptionsPanel.gd" id="1_ysemm"]
+[ext_resource type="Script" uid="uid://cjsert5py60h" path="res://Scenes/MatchScene/MatchUI/LiberoOptionsPanel.gd" id="1_ysemm"]
 [ext_resource type="PackedScene" uid="uid://bg8wxhb7lwba0" path="res://Scenes/MatchScene/MatchUI/LiberoOptionsNameCard.tscn" id="2_lrt3e"]
 
 [node name="LiberoOptionsPanel" type="Node2D"]
@@ -141,6 +141,7 @@ text = "Change Player Liberoed On Serve"
 hide_on_state_item_selection = true
 item_count = 1
 item_0/text = "None"
+item_0/id = 0
 
 [node name="PlayerLiberoedOnReceiveButton" type="Button" parent="ColourRect"]
 layout_mode = 0
@@ -160,6 +161,7 @@ borderless = false
 allow_search = false
 item_count = 2
 item_0/text = "Libero1"
+item_0/id = 0
 item_1/text = "Libero2"
 item_1/id = 1
 
@@ -171,6 +173,7 @@ borderless = false
 allow_search = false
 item_count = 2
 item_0/text = "Libero1"
+item_0/id = 0
 item_1/text = "Libero2"
 item_1/id = 1
 

@@ -95,11 +95,17 @@ func SetBall(team:TeamNode):
 		#team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
 
 		if team.ball.linear_velocity == Vector3.ZERO || team.ball.linear_velocity.length() > 10:
+			if team.ball.position.y < team .setTarget.target.y:
+				Console.AddNewLine("What happened here? Nothing logically impossible, but a perfect set has been requested in a place it can't happen. What do we do now?")
+				team.mManager.Pause()
+
 			Console.AddNewLine("Perfect, downwards set", Color.DARK_ORANGE)
 			var trialVel = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
 			if trialVel == null:
 				trialVel = Vector3.ZERO
 				Console.AddNewLine("Error!: Perfect set couldn't be produced from position requested")
+				#Throw to setting error, however pardoxically? Will this be common enough to throw out long run averages?
+				# Or force perfect parabola, leading to improbable sets being made?
 
 			team.ball.linear_velocity = trialVel
 			var timeCheck = Maths.TimeTillBallReachesHeight(team.ball.position, trialVel, team.setTarget.target.y, 1)
@@ -571,7 +577,7 @@ func ChooseSpiker(team:TeamNode):
 
 		var setChoice = randi()%possibleSpikers.size()
 
-		team.chosenSpiker = possibleSpikers[setChoice]
+		team.chosenSpiker = possibleSpikers[setChoice] #team.middleFront #
 		team.setTarget = team.chosenSpiker.setRequest
 		Console.AddNewLine("Chosen spiker is " + team.chosenSpiker.stats.lastName)
 

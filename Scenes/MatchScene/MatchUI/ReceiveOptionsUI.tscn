@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://besq01chm6eix"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/ReceiveOptionsUI.gd" id="1_l4r07"]
+[ext_resource type="Script" uid="uid://dl4se1ra4u4yc" path="res://Scenes/MatchScene/MatchUI/ReceiveOptionsUI.gd" id="1_l4r07"]
 [ext_resource type="Texture2D" uid="uid://cwr4n2ytf3xfj" path="res://Textures/HalfCourt.png" id="3_ych81"]
 [ext_resource type="PackedScene" uid="uid://6r18x6kmjjvr" path="res://Scenes/MatchScene/MatchUI/ReceiverRepresentationUI.tscn" id="4_ljldc"]
 [ext_resource type="FontFile" uid="uid://c3ryb8bqtv4yu" path="res://Fonts/DynamicFontData_Roboto.tres" id="5_fqxpa"]

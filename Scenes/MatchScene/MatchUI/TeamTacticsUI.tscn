@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://dgn1arb8c8e44"]
 
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/TeamTacticsUI.gd" id="1_se1cr"]
+[ext_resource type="Script" uid="uid://cj82fq6duux0y" path="res://Scenes/MatchScene/MatchUI/TeamTacticsUI.gd" id="1_se1cr"]
 [ext_resource type="PackedScene" uid="uid://besq01chm6eix" path="res://Scenes/MatchScene/MatchUI/ReceiveOptionsUI.tscn" id="2_xc2ht"]
 [ext_resource type="PackedScene" uid="uid://bn7njj16hwoye" path="res://Scenes/MatchScene/MatchUI/ServeOptionsUI.tscn" id="3_h46rf"]
 [ext_resource type="PackedScene" uid="uid://bpb8ra3kywlo6" path="res://Scenes/MatchScene/MatchUI/CourtRepresentationUI.tscn" id="3_uij1t"]
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/ServeOptionsUI.gd" id="4_8bssx"]
-[ext_resource type="Script" path="res://Scenes/MatchScene/MatchUI/BlockOptionsUI.gd" id="4_ev5x7"]
+[ext_resource type="Script" uid="uid://bd7qwn0vq2vnk" path="res://Scenes/MatchScene/MatchUI/ServeOptionsUI.gd" id="4_8bssx"]
+[ext_resource type="Script" uid="uid://12ywadewyvax" path="res://Scenes/MatchScene/MatchUI/BlockOptionsUI.gd" id="4_ev5x7"]
 [ext_resource type="PackedScene" uid="uid://cykoixxohrpxa" path="res://Scenes/MatchScene/MatchUI/BlockingIndividualUI.tscn" id="5_v884v"]
 
 [node name="TeamTacticsUI" type="Control"]

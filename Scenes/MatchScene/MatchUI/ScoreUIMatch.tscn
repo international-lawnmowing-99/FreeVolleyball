@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dmu0b2wanhyv7"]
 
 [ext_resource type="Texture2D" uid="uid://hrehrqgjk1yk" path="res://Textures/Scorecard.png" id="2"]
-[ext_resource type="Script" path="res://Scenes/Score.gd" id="3"]
+[ext_resource type="Script" uid="uid://smskaogspg0k" path="res://Scenes/Score.gd" id="3"]
 [ext_resource type="Texture2D" uid="uid://b5bxp73r55d64" path="res://icon.png" id="3_y7ruu"]
 
 [node name="Score" type="TextureRect"]
