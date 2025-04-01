@@ -13,7 +13,8 @@ func Enter(team:TeamNode):
 #		if player.rb.freeze:
 #			print(player.stats.lastName + "Changing")
 		if athlete.FrontCourt():
-			athlete.stateMachine.SetCurrentState(athlete.blockState)
+			if athlete.stateMachine.currentState != athlete.blockState:
+				athlete.stateMachine.SetCurrentState(athlete.blockState)
 		else:
 			athlete.stateMachine.SetCurrentState(athlete.defendState)
 

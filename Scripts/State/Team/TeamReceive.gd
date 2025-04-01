@@ -16,7 +16,7 @@ func Enter(team:TeamNode):
 	var orderedList = team.courtPlayerNodes.duplicate(false)
 	orderedList.sort_custom(Callable(Athlete,"SortDistance"))
 
-	team.chosenReceiver = orderedList[0]
+	team.chosenReceiver = team.setter# orderedList[0]
 
 	# Begin transitions
 	var middleChoice:int = randi()%3

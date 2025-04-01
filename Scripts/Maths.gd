@@ -69,7 +69,8 @@ func TimeTillBallReachesHeight(position:Vector3, linear_velocity:Vector3, height
 
 	var finalV = sqrt(linear_velocity.y * linear_velocity.y + 2 * g * (position.y - height))
 	if is_nan(finalV):
-		print("Tried to find TimeTillBallReachesHeight - ball won't reach height")
+		Console.AddNewLine("Tried to find TimeTillBallReachesHeight - ball won't reach height", Color.CORNFLOWER_BLUE)
+		Console.AddNewLine("Det = " + str(linear_velocity.y * linear_velocity.y + 2 * g * (position.y - height)), Color.CORNFLOWER_BLUE)
 	var remainingTime = (finalV + linear_velocity.y) / g
 
 	return remainingTime

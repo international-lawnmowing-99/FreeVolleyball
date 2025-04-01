@@ -65,7 +65,8 @@ func Enter(athlete:Athlete):
 
 	serveUI.humanServeState = self
 	_athlete = athlete
-
+	athlete.rb.freeze
+	athlete.rb.linear_velocity = Vector3.ZERO
 
 	if rememberSettings:
 		if rememberedServeTarget:

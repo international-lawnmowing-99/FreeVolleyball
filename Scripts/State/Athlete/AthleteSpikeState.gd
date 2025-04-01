@@ -73,13 +73,14 @@ func Update(athlete:Athlete):
 					athlete.rb.freeze = false
 					athlete.rb.gravity_scale = 1
 					# We want to contact the ball at our max height...
-					# This means a steeper jump for more extreme verticals
+					# This means a steeper jurightIKmp for more extreme verticals
 					athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, landingXZ, athlete.stats.verticalJump)
 					if athlete == athlete.team.chosenSpiker:
 						ChooseSpikingStrategy(athlete)
 
 		SpikeState.Jump:
-			athlete.rightIKTarget.global_transform.origin = athlete.ball.position
+			if athlete.ball && athlete.ball.position:
+				athlete.rightIKTarget.global_transform.origin = athlete.ball.position
 
 			if athlete.position.y <= 0.05 && athlete.rb.linear_velocity.y < 0:
 				athlete.rb.freeze = true
@@ -223,7 +224,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	# Weight the desirability of each option based on a mixture of expected point scoring value
 	# plus the athlete's internal quirks, then randomly choose between the options
 
-	FindPermissableAnglesDisregardingBlock(athlete)
+	#FindPermissableAnglesDisregardingBlock(athlete)
 	var leftmostPossibleSpikeAngleDisregardingBlock:float
 	var rightmostPossibleSpikeAngleDisregardingBlock:float
 
@@ -328,7 +329,9 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 	#ProduceOTTReport(athlete, oppositionLeftBlocker, oppositionMiddleBlocker, oppositionRightBlocker)
 
 	var timeTillSpikeContact = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, athlete.stats.spikeHeight, 1.0)
-
+	# before I forget this - seems to always trigger when a non-setter standing sets the middle
+	if is_nan(timeTillSpikeContact):
+		Console.AddNewLine("Can't find time till spike contact", Color.CORNFLOWER_BLUE)
 	var timeDelay = athlete.myDelta * 5
 
 #	Console.AddNewLine("Assuming blocker will jump for max height at the time of spike contact")
@@ -535,7 +538,9 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 #		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightLeft)) + " degrees to (opposition perspective) right blocker left hand")
 
 	if !middleBlockerLeftCoverage:
-		Console.AddNewLine("Couldn't see a middle block, maybe you can though", Color.LIME_GREEN)
+		Console.AddNewLine("Couldn't see a middle block, maybe you can though", Color.LIME_GREEN) #might never be called
+	elif is_nan(middleBlockerLeftCoverage):
+		Console.AddNewLine("Don't mind this error, it's just the debug shapes not having a position", Color.RED)
 	else:
 		athlete.team.mManager.cube.position = Vector3(0, oppositionMiddleBlocker.stats.blockHeight, middleBlockerLeftCoverage)
 		athlete.team.mManager.sphere.position = Vector3(0, oppositionMiddleBlocker.stats.blockHeight, middleBlockerRightCoverage)

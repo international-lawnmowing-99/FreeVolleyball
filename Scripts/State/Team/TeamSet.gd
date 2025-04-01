@@ -65,7 +65,7 @@ func DumpBall(team:TeamNode):
 func SetBall(team:TeamNode):
 	# mint set, poor set (short, long, mis-timed, tight, over, or some combo thereof - so many ways to set poorly!), 2 hits/carry ("setting error")
 	randomize()
-	var setExecution = randi()% 100
+	var setExecution = 100#randi()% 100
 
 	# A 100 setter would always set good?
 	# A 0 setter always makes errors
@@ -578,6 +578,10 @@ func ChooseSpiker(team:TeamNode):
 		var setChoice = randi()%possibleSpikers.size()
 
 		team.chosenSpiker = possibleSpikers[setChoice] #team.middleFront #
+
+		if team.middleFront in possibleSpikers:
+			team.chosenSpiker = team.middleFront
+
 		team.setTarget = team.chosenSpiker.setRequest
 		Console.AddNewLine("Chosen spiker is " + team.chosenSpiker.stats.lastName)
 
