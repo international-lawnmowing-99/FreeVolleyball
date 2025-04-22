@@ -98,20 +98,20 @@ func SetBall(team:TeamNode):
 			if team.ball.position.y < team .setTarget.target.y:
 				Console.AddNewLine("What happened here? Nothing logically impossible, but a perfect set has been requested in a place it can't happen. What do we do now?")
 				team.mManager.Pause()
+			else:
+				Console.AddNewLine("Perfect, downwards set", Color.DARK_ORANGE)
+				var trialVel = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
+				if trialVel == null:
+					trialVel = Vector3.ZERO
+					Console.AddNewLine("Error!: Perfect set couldn't be produced from position requested")
+					#Throw to setting error, however pardoxically? Will this be common enough to throw out long run averages?
+					# Or force perfect parabola, leading to improbable sets being made?
 
-			Console.AddNewLine("Perfect, downwards set", Color.DARK_ORANGE)
-			var trialVel = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
-			if trialVel == null:
-				trialVel = Vector3.ZERO
-				Console.AddNewLine("Error!: Perfect set couldn't be produced from position requested")
-				#Throw to setting error, however pardoxically? Will this be common enough to throw out long run averages?
-				# Or force perfect parabola, leading to improbable sets being made?
+				team.ball.linear_velocity = trialVel
+				var timeCheck = Maths.TimeTillBallReachesHeight(team.ball.position, trialVel, team.setTarget.target.y, 1)
 
-			team.ball.linear_velocity = trialVel
-			var timeCheck = Maths.TimeTillBallReachesHeight(team.ball.position, trialVel, team.setTarget.target.y, 1)
-
-			Console.AddNewLine("Set speed: " + str(trialVel.length()), Color.POWDER_BLUE)
-			Console.AddNewLine("Predicted set time: " + str(timeCheck), Color.POWDER_BLUE)
+				Console.AddNewLine("Set speed: " + str(trialVel.length()), Color.POWDER_BLUE)
+				Console.AddNewLine("Predicted set time: " + str(timeCheck), Color.POWDER_BLUE)
 
 	else:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " shitty set", Color.RED)
@@ -569,7 +569,7 @@ func ChooseSpiker(team:TeamNode):
 		Console.AddNewLine("Do we have an explicit instruction from the coach?")
 		Console.AddNewLine("Does the setter favour any set? Do they prefer to spread it around, or to set their best hitter all the time?")
 		Console.AddNewLine("Does the hitter have any connection modifier from playing with the setter for a long time?") # Maybe in version 2...
-		Console
+
 #		if team.outsideBack in possibleSpikers:
 #			team.chosenSpiker = team.outsideBack
 #			team.setTarget = team.outsideBack.setRequest
@@ -579,8 +579,8 @@ func ChooseSpiker(team:TeamNode):
 
 		team.chosenSpiker = possibleSpikers[setChoice] #team.middleFront #
 
-		if team.middleFront in possibleSpikers:
-			team.chosenSpiker = team.middleFront
+		if team.oppositeHitter in possibleSpikers:
+			team.chosenSpiker = team.oppositeHitter
 
 		team.setTarget = team.chosenSpiker.setRequest
 		Console.AddNewLine("Chosen spiker is " + team.chosenSpiker.stats.lastName)

@@ -60,7 +60,7 @@ func SpikeBall(team:TeamNode):
 
 		netPass = ball.position + (ball.attackTarget - ball.position) * distanceFactor
 
-		if netPass.y > 0:# netHeightPlusBallClearance:
+		if netPass.y > netHeightPlusBallClearance:
 			#var xzDistToTarget:float = (Vector3(ball.position.x, 0, ball.position.z) - Vector3(ball.attackTarget.x, 0, ball.attackTarget.z)).length()
 			#var y = ball.position.y
 			#var g = team.chosenSpiker.g
@@ -70,16 +70,16 @@ func SpikeBall(team:TeamNode):
 			#print("Spike Speed(m/s): " + str(u))
 
 			ball.difficultyOfReception = u/37.0*team.chosenSpiker.stats.spike*2
-			ball.gravity_scale = 3.0
-			ball.topspin = 3.0
-			var newVel = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 3.0)
+			ball.gravity_scale = team.chosenSpiker.spikeState.customTopspin
+			ball.topspin = ball.gravity_scale
+			var newVel = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, ball.topspin)
 			if newVel == null:
 				Console.AddNewLine("ERROR! Impossible parabola requested for spike")
 				newVel = Vector3.ZERO
 			ball.linear_velocity = newVel
 			#await team.get_tree().process_frame
 			#ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 3.0)
-			var realNetPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, 3.0)
+			var realNetPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, ball.topspin)
 			Console.AddNewLine("Net Pass: " + str(realNetPass))
 			ball.blockResolver.netPass = realNetPass
 		else:

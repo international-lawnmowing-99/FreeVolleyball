@@ -75,7 +75,10 @@ func Update(athlete:Athlete):
 					if blockingTarget && (blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Runup || blockingTarget.spikeState.spikeState == SpikeState.SpikeState.Jump):
 						internalBlockState = InternalBlockState.Preparing
 
+
+
 			InternalBlockState.Preparing:
+				athlete.stateMachine.SetCurrentState(athlete.coverState)
 #					athlete.model.rotation.slerp(Vector3(0, -athlete.team.flip * PI/2, 0), athlete.myDelta * 10)
 				athlete.model.rotation.y = -athlete.team.flip * PI/2
 				#Perhaps adding a random offset would make this look less choreographed...

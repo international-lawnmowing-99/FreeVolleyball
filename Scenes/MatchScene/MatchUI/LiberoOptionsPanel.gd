@@ -129,7 +129,7 @@ func DisplayRotation(positionOfOriginalRot1Player:int):
 				card.CardAthleteWillBeLiberoedOnReceive(liberoUsed)
 
 
-	pseudoTeam.free()
+	#pseudoTeam.free()
 
 
 func _on_player_liberoed_on_serve_button_pressed():

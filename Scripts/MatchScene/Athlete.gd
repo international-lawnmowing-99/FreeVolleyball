@@ -269,7 +269,9 @@ func ReEvaluateState():
 			team.spikeState:
 				if team.chosenSpiker == self:
 					Console.AddNewLine("Ghost spike potentially incoming??")
-					team.mManager.Pause()
+					# there is a situation where this happens that I never go to the bottom of
+					# but when you land after doing a wussy tip it's not an issue
+					#team.mManager.Pause()
 				if stateMachine.currentState.nameOfState == "Set":
 					model.rotation.y = -team.flip * PI/2
 					stateMachine.SetCurrentState(defendState)

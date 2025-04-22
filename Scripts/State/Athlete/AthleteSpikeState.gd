@@ -8,7 +8,7 @@ ChoiceConfirmed,
 Runup,
 Jump
 }
-
+var customTopspin:float = 1
 const ballRadius = 0.13
 
 var takeOffXZ:Vector3
@@ -19,14 +19,27 @@ var spikeState = SpikeState.NotSpiking
 var spikeValue:float = 0
 var runupStartPosition:Vector3
 
+var oppositionLeftBlocker:Athlete
+var oppositionMiddleBlocker:Athlete
+var oppositionRightBlocker:Athlete
+
 var leftBlockerLeftCoverage
 var leftBlockerRightCoverage
+var angleToRightLeft:float
+var angleToRightRight:float
 
 var middleBlockerLeftCoverage
 var middleBlockerRightCoverage
+var angleToMiddleLeft:float
+var angleToMiddleRight:float
 
 var rightBlockerLeftCoverage
 var rightBlockerRightCoverage
+var angleToLeftLeft:float
+var angleToLeftRight:float
+
+var leftOverlap:bool
+var rightOverlap:bool
 
 func Enter(athlete:Athlete):
 	athlete.debug1.position.y = athlete.position.y + athlete.stats.height * 1.25
@@ -196,11 +209,158 @@ func ChooseSpikingStrategy(athlete:Athlete):
 #	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target + playerToLeftAntennaVector)
 	var angleToLeftAntenna = Maths.SignedAngle(playerToNetVector, playerToLeftAntennaVector, Vector3.DOWN)
 	var angleToRightAntenna = Maths.SignedAngle(playerToNetVector, playerToRightAntennaVector, Vector3.DOWN)
-#	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna")
-#	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightAntenna)) + " degrees to right antenna")
-#
-#	Console.AddNewLine("Choosing an angle between the two", Color.LIME_GREEN)
 
+	var spikeAngles = []
+
+	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna", Color.PLUM)
+
+	if oppositionRightBlocker.stateMachine.currentState == oppositionRightBlocker.blockState:
+		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightRight)) + " degrees to [their perspective] right blocker right hand", Color.PLUM)
+		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightLeft)) + " degrees to [their perspective] right blocker left hand", Color.PLUM)
+		if angleToLeftAntenna < angleToRightRight:
+			spikeAngles.append([angleToLeftAntenna, angleToRightRight])
+			Console.AddNewLine("Adding their right blocker")
+		else:
+			Console.AddNewLine("Not adding their right blocker because they cover the line")
+	else:
+		Console.AddNewLine("Apparently opposition right blocker not blocking", Color.PLUM)
+
+	if oppositionMiddleBlocker.stateMachine.currentState == oppositionMiddleBlocker.blockState:
+		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleRight)) + " degrees to middle blocker right hand", Color.PLUM)
+		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleLeft)) + " degrees to middle blocker left hand", Color.PLUM)
+		if spikeAngles.size() == 0:
+			Console.AddNewLine("No spike angle between their right blocker and the antenna")
+			if oppositionRightBlocker.stateMachine.currentState == oppositionRightBlocker.blockState:
+				Console.AddNewLine("Opposition right blocker completely covers line")
+				if angleToRightLeft < angleToMiddleRight:
+					Console.AddNewLine("Adding middle, seam to opposition right blocker")
+				else:
+					Console.AddNewLine("Overlap between middle and opposition right blocker, double at least...")
+			else:
+				if angleToLeftAntenna < angleToMiddleRight:
+					spikeAngles.append([angleToLeftAntenna, angleToMiddleRight])
+					Console.AddNewLine("Adding middle, opposition right not blocking")
+		else:
+			Console.AddNewLine("1 spike angle already")
+			if angleToRightLeft < angleToMiddleRight:
+				spikeAngles.append([angleToRightLeft, angleToMiddleRight])
+				Console.AddNewLine("Adding middle, seam to opposition right blocker")
+			else:
+				Console.AddNewLine("Overlap between middle and opposition right blocker, double at least...")
+
+	else:
+		Console.AddNewLine("Apparently opposition middle blocker not blocking", Color.PLUM)
+
+	if oppositionLeftBlocker.stateMachine.currentState == oppositionLeftBlocker.blockState:
+		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftRight)) + " degrees to [their perspective] left blocker right hand", Color.PLUM)
+		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftLeft)) + " degrees to [their perspective] left blocker left hand", Color.PLUM)
+		if spikeAngles.size() == 0:
+			Console.AddNewLine("No spike angles")
+			# could be:  other two aren't blocking,
+			# the other 2 are doing a double with line closed and you've got a seam,
+			# or a triple with the line shut off
+			# or line is shut off but middle isn't blocking
+			if oppositionRightBlocker.stateMachine.currentState != oppositionRightBlocker.blockState && oppositionMiddleBlocker.stateMachine.currentState != oppositionMiddleBlocker.blockState:
+				Console.AddNewLine("No other blockers, opposition left blocker will cover the whole lot")
+				if angleToLeftAntenna < angleToLeftRight:
+					Console.AddNewLine("Adding opposiion left blocker")
+					spikeAngles.append([angleToLeftAntenna, angleToLeftRight])
+				if angleToLeftLeft < angleToRightAntenna:
+					Console.AddNewLine("Adding left blocker to right antenna")
+					spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
+				else:
+					Console.AddNewLine("Left blocker closes off line")
+
+
+			if oppositionMiddleBlocker.stateMachine.currentState != oppositionMiddleBlocker.blockState:
+				Console.AddNewLine("No middle blocker but line closed by right blocker")
+				if angleToRightLeft < angleToLeftRight:
+					spikeAngles.append([angleToRightLeft, angleToLeftRight])
+					Console.AddNewLine("Adding left blocker")
+				else:
+					Console.AddNewLine("No seam between left and middle")
+				if angleToLeftLeft < angleToRightAntenna:
+					Console.AddNewLine("Adding left blocker to right antenna")
+					spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
+				else:
+					Console.AddNewLine("Left blocker closes off line")
+
+			else:
+				Console.AddNewLine("Line is closed, and there is no seam between right and middle")
+				if angleToMiddleLeft < angleToLeftRight:
+					spikeAngles.append([angleToMiddleLeft, angleToLeftRight])
+					Console.AddNewLine("Adding left blocker seam to middle")
+				else:
+					Console.AddNewLine("No seam between left and middle")
+				if angleToLeftLeft < angleToRightAntenna:
+					Console.AddNewLine("Adding left blocker to right antenna")
+					spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
+				else:
+					Console.AddNewLine("Left blocker closes off line")
+
+		elif spikeAngles.size() == 1:
+			Console.AddNewLine("1 block-free spike angle so far")
+			if spikeAngles[0][1] == angleToRightRight:
+				Console.AddNewLine("There is line on the right side open")
+				if angleToMiddleLeft < angleToLeftRight:
+					spikeAngles.append([angleToMiddleLeft, angleToLeftRight])
+					Console.AddNewLine("Adding left blocker seam to middle")
+				else:
+					Console.AddNewLine("No seam between left and middle")
+				if angleToLeftLeft < angleToRightAntenna:
+					Console.AddNewLine("Adding left blocker to right antenna")
+					spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
+				else:
+					Console.AddNewLine("Left blocker closes off line")
+			else:
+				# Middle must be blocking with a seam to right, or they aren't in the block.
+				Console.AddNewLine("Line is not open on the right", Color.PLUM)
+				if angleToMiddleLeft < angleToLeftRight:
+					spikeAngles.append([angleToMiddleLeft, angleToLeftRight])
+					Console.AddNewLine("Adding left blocker seam to middle")
+				else:
+					Console.AddNewLine("No seam between left and middle")
+				if angleToLeftLeft < angleToRightAntenna:
+					Console.AddNewLine("Adding left blocker to right antenna")
+					spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
+				else:
+					Console.AddNewLine("Left blocker closes off line")
+		else:
+			Console.AddNewLine("2 block-free spike angles so far")
+			if angleToMiddleLeft < angleToLeftRight:
+				spikeAngles.append([angleToMiddleLeft, angleToLeftRight])
+				Console.AddNewLine("Adding left blocker seam to middle")
+			else:
+				Console.AddNewLine("No seam between left and middle")
+			if angleToLeftLeft < angleToRightAntenna:
+				Console.AddNewLine("Adding left blocker to right antenna")
+				spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
+			else:
+				Console.AddNewLine("Left blocker closes off line")
+
+	else:
+		Console.AddNewLine("Apparently opposition left blocker not blocking", Color.PLUM)
+		if oppositionMiddleBlocker.stateMachine.currentState == oppositionMiddleBlocker.blockState:
+			if angleToMiddleLeft < angleToRightAntenna:
+				Console.AddNewLine("Adding middle to antenna seam")
+				spikeAngles.append([angleToMiddleLeft, angleToRightAntenna])
+			else:
+				Console.AddNewLine("Middle covers line... what a huge lad")
+		elif oppositionRightBlocker.stateMachine.currentState == oppositionRightBlocker.blockState:
+			if angleToRightLeft < angleToRightAntenna:
+				Console.AddNewLine("Adding right to far antenna seam")
+				spikeAngles.append([angleToRightLeft, angleToRightAntenna])
+			else:
+				Console.AddNewLine("Right covers line on the other side... immense")
+		else:
+			Console.AddNewLine("No block, adding whole net")
+			spikeAngles.append([angleToLeftAntenna, angleToRightAntenna])
+
+	for pair in spikeAngles:
+		Console.AddNewLine("Spike angle: " + str("%.1f" % rad_to_deg(pair[0])) + " " + str("%.1f" % rad_to_deg(pair[1])), Color.PLUM)
+	if spikeAngles.size() == 0:
+		Console.AddNewLine("No possible spike angles, must be some lanky blockers...", Color.PLUM)
+	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightAntenna)) + " degrees to right antenna", Color.PLUM)
 
 	# We need to be able to list the angles available in terms of:
 	# a) left antenna to left blocker left hand
@@ -225,16 +385,25 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	# plus the athlete's internal quirks, then randomly choose between the options
 
 	#FindPermissableAnglesDisregardingBlock(athlete)
-	var leftmostPossibleSpikeAngleDisregardingBlock:float
-	var rightmostPossibleSpikeAngleDisregardingBlock:float
+	var playerToLeftCornerVector = Vector3(-athlete.setRequest.target.x - athlete.team.flip * 9, 0, -athlete.setRequest.target.z + athlete.team.flip * 4.5)
+	var playerToRightCornerVector = Vector3(-athlete.setRequest.target.x - athlete.team.flip * 9, 0, -athlete.setRequest.target.z - athlete.team.flip * 4.5)
+	#athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target) + playerToRightCornerVector #Vector3(athlete.team.flip * -9, 0, athlete.team.flip * 4.5)
+	var angleToLeftCorner = Maths.SignedAngle(playerToNetVector, playerToLeftCornerVector, Vector3.DOWN)
+	var angleToRightCorner = Maths.SignedAngle(playerToNetVector, playerToRightCornerVector, Vector3.DOWN)
 
+	### Now we need to make a list of angles to test whether the ball will go in along. Binary search.
 
+	#FindPermissableAnglesDisregardingBlock(athlete)
 
-
+	var spikeAngleTopDown
 	var lineCross = randf()
-	var spikeAngleTopDown = lerp(angleToLeftAntenna, angleToRightAntenna, lineCross)
+	if spikeAngles.size() > 0:
+		var choice = randi()%spikeAngles.size()
+		spikeAngleTopDown = lerp(spikeAngles[choice][0], spikeAngles[choice][1], lineCross)
+	else:
+		spikeAngleTopDown = lerp(angleToLeftCorner, angleToRightCorner, lineCross)
 #	spikeAngleTopDown = PI/4
-#	Console.AddNewLine(str("%.1f" % rad_to_deg(spikeAngleTopDown)) + " potential spike angle")
+#	Console.AddNewLine(str("%.1f" % rad_angleToRightCornerto_deg(spikeAngleTopDown)) + " potential spike angle")
 
 	var furthestCourtPoint:Vector3
 	# Find the nearest intersection to the edge of the court along the line
@@ -250,6 +419,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 #	Console.AddNewLine(str("%.1f" % b) + " b")
 
 	var baselineZIntercept:float = m * 9 * -athlete.team.flip + b
+#	Console.AddNewLine(str("%.1f" % baselineZIntercept) + " baseline z intercept")
 	# If the baseline intercept is wider than the antennae, the ball is out on the side first
 	if abs(baselineZIntercept) > 4.5:
 		var leftSideXIntercept:float = (4.5 - b)/m
@@ -265,37 +435,35 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	else:
 		furthestCourtPoint = Vector3(9 * -athlete.team.flip, 0, baselineZIntercept)
 
+	athlete.team.mManager.cube.position = furthestCourtPoint
 	var u = 27.78 # 100 kph spike
-	var topspin = 3.0
+
 
 	var lowestNetPass = Vector3(0, 2.43 + 0.35, b)
 #	athlete.team.mManager.cylinder.position = lowestNetPass
-	var lowestPossibleSpike = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, lowestNetPass, u, false, topspin)
+	var lowestPossibleSpike = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, lowestNetPass, u, false, customTopspin)
 	if lowestPossibleSpike == null:
 		Console.AddNewLine("Lowest possible spike turned out to not be possible after all. How embarrassing!")
 		lowestPossibleSpike = Vector3.ZERO
-	var closestPossibleSpikeTarget:Vector3 = Maths.BallPositionAtGivenHeight(athlete.setRequest.target, lowestPossibleSpike, 0, topspin)
+		athlete.team.mManager.Pause()
+	var closestPossibleSpikeTarget:Vector3 = Maths.BallPositionAtGivenHeight(athlete.setRequest.target, lowestPossibleSpike, ballRadius, customTopspin)
 
-	var spikeDepth:float = randf_range(0.03, .97)
 	athlete.ball.attackTarget = closestPossibleSpikeTarget
+	athlete.team.mManager.sphere.position = closestPossibleSpikeTarget
 
-# if the furthest point is closer than the edge of the court, choose some depth randomly
+
+	var landingIn:bool = false
+# if the furthest point is closer than the edge of the court, choose some depth randomly (for now)
 	if -athlete.team.flip * furthestCourtPoint.x > -athlete.team.flip * closestPossibleSpikeTarget.x:
 		if closestPossibleSpikeTarget.z > -4.5 && closestPossibleSpikeTarget.z < 4.5:
+			landingIn = true
+			var spikeDepth:float = randf_range(0.03, .97)
 			athlete.ball.attackTarget = lerp(closestPossibleSpikeTarget, furthestCourtPoint, spikeDepth)
 
-	# Otherwise though, it's just flying long currently...
-
-
-#	athlete.team.mManager.sphere.position = closestPossibleSpikeTarget
-#	athlete.team.mManager.cube.position = athlete.ball.attackTarget
-#	athlete.team.mManager.cylinder.position = furthestCourtPoint
-
-#	athlete.ball.attackTarget = Maths.XZVector(lerp(athlete.ball.FindNetPass(), furthestCourtPoint, spikeDepth))
-
-#	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target)
-#	athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target) + topDownSpikeVector
-#	Console.AddNewLine(str("%.1f" % baselineZIntercept) + " baseline z intercept")
+	# Otherwise though, it's just flying long...
+	if !landingIn:
+		Console.AddNewLine("Spike landing out :(")
+		ball.attackTarget = furthestCourtPoint
 	var vel = Maths.FindParabolaForGivenSpeed(athlete.setRequest.target, ball.attackTarget, u, false, 3.0)
 	if vel == null:
 		Console.AddNewLine("ERROR, impossible parabola requested")
@@ -317,9 +485,9 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 	var ball = athlete.ball
 	Console.AddNewLine("Reading block")
 
-	var oppositionLeftBlocker = otherTeam.defendState.leftSideBlocker
-	var oppositionMiddleBlocker = otherTeam.defendState.middleBlocker
-	var oppositionRightBlocker = otherTeam.defendState.rightSideBlocker
+	oppositionLeftBlocker = otherTeam.defendState.leftSideBlocker
+	oppositionMiddleBlocker = otherTeam.defendState.middleBlocker
+	oppositionRightBlocker = otherTeam.defendState.rightSideBlocker
 
 
 	var leftBlockerPossiblePosition
@@ -365,7 +533,7 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 			# Has the middle jumped on our middle?
 			var middleLandingTime = 0
 			if !oppositionMiddleBlocker.rb.freeze:
-				Console.AddNewLine("Opposition middle has already jumped")
+				Console.AddNewLine("Opposition middle has already jumped", Color.BLUE)
 				middleLandingTime = Maths.TimeTillBallReachesHeight(oppositionMiddleBlocker.position, oppositionMiddleBlocker.linear_velocity, 0, 1.0)
 
 			if timeTillSpikeContact < oppositionMiddleBlocker.blockState.jumpTime + middleLandingTime:
@@ -531,8 +699,8 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 	else:
 		var playerToRightLeft = Vector3(-athlete.setRequest.target.x, 0, rightBlockerLeftCoverage - athlete.setRequest.target.z)
 		var playerToRightRight = Vector3(-athlete.setRequest.target.x, 0, rightBlockerRightCoverage - athlete.setRequest.target.z)
-		var angleToRightLeft = Maths.SignedAngle(playerToNetVector, playerToRightLeft, Vector3.DOWN)
-		var angleToRightRight = Maths.SignedAngle(playerToNetVector, playerToRightRight, Vector3.DOWN)
+		angleToRightLeft = Maths.SignedAngle(playerToNetVector, playerToRightLeft, Vector3.DOWN)
+		angleToRightRight = Maths.SignedAngle(playerToNetVector, playerToRightRight, Vector3.DOWN)
 
 #		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightRight)) + " degrees to (opposition perspective) right blocker right hand")
 #		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightLeft)) + " degrees to (opposition perspective) right blocker left hand")
@@ -542,13 +710,13 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 	elif is_nan(middleBlockerLeftCoverage):
 		Console.AddNewLine("Don't mind this error, it's just the debug shapes not having a position", Color.RED)
 	else:
-		athlete.team.mManager.cube.position = Vector3(0, oppositionMiddleBlocker.stats.blockHeight, middleBlockerLeftCoverage)
-		athlete.team.mManager.sphere.position = Vector3(0, oppositionMiddleBlocker.stats.blockHeight, middleBlockerRightCoverage)
+		#athlete.team.mManager.cube.position = Vector3(0, oppositionMiddleBlocker.stats.blockHeight, middleBlockerLeftCoverage)
+		#athlete.team.mManager.sphere.position = Vector3(0, oppositionMiddleBlocker.stats.blockHeight, middleBlockerRightCoverage)
 
 		var playerToMiddleLeft = Vector3(-athlete.setRequest.target.x, 0, middleBlockerLeftCoverage - athlete.setRequest.target.z)
 		var playerToMiddleRight = Vector3(-athlete.setRequest.target.x, 0, middleBlockerRightCoverage - athlete.setRequest.target.z)
-		var angleToMiddleLeft = Maths.SignedAngle(playerToNetVector, playerToMiddleLeft, Vector3.DOWN)
-		var angleToMiddleRight = Maths.SignedAngle(playerToNetVector, playerToMiddleRight, Vector3.DOWN)
+		angleToMiddleLeft = Maths.SignedAngle(playerToNetVector, playerToMiddleLeft, Vector3.DOWN)
+		angleToMiddleRight = Maths.SignedAngle(playerToNetVector, playerToMiddleRight, Vector3.DOWN)
 
 #		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleRight)) + " degrees to (opposition perspective) middle blocker right hand")
 #		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleLeft)) + " degrees to (opposition perspective) middle blocker left hand")
@@ -561,8 +729,8 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 
 		var playerToLeftLeft = Vector3(-athlete.setRequest.target.x, 0, leftBlockerLeftCoverage - athlete.setRequest.target.z)
 		var playerToLeftRight = Vector3(-athlete.setRequest.target.x, 0, leftBlockerRightCoverage - athlete.setRequest.target.z)
-		var angleToLeftLeft = Maths.SignedAngle(playerToNetVector, playerToLeftLeft, Vector3.DOWN)
-		var angleToLeftRight = Maths.SignedAngle(playerToNetVector, playerToLeftRight, Vector3.DOWN)
+		angleToLeftLeft = Maths.SignedAngle(playerToNetVector, playerToLeftLeft, Vector3.DOWN)
+		angleToLeftRight = Maths.SignedAngle(playerToNetVector, playerToLeftRight, Vector3.DOWN)
 
 #		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftRight)) + " degrees to (opposition perspective) left blocker right hand")
 #		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftLeft)) + " degrees to (opposition perspective) left blocker left hand")
@@ -571,8 +739,8 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 
 
 	var flip = athlete.team.flip
-	var leftOverlap:bool = false
-	var rightOverlap:bool = false
+	leftOverlap = false
+	rightOverlap = false
 
 	if !middleBlockerLeftCoverage || ! leftBlockerRightCoverage:
 		Console.AddNewLine("Middle and left blocker didn't both show up")
@@ -592,6 +760,8 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 
 	if leftOverlap && rightOverlap:
 		Console.AddNewLine("Triple Block! (Predicted)", Color.DARK_TURQUOISE)
+
+
 #	var blockMaximumHeight:float = 0
 #	var ballRadius:float = 0.13
 #	var opposingBlockers:Array = []
@@ -707,6 +877,11 @@ func CalculateTimeTillSpike(athlete:Athlete):
 func FindPermissableAnglesDisregardingBlock(athlete:Athlete):
 	# Technically should check if they are within range of the net...
 	# IE not spiking from 20km back, or from under the net height by an unfeasible margin
+	# Under net height will affect a key assumption that the lowest netpass is the best
+
+
+
+
 
 	var flip = athlete.team.flip
 
@@ -716,31 +891,44 @@ func FindPermissableAnglesDisregardingBlock(athlete:Athlete):
 
 	var initialVelocityMagnitude:float = 100
 
-	landingPoint.x = -4.5 * flip
+	# First, does any corner spike land in?
+	# To do this, I need the angle to the corner, which we have, and then the netpass, which can be worked
+	# out, and finally the ball position when it touches the ground.
+
+	# How does topspin fall into this? Same topspin every time? Yes, 3.0 is the amount
+
+	var playerToNetVector = Vector3(-athlete.setRequest.target.x, 0, 0)
+
+	var playerToLeftCornerVector = Vector3(-athlete.setRequest.target.x - athlete.team.flip * 9, 0, -athlete.setRequest.target.z + athlete.team.flip * 4.5)
+	var playerToRightCornerVector = Vector3(-athlete.setRequest.target.x - athlete.team.flip * 9, 0, -athlete.setRequest.target.z - athlete.team.flip * 4.5)
+
+	var angleToLeftCorner = Maths.SignedAngle(playerToNetVector, playerToLeftCornerVector, Vector3.DOWN)
+	var angleToRightCorner = Maths.SignedAngle(playerToNetVector, playerToRightCornerVector, Vector3.DOWN)
+
+# for left corner
+	var leftCorner:Vector3 = Vector3(-athlete.team.flip * 9, 0, -athlete.team.flip * 4.5)
+	var distanceFactor:float = contactPoint.x / (abs(contactPoint.x) + abs(leftCorner.x))
+	if contactPoint.x < 0:
+		distanceFactor *= -1;
+	netPass = contactPoint + ( - contactPoint) * distanceFactor
 	netPass.y = 2.43 + ballRadius
+
+
+	landingPoint.x = -4.5 * flip
+
 
 	var yDistBallToNetpass = contactPoint.y - netPass.y
 	if yDistBallToNetpass < 0 :
 		Console.AddNewLine("Warning: spiking from below net height")
 
-	var xDistToNet:float = abs(contactPoint.x)
+	var testSpike = Maths.FindParabolaForGivenSpeed(contactPoint, netPass, 100.0/3.6, false, 3)
+	var testLandingSpot = Maths.BallPositionAtGivenHeight(contactPoint, testSpike, 0, 3)
 
-	var topDownAngle:float
-	var sideOnAngle:float
-
-
-
+	if abs(testLandingSpot.x) > abs(leftCorner.x):
+		Console.AddNewLine("ball will land out past the service line", Color.DARK_GOLDENROD)
 
 
-
-
-
-
-
-
-
-
-	var playerToNetVector = Vector3(-athlete.setRequest.target.x, 0, 0)
+	#var playerToNetVector = Vector3(-athlete.setRequest.target.x, 0, 0)
 	var playerToLeftAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * (4.5 - ballRadius) - athlete.setRequest.target.z)
 	var playerToRightAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * (-4.5 + ballRadius) - athlete.setRequest.target.z)
 

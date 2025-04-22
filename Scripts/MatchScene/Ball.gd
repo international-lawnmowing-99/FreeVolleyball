@@ -2,9 +2,6 @@ extends RigidBody3D
 
 class_name Ball
 
-#var g
-var _parented:bool = false
-var _pseudoParent
 var wasLastTouchedByA:bool
 var attackTarget
 var mManager:MatchManager
@@ -51,6 +48,7 @@ func _on_ball_body_entered(body):
 #	print (body.name)
 	if inPlay:
 		if body.is_in_group("ZoneOut"):
+			mManager.sphere.position = position
 #		print("out got him yes")
 			floating = false
 			floatDisplacement = Vector3.ZERO
@@ -63,6 +61,7 @@ func _on_ball_body_entered(body):
 				Console.AddNewLine("ball out, point to a")
 				mManager.PointToTeamA()
 		elif body.is_in_group("ZoneInA"):
+			mManager.sphere.position = position
 			floating = false
 			floatDisplacement = Vector3.ZERO
 			inPlay = false
@@ -70,12 +69,14 @@ func _on_ball_body_entered(body):
 			Console.AddNewLine("Ball in, point to a")
 
 		elif body.is_in_group("ZoneInB"):
+			mManager.sphere.position = position
 			floating = false
 			floatDisplacement = Vector3.ZERO
 			inPlay = false
 			mManager.PointToTeamB()
 			Console.AddNewLine("Ball in, point to b", Color.BISQUE)
 		elif body.is_in_group("ZoneUnderNet"):
+			mManager.sphere.position = position
 			inPlay = false
 			if wasLastTouchedByA:
 				Console.AddNewLine("ball under net, point to b", Color.GOLD)
@@ -86,16 +87,6 @@ func _on_ball_body_entered(body):
 				mManager.PointToTeamA()
 		elif body.is_in_group("Net"):
 			Console.AddNewLine("Netflipper", Color.CORAL)
-
-func PretendToBeParented(node):
-	_parented = true
-	_pseudoParent = node
-
-
-#func SetTimeWellBehavedParabolaII(startPos:Vector3, endPos:Vector3):
-#	var g = ProjectSettings.get_setting("physics/3d/default_gravity") * (gravity_scale)
-#	var yVel = sqrt(2 * g * abs(endPos.y - startPos.y))
-#		return yVel / g + sqrt(2 * g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / g
 
 func Serve(startPos, _attackTarget, serveHeight, _topspin):
 	mManager.cube.position = Vector3.ZERO
