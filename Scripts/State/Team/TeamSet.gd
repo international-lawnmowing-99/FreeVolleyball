@@ -570,17 +570,15 @@ func ChooseSpiker(team:TeamNode):
 		Console.AddNewLine("Does the setter favour any set? Do they prefer to spread it around, or to set their best hitter all the time?")
 		Console.AddNewLine("Does the hitter have any connection modifier from playing with the setter for a long time?") # Maybe in version 2...
 
-#		if team.outsideBack in possibleSpikers:
-#			team.chosenSpiker = team.outsideBack
-#			team.setTarget = team.outsideBack.setRequest
-#			return
+
 
 		var setChoice = randi()%possibleSpikers.size()
 
-		team.chosenSpiker = possibleSpikers[setChoice] #team.middleFront #
+		team.chosenSpiker = possibleSpikers[setChoice]
+		#if team.middleFront in possibleSpikers:
+			#team.chosenSpiker = team.middleFront
 
-		if team.oppositeHitter in possibleSpikers:
-			team.chosenSpiker = team.oppositeHitter
+
 
 		team.setTarget = team.chosenSpiker.setRequest
 		Console.AddNewLine("Chosen spiker is " + team.chosenSpiker.stats.lastName)

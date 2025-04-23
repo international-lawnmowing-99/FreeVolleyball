@@ -55,7 +55,7 @@ func Enter(athlete:Athlete):
 
 func Update(athlete:Athlete):
 	athlete.DontFallThroughFloor()
-
+	athlete.stateMachine.SetCurrentState(athlete.chillState)
 
 	if blockingTarget:
 		athlete.leftIKTarget.global_transform.origin = athlete.model.position + athlete.model.transform.basis.x/4.0 + Vector3.UP * 2 + athlete.model.transform.basis.z * 2
@@ -78,11 +78,10 @@ func Update(athlete:Athlete):
 
 
 			InternalBlockState.Preparing:
-				athlete.stateMachine.SetCurrentState(athlete.coverState)
 #					athlete.model.rotation.slerp(Vector3(0, -athlete.team.flip * PI/2, 0), athlete.myDelta * 10)
 				athlete.model.rotation.y = -athlete.team.flip * PI/2
 				#Perhaps adding a random offset would make this look less choreographed...
-				var timeFromSpikeToNet =  blockingTarget.setRequest.target.distance_to(athlete.moveTarget + Vector3.UP * blockingTarget.setRequest.target.y)/27.7
+				var timeFromSpikeToNet =  blockingTarget.setRequest.target.distance_to(athlete.moveTarget + Vector3.UP * blockingTarget.setRequest.target.y)/(100.0/3.6)
 				if athlete.rb.freeze && blockingTarget.spikeState.CalculateTimeTillSpike(blockingTarget) + timeFromSpikeToNet <= jumpTime:
 					Console.AddNewLine(athlete.stats.lastName + " jumps to block (commit)")
 					internalBlockState = InternalBlockState.Jump

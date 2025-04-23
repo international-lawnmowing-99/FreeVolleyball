@@ -18,6 +18,7 @@ func Update(team:TeamNode):
 	team.UpdateTimeTillDigTarget()
 #	Console.AddNewLine(str((team.ball.position - team.chosenSpiker.setRequest.target).length()))
 	if !hit &&team.ball.inPlay && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight:
+		team.ball.position = team.chosenSpiker.setRequest.target # lol, hacky but might make the predictions work
 		SpikeBall(team)
 #		timeEnd = Time.get_unix_time_from_system()
 #		var timeElapsed = timeEnd - timeStart
@@ -46,6 +47,8 @@ func Exit(_team:TeamNode):
 	pass
 
 func SpikeBall(team:TeamNode):
+	Console.AddNewLine(str("%.3f" % team.chosenSpiker.setRequest.target.distance_to(team.ball.position)) + " distance from predicted contact point to actual", Color.DEEP_PINK)
+
 	var netHeightPlusBallClearance:float = 2.43 + .13
 	var ball:Ball = team.ball
 
@@ -60,13 +63,20 @@ func SpikeBall(team:TeamNode):
 
 		netPass = ball.position + (ball.attackTarget - ball.position) * distanceFactor
 
-		if netPass.y > netHeightPlusBallClearance:
+
+		var u = 100.0/3.6
+		var _topspin = team.chosenSpiker.spikeState.customTopspin
+		var _newVel = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, _topspin)
+		var realNetPass = Maths.FindNetPass(ball.position, ball.attackTarget, _newVel, _topspin)
+		Console.AddNewLine("Net Pass: " + str(realNetPass), Color.LIME_GREEN)
+
+		if realNetPass.y > netHeightPlusBallClearance:
 			#var xzDistToTarget:float = (Vector3(ball.position.x, 0, ball.position.z) - Vector3(ball.attackTarget.x, 0, ball.attackTarget.z)).length()
 			#var y = ball.position.y
 			#var g = team.chosenSpiker.g
 
 			#initial velocity of spike in mps
-			var u = 27.78
+
 			#print("Spike Speed(m/s): " + str(u))
 
 			ball.difficultyOfReception = u/37.0*team.chosenSpiker.stats.spike*2
@@ -79,18 +89,28 @@ func SpikeBall(team:TeamNode):
 			ball.linear_velocity = newVel
 			#await team.get_tree().process_frame
 			#ball.linear_velocity = Maths.FindParabolaForGivenSpeed(ball.position, ball.attackTarget, u, false, 3.0)
-			var realNetPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, ball.topspin)
-			Console.AddNewLine("Net Pass: " + str(realNetPass))
-			ball.blockResolver.netPass = realNetPass
+
 		else:
-			Console.AddNewLine("Ball will clip net if hit at that speed, finding easy parabola")
+
+			Console.AddNewLine("Ball will clip net if hit at that speed, finding easy parabola", Color.RED)
+			Console.AddNewLine(str(netPass.y), Color.RED)
 			#yet again, somehow necessary
+
+			### This doesn't always go over the net, especially at sharp angles
 			ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+			###
+
+
 			#await team.get_tree().process_frame
 			#ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
 			ball.difficultyOfReception = rng.randf_range(0, team.chosenSpiker.stats.spike/4)
 			#team.setTarget = null
 			#print(ball.attackTarget)
+
+
+		ball.blockResolver.netPass = realNetPass
+		if realNetPass.y < netHeightPlusBallClearance:
+			Console.AddNewLine("ERROR: Net pass won't clear net", Color.RED)
 
 		if abs(netPass.z) >= 4.49:
 			Console.AddNewLine("Ball will pass outside antennae lad", Color.CRIMSON)
