@@ -423,24 +423,36 @@ func ChooseSpikingStrategy(athlete:Athlete):
 		# If one is, we need to step using a binary method to find the angle at which the spike will
 		# clip the line.
 
-
-
 		if spikeAngles[i][0] < angleToLeftCorner && spikeAngles[i][1] > angleToRightCorner:
-			var x
 			# Large area open, need to split 3 ways.
+			revisedSpikeableAngles.append([spikeAngles[i][0], angleToLeftCorner])
+			revisedSpikeableAngles.append([angleToLeftCorner, angleToRightCorner])
+			revisedSpikeableAngles.append([angleToRightCorner, spikeAngles[i][1]])
+
 		elif spikeAngles[i][0] < angleToLeftCorner && spikeAngles[i][1] > angleToLeftCorner:
 			# left corner is in the middle.
-			var x
+			revisedSpikeableAngles.append([spikeAngles[i][0], angleToLeftCorner])
+			revisedSpikeableAngles.append([angleToLeftCorner, spikeAngles[i][1]])
+
 		elif spikeAngles[i][0] < angleToRightCorner && spikeAngles[i][1] > angleToRightCorner:
 			# right corner is in the middle.
-			var x
+			revisedSpikeableAngles.append([spikeAngles[i][0], angleToRightCorner])
+			revisedSpikeableAngles.append([angleToRightCorner, spikeAngles[i][0]])
+
 		else:
-			var x
 			# Presumably most of the time we'll end up here with no adjustments.
+			revisedSpikeableAngles.append(spikeAngles[i])
 
-
-
-	# Choose a spike angle
+	for line in revisedSpikeableAngles:
+		Console.AddNewLine("Revised Angle: " + str("%.1f" % rad_to_deg(line[0])) + ", " + str("%.1f" % rad_to_deg(line[1])), Color.PEACH_PUFF)
+		if WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, line[0], athlete.team.flip, customTopspin):
+			Console.AddNewLine("1st angle will go in", Color.PEACH_PUFF)
+		else:
+			Console.AddNewLine("1st angle won't go in", Color.PEACH_PUFF)
+		if WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, line[1], athlete.team.flip, customTopspin):
+			Console.AddNewLine("2nd angle will go in", Color.PEACH_PUFF)
+		else:
+			Console.AddNewLine("2nd angle won't go in", Color.PEACH_PUFF)	# Choose a spike angle
 
 	if spikeAngles.size() > 0:
 		var choice = randi()%spikeAngles.size()
