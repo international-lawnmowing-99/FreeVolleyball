@@ -27,9 +27,9 @@ var blockingTarget:Athlete
 var jumpTime:float
 
 func Enter(athlete:Athlete):
-	athlete.blockDebug.visible = true
-	athlete.debug1.visible = true
-	athlete.debug2.visible = true
+	#athlete.blockDebug.visible = true
+	#athlete.debug1.visible = true
+	#athlete.debug2.visible = true
 	nameOfState="Block"
 	athlete.animTree.set("parameters/state/transition_request", "moving")
 	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
@@ -55,7 +55,7 @@ func Enter(athlete:Athlete):
 
 func Update(athlete:Athlete):
 	athlete.DontFallThroughFloor()
-	athlete.stateMachine.SetCurrentState(athlete.chillState)
+	#athlete.stateMachine.SetCurrentState(athlete.chillState)
 
 	if blockingTarget:
 		athlete.leftIKTarget.global_transform.origin = athlete.model.position + athlete.model.transform.basis.x/4.0 + Vector3.UP * 2 + athlete.model.transform.basis.z * 2

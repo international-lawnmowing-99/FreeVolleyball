@@ -233,6 +233,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 			if oppositionRightBlocker.stateMachine.currentState == oppositionRightBlocker.blockState:
 				Console.AddNewLine("Opposition right blocker completely covers line")
 				if angleToRightLeft < angleToMiddleRight:
+					spikeAngles.append([angleToRightLeft, angleToMiddleRight])
 					Console.AddNewLine("Adding middle, seam to opposition right blocker")
 				else:
 					Console.AddNewLine("Overlap between middle and opposition right blocker, double at least...")
@@ -360,7 +361,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 		Console.AddNewLine("Spike angle: " + str("%.1f" % rad_to_deg(pair[0])) + " " + str("%.1f" % rad_to_deg(pair[1])), Color.PLUM)
 	if spikeAngles.size() == 0:
 		Console.AddNewLine("No possible spike angles, must be some lanky blockers...", Color.PLUM)
-	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightAntenna)) + " degrees to right antenna", Color.PLUM)
+	#Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightAntenna)) + " degrees to right antenna", Color.PLUM)
 
 	# We need to be able to list the angles available in terms of:
 	# a) left antenna to left blocker left hand
@@ -395,24 +396,24 @@ func ChooseSpikingStrategy(athlete:Athlete):
 
 	#FindPermissableAnglesDisregardingBlock(athlete)
 
-	var spikeAngleTopDown
-	var lineCross = randf()
 
-	var canSpikeToLeftCorner:bool = WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, angleToLeftCorner, athlete.team.flip, customTopspin)
-	if !canSpikeToLeftCorner:
-		Console.AddNewLine("Can't spike to left corner", Color.OLIVE_DRAB)
-	var canSpikeToRightCorner:bool = WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, angleToLeftCorner, athlete.team.flip, customTopspin)
-	if !canSpikeToRightCorner:
-		Console.AddNewLine("Can't spike to right corner", Color.OLIVE_DRAB)
-	if !canSpikeToLeftCorner && !canSpikeToRightCorner:
-		Console.AddNewLine("Can't spike at all from this position :(", Color.OLIVE_DRAB)
-		# Choose another option from our exciting menu of attacking options...
+
+	#var canSpikeToLeftCorner:bool = WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, angleToLeftCorner, athlete.team.flip, customTopspin)
+	#if !canSpikeToLeftCorner:
+		#Console.AddNewLine("Can't spike to left corner", Color.OLIVE_DRAB)
+	#var canSpikeToRightCorner:bool = WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, angleToLeftCorner, athlete.team.flip, customTopspin)
+	#if !canSpikeToRightCorner:
+		#Console.AddNewLine("Can't spike to right corner", Color.OLIVE_DRAB)
+	#if !canSpikeToLeftCorner && !canSpikeToRightCorner:
+		#Console.AddNewLine("Can't spike at all from this position :(", Color.OLIVE_DRAB)
+		## Choose another option from our exciting menu of attacking options...
 
 
 
 	Console.AddNewLine(str(spikeAngles.size()) + " possible spike angles", Color.DEEP_SKY_BLUE)
 	var revisedSpikeableAngles:Array = []
 	for i:int in range(spikeAngles.size()):
+		#Console.AddNewLine("Possible spike angle: " + str("%.1f" % rad_to_deg(spikeAngles[i][0])) + ", " + str("%.1f" % rad_to_deg(spikeAngles[i][1])), Color.CRIMSON)
 		# For each spike angle, we need to see if it includes the angle to the corners
 		# If it does, we need to split into two more angles, as the idea is to move along the court
 		# lines to see if it's spikeable.
@@ -428,44 +429,96 @@ func ChooseSpikingStrategy(athlete:Athlete):
 			revisedSpikeableAngles.append([spikeAngles[i][0], angleToLeftCorner])
 			revisedSpikeableAngles.append([angleToLeftCorner, angleToRightCorner])
 			revisedSpikeableAngles.append([angleToRightCorner, spikeAngles[i][1]])
+			Console.AddNewLine("Splitting angle into 3", Color.PERU)
 
 		elif spikeAngles[i][0] < angleToLeftCorner && spikeAngles[i][1] > angleToLeftCorner:
 			# left corner is in the middle.
 			revisedSpikeableAngles.append([spikeAngles[i][0], angleToLeftCorner])
 			revisedSpikeableAngles.append([angleToLeftCorner, spikeAngles[i][1]])
+			Console.AddNewLine("Splitting angle into 2 (left corner)", Color.PERU)
 
 		elif spikeAngles[i][0] < angleToRightCorner && spikeAngles[i][1] > angleToRightCorner:
 			# right corner is in the middle.
 			revisedSpikeableAngles.append([spikeAngles[i][0], angleToRightCorner])
-			revisedSpikeableAngles.append([angleToRightCorner, spikeAngles[i][0]])
+			revisedSpikeableAngles.append([angleToRightCorner, spikeAngles[i][1]])
+			Console.AddNewLine("Splitting angle into 2 (right corner)", Color.PERU)
 
 		else:
 			# Presumably most of the time we'll end up here with no adjustments.
 			revisedSpikeableAngles.append(spikeAngles[i])
+			Console.AddNewLine("No Change to Angle", Color.PERU)
 
+	Console.AddNewLine(str(revisedSpikeableAngles.size()) + " revised spike angles", Color.DEEP_SKY_BLUE)
+
+	const MAX_ITERATIONS:int = 8
 	for line in revisedSpikeableAngles:
+		var firstAngleGood: bool = false
+		var secondAngleGood: bool = false
 		Console.AddNewLine("Revised Angle: " + str("%.1f" % rad_to_deg(line[0])) + ", " + str("%.1f" % rad_to_deg(line[1])), Color.PEACH_PUFF)
 		if WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, line[0], athlete.team.flip, customTopspin):
 			Console.AddNewLine("1st angle will go in", Color.PEACH_PUFF)
+			firstAngleGood = true
 		else:
 			Console.AddNewLine("1st angle won't go in", Color.PEACH_PUFF)
+
 		if WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, line[1], athlete.team.flip, customTopspin):
 			Console.AddNewLine("2nd angle will go in", Color.PEACH_PUFF)
+			secondAngleGood = true
 		else:
-			Console.AddNewLine("2nd angle won't go in", Color.PEACH_PUFF)	# Choose a spike angle
+			Console.AddNewLine("2nd angle won't go in", Color.PEACH_PUFF)
 
-	if spikeAngles.size() > 0:
-		var choice = randi()%spikeAngles.size()
-		spikeAngleTopDown = lerp(spikeAngles[choice][0], spikeAngles[choice][1], lineCross)
+		if !firstAngleGood && !secondAngleGood:
+			# there's no way of making this work
+			line[0] = NAN
+			Console.AddNewLine("Discarding open spike angle as no spike will land in", Color.PEACH_PUFF)
+
+		elif !firstAngleGood && secondAngleGood:
+			var lastBadAngle = line[0]
+			var lastGoodAngle = line[1]
+			for i:int in range(MAX_ITERATIONS):
+				var testAngle = (lastBadAngle + lastGoodAngle)/2
+				if WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, testAngle, athlete.team.flip, customTopspin):
+					lastGoodAngle = testAngle
+				else:
+					lastBadAngle = testAngle
+
+			line[0] = lastGoodAngle
+			# if the angle isn't found this will just be the second angle, I guess that's ok?
+			Console.AddNewLine("1st angle updated to " + str("%.1f" % rad_to_deg(line[0])), Color.PEACH_PUFF)
+
+		elif firstAngleGood && !secondAngleGood:
+			var lastBadAngle = line[1]
+			var lastGoodAngle = line[0]
+			for i:int in range(MAX_ITERATIONS):
+				var testAngle = (lastBadAngle + lastGoodAngle)/2
+				if WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, testAngle, athlete.team.flip, customTopspin):
+					lastGoodAngle = testAngle
+				else:
+					lastBadAngle = testAngle
+
+			line[1] = lastGoodAngle
+			Console.AddNewLine("1st angle updated to " + str("%.1f" % rad_to_deg(line[1])), Color.PEACH_PUFF)
+
+	var finalSpikeAngles = []
+	for anglePair in revisedSpikeableAngles:
+		if !is_nan(anglePair[0]):
+			finalSpikeAngles.append(anglePair)
+	Console.AddNewLine(str(finalSpikeAngles.size()) + " valid angles")
+
+	var spikeAngleTopDown
+	var lineCross = randf()
+
+	if finalSpikeAngles.size() > 0:
+		var choice = randi()%finalSpikeAngles.size()
+		spikeAngleTopDown = lerp(finalSpikeAngles[choice][0], finalSpikeAngles[choice][1], lineCross)
 
 
 	else:
-		assert(false)
+		#assert(false)
+		Console.AddNewLine("No open angles, swinging wildly", Color.CRIMSON)
 		spikeAngleTopDown = lerp(angleToLeftCorner, angleToRightCorner, lineCross)
 #	spikeAngleTopDown = PI/4
-#	Console.AddNewLine(str("%.1f" % rad_angleToRightCornerto_deg(spikeAngleTopDown)) + " potential spike angle")
-
-	var yes = WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, spikeAngleTopDown, athlete.team.flip, customTopspin)
+	Console.AddNewLine(str("%.1f" % rad_to_deg(spikeAngleTopDown)) + " chosen spike angle", Color.DARK_TURQUOISE)
 
 	var furthestCourtPoint:Vector3
 	# Find the nearest intersection to the edge of the court along the line
