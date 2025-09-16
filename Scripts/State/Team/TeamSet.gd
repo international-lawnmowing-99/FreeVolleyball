@@ -527,8 +527,25 @@ func ChooseSpiker(team:TeamNode):
 #	Console.AddNewLine("Choosing set option...")
 	if possibleSpikers.size() <= 0:
 		# Is there the opportunity to dump? Or should we do a release ball?
-#		if abs(team.receptionTarget.x) >
-		ballWillBeDumped = true
+		if abs(team.receptionTarget.x) > 3:
+			var centreOfCourtish = Vector3(randf_range(-6.5, -3), 0.5, randf_range(-2,2))
+			var trialVel:Vector3 = Maths.FindWellBehavedParabola(team.receptionTarget, team.flip * centreOfCourtish, randf_range(4, 5.5))
+			if trialVel.length() >= 10:
+				#Fix this
+				if typeof(Maths.FindParabolaForGivenSpeed(team.receptionTarget, Vector3(team.flip * Vector3(-4.5, 0, 0) - team.receptionTarget).normalized() + Vector3.UP, 10, true, 1.0)) == TYPE_VECTOR3:
+					trialVel = Maths.FindParabolaForGivenSpeed(team.receptionTarget, Vector3(team.flip * Vector3(-4.5, 0, 0) - team.receptionTarget).normalized() + Vector3.UP, 10, true, 1.0)
+				else:
+					Console.AddNewLine("Error finding trial vel")
+				Console.AddNewLine("Attempting to get ball towards middle of court", Color.AQUAMARINE)
+			if is_nan(trialVel.x):
+				print("Error finding trial vel")
+
+			else :
+				team.setTarget.target = centreOfCourtish
+			var freeBallContactLocation = Maths.BallPositionAtGivenHeight(team.receptionTarget, trialVel, 0.5, 1.0)
+		else:
+			ballWillBeDumped = true
+			Console.AddNewLine("$$$___~~~ No possible spikers, DUMPLING", Color.CRIMSON)
 
 		Console.AddNewLine("^^^___^^^  No possible spikers, release ball", Color.CRIMSON)
 		return
@@ -565,10 +582,10 @@ func ChooseSpiker(team:TeamNode):
 		for spiker:Athlete in possibleSpikers:
 			Console.AddNewLine(spiker.stats.lastName + " spike: " + str(spiker.stats.spike))
 
-		Console.AddNewLine("How repetitive is our choice - are we predictable?")
-		Console.AddNewLine("Do we have an explicit instruction from the coach?")
-		Console.AddNewLine("Does the setter favour any set? Do they prefer to spread it around, or to set their best hitter all the time?")
-		Console.AddNewLine("Does the hitter have any connection modifier from playing with the setter for a long time?") # Maybe in version 2...
+		#Console.AddNewLine("How repetitive is our choice - are we predictable?")
+		#Console.AddNewLine("Do we have an explicit instruction from the coach?")
+		#Console.AddNewLine("Does the setter favour any set? Do they prefer to spread it around, or to set their best hitter all the time?")
+		#Console.AddNewLine("Does the hitter have any connection modifier from playing with the setter for a long time?") # Maybe in version 2...
 
 
 
@@ -752,3 +769,9 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 
 
 	return athleteSpikeTime < Maths.SetTimeWellBehavedParabola(ball.position, spikeContactPos, Maths.BallMaxHeight(ball.position, ball.linear_velocity, 1.0))
+
+func HighBallSet():
+	pass
+
+func SetUpFreeBall():
+	pass

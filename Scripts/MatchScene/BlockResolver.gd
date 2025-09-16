@@ -198,11 +198,11 @@ func ResolveBlock():
 
 	# Ineffective block
 	if attackRoll>blockRoll * (1 + deflectGradient):
-		KillBlock()
+		ReflectBlock()
 		#SnickBlock()
 
 	elif blockRoll * (1 - deflectGradient) > attackRoll:
-		KillBlock()
+		TouchBlock()
 		#SnickBlock()
 	else:
 		KillBlock()

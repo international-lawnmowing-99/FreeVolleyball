@@ -93,7 +93,7 @@ func SpikeBall(team:TeamNode):
 		else:
 
 			Console.AddNewLine("Ball will clip net if hit at that speed, finding easy parabola", Color.RED)
-			Console.AddNewLine(str(netPass.y), Color.RED)
+			#Console.AddNewLine(str(netPass.y), Color.RED)
 			#yet again, somehow necessary
 
 			### This doesn't always go over the net, especially at sharp angles
@@ -108,7 +108,7 @@ func SpikeBall(team:TeamNode):
 			#print(ball.attackTarget)
 
 
-		ball.blockResolver.netPass = realNetPass
+		ball.blockResolver.netPass = Maths.FindNetPass(ball.position, ball.attackTarget, ball.linear_velocity, _topspin)
 		if realNetPass.y < netHeightPlusBallClearance:
 			Console.AddNewLine("ERROR: Net pass won't clear net", Color.RED)
 
