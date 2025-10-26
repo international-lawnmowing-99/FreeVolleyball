@@ -64,20 +64,21 @@ func DumpBall(team:TeamNode):
 
 func SetBall(team:TeamNode):
 	# mint set, poor set (short, long, mis-timed, tight, over, or some combo thereof - so many ways to set poorly!), 2 hits/carry ("setting error")
-	randomize()
-	var setExecution = 100#randi()% 100
+	#randomize()
+	var errorThreshold = 100.0 * pow((team.chosenSetter.stats.set/100 - 1.0), 8.0)
+	var perfectThreshold = 100.0 - 100.0 / (1.0 + pow(2.71828, -((team.chosenSetter.stats.set/100.0) - 0.5)/0.1))
+
+	var setExecution = (errorThreshold + perfectThreshold )/2 #randi()% 100
 
 	# A 100 setter would always set good?
 	# A 0 setter always makes errors
 	# An 80 setter sets a higher proportion of good sets than a 40
 
-	var errorThreshold = 100.0 * pow((team.chosenSetter.stats.set/100 - 1.0), 8.0)
-	var perfectThreshold = 100.0 - 100.0 / (1.0 + pow(2.71828, -((team.chosenSetter.stats.set/100.0) - 0.5)/0.1))
 	# most sets are perfect now...
 #	setExecution = perfectThreshold - 1
-#	Console.AddNewLine("[[[[[ set execution:" + str(setExecution) + " ]]]]]")
-#	Console.AddNewLine("[[[[[ error threshold:" + str(errorThreshold) + " ]]]]]")
-#	Console.AddNewLine("[[[[[ perfect threshold:" + str(perfectThreshold) + " ]]]]]")
+	Console.AddNewLine("[[[[[ set execution:" + str(setExecution) + " ]]]]]")
+	Console.AddNewLine("[[[[[ error threshold:" + str(errorThreshold) + " ]]]]]")
+	Console.AddNewLine("[[[[[ perfect threshold:" + str(perfectThreshold) + " ]]]]]")
 #
 	if setExecution < errorThreshold:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " setting error", Color.BLUE)
@@ -119,14 +120,36 @@ func SetBall(team:TeamNode):
 		# my major issue is setting short! direction not so bad
 		# angle, distance, time as the three possible imperfections
 
+
+		var theoreticalGoodSet:Set = Set.new(0,0,0,1)
+
+
+		var theoreticalGoodSetVelocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		var theoreticalGoodSetXZAngle = Maths.SignedAngle(Maths.XZVector(Vector3(1,0,0)), Maths.XZVector(team.setTarget.target), Vector3.UP)
+		var theoreticalGoodSetYAngle = atan(theoreticalGoodSetVelocity.y/ Maths.XZVector(theoreticalGoodSetVelocity).length())
+
 		var difference = 100.0 - perfectThreshold - setExecution
 		# smaller difference = smaller error
+
+		Console.AddNewLine(str("theoreticalGoodSetXZAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetXZAngle))), Color.BLUE)
+		Console.AddNewLine(str("theoreticalGoodSetYAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetYAngle))), Color.BLUE)
+
+		var rand_sign = round(randf()) * 2 - 1
+
+		Console.AddNewLine(str(rand_sign), Color.FIREBRICK)
+
+		var xzError = .20
+		var yError = .20
+
+		var speedError = .2
+
+
 		var error = randf_range(0, difference) /30
 		if team.data.isHuman:
 			team.setTarget.target.x += abs(error)
 		else:
 			team.setTarget.target.x -= abs(error)
-		team.setTarget.target.z += pow(-1,randi()%2) * error
+		team.setTarget.target.z += pow(-1,randi()%2) * error *2
 		team.setTarget.height += randf_range(0,4) * abs(error)
 		Console.AddNewLine("Error: " + str(error))
 		team.mManager.cylinder.position = team.setTarget.target
@@ -528,8 +551,8 @@ func ChooseSpiker(team:TeamNode):
 	if possibleSpikers.size() <= 0:
 		# Is there the opportunity to dump? Or should we do a release ball?
 		if abs(team.receptionTarget.x) > 3:
-			var centreOfCourtish = Vector3(randf_range(-6.5, -3), 0.5, randf_range(-2,2))
-			var trialVel:Vector3 = Maths.FindWellBehavedParabola(team.receptionTarget, team.flip * centreOfCourtish, randf_range(4, 5.5))
+			var centreOfCourtish:Set = Set.new(randf_range(-6.5, -3), 0.5, randf_range(-2,2), 10)
+			var trialVel:Vector3 = Maths.FindWellBehavedParabola(team.receptionTarget, team.flip * centreOfCourtish.target, randf_range(4, 5.5))
 			if trialVel.length() >= 10:
 				#Fix this
 				if typeof(Maths.FindParabolaForGivenSpeed(team.receptionTarget, Vector3(team.flip * Vector3(-4.5, 0, 0) - team.receptionTarget).normalized() + Vector3.UP, 10, true, 1.0)) == TYPE_VECTOR3:
@@ -541,7 +564,7 @@ func ChooseSpiker(team:TeamNode):
 				print("Error finding trial vel")
 
 			else :
-				team.setTarget.target = centreOfCourtish
+				team.setTarget = centreOfCourtish
 			var freeBallContactLocation = Maths.BallPositionAtGivenHeight(team.receptionTarget, trialVel, 0.5, 1.0)
 		else:
 			ballWillBeDumped = true

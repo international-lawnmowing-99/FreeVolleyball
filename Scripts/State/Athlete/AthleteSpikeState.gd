@@ -202,8 +202,8 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	# but spiking wide means that line is unavailable
 
 	var playerToNetVector = Vector3(-athlete.setRequest.target.x, 0, 0)
-	var playerToLeftAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * (4.5 - ballRadius) - athlete.setRequest.target.z)
-	var playerToRightAntennaVector = Vector3(-athlete.setRequest.target.x, 0, athlete.team.flip * (-4.5 + ballRadius) - athlete.setRequest.target.z)
+	var playerToLeftAntennaVector = Vector3(-athlete.team.setTarget.target.x, 0, athlete.team.flip * (4.5 - ballRadius) - athlete.team.setTarget.target.z)
+	var playerToRightAntennaVector = Vector3(-athlete.team.setTarget.target.x, 0, athlete.team.flip * (-4.5 + ballRadius) - athlete.team.setTarget.target.z)
 #	athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target + playerToNetVector)
 
 #	athlete.team.mManager.cylinder.position = Maths.XZVector(athlete.setRequest.target + playerToLeftAntennaVector)
@@ -386,8 +386,10 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	# plus the athlete's internal quirks, then randomly choose between the options
 
 	#FindPermissableAnglesDisregardingBlock(athlete)
-	var playerToLeftCornerVector = Vector3(-athlete.setRequest.target.x - athlete.team.flip * 9, 0, -athlete.setRequest.target.z + athlete.team.flip * 4.5)
-	var playerToRightCornerVector = Vector3(-athlete.setRequest.target.x - athlete.team.flip * 9, 0, -athlete.setRequest.target.z - athlete.team.flip * 4.5)
+
+
+	var playerToLeftCornerVector = Vector3(-athlete.team.setTarget.target.x - athlete.team.flip * 9, 0, -athlete.team.setTarget.target.z + athlete.team.flip * 4.5)
+	var playerToRightCornerVector = Vector3(-athlete.team.setTarget.target.x - athlete.team.flip * 9, 0, -athlete.team.setTarget.target.z - athlete.team.flip * 4.5)
 	#athlete.team.mManager.cube.position = Maths.XZVector(athlete.setRequest.target) + playerToRightCornerVector #Vector3(athlete.team.flip * -9, 0, athlete.team.flip * 4.5)
 	var angleToLeftCorner = Maths.SignedAngle(playerToNetVector, playerToLeftCornerVector, Vector3.DOWN)
 	var angleToRightCorner = Maths.SignedAngle(playerToNetVector, playerToRightCornerVector, Vector3.DOWN)
@@ -497,13 +499,13 @@ func ChooseSpikingStrategy(athlete:Athlete):
 					lastBadAngle = testAngle
 
 			line[1] = lastGoodAngle
-			Console.AddNewLine("1st angle updated to " + str("%.1f" % rad_to_deg(line[1])), Color.PEACH_PUFF)
+			Console.AddNewLine("2nd angle updated to " + str("%.1f" % rad_to_deg(line[1])), Color.PEACH_PUFF)
 
 	var finalSpikeAngles = []
 	for anglePair in revisedSpikeableAngles:
 		if !is_nan(anglePair[0]):
 			finalSpikeAngles.append(anglePair)
-	Console.AddNewLine(str(finalSpikeAngles.size()) + " valid angles")
+	Console.AddNewLine(str(finalSpikeAngles.size()) + " valid angle(s)")
 
 	var spikeAngleTopDown
 	var lineCross = randf()
@@ -516,7 +518,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 	else:
 		#assert(false)
 		Console.AddNewLine("No open angles, swinging wildly", Color.CRIMSON)
-		spikeAngleTopDown = lerp(angleToLeftCorner, angleToRightCorner, lineCross)
+		spikeAngleTopDown = lerp(angleToLeftAntenna, angleToRightAntenna, lineCross)
 #	spikeAngleTopDown = PI/4
 	Console.AddNewLine(str("%.1f" % rad_to_deg(spikeAngleTopDown)) + " chosen spike angle", Color.DARK_TURQUOISE)
 
