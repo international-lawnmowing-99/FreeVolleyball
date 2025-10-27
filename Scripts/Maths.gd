@@ -8,6 +8,9 @@ func _ready():
 func XZVector(vec:Vector3) -> Vector3:
 	return Vector3(vec.x, 0, vec.z)
 
+func RandomSign()->int:
+	return round(randf()) * 2 - 1
+
 func SignedAngle(from:Vector3, to:Vector3, up:Vector3):
 	if from == to or from == up or up == to:
 		print("signed angle issue(?)")

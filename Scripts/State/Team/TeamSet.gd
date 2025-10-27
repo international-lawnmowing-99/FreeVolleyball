@@ -125,43 +125,57 @@ func SetBall(team:TeamNode):
 
 
 		var theoreticalGoodSetVelocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
-		var theoreticalGoodSetXZAngle = Maths.SignedAngle(Maths.XZVector(Vector3(1,0,0)), Maths.XZVector(team.setTarget.target), Vector3.UP)
+		var theoreticalGoodSetXZAngle = Maths.SignedAngle(Maths.XZVector(Vector3(1,0,0)), Maths.XZVector(team.setTarget.target - team.ball.position), Vector3.UP)
 		var theoreticalGoodSetYAngle = atan(theoreticalGoodSetVelocity.y/ Maths.XZVector(theoreticalGoodSetVelocity).length())
 
-		var difference = 100.0 - perfectThreshold - setExecution
+		var difference = (perfectThreshold - setExecution)/100
 		# smaller difference = smaller error
 
-		Console.AddNewLine(str("theoreticalGoodSetXZAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetXZAngle))), Color.BLUE)
-		Console.AddNewLine(str("theoreticalGoodSetYAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetYAngle))), Color.BLUE)
+		Console.AddNewLine(str("theoreticalGoodSetXZAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetXZAngle))), Color.GOLD)
+		Console.AddNewLine(str("theoreticalGoodSetYAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetYAngle))), Color.GOLD)
+
 
 		var rand_sign = round(randf()) * 2 - 1
 
-		Console.AddNewLine(str(rand_sign), Color.FIREBRICK)
+		Console.AddNewLine(str("%.3f" % difference), Color.FIREBRICK)
 
-		var xzError = .20
-		var yError = .20
+		var xzError = randf()/3
+		var yError = randf()/3
+		var speedError = randf()/3
 
-		var speedError = .2
+		var xzAngle = theoreticalGoodSetXZAngle * (1 + Maths.RandomSign() * xzError)
+		var yAngle = theoreticalGoodSetYAngle * (1 + Maths.RandomSign() * yError)
+		var speed = theoreticalGoodSetVelocity.length() * (1 + Maths.RandomSign() * speedError)
+		Console.AddNewLine(str("actual xz angle: " + str("%.3f" % rad_to_deg(xzAngle))), Color.GOLD)
+		Console.AddNewLine(str("actualGoodSetYAngle: " + str("%.3f" % rad_to_deg(yAngle))), Color.GOLD)
+
+		var yVel = speed * sin(yAngle)
+		var xzVel = speed * cos(yAngle)
+		var xVel = xzVel * cos(xzAngle)
+		var zVel = xzVel * sin(-xzAngle)
+
+		#Console.AddNewLine(str(), Color.GREEN_YELLOW)
+		#Console.AddNewLine(str(), Color.GREEN_YELLOW)
 
 
-		var error = randf_range(0, difference) /30
-		if team.data.isHuman:
-			team.setTarget.target.x += abs(error)
-		else:
-			team.setTarget.target.x -= abs(error)
-		team.setTarget.target.z += pow(-1,randi()%2) * error *2
-		team.setTarget.height += randf_range(0,4) * abs(error)
-		Console.AddNewLine("Error: " + str(error))
+		team.ball.linear_velocity = Vector3(xVel, yVel, zVel)
+		Console.AddNewLine(str(theoreticalGoodSetVelocity.x), Color.GOLD)
+		Console.AddNewLine(str(xVel), Color.GOLD)
+		Console.AddNewLine(str(theoreticalGoodSetVelocity.y), Color.GREEN_YELLOW)
+		Console.AddNewLine(str(yVel), Color.GREEN_YELLOW)
+		Console.AddNewLine(str(theoreticalGoodSetVelocity.z), Color.GOLD)
+		Console.AddNewLine(str(zVel), Color.GOLD)
+		Console.AddNewLine(str(sqrt(xVel*xVel + zVel*zVel)), Color.GREEN_YELLOW)
+		Console.AddNewLine(str(Maths.XZVector(theoreticalGoodSetVelocity).length()), Color.GREEN_YELLOW)
+
 		team.mManager.cylinder.position = team.setTarget.target
 
-		team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
 
 		#await team.get_tree().process_frame
 		#team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		team.setTarget.target = Maths.BallPositionAtGivenHeight(team.ball.position, team.ball.linear_velocity, team.chosenSpiker.stats.spikeHeight,1.0)
+		team.mManager.sphere.position = team.setTarget.target
 
-		if team.ball.linear_velocity == Vector3.ZERO:
-			team.ball.linear_velocity = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
-	#
 		team.ballPositionWhenSet = team.ball.position
 		# React to the unexpected trajectory of the ball...
 		###
