@@ -70,14 +70,19 @@ func Update(athlete:Athlete):
 				spikeState = SpikeState.Runup
 				athlete.moveTarget = takeOffXZ
 				athlete.model.look_at(takeOffXZ, Vector3.UP, true)
-#				Console.AddNewLine(athlete.stats.lastName)
-#				Console.AddNewLine("time to set target: " + str("%0.3f" % timeTillBallReachesSetTarget))
-#				Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
-#				athlete.team.spikeState.timeStart = Time.get_unix_time_from_system()
-#				print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
+				Console.AddNewLine(athlete.stats.lastName)
+				Console.AddNewLine("time to set target: " + str("%0.3f" % timeTillBallReachesSetTarget))
+				Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
+				athlete.team.spikeState.timeStart = Time.get_unix_time_from_system()
+				print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
 #				print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState))
 
 		SpikeState.Runup:
+			if athlete == athlete.team.oppositeHitter:
+				Console.AddNewLine(athlete.stats.lastName)
+
+				Console.AddNewLine("time to set target: " + str("%0.3f" % CalculateTimeTillBallReachesSetTarget(athlete)))
+				Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
 			if athlete.team.flip * athlete.position.x <= abs(takeOffXZ.x + athlete.team.flip * 0.05): #Maths.XZVector(takeOffXZ - athlete.position).length() < 0.1:
 				spikeState = SpikeState.Jump
 				athlete.rightIK.start()
@@ -108,6 +113,9 @@ func CalculateTakeOffXZ(athlete:Athlete):
 
 #	takeOffXZ = Vector3(athlete.setRequest.target.x + athlete.team.flip * athlete.stats.verticalJump/2, 0, athlete.setRequest.target.z)
 #	return
+
+# There's a problem here with this counting down more slowly than it should if they aren't running
+# straight at the net
 	if athlete.team.flip * athlete.setRequest.target.x <= 0.1:
 		Console.AddNewLine("ERROR! SetRequest too close to net", Color.BROWN)
 		return
@@ -140,7 +148,7 @@ func CalculateTakeOffXZ(athlete:Athlete):
 		# Otherwise takeoff is just the landing vector reversed - visually this is a nice parallelogram!
 		takeOffXZ = 2 * Maths.XZVector(athlete.setRequest.target) - athlete.team.flip * flippedProjectionTowardsNet
 		landingXZ = athlete.team.flip * flippedProjectionTowardsNet
-#	athlete.team.mManager.cube.position = takeOffXZ
+	#athlete.team.mManager.cube.position = takeOffXZ
 
 func Exit(athlete:Athlete):
 	athlete.rightIK.interpolation = 0
@@ -179,7 +187,6 @@ func CalculateTimeTillBallReachesSetTarget(athlete:Athlete) -> float:
 			setTime = yVel / athlete.g + sqrt(2 * athlete.g * abs(athlete.setRequest.height - athlete.setRequest.target.y)) / athlete.g
 	#if athlete == athlete.team.middleFront:
 		#Console.AddNewLine(athlete.stats.lastName + " pred spike time(middle) " + str(athlete.team.timeTillDigTarget + setTime))
-
 	return athlete.team.timeTillDigTarget + setTime
 
 func ChooseSpikingStrategy(athlete:Athlete):

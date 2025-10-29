@@ -22,8 +22,7 @@ func Enter(team:TeamNode):
 
 	if !ballWillBeDumped:
 		ChooseSpiker(team)
-	#Can the spiker get back to their runup and if not, how will that affect their spike?
-#	team.mManager.sphere.position = team.setTarget.target
+
 func Update(team:TeamNode):
 	team.UpdateTimeTillDigTarget()
 
@@ -76,9 +75,9 @@ func SetBall(team:TeamNode):
 
 	# most sets are perfect now...
 #	setExecution = perfectThreshold - 1
-	Console.AddNewLine("[[[[[ set execution:" + str(setExecution) + " ]]]]]")
-	Console.AddNewLine("[[[[[ error threshold:" + str(errorThreshold) + " ]]]]]")
-	Console.AddNewLine("[[[[[ perfect threshold:" + str(perfectThreshold) + " ]]]]]")
+	#Console.AddNewLine("[[[[[ set execution:" + str(setExecution) + " ]]]]]")
+	#Console.AddNewLine("[[[[[ error threshold:" + str(errorThreshold) + " ]]]]]")
+	#Console.AddNewLine("[[[[[ perfect threshold:" + str(perfectThreshold) + " ]]]]]")
 #
 	if setExecution < errorThreshold:
 		Console.AddNewLine(team.chosenSetter.stats.lastName + " setting error", Color.BLUE)
@@ -120,76 +119,70 @@ func SetBall(team:TeamNode):
 		# my major issue is setting short! direction not so bad
 		# angle, distance, time as the three possible imperfections
 
-
-		var theoreticalGoodSet:Set = Set.new(0,0,0,1)
-
-
 		var theoreticalGoodSetVelocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
 		var theoreticalGoodSetXZAngle = Maths.SignedAngle(Maths.XZVector(Vector3(1,0,0)), Maths.XZVector(team.setTarget.target - team.ball.position), Vector3.UP)
 		var theoreticalGoodSetYAngle = atan(theoreticalGoodSetVelocity.y/ Maths.XZVector(theoreticalGoodSetVelocity).length())
 
 		var difference = (perfectThreshold - setExecution)/100
 		# smaller difference = smaller error
-
-		Console.AddNewLine(str("theoreticalGoodSetXZAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetXZAngle))), Color.GOLD)
-		Console.AddNewLine(str("theoreticalGoodSetYAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetYAngle))), Color.GOLD)
-
-
-		var rand_sign = round(randf()) * 2 - 1
-
-		Console.AddNewLine(str("%.3f" % difference), Color.FIREBRICK)
+		#Console.AddNewLine(str("%.3f" % difference), Color.FIREBRICK)
+		#Console.AddNewLine(str("theoreticalGoodSetXZAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetXZAngle))), Color.GOLD)
+		#Console.AddNewLine(str("theoreticalGoodSetYAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetYAngle))), Color.GOLD)
 
 		var xzError = randf()/3
 		var yError = randf()/3
 		var speedError = randf()/3
 
 		var xzAngle = theoreticalGoodSetXZAngle * (1 + Maths.RandomSign() * xzError)
-		var yAngle = theoreticalGoodSetYAngle * (1 + Maths.RandomSign() * yError)
+		var yAngle = theoreticalGoodSetYAngle * (1 +  yError)
 		var speed = theoreticalGoodSetVelocity.length() * (1 + Maths.RandomSign() * speedError)
-		Console.AddNewLine(str("actual xz angle: " + str("%.3f" % rad_to_deg(xzAngle))), Color.GOLD)
-		Console.AddNewLine(str("actualGoodSetYAngle: " + str("%.3f" % rad_to_deg(yAngle))), Color.GOLD)
+		#Console.AddNewLine(str("actual xz angle: " + str("%.3f" % rad_to_deg(xzAngle))), Color.GOLD)
+		#Console.AddNewLine(str("actualGoodSetYAngle: " + str("%.3f" % rad_to_deg(yAngle))), Color.GOLD)
 
 		var yVel = speed * sin(yAngle)
 		var xzVel = speed * cos(yAngle)
 		var xVel = xzVel * cos(xzAngle)
 		var zVel = xzVel * sin(-xzAngle)
-
-		#Console.AddNewLine(str(), Color.GREEN_YELLOW)
-		#Console.AddNewLine(str(), Color.GREEN_YELLOW)
-
-
+		#team.ball.linear_velocity = theoreticalGoodSetVelocity
 		team.ball.linear_velocity = Vector3(xVel, yVel, zVel)
-		Console.AddNewLine(str(theoreticalGoodSetVelocity.x), Color.GOLD)
-		Console.AddNewLine(str(xVel), Color.GOLD)
-		Console.AddNewLine(str(theoreticalGoodSetVelocity.y), Color.GREEN_YELLOW)
-		Console.AddNewLine(str(yVel), Color.GREEN_YELLOW)
-		Console.AddNewLine(str(theoreticalGoodSetVelocity.z), Color.GOLD)
-		Console.AddNewLine(str(zVel), Color.GOLD)
-		Console.AddNewLine(str(sqrt(xVel*xVel + zVel*zVel)), Color.GREEN_YELLOW)
-		Console.AddNewLine(str(Maths.XZVector(theoreticalGoodSetVelocity).length()), Color.GREEN_YELLOW)
-
-		team.mManager.cylinder.position = team.setTarget.target
-
-
-		#await team.get_tree().process_frame
-		#team.ball.linear_velocity = Maths.FindWellBehavedParabola(team.ball.position, team.setTarget.target, team.setTarget.height)
+		#Console.AddNewLine(str(theoreticalGoodSetVelocity.x), Color.GOLD)
+		#Console.AddNewLine(str(xVel), Color.GOLD)
+		#Console.AddNewLine(str(theoreticalGoodSetVelocity.y), Color.GREEN_YELLOW)
+		#Console.AddNewLine(str(yVel), Color.GREEN_YELLOW)
+		#Console.AddNewLine(str(theoreticalGoodSetVelocity.z), Color.GOLD)
+		#Console.AddNewLine(str(zVel), Color.GOLD)
+		#Console.AddNewLine(str(sqrt(xVel*xVel + zVel*zVel)), Color.GREEN_YELLOW)
+		#Console.AddNewLine(str(Maths.XZVector(theoreticalGoodSetVelocity).length()), Color.GREEN_YELLOW)
+#
+		#team.mManager.cylinder.position = team.setTarget.target
+		#console
+		if !team.chosenSpiker:
+			#do something
+			pass
 		team.setTarget.target = Maths.BallPositionAtGivenHeight(team.ball.position, team.ball.linear_velocity, team.chosenSpiker.stats.spikeHeight,1.0)
-		team.mManager.sphere.position = team.setTarget.target
+		#team.setTarget.height = Maths.BallMaxHeight(team.ball.position, team.ball.linear_velocity, 1)
+		#team.chosenSpiker.setRequest = team.setTarget
+		team.mManager.cube.position = team.setTarget.target
 
-		team.ballPositionWhenSet = team.ball.position
+		#team.ballPositionWhenSet = team.ball.position
 		# React to the unexpected trajectory of the ball...
 		###
 		###
 		if team.setTarget.target.x * team.flip < -0.5:
-			Console.AddNewLine("__________________________________________===============================================================================================================================")
+			Console.AddNewLine("Set was on the other side of the net! __________________________________________===============================================================================================================================")
 			team.ball.attackTarget = Maths.BallPositionAtGivenHeight(team.ball.position, team.ball.linear_velocity, 0, 1.0)
 			team.ball.difficultyOfReception = 1.3
 			team.mManager.BallOverNet(team.data.isHuman)
+			### They should look at spiking it...
+
 			return
 		elif team.setTarget.target.x * team.flip < 0:
+			Console.AddNewLine("Tight set on the other side of the net. Might be able to joust it __________________________________________===============================================================================================================================")
+
 			# Tight set on other side of court, might be able to block
 			pass
 		elif team.setTarget.target.x * team.flip < 0.5:
+			Console.AddNewLine("Tight set on our side! __________________________________________===============================================================================================================================")
 			# Tight set on our side
 			pass
 		else:
@@ -200,6 +193,7 @@ func SetBall(team:TeamNode):
 
 			var maxHeightBadSet = Maths.BallMaxHeight(team.ball.position, team.ball.linear_velocity, 1.0)
 			if maxHeightBadSet <= team.chosenSpiker.stats.spikeHeight:
+				## This isn't necessarily true
 				Console.AddNewLine("can't attack that bad set: Spike height " + str(team.chosenSpiker.stats.spikeHeight) + "  vs set: " + str(maxHeightBadSet))
 				ScrambleForBadSet(team)
 			else:
@@ -212,14 +206,13 @@ func SetBall(team:TeamNode):
 
 				if AthleteCanSpikeBadSet(team.chosenSpiker):
 					Console.AddNewLine(team.chosenSpiker.stats.lastName + " (chosenSpiker) CAN spike bad set +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-					team.chosenSpiker.moveTarget = team.chosenSpiker.spikeState.runupStartPosition
-					team.chosenSpiker.setRequest = team.setTarget
-					team.chosenSpiker.spikeState.spikeState = team.chosenSetter.spikeState.SpikeState.ChoiceConfirmed
-					pass
+					#team.chosenSpiker.moveTarget = team.chosenSpiker.spikeState.runupStartPosition
+					#team.chosenSpiker.setRequest = team.setTarget
+					#team.chosenSpiker.spikeState.spikeState = team.chosenSetter.spikeState.SpikeState.ChoiceConfirmed
 
 				elif AthleteCanStandingRollBadSet(team.chosenSpiker):
 					Console.AddNewLine(team.chosenSpiker.stats.lastName + " (chosenSpiker) can't spike bad set, will be able to aggressively play it though --------------------------------------------------------------------------------------------------------------------")
-					pass
+
 				else:
 					Console.AddNewLine("Scrambling for bad set ===============================================================")
 					ScrambleForBadSet(team)
@@ -629,8 +622,8 @@ func ChooseSpiker(team:TeamNode):
 		var setChoice = randi()%possibleSpikers.size()
 
 		team.chosenSpiker = possibleSpikers[setChoice]
-		#if team.middleFront in possibleSpikers:
-			#team.chosenSpiker = team.middleFront
+		#if team.oppositeHitter in possibleSpikers:
+			#team.chosenSpiker = team.oppositeHitter
 
 
 
@@ -702,6 +695,8 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 			return false
 
 	var athleteSpikeTime:float = 0
+	# Add the time it will take them to jump.
+	athleteSpikeTime += sqrt(2 * athlete.stats.verticalJump/ athlete.g)
 
 	# 0 Are they airborne?
 	var timeToReachGround:float = 0
@@ -750,10 +745,10 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 #	athlete.team.mManager.sphere.position = leftFanCorner
 	#athlete.team.mManager.cube.position = rightFanCorner
 
-	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
-	var jumpTime = jumpYVel / -athlete.g
-
-	athleteSpikeTime += runupLengthWithoutJump/athlete.stats.speed + jumpTime
+	#var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
+	#var jumpTime = jumpYVel / -athlete.g
+#
+	#athleteSpikeTime += runupLengthWithoutJump/athlete.stats.speed + jumpTime
 
 
 	# 3 If the spiker is left or right of either of the corners, can they make it to one?

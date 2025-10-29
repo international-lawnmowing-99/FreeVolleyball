@@ -40,7 +40,7 @@ var flip = 1
 
 var receptionTarget:Vector3
 # What does this do?? Was it meant to do something?
-var ballPositionWhenSet:Vector3
+#var ballPositionWhenSet:Vector3
 var setTarget:Set
 
 var timeTillDigTarget:float
