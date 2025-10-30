@@ -59,30 +59,31 @@ func Update(athlete:Athlete):
 			pass
 
 		SpikeState.ChoiceConfirmed:
-#			if athlete == athlete.team.oppositeHitter:
-#				var a
+
 			CalculateTakeOffXZ(athlete)
 
 			var timeTillBallReachesSetTarget:float = CalculateTimeTillBallReachesSetTarget(athlete)
+			if athlete == athlete.team.oppositeHitter:
+				Console.AddNewLine("set request height: " + str(athlete.setRequest.height) + " ||| set request y: " + str(athlete.setRequest.target.y), Color.GOLDENROD)
+				Console.AddNewLine("time to set target: " + str("%0.3f" % timeTillBallReachesSetTarget), Color.GOLD)
+				Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)), Color.GOLD)
 
 #			Console.AddNewLine("time till set target apparently... ")
 			if timeTillBallReachesSetTarget <= athlete.CalculateTimeTillJumpPeak(takeOffXZ) && athlete.team.stateMachine.currentState != athlete.team.receiveState:
 				spikeState = SpikeState.Runup
 				athlete.moveTarget = takeOffXZ
 				athlete.model.look_at(takeOffXZ, Vector3.UP, true)
-				Console.AddNewLine(athlete.stats.lastName)
-				Console.AddNewLine("time to set target: " + str("%0.3f" % timeTillBallReachesSetTarget))
-				Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
+				#Console.AddNewLine(athlete.stats.lastName)
 				athlete.team.spikeState.timeStart = Time.get_unix_time_from_system()
-				print(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
+				Console.AddNewLine(athlete.stats.lastName + " " + str(athlete.CalculateTimeTillJumpPeak(takeOffXZ)), Color.GOLD)
 #				print(str(timeTillBallReachesSetTarget) + str(athlete.team.stateMachine.currentState))
 
 		SpikeState.Runup:
-			if athlete == athlete.team.oppositeHitter:
-				Console.AddNewLine(athlete.stats.lastName)
-
-				Console.AddNewLine("time to set target: " + str("%0.3f" % CalculateTimeTillBallReachesSetTarget(athlete)))
-				Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
+			#if athlete == athlete.team.oppositeHitter:
+				#Console.AddNewLine(athlete.stats.lastName)
+#
+				#Console.AddNewLine("time to set target: " + str("%0.3f" % CalculateTimeTillBallReachesSetTarget(athlete)))
+				#Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)))
 			if athlete.team.flip * athlete.position.x <= abs(takeOffXZ.x + athlete.team.flip * 0.05): #Maths.XZVector(takeOffXZ - athlete.position).length() < 0.1:
 				spikeState = SpikeState.Jump
 				athlete.rightIK.start()
@@ -162,6 +163,8 @@ func Exit(athlete:Athlete):
 #	var timeToRunup = runupStartPosition.distance_to(takeOffXZ)/athlete.stats.speed
 #	var timeToReach
 func CalculateTimeTillBallReachesSetTarget(athlete:Athlete) -> float:
+	if athlete == athlete.team.oppositeHitter:
+		var a
 	var setTime:float
 	var yVel:float
 			# Setting downwards
@@ -191,7 +194,7 @@ func CalculateTimeTillBallReachesSetTarget(athlete:Athlete) -> float:
 
 func ChooseSpikingStrategy(athlete:Athlete):
 	var ball = athlete.ball
-	Console.AddNewLine("_____________________________________________________________", Color.TOMATO)
+	#Console.AddNewLine("_____________________________________________________________", Color.TOMATO)
 	Console.AddNewLine("Chosen spiker " + athlete.stats.lastName + " choosing spiking strategy", Color.TOMATO)
 	ReadBlock(athlete, athlete.team.defendState.otherTeam)
 	ReadDefence(athlete, athlete.team.defendState.otherTeam)
@@ -219,153 +222,172 @@ func ChooseSpikingStrategy(athlete:Athlete):
 
 	var spikeAngles = []
 
-	Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna", Color.PLUM)
+	#Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftAntenna)) + " degrees to left antenna", Color.PLUM)
 
 	if oppositionRightBlocker.stateMachine.currentState == oppositionRightBlocker.blockState:
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightRight)) + " degrees to [their perspective] right blocker right hand", Color.PLUM)
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightLeft)) + " degrees to [their perspective] right blocker left hand", Color.PLUM)
+		#Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightRight)) + " degrees to [their perspective] right blocker right hand", Color.PLUM)
+		#Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightLeft)) + " degrees to [their perspective] right blocker left hand", Color.PLUM)
 		if angleToLeftAntenna < angleToRightRight:
 			spikeAngles.append([angleToLeftAntenna, angleToRightRight])
-			Console.AddNewLine("Adding their right blocker")
+			#Console.AddNewLine("Adding their right blocker")
 		else:
-			Console.AddNewLine("Not adding their right blocker because they cover the line")
+			pass
+			#Console.AddNewLine("Not adding their right blocker because they cover the line")
 	else:
-		Console.AddNewLine("Apparently opposition right blocker not blocking", Color.PLUM)
+		pass
+		#Console.AddNewLine("Apparently opposition right blocker not blocking", Color.PLUM)
 
 	if oppositionMiddleBlocker.stateMachine.currentState == oppositionMiddleBlocker.blockState:
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleRight)) + " degrees to middle blocker right hand", Color.PLUM)
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleLeft)) + " degrees to middle blocker left hand", Color.PLUM)
+		#Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleRight)) + " degrees to middle blocker right hand", Color.PLUM)
+		#Console.AddNewLine(str("%.1f" % rad_to_deg(angleToMiddleLeft)) + " degrees to middle blocker left hand", Color.PLUM)
 		if spikeAngles.size() == 0:
-			Console.AddNewLine("No spike angle between their right blocker and the antenna")
+			#Console.AddNewLine("No spike angle between their right blocker and the antenna")
 			if oppositionRightBlocker.stateMachine.currentState == oppositionRightBlocker.blockState:
-				Console.AddNewLine("Opposition right blocker completely covers line")
+				#Console.AddNewLine("Opposition right blocker completely covers line")
 				if angleToRightLeft < angleToMiddleRight:
 					spikeAngles.append([angleToRightLeft, angleToMiddleRight])
-					Console.AddNewLine("Adding middle, seam to opposition right blocker")
+					#Console.AddNewLine("Adding middle, seam to opposition right blocker")
 				else:
-					Console.AddNewLine("Overlap between middle and opposition right blocker, double at least...")
+					pass
+					#Console.AddNewLine("Overlap between middle and opposition right blocker, double at least...")
 			else:
 				if angleToLeftAntenna < angleToMiddleRight:
 					spikeAngles.append([angleToLeftAntenna, angleToMiddleRight])
-					Console.AddNewLine("Adding middle, opposition right not blocking")
+					#Console.AddNewLine("Adding middle, opposition right not blocking")
 		else:
-			Console.AddNewLine("1 spike angle already")
+			#Console.AddNewLine("1 spike angle already")
 			if angleToRightLeft < angleToMiddleRight:
 				spikeAngles.append([angleToRightLeft, angleToMiddleRight])
-				Console.AddNewLine("Adding middle, seam to opposition right blocker")
+				#Console.AddNewLine("Adding middle, seam to opposition right blocker")
 			else:
-				Console.AddNewLine("Overlap between middle and opposition right blocker, double at least...")
+				pass
+				#Console.AddNewLine("Overlap between middle and opposition right blocker, double at least...")
 
 	else:
-		Console.AddNewLine("Apparently opposition middle blocker not blocking", Color.PLUM)
+		pass
+		#Console.AddNewLine("Apparently opposition middle blocker not blocking", Color.PLUM)
 
 	if oppositionLeftBlocker.stateMachine.currentState == oppositionLeftBlocker.blockState:
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftRight)) + " degrees to [their perspective] left blocker right hand", Color.PLUM)
-		Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftLeft)) + " degrees to [their perspective] left blocker left hand", Color.PLUM)
+		#Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftRight)) + " degrees to [their perspective] left blocker right hand", Color.PLUM)
+		#Console.AddNewLine(str("%.1f" % rad_to_deg(angleToLeftLeft)) + " degrees to [their perspective] left blocker left hand", Color.PLUM)
 		if spikeAngles.size() == 0:
-			Console.AddNewLine("No spike angles")
+			#Console.AddNewLine("No spike angles")
 			# could be:  other two aren't blocking,
 			# the other 2 are doing a double with line closed and you've got a seam,
 			# or a triple with the line shut off
 			# or line is shut off but middle isn't blocking
 			if oppositionRightBlocker.stateMachine.currentState != oppositionRightBlocker.blockState && oppositionMiddleBlocker.stateMachine.currentState != oppositionMiddleBlocker.blockState:
-				Console.AddNewLine("No other blockers, opposition left blocker will cover the whole lot")
+				#Console.AddNewLine("No other blockers, opposition left blocker will cover the whole lot")
 				if angleToLeftAntenna < angleToLeftRight:
-					Console.AddNewLine("Adding opposiion left blocker")
+					#Console.AddNewLine("Adding opposiion left blocker")
 					spikeAngles.append([angleToLeftAntenna, angleToLeftRight])
 				if angleToLeftLeft < angleToRightAntenna:
-					Console.AddNewLine("Adding left blocker to right antenna")
+					#Console.AddNewLine("Adding left blocker to right antenna")
 					spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
 				else:
-					Console.AddNewLine("Left blocker closes off line")
+					pass
+					#Console.AddNewLine("Left blocker closes off line")
 
 
 			if oppositionMiddleBlocker.stateMachine.currentState != oppositionMiddleBlocker.blockState:
-				Console.AddNewLine("No middle blocker but line closed by right blocker")
+				#Console.AddNewLine("No middle blocker but line closed by right blocker")
 				if angleToRightLeft < angleToLeftRight:
 					spikeAngles.append([angleToRightLeft, angleToLeftRight])
-					Console.AddNewLine("Adding left blocker")
+					#Console.AddNewLine("Adding left blocker")
 				else:
-					Console.AddNewLine("No seam between left and middle")
+					pass
+					#Console.AddNewLine("No seam between left and middle")
 				if angleToLeftLeft < angleToRightAntenna:
-					Console.AddNewLine("Adding left blocker to right antenna")
+					#Console.AddNewLine("Adding left blocker to right antenna")
 					spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
 				else:
-					Console.AddNewLine("Left blocker closes off line")
+					pass
+					#Console.AddNewLine("Left blocker closes off line")
 
 			else:
-				Console.AddNewLine("Line is closed, and there is no seam between right and middle")
+				#Console.AddNewLine("Line is closed, and there is no seam between right and middle")
 				if angleToMiddleLeft < angleToLeftRight:
 					spikeAngles.append([angleToMiddleLeft, angleToLeftRight])
-					Console.AddNewLine("Adding left blocker seam to middle")
+					#Console.AddNewLine("Adding left blocker seam to middle")
 				else:
-					Console.AddNewLine("No seam between left and middle")
+					pass
+					#Console.AddNewLine("No seam between left and middle")
 				if angleToLeftLeft < angleToRightAntenna:
-					Console.AddNewLine("Adding left blocker to right antenna")
+					#Console.AddNewLine("Adding left blocker to right antenna")
 					spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
 				else:
-					Console.AddNewLine("Left blocker closes off line")
+					pass
+					#Console.AddNewLine("Left blocker closes off line")
 
 		elif spikeAngles.size() == 1:
-			Console.AddNewLine("1 block-free spike angle so far")
+			#Console.AddNewLine("1 block-free spike angle so far")
 			if spikeAngles[0][1] == angleToRightRight:
-				Console.AddNewLine("There is line on the right side open")
+				#Console.AddNewLine("There is line on the right side open")
 				if angleToMiddleLeft < angleToLeftRight:
 					spikeAngles.append([angleToMiddleLeft, angleToLeftRight])
-					Console.AddNewLine("Adding left blocker seam to middle")
+					#Console.AddNewLine("Adding left blocker seam to middle")
 				else:
-					Console.AddNewLine("No seam between left and middle")
+					pass
+					#Console.AddNewLine("No seam between left and middle")
 				if angleToLeftLeft < angleToRightAntenna:
-					Console.AddNewLine("Adding left blocker to right antenna")
+					#Console.AddNewLine("Adding left blocker to right antenna")
 					spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
 				else:
-					Console.AddNewLine("Left blocker closes off line")
+					pass
+					#Console.AddNewLine("Left blocker closes off line")
 			else:
 				# Middle must be blocking with a seam to right, or they aren't in the block.
-				Console.AddNewLine("Line is not open on the right", Color.PLUM)
+				#Console.AddNewLine("Line is not open on the right", Color.PLUM)
 				if angleToMiddleLeft < angleToLeftRight:
 					spikeAngles.append([angleToMiddleLeft, angleToLeftRight])
-					Console.AddNewLine("Adding left blocker seam to middle")
+					#Console.AddNewLine("Adding left blocker seam to middle")
 				else:
-					Console.AddNewLine("No seam between left and middle")
+					pass
+					#Console.AddNewLine("No seam between left and middle")
 				if angleToLeftLeft < angleToRightAntenna:
-					Console.AddNewLine("Adding left blocker to right antenna")
+					#Console.AddNewLine("Adding left blocker to right antenna")
 					spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
 				else:
-					Console.AddNewLine("Left blocker closes off line")
+					pass
+					#Console.AddNewLine("Left blocker closes off line")
 		else:
-			Console.AddNewLine("2 block-free spike angles so far")
+			#Console.AddNewLine("2 block-free spike angles so far")
 			if angleToMiddleLeft < angleToLeftRight:
 				spikeAngles.append([angleToMiddleLeft, angleToLeftRight])
-				Console.AddNewLine("Adding left blocker seam to middle")
+				#Console.AddNewLine("Adding left blocker seam to middle")
 			else:
-				Console.AddNewLine("No seam between left and middle")
+				pass
+				#Console.AddNewLine("No seam between left and middle")
 			if angleToLeftLeft < angleToRightAntenna:
-				Console.AddNewLine("Adding left blocker to right antenna")
+				#Console.AddNewLine("Adding left blocker to right antenna")
 				spikeAngles.append([angleToLeftLeft, angleToRightAntenna])
 			else:
-				Console.AddNewLine("Left blocker closes off line")
+				pass
+				#Console.AddNewLine("Left blocker closes off line")
 
 	else:
-		Console.AddNewLine("Apparently opposition left blocker not blocking", Color.PLUM)
+		#Console.AddNewLine("Apparently opposition left blocker not blocking", Color.PLUM)
 		if oppositionMiddleBlocker.stateMachine.currentState == oppositionMiddleBlocker.blockState:
 			if angleToMiddleLeft < angleToRightAntenna:
-				Console.AddNewLine("Adding middle to antenna seam")
+				#Console.AddNewLine("Adding middle to antenna seam")
 				spikeAngles.append([angleToMiddleLeft, angleToRightAntenna])
 			else:
-				Console.AddNewLine("Middle covers line... what a huge lad")
+				pass
+				#Console.AddNewLine("Middle covers line... what a huge lad")
 		elif oppositionRightBlocker.stateMachine.currentState == oppositionRightBlocker.blockState:
 			if angleToRightLeft < angleToRightAntenna:
-				Console.AddNewLine("Adding right to far antenna seam")
+				#Console.AddNewLine("Adding right to far antenna seam")
 				spikeAngles.append([angleToRightLeft, angleToRightAntenna])
 			else:
-				Console.AddNewLine("Right covers line on the other side... immense")
+				pass
+				#Console.AddNewLine("Right covers line on the other side... immense")
 		else:
-			Console.AddNewLine("No block, adding whole net")
+			#Console.AddNewLine("No block, adding whole net")
 			spikeAngles.append([angleToLeftAntenna, angleToRightAntenna])
 
 	for pair in spikeAngles:
-		Console.AddNewLine("Spike angle: " + str("%.1f" % rad_to_deg(pair[0])) + " " + str("%.1f" % rad_to_deg(pair[1])), Color.PLUM)
+		pass
+		#Console.AddNewLine("Spike angle: " + str("%.1f" % rad_to_deg(pair[0])) + " " + str("%.1f" % rad_to_deg(pair[1])), Color.PLUM)
 	if spikeAngles.size() == 0:
 		Console.AddNewLine("No possible spike angles, must be some lanky blockers...", Color.PLUM)
 	#Console.AddNewLine(str("%.1f" % rad_to_deg(angleToRightAntenna)) + " degrees to right antenna", Color.PLUM)
@@ -419,7 +441,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 
 
 
-	Console.AddNewLine(str(spikeAngles.size()) + " possible spike angles", Color.DEEP_SKY_BLUE)
+	#Console.AddNewLine(str(spikeAngles.size()) + " possible spike angles", Color.DEEP_SKY_BLUE)
 	var revisedSpikeableAngles:Array = []
 	for i:int in range(spikeAngles.size()):
 		#Console.AddNewLine("Possible spike angle: " + str("%.1f" % rad_to_deg(spikeAngles[i][0])) + ", " + str("%.1f" % rad_to_deg(spikeAngles[i][1])), Color.CRIMSON)
@@ -438,48 +460,50 @@ func ChooseSpikingStrategy(athlete:Athlete):
 			revisedSpikeableAngles.append([spikeAngles[i][0], angleToLeftCorner])
 			revisedSpikeableAngles.append([angleToLeftCorner, angleToRightCorner])
 			revisedSpikeableAngles.append([angleToRightCorner, spikeAngles[i][1]])
-			Console.AddNewLine("Splitting angle into 3", Color.PERU)
+			#Console.AddNewLine("Splitting angle into 3", Color.PERU)
 
 		elif spikeAngles[i][0] < angleToLeftCorner && spikeAngles[i][1] > angleToLeftCorner:
 			# left corner is in the middle.
 			revisedSpikeableAngles.append([spikeAngles[i][0], angleToLeftCorner])
 			revisedSpikeableAngles.append([angleToLeftCorner, spikeAngles[i][1]])
-			Console.AddNewLine("Splitting angle into 2 (left corner)", Color.PERU)
+			#Console.AddNewLine("Splitting angle into 2 (left corner)", Color.PERU)
 
 		elif spikeAngles[i][0] < angleToRightCorner && spikeAngles[i][1] > angleToRightCorner:
 			# right corner is in the middle.
 			revisedSpikeableAngles.append([spikeAngles[i][0], angleToRightCorner])
 			revisedSpikeableAngles.append([angleToRightCorner, spikeAngles[i][1]])
-			Console.AddNewLine("Splitting angle into 2 (right corner)", Color.PERU)
+			#Console.AddNewLine("Splitting angle into 2 (right corner)", Color.PERU)
 
 		else:
 			# Presumably most of the time we'll end up here with no adjustments.
 			revisedSpikeableAngles.append(spikeAngles[i])
-			Console.AddNewLine("No Change to Angle", Color.PERU)
+			#Console.AddNewLine("No Change to Angle", Color.PERU)
 
-	Console.AddNewLine(str(revisedSpikeableAngles.size()) + " revised spike angles", Color.DEEP_SKY_BLUE)
+	#Console.AddNewLine(str(revisedSpikeableAngles.size()) + " revised spike angles", Color.DEEP_SKY_BLUE)
 
 	const MAX_ITERATIONS:int = 8
 	for line in revisedSpikeableAngles:
 		var firstAngleGood: bool = false
 		var secondAngleGood: bool = false
-		Console.AddNewLine("Revised Angle: " + str("%.1f" % rad_to_deg(line[0])) + ", " + str("%.1f" % rad_to_deg(line[1])), Color.PEACH_PUFF)
+		#Console.AddNewLine("Revised Angle: " + str("%.1f" % rad_to_deg(line[0])) + ", " + str("%.1f" % rad_to_deg(line[1])), Color.PEACH_PUFF)
 		if WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, line[0], athlete.team.flip, customTopspin):
-			Console.AddNewLine("1st angle will go in", Color.PEACH_PUFF)
+			#Console.AddNewLine("1st angle will go in", Color.PEACH_PUFF)
 			firstAngleGood = true
 		else:
-			Console.AddNewLine("1st angle won't go in", Color.PEACH_PUFF)
+			pass
+			#Console.AddNewLine("1st angle won't go in", Color.PEACH_PUFF)
 
 		if WillBallSpikedOnAngleLandIn(athlete.setRequest.target, 100.0/3.6, line[1], athlete.team.flip, customTopspin):
-			Console.AddNewLine("2nd angle will go in", Color.PEACH_PUFF)
+			#Console.AddNewLine("2nd angle will go in", Color.PEACH_PUFF)
 			secondAngleGood = true
 		else:
-			Console.AddNewLine("2nd angle won't go in", Color.PEACH_PUFF)
+			pass
+			#Console.AddNewLine("2nd angle won't go in", Color.PEACH_PUFF)
 
 		if !firstAngleGood && !secondAngleGood:
 			# there's no way of making this work
 			line[0] = NAN
-			Console.AddNewLine("Discarding open spike angle as no spike will land in", Color.PEACH_PUFF)
+			#Console.AddNewLine("Discarding open spike angle as no spike will land in", Color.PEACH_PUFF)
 
 		elif !firstAngleGood && secondAngleGood:
 			var lastBadAngle = line[0]
@@ -493,7 +517,7 @@ func ChooseSpikingStrategy(athlete:Athlete):
 
 			line[0] = lastGoodAngle
 			# if the angle isn't found this will just be the second angle, I guess that's ok?
-			Console.AddNewLine("1st angle updated to " + str("%.1f" % rad_to_deg(line[0])), Color.PEACH_PUFF)
+			#Console.AddNewLine("1st angle updated to " + str("%.1f" % rad_to_deg(line[0])), Color.PEACH_PUFF)
 
 		elif firstAngleGood && !secondAngleGood:
 			var lastBadAngle = line[1]
@@ -506,13 +530,13 @@ func ChooseSpikingStrategy(athlete:Athlete):
 					lastBadAngle = testAngle
 
 			line[1] = lastGoodAngle
-			Console.AddNewLine("2nd angle updated to " + str("%.1f" % rad_to_deg(line[1])), Color.PEACH_PUFF)
+			#Console.AddNewLine("2nd angle updated to " + str("%.1f" % rad_to_deg(line[1])), Color.PEACH_PUFF)
 
 	var finalSpikeAngles = []
 	for anglePair in revisedSpikeableAngles:
 		if !is_nan(anglePair[0]):
 			finalSpikeAngles.append(anglePair)
-	Console.AddNewLine(str(finalSpikeAngles.size()) + " valid angle(s)")
+	#Console.AddNewLine(str(finalSpikeAngles.size()) + " valid angle(s)")
 
 	var spikeAngleTopDown
 	var lineCross = randf()
@@ -604,8 +628,8 @@ func ChooseSpikingStrategy(athlete:Athlete):
 
 	# What is their preference as to hitting line or cross?
 	# How aggressively will they swing?
-	Console.AddNewLine("End choice of initial spiking plan", Color.TOMATO)
-	Console.AddNewLine("_____________________________________________________________", Color.TOMATO)
+	#Console.AddNewLine("End choice of initial spiking plan", Color.TOMATO)
+	#Console.AddNewLine("_____________________________________________________________", Color.TOMATO)
 
 func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 	var ball = athlete.ball
@@ -631,7 +655,7 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 #	Console.AddNewLine("Assuming blocker will jump for max height at the time of spike contact")
 
 	if athlete.setRequest.target.z * athlete.team.flip > 1.5:
-		Console.AddNewLine("Opposing right blocker will set block")
+		#Console.AddNewLine("Opposing right blocker will set block")
 
 		if timeTillSpikeContact < oppositionRightBlocker.blockState.jumpTime:
 			# They've already jumped
@@ -660,7 +684,7 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 			# Has the middle jumped on our middle?
 			var middleLandingTime = 0
 			if !oppositionMiddleBlocker.rb.freeze:
-				Console.AddNewLine("Opposition middle has already jumped", Color.BLUE)
+				#Console.AddNewLine("Opposition middle has already jumped", Color.BLUE)
 				middleLandingTime = Maths.TimeTillBallReachesHeight(oppositionMiddleBlocker.position, oppositionMiddleBlocker.linear_velocity, 0, 1.0)
 
 			if timeTillSpikeContact < oppositionMiddleBlocker.blockState.jumpTime + middleLandingTime:
@@ -687,13 +711,14 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 #			else:
 #				Console.AddNewLine("Other team's middle will try to help, but won't close the seam")
 		else:
-			Console.AddNewLine("Middle not targetting spiker, nor should the left blocker really...")
+			pass
+			#Console.AddNewLine("Middle not targetting spiker, nor should the left blocker really...")
 
 		if oppositionLeftBlocker.blockState.blockingTarget == athlete:
 			# Is the middle on the ground, or has alternativele gotten to within an arbitrary 1.5 metres of the pin blocker?
 			# Otherwise too much seam
 			if oppositionMiddleBlocker.rb.freeze || Maths.XZVector(oppositionMiddleBlocker.position).distance_to(Maths.XZVector(oppositionLeftBlocker.position)) < 1.5:
-				Console.AddNewLine("Opposing left blocker can try to join a triple if they so desire")
+				#Console.AddNewLine("Opposing left blocker can try to join a triple if they so desire")
 				if timeTillSpikeContact < oppositionLeftBlocker.blockState.jumpTime:
 					leftBlockerPossiblePosition = oppositionLeftBlocker.position
 					leftBlockerLeftCoverage = leftBlockerPossiblePosition.z - athlete.team.flip * oppositionLeftBlocker.stats.height/3
@@ -712,11 +737,11 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 
 
 	elif athlete.setRequest.target.z * athlete.team.flip > -1.5:
-		Console.AddNewLine("Opposing middle will set block")
+		#Console.AddNewLine("Opposing middle will set block")
 
 		var middleLandingTime = 0
 		if !oppositionMiddleBlocker.rb.freeze:
-			Console.AddNewLine("Opposition middle has already jumped")
+			#Console.AddNewLine("Opposition middle has already jumped")
 			middleLandingTime = Maths.TimeTillBallReachesHeight(oppositionMiddleBlocker.position, oppositionMiddleBlocker.linear_velocity, 0, 1.0)
 
 		if timeTillSpikeContact < oppositionMiddleBlocker.blockState.jumpTime + middleLandingTime:
@@ -767,7 +792,7 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 			rightBlockerLeftCoverage = oppositionRightBlocker.position.z - athlete.team.flip * oppositionRightBlocker.stats.height/3
 			rightBlockerRightCoverage = oppositionRightBlocker.position.z + athlete.team.flip * oppositionRightBlocker.stats.height/3
 	else:
-		Console.AddNewLine("Opposing left blocker will set block")
+		#Console.AddNewLine("Opposing left blocker will set block")
 		if timeTillSpikeContact < oppositionLeftBlocker.blockState.jumpTime:
 			# They've already jumped
 #			Console.AddNewLine("Right blocker position set: has already jumped")
@@ -791,7 +816,7 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 			# Has the middle jumped on our middle?
 			var middleLandingTime = 0
 			if !oppositionMiddleBlocker.rb.freeze:
-				Console.AddNewLine("Opposition middle has already jumped")
+				#Console.AddNewLine("Opposition middle has already jumped")
 				middleLandingTime = Maths.TimeTillBallReachesHeight(oppositionMiddleBlocker.position, oppositionMiddleBlocker.linear_velocity, 0, 1.0)
 
 			if timeTillSpikeContact < oppositionMiddleBlocker.blockState.jumpTime + middleLandingTime:
@@ -814,7 +839,7 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 
 		if oppositionRightBlocker.blockState.blockingTarget == athlete:
 			if oppositionMiddleBlocker.rb.freeze || Maths.XZVector(oppositionMiddleBlocker.position).distance_to(Maths.XZVector(oppositionLeftBlocker.position)) < 1.5:
-				Console.AddNewLine("Opposing right blocker can try to join a triple if they so desire")
+				#Console.AddNewLine("Opposing right blocker can try to join a triple if they so desire")
 				if timeTillSpikeContact < oppositionRightBlocker.blockState.jumpTime:
 					rightBlockerPossiblePosition = oppositionRightBlocker.position
 					rightBlockerLeftCoverage = rightBlockerPossiblePosition.z - athlete.team.flip * oppositionRightBlocker.stats.height/3
@@ -886,24 +911,24 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 	leftOverlap = false
 	rightOverlap = false
 
-	if !middleBlockerLeftCoverage || ! leftBlockerRightCoverage:
-		Console.AddNewLine("Middle and left blocker didn't both show up")
+	if !middleBlockerLeftCoverage || ! leftBlockerRightCoverage:pass
+		#Console.AddNewLine("Middle and left blocker didn't both show up")
 	elif flip * middleBlockerLeftCoverage < flip * leftBlockerRightCoverage:
-		Console.AddNewLine("Middle and left blocker overlap (Predicted)")
+		#Console.AddNewLine("Middle and left blocker overlap (Predicted)")
 		leftOverlap = true
-	else:
-		Console.AddNewLine("Middle and left blocker seam (Predicted)")
+	else:pass
+		#Console.AddNewLine("Middle and left blocker seam (Predicted)")
 
-	if !middleBlockerRightCoverage || ! rightBlockerLeftCoverage:
-		Console.AddNewLine("Middle and right blocker didn't both show up")
+	if !middleBlockerRightCoverage || ! rightBlockerLeftCoverage:pass
+		#Console.AddNewLine("Middle and right blocker didn't both show up")
 	elif flip * middleBlockerRightCoverage > flip * rightBlockerLeftCoverage:
-		Console.AddNewLine("Middle and right blocker overlap (Predicted)")
+		#Console.AddNewLine("Middle and right blocker overlap (Predicted)")
 		rightOverlap = true
-	else:
-		Console.AddNewLine("Middle and right blocker seam (Predicted)")
+	else:pass
+		#Console.AddNewLine("Middle and right blocker seam (Predicted)")
 
-	if leftOverlap && rightOverlap:
-		Console.AddNewLine("Triple Block! (Predicted)", Color.DARK_TURQUOISE)
+	if leftOverlap && rightOverlap:pass
+		#Console.AddNewLine("Triple Block! (Predicted)", Color.DARK_TURQUOISE)
 
 
 #	var blockMaximumHeight:float = 0
@@ -976,9 +1001,9 @@ func ReadDefence(athlete:Athlete, otherTeam:TeamNode):
 	var distanceToMiddleDefender:float = athlete.setRequest.target.distance_to(middleDefender.position)
 	var distanceToRightDefender:float = athlete.setRequest.target.distance_to(rightDefender.position)
 
-	Console.AddNewLine("Distance to left defender (" + leftDefender.stats.lastName + "): " + str("%0.1f"%distanceToLeftDefender))
-	Console.AddNewLine("Distance to middle defender(" + middleDefender.stats.lastName + "): " + str("%0.1f"%distanceToMiddleDefender))
-	Console.AddNewLine("Distance to right defender(" + rightDefender.stats.lastName + "): " + str("%0.1f"%distanceToRightDefender))
+	#Console.AddNewLine("Distance to left defender (" + leftDefender.stats.lastName + "): " + str("%0.1f"%distanceToLeftDefender))
+	#Console.AddNewLine("Distance to middle defender(" + middleDefender.stats.lastName + "): " + str("%0.1f"%distanceToMiddleDefender))
+	#Console.AddNewLine("Distance to right defender(" + rightDefender.stats.lastName + "): " + str("%0.1f"%distanceToRightDefender))
 
 
 func CalculateTimeTillSpike(athlete:Athlete):

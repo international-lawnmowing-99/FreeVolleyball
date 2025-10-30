@@ -67,7 +67,7 @@ func SetBall(team:TeamNode):
 	var errorThreshold = 100.0 * pow((team.chosenSetter.stats.set/100 - 1.0), 8.0)
 	var perfectThreshold = 100.0 - 100.0 / (1.0 + pow(2.71828, -((team.chosenSetter.stats.set/100.0) - 0.5)/0.1))
 
-	var setExecution = (errorThreshold + perfectThreshold )/2 #randi()% 100
+	var setExecution = 1000#(errorThreshold + perfectThreshold )/2 #randi()% 100
 
 	# A 100 setter would always set good?
 	# A 0 setter always makes errors
@@ -129,9 +129,9 @@ func SetBall(team:TeamNode):
 		#Console.AddNewLine(str("theoreticalGoodSetXZAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetXZAngle))), Color.GOLD)
 		#Console.AddNewLine(str("theoreticalGoodSetYAngle: " + str("%.3f" % rad_to_deg(theoreticalGoodSetYAngle))), Color.GOLD)
 
-		var xzError = randf()/3
-		var yError = randf()/3
-		var speedError = randf()/3
+		var xzError = randf()
+		var yError = randf()
+		var speedError = randf()/2
 
 		var xzAngle = theoreticalGoodSetXZAngle * (1 + Maths.RandomSign() * xzError)
 		var yAngle = theoreticalGoodSetYAngle * (1 +  yError)
@@ -143,8 +143,11 @@ func SetBall(team:TeamNode):
 		var xzVel = speed * cos(yAngle)
 		var xVel = xzVel * cos(xzAngle)
 		var zVel = xzVel * sin(-xzAngle)
-		#team.ball.linear_velocity = theoreticalGoodSetVelocity
-		team.ball.linear_velocity = Vector3(xVel, yVel, zVel)
+		team.ball.linear_velocity = theoreticalGoodSetVelocity
+		#team.ball.linear_velocity = Vector3(xVel, yVel, zVel)
+		var timeCheck = Maths.TimeTillBallReachesHeight(team.ball.position, team.ball.linear_velocity, team.chosenSpiker.stats.spikeHeight, 1)
+		Console.AddNewLine("Predicted set time: " + str(timeCheck), Color.GREEN_YELLOW)
+
 		#Console.AddNewLine(str(theoreticalGoodSetVelocity.x), Color.GOLD)
 		#Console.AddNewLine(str(xVel), Color.GOLD)
 		#Console.AddNewLine(str(theoreticalGoodSetVelocity.y), Color.GREEN_YELLOW)
@@ -160,7 +163,7 @@ func SetBall(team:TeamNode):
 			#do something
 			pass
 		team.setTarget.target = Maths.BallPositionAtGivenHeight(team.ball.position, team.ball.linear_velocity, team.chosenSpiker.stats.spikeHeight,1.0)
-		#team.setTarget.height = Maths.BallMaxHeight(team.ball.position, team.ball.linear_velocity, 1)
+		team.setTarget.height = Maths.BallMaxHeight(team.ball.position, team.ball.linear_velocity, 1)
 		#team.chosenSpiker.setRequest = team.setTarget
 		team.mManager.cube.position = team.setTarget.target
 
@@ -230,7 +233,6 @@ func SetBall(team:TeamNode):
 		team.chosenSetter = null
 		if (team.data.markUndoChangesToRoles):
 			team.setTarget = team.oppositeHitter.outsideFrontSpikes[0]
-
 			team.chosenSpiker = team.oppositeHitter
 		else:
 			team.setTarget = team.outsideFront.outsideFrontSpikes[0]
@@ -520,14 +522,14 @@ func ChooseSpiker(team:TeamNode):
 				if potentialSet == null:
 					athlete.stateMachine.SetCurrentState(athlete.coverState)
 					Console.AddNewLine(athlete.stats.lastName + " requires a set with velocity: " + str(setSpeed) + "mps, and will cover - no theoretical downward set available")
-					Console.AddNewLine("reception target: " + str(team.receptionTarget) + ", setTarget: " + str(athlete.setRequest.target))
+					#Console.AddNewLine("reception target: " + str(team.receptionTarget) + ", setTarget: " + str(athlete.setRequest.target))
 					continue
 
 				setSpeed = potentialSet.length()
 				if setSpeed > 10 || setSpeed < 0.01:
 					athlete.stateMachine.SetCurrentState(athlete.coverState)
 					Console.AddNewLine(athlete.stats.lastName + " requires a set with velocity: " + str(setSpeed) + "mps, and will cover")
-					Console.AddNewLine("reception target: " + str(team.receptionTarget) + ", setTarget: " + str(athlete.setRequest.target))
+					#Console.AddNewLine("reception target: " + str(team.receptionTarget) + ", setTarget: " + str(athlete.setRequest.target))
 					continue
 
 			if AthleteCanFullyTransition(athlete):
@@ -622,8 +624,8 @@ func ChooseSpiker(team:TeamNode):
 		var setChoice = randi()%possibleSpikers.size()
 
 		team.chosenSpiker = possibleSpikers[setChoice]
-		#if team.oppositeHitter in possibleSpikers:
-			#team.chosenSpiker = team.oppositeHitter
+		#if team.middleFront in possibleSpikers:
+			#team.chosenSpiker = team.middleFront
 
 
 

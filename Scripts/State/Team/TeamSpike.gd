@@ -20,9 +20,9 @@ func Update(team:TeamNode):
 	if !hit &&team.ball.inPlay && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight:
 		team.ball.position = team.chosenSpiker.setRequest.target # lol, hacky but might make the predictions work
 		SpikeBall(team)
-#		timeEnd = Time.get_unix_time_from_system()
-#		var timeElapsed = timeEnd - timeStart
-#		Console.AddNewLine("Actual time when ball ready to be spiked: " + str(timeElapsed))
+		timeEnd = Time.get_unix_time_from_system()
+		var timeElapsed = timeEnd - timeStart
+		Console.AddNewLine("Actual time when ball ready to be spiked: " + str(timeElapsed), Color.GOLD)
 #		if team.ball.linear_velocity.z > 0:
 #			if team.ball.position.z > team.chosenSpiker.setRequest.target.z: #&& \
 #				if(team.ball.position - team.chosenSpiker.setRequest.target).length() < 0.5:# &&\

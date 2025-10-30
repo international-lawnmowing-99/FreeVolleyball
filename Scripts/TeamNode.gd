@@ -631,9 +631,9 @@ func AutoSelectTeamLineup():
 		for list in aptitudeLists:
 			list.erase(nlibero2)
 		#libero2 = nlibero2
-	#nsetter.verticalJump += .5
-	#nsetter.jumpSetHeight += .5
-	#nsetter.spikeHeight += .5
+	nsetter.verticalJump += 3.5
+	nsetter.jumpSetHeight += 3.5
+	nsetter.spikeHeight += 3.5
 
 func SwapPlayer(player:AthleteStats,newPostion:int):
 	#print("-----------")

@@ -81,6 +81,8 @@ func TimeTillBallReachesHeight(position:Vector3, linear_velocity:Vector3, height
 func BallPositionAtGivenHeight(position:Vector3, linear_velocity:Vector3, height:float, gravity_scale:float):
 
 	var timeOfFlight = TimeTillBallReachesHeight(position, linear_velocity, height, gravity_scale)
+	if timeOfFlight == null:
+		return null
 	var xzPos = Vector2(position.x, position.z)
 	var xzVel = Vector2(linear_velocity.x, linear_velocity.z)
 	var newXZPos = xzPos + xzVel * timeOfFlight
@@ -101,7 +103,7 @@ func BallMaxHeight(position:Vector3, linear_velocity:Vector3, gravity_scale:floa
 		return position.y
 	else:
 		var timeOfFLight = linear_velocity.y/g
-		var distanceToTravel = linear_velocity.y * timeOfFLight + 0.5 * g * timeOfFLight * timeOfFLight
+		var distanceToTravel = linear_velocity.y * timeOfFLight - 0.5 * g * timeOfFLight * timeOfFLight
 		return position.y + distanceToTravel
 
 func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNet:float, gravity_scale:float):
@@ -175,10 +177,10 @@ func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 
 	var yDist = startPos.y - endPos.y
 	if yDist < 0:
-		Console.AddNewLine("Downwards parabola requested in inappropriate situation")
+		#Console.AddNewLine("Downwards parabola requested in inappropriate situation")
 		return null
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.z))
-	var xzTheta = Maths.SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
+	var xzTheta = SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
 
 
 	# Can the xzDistance be traversed by a ball set horizontally at the maximum allowable speed?
@@ -186,7 +188,7 @@ func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 	# for every angle there's a corresponding velocity, should we find the most aggressive?
 
 	# attempt to set horizontally, zero yVel
-	var yTravelTime = sqrt(yDist/gravity)
+	var yTravelTime = sqrt(2*yDist/gravity)
 	var maxXZTravelTime = xzDist/maxSetVelocity
 
 	if yTravelTime <= maxXZTravelTime:

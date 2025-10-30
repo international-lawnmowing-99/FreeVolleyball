@@ -101,49 +101,50 @@ func ResolveBlock():
 
 	if blockers.has(defendingTeam.defendState.leftSideBlocker):
 		leftBlocker = defendingTeam.defendState.leftSideBlocker
-		Console.AddNewLine("Defending team's left blocker present " + leftBlocker.stats.lastName)
+		#Console.AddNewLine("Defending team's left blocker present " + leftBlocker.stats.lastName)
 #		var leftBlockerLeft:float = leftBlocker.position.z + flip * leftBlocker.stats.height/3
 #		var leftBlockerRight:float = leftBlocker.position.z - flip * leftBlocker.stats.height/3
 
 
 		if abs(netPass.z - leftBlocker.position.z) > leftBlocker.stats.height/3:
-			Console.AddNewLine("Left blocker can't reach ball")
+			pass
+			#Console.AddNewLine("Left blocker can't reach ball")
 		else:
 			var actualBlockHeight:float = leftBlocker.stats.blockHeight - leftBlocker.stats.verticalJump + leftBlocker.position.y
-			Console.AddNewLine("Left blocker height at block: " + str("%0.2f" % actualBlockHeight) + " ... Possible block height: " + str("%0.2f" % leftBlocker.stats.blockHeight))
-			if netPass.y - ballRadius > actualBlockHeight:
-				Console.AddNewLine("Ball sails harmlessly over left blocker, ball height: " + str(netPass.y))
+			#Console.AddNewLine("Left blocker height at block: " + str("%0.2f" % actualBlockHeight) + " ... Possible block height: " + str("%0.2f" % leftBlocker.stats.blockHeight))
+			if netPass.y - ballRadius > actualBlockHeight:pass
+				#Console.AddNewLine("Ball sails harmlessly over left blocker, ball height: " + str(netPass.y))
 			else:
-				Console.AddNewLine("Left blocker involved in block!", Color.MEDIUM_TURQUOISE)
+				#Console.AddNewLine("Left blocker involved in block!", Color.MEDIUM_TURQUOISE)
 				canLeftBlock = true
 
 
 	if blockers.has(defendingTeam.defendState.middleBlocker):
 		middleBlocker = defendingTeam.defendState.middleBlocker
-		Console.AddNewLine("Defending team's middle blocker present " + middleBlocker.stats.lastName)
-		if abs(netPass.z - middleBlocker.position.z) > middleBlocker.stats.height/3:
-			Console.AddNewLine("Middle blocker can't reach ball")
+		#Console.AddNewLine("Defending team's middle blocker present " + middleBlocker.stats.lastName)
+		if abs(netPass.z - middleBlocker.position.z) > middleBlocker.stats.height/3:pass
+			#Console.AddNewLine("Middle blocker can't reach ball")
 		else:
 			var actualBlockHeight:float = middleBlocker.stats.blockHeight - middleBlocker.stats.verticalJump + middleBlocker.position.y
-			Console.AddNewLine("Middle blocker height at block: " + str("%0.2f" % actualBlockHeight) + " ... Possible block height: " + str("%0.2f" % middleBlocker.stats.blockHeight))
-			if netPass.y - ballRadius > actualBlockHeight:
-				Console.AddNewLine("Ball sails harmlessly over middle blocker, ball height: " + str(netPass.y))
+			#Console.AddNewLine("Middle blocker height at block: " + str("%0.2f" % actualBlockHeight) + " ... Possible block height: " + str("%0.2f" % middleBlocker.stats.blockHeight))
+			if netPass.y - ballRadius > actualBlockHeight:pass
+				#Console.AddNewLine("Ball sails harmlessly over middle blocker, ball height: " + str(netPass.y))
 			else:
-				Console.AddNewLine("Middle blocker involved in block!", Color.MEDIUM_TURQUOISE)
+				#Console.AddNewLine("Middle blocker involved in block!", Color.MEDIUM_TURQUOISE)
 				canMiddleBlock = true
 
 	if blockers.has(defendingTeam.defendState.rightSideBlocker):
 		rightBlocker = defendingTeam.defendState.rightSideBlocker
-		Console.AddNewLine("Defending team's right blocker present " + rightBlocker.stats.lastName)
-		if abs(netPass.z - rightBlocker.position.z) > rightBlocker.stats.height/3:
-			Console.AddNewLine("Right blocker can't reach ball")
+		#Console.AddNewLine("Defending team's right blocker present " + rightBlocker.stats.lastName)
+		if abs(netPass.z - rightBlocker.position.z) > rightBlocker.stats.height/3:pass
+			#Console.AddNewLine("Right blocker can't reach ball")
 		else:
 			var actualBlockHeight:float = rightBlocker.stats.blockHeight - rightBlocker.stats.verticalJump + rightBlocker.position.y
-			Console.AddNewLine("Right blocker height at block: " + str("%0.2f" % actualBlockHeight) + " ... Possible block height: " + str("%0.2f" % rightBlocker.stats.blockHeight))
-			if netPass.y - ballRadius > actualBlockHeight:
-				Console.AddNewLine("Ball sails harmlessly over right blocker, ball height: " + str(netPass.y))
+			#Console.AddNewLine("Right blocker height at block: " + str("%0.2f" % actualBlockHeight) + " ... Possible block height: " + str("%0.2f" % rightBlocker.stats.blockHeight))
+			if netPass.y - ballRadius > actualBlockHeight:pass
+				#Console.AddNewLine("Ball sails harmlessly over right blocker, ball height: " + str(netPass.y))
 			else:
-				Console.AddNewLine("Right blocker involved in block!", Color.MEDIUM_TURQUOISE)
+				#Console.AddNewLine("Right blocker involved in block!", Color.MEDIUM_TURQUOISE)
 				canRightBlock = true
 
 	# Choose the best available blocker to do a roll-off with
@@ -154,13 +155,13 @@ func ResolveBlock():
 			tripleBlockList.sort_custom(func(a,b): return a.stats.block > b.stats.block)
 			chosenBlocker = tripleBlockList[0]
 		elif canLeftBlock:
-			Console.AddNewLine("Middle and Left combine", Color.BLANCHED_ALMOND)
+			#Console.AddNewLine("Middle and Left combine", Color.BLANCHED_ALMOND)
 			if leftBlocker.stats.block > middleBlocker.stats.block:
 				chosenBlocker = leftBlocker
 			else:
 				chosenBlocker = middleBlocker
 		elif canRightBlock:
-			Console.AddNewLine("Middle and Right combine", Color.BLANCHED_ALMOND)
+			#Console.AddNewLine("Middle and Right combine", Color.BLANCHED_ALMOND)
 			if rightBlocker.stats.block > middleBlocker.stats.block:
 				chosenBlocker = rightBlocker
 			else:
@@ -173,7 +174,7 @@ func ResolveBlock():
 	elif  canRightBlock:
 		chosenBlocker = rightBlocker
 	else:
-		Console.AddNewLine("Queued block, but noone could reach ball!", Color.RED)
+		#Console.AddNewLine("Queued block, but noone could reach ball!", Color.RED)
 		ball.blockWillBeAttempted = false
 		if ball.inPlay:
 			spiker.team.mManager.BallOverNet(spiker.team.data.isHuman)
@@ -183,18 +184,18 @@ func ResolveBlock():
 	var attackRoll = randf_range(1, spiker.stats.spike)
 	var blockRoll = randf_range(1, chosenBlocker.stats.block)
 
-	Console.AddNewLine("Spike Roll: : " + str(int(attackRoll)) + " || Block Roll: " + str(int(blockRoll)), Color.YELLOW_GREEN)
+	#Console.AddNewLine("Spike Roll: : " + str(int(attackRoll)) + " || Block Roll: " + str(int(blockRoll)), Color.YELLOW_GREEN)
 
 	# Imagine a graph of spike roll vs block roll, both 0-100
 	# If spike is much better than the corresponding equal block value, then it's a kill,
 	# the other way, a kill block, and in the middle a deflection
 	var deflectGradient = .25
 
-	Console.AddNewLine("A block will happen")
-	Console.AddNewLine("1 + deflectGradient: " + str(1 + deflectGradient))
-	Console.AddNewLine("1 - deflectGradient: " + str(1 - deflectGradient))
-	Console.AddNewLine("Attack roll: " + str(attackRoll))
-	Console.AddNewLine("Block roll: " + str(blockRoll))
+	#Console.AddNewLine("A block will happen")
+	#Console.AddNewLine("1 + deflectGradient: " + str(1 + deflectGradient))
+	#Console.AddNewLine("1 - deflectGradient: " + str(1 - deflectGradient))
+	#Console.AddNewLine("Attack roll: " + str(attackRoll))
+	#Console.AddNewLine("Block roll: " + str(blockRoll))
 
 	# Ineffective block
 	if attackRoll>blockRoll * (1 + deflectGradient):
