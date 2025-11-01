@@ -161,7 +161,7 @@ func DontFallThroughFloor():
 #		Console.AddNewLine("Don't fall through floor " + stats.lastName)
 
 func Move(delta):
-	# For the future - measure the length, use it to determine if you should strafe or turn
+	# For the future - measure the length, use it to discrimine if you should strafe or turn
 
 
 	var distanceToTarget = position.distance_to(moveTarget)

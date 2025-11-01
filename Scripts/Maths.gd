@@ -39,16 +39,16 @@ func FindParabolaForGivenSpeed(startPos:Vector3, target:Vector3, speed:float, ai
 	var angle1
 	var angle2
 
-	var determinant = pow(speed, 4) - g * (g * xzDist * xzDist + 2 * yDist * speed * speed)
-	if determinant < 0:
+	var discriminant = pow(speed, 4) - g * (g * xzDist * xzDist + 2 * yDist * speed * speed)
+	if discriminant < 0:
 		Console.AddNewLine("Can't make that parabola work mate", Color.POWDER_BLUE)
 		return null
 		#Console.AddNewLine("Can't make that parabola work mate, giving you the best we've got", Color.POWDER_BLUE)
 #
 		#idealAngle = PI/4
 	else:
-		angle1 = atan((speed * speed + sqrt(determinant)) / (g * xzDist))
-		angle2 = atan((speed * speed - sqrt(determinant)) / (g * xzDist))
+		angle1 = atan((speed * speed + sqrt(discriminant)) / (g * xzDist))
+		angle2 = atan((speed * speed - sqrt(discriminant)) / (g * xzDist))
 
 		if aimingUp:
 			idealAngle = max(angle1, angle2)
@@ -70,11 +70,16 @@ func TimeTillBallReachesHeight(position:Vector3, linear_velocity:Vector3, height
 	# Returns the 2nd time the ball reaches a height if it is travelling up, and the height is above or equal to the ball's height
 	var g = gravity * gravity_scale
 
-	var finalV = sqrt(linear_velocity.y * linear_velocity.y + 2 * g * (position.y - height))
-	if is_nan(finalV):
-		Console.AddNewLine("Tried to find TimeTillBallReachesHeight - ball won't reach height", Color.CORNFLOWER_BLUE)
-		Console.AddNewLine("Det = " + str(linear_velocity.y * linear_velocity.y + 2 * g * (position.y - height)), Color.CORNFLOWER_BLUE)
+	var discriminant = linear_velocity.y * linear_velocity.y + 2 * g * (position.y - height)
+	if discriminant < 0:
+		#Console.AddNewLine("Tried to find TimeTillBallReachesHeight - ball won't reach height", Color.CORNFLOWER_BLUE)
+		return null
+
+	var finalV = sqrt(discriminant)
 	var remainingTime = (finalV + linear_velocity.y) / g
+	if remainingTime < 0.0:
+		#Console.AddNewLine("Already passed height?")
+		return null
 
 	return remainingTime
 
@@ -91,8 +96,8 @@ func BallPositionAtGivenHeight(position:Vector3, linear_velocity:Vector3, height
 
 func SetTimeDownwardsParabola(startPos:Vector3, endPos:Vector3):
 	var ballVel = FindDownwardsParabola(startPos, endPos)
-	if ballVel == Vector3.ZERO || null:
-		return 9999.9
+	if ballVel == null:
+		return INF
 
 	return TimeTillBallReachesHeight(startPos, ballVel, endPos.y, 1)
 
@@ -123,13 +128,13 @@ func CalculateBallOverNetVelocity(startPos:Vector3, target:Vector3, heightOverNe
 	var theta = atan((netPass.y * xzDistToTarget * xzDistToTarget - startPos.y * xzDistToNet * xzDistToNet) / (xzDistToNet * xzDistToTarget * xzDistToTarget - xzDistToTarget * xzDistToNet * xzDistToNet))
 
 #final vel(in reverse)
-	var determinant = g * xzDistToNet * xzDistToTarget * (xzDistToTarget - xzDistToNet) * (1 + tan(theta) * tan(theta)) / (2 * (xzDistToTarget * netPass.y - xzDistToNet * startPos.y))
+	var discriminant = g * xzDistToNet * xzDistToTarget * (xzDistToTarget - xzDistToNet) * (1 + tan(theta) * tan(theta)) / (2 * (xzDistToTarget * netPass.y - xzDistToNet * startPos.y))
 #this will happen if the middle point is lower than or equal to the straight-line point at the net of the start and end, ie the parabola curves the wrong way
-	if determinant < 0:
+	if discriminant < 0:
 		print("Can't make that work chap")
 		return Vector3.ZERO
 
-	var vel = sqrt(determinant)
+	var vel = sqrt(discriminant)
 
 #Calculate new y vel
 	var xzVel = cos(theta) * vel
@@ -177,9 +182,12 @@ func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 
 	var yDist = startPos.y - endPos.y
 	if yDist < 0:
-		#Console.AddNewLine("Downwards parabola requested in inappropriate situation")
+		Console.AddNewLine("Downwards parabola requested in inappropriate situation")
 		return null
 	var xzDist = Vector3(startPos.x, 0, startPos.z).distance_to(Vector3(endPos.x, 0, endPos.z))
+	if xzDist < 0.001:
+		# should the set be fired down at the max set velocity? it's an edge case anyway
+		return Vector3.ZERO
 	var xzTheta = SignedAngle(Vector3(1,0,0), Vector3(endPos.x, 0, endPos.z) - Vector3(startPos.x, 0, startPos.z), Vector3.UP)
 
 
@@ -190,51 +198,77 @@ func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 	# attempt to set horizontally, zero yVel
 	var yTravelTime = sqrt(2*yDist/gravity)
 	var maxXZTravelTime = xzDist/maxSetVelocity
+	#Console.AddNewLine("y travel time: " + str(yTravelTime), Color.GREEN_YELLOW)
+	#Console.AddNewLine("max xz travel time: " + str(maxXZTravelTime), Color.GREEN_YELLOW)
 
 	if yTravelTime <= maxXZTravelTime:
 		var xzVel = xzDist/ yTravelTime
-		Console.AddNewLine("Horizontal parabola")
+		Console.AddNewLine("Horizontal parabola", Color.GREEN_YELLOW)
+
 		return Vector3(xzVel * cos(-xzTheta), 0, xzVel * sin(-xzTheta))
 
 
 	else:
-		#Console.AddNewLine("downwards parabola with lowest possible velocity", Color.POWDER_BLUE)
-
+		Console.AddNewLine("Attempting to find downwards parabola with lowest possible velocity", Color.POWDER_BLUE)
 		#https://physics.stackexchange.com/questions/744596/calculate-the-angle-of-a-projectile-to-minimalize-the-initial-velocity
-		var theta = atan((yDist + sqrt(yDist * yDist + xzDist * xzDist))/xzDist)
+		#var theta = atan((-yDist + sqrt(yDist * yDist + xzDist * xzDist))/xzDist)
 		#var theta2 = atan((yDist - sqrt(yDist * yDist + xzDist * xzDist))/xzDist)
+
+		var discriminant = xzDist * xzDist + yDist * yDist
+		if discriminant < 0:
+			return null
+
+		var tanTheta = (-yDist + sqrt(discriminant))/xzDist
+		var denominator = xzDist * tanTheta + yDist
+
+		if denominator <= 1e-8:
+		# no valid angle found (shouldn't happen for typical downward cases)
+			return null
+
+		var v2 = gravity * xzDist * xzDist * (1 + tanTheta * tanTheta) / (2 * denominator)
+		if v2 <= 0.0:
+			return null
+
+		var speed = sqrt(v2)
+		var cos_theta = 1.0 / sqrt(1.0 + tanTheta * tanTheta)
+		var xz_speed = speed * cos_theta  # = speed * cos(theta)
+		var y_speed = speed * tanTheta * cos_theta  # = speed * sin(theta)
+
+		#Console.AddNewLine("Downwards parabola velocity: " + str(Vector3(xz_speed * cos(-xzTheta), -y_speed, xz_speed * sin(-xzTheta))))
+		return Vector3(xz_speed * cos(-xzTheta), y_speed, xz_speed * sin(-xzTheta))
+		#var theoreticalV = Vector3(xzVel * cos(-xzTheta), -yvel, xzVel * sin(-xzTheta))
+#
+		#return theoreticalV
+
 
 
 		#var theta:float = PI/4 + .5 * atan(yDist/xzDist)
 		#Console.AddNewLine("theta: " + str(theta))
 		#Console.AddNewLine("theta2: " + str(theta2))
 
-		var test = -gravity * xzDist * xzDist/(2*cos(theta)*cos(theta) * (yDist - xzDist*tan(theta)))
+		#var test = -gravity * xzDist * xzDist/(2*cos(theta)*cos(theta) * (xzDist*tan(theta)) + yDist)
 		#var test2 = -gravity * xzDist * xzDist/(2*cos(theta2)*cos(theta2) * (yDist - xzDist*tan(theta2)))
 
-		var speed = 0
-		#var speed2 = 0
-
-		if test > 0:
-			speed = sqrt(test)
+		#var speed = 0
+		##var speed2 = 0
+#
+		#if test > 0:
+			#speed = sqrt(test)
 		#if test2 > 0:
 			#speed2 = sqrt(test2)
 
 		#Console.AddNewLine("speed: " + str(speed))
 		#Console.AddNewLine("speed2: " + str(speed2))
-
-		if speed == 0:# && speed2 == 0:
-			Console.AddNewLine("Couldn't find parabola with lowest velocity")
-			return Vector3.ZERO
+#
+		#if speed == 0:# && speed2 == 0:
+			#Console.AddNewLine("Couldn't find parabola with lowest velocity")
+			#return null
 
 		#var speed = gravity*xzDist*xzDist/(sqrt(xzDist*xzDist + yDist*yDist) + yDist)
 
-		var xzVel = speed * cos(theta)
-		var yvel = speed * sin(theta)
+		#var xzVel = speed * cos(theta)
+		#var yvel = speed * sin(theta)
 
-		var theoreticalV = Vector3(xzVel * cos(-xzTheta), -yvel, xzVel * sin(-xzTheta))
-
-		return theoreticalV
 
 
 

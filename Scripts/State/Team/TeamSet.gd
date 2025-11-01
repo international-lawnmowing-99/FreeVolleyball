@@ -100,7 +100,10 @@ func SetBall(team:TeamNode):
 				team.mManager.Pause()
 			else:
 				Console.AddNewLine("Perfect, downwards set", Color.DARK_ORANGE)
+				Console.AddNewLine(team.chosenSpiker.stats.lastName, Color.DARK_ORANGE)
+				#Console.AddNewLine("Start: " + str(team.ball.position) + " End: " + str(team.setTarget.target))
 				var trialVel = Maths.FindDownwardsParabola(team.ball.position, team.setTarget.target)
+				#Console.AddNewLine("Actual end: " + str(Maths.BallPositionAtGivenHeight(team.ball.position, trialVel, team.chosenSpiker.stats.spikeHeight,1)))
 				if trialVel == null:
 					trialVel = Vector3.ZERO
 					Console.AddNewLine("Error!: Perfect set couldn't be produced from position requested")
@@ -373,7 +376,9 @@ func AssignSetter(athlete:Athlete, team:TeamNode, isJumpSetting:bool):
 #	team.mManager.cylinder.position = team.receptionTarget
 
 func AthleteCanJumpSet(athlete:Athlete, team:TeamNode)->bool:
-	var athleteSetPosition:Vector3 = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.jumpSetHeight, 1.0)
+	var athleteSetPosition = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.jumpSetHeight, 1.0)
+	if athleteSetPosition == null:
+		return false
 
 	if team.data.isHuman:
 		if athleteSetPosition.x < 0.1:
@@ -388,7 +393,10 @@ func AthleteCanJumpSet(athlete:Athlete, team:TeamNode)->bool:
 
 
 func AthleteCanStandingSet(athlete:Athlete, team:TeamNode)->bool:
-	var athleteSetPosition:Vector3 = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.standingSetHeight, 1.0)
+	var pos = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.standingSetHeight, 1.0)
+	if pos == null:
+		return false
+	var athleteSetPosition:Vector3 = pos
 
 	if team.data.isHuman:
 		if athleteSetPosition.x < 0.1:
@@ -518,18 +526,19 @@ func ChooseSpiker(team:TeamNode):
 			# Very hacky, but if no parabola is found then vector3.zero will be returned
 			if setSpeed > 10 || setSpeed < 0.01:
 				# Attempt downwards parabola
+				#Console.AddNewLine(athlete.stats.lastName)
 				potentialSet = Maths.FindDownwardsParabola(team.receptionTarget, athlete.setRequest.target)
 				if potentialSet == null:
 					athlete.stateMachine.SetCurrentState(athlete.coverState)
 					Console.AddNewLine(athlete.stats.lastName + " requires a set with velocity: " + str(setSpeed) + "mps, and will cover - no theoretical downward set available")
-					#Console.AddNewLine("reception target: " + str(team.receptionTarget) + ", setTarget: " + str(athlete.setRequest.target))
+					Console.AddNewLine("reception target: " + str(team.receptionTarget) + ", setTarget: " + str(athlete.setRequest.target))
 					continue
 
 				setSpeed = potentialSet.length()
 				if setSpeed > 10 || setSpeed < 0.01:
 					athlete.stateMachine.SetCurrentState(athlete.coverState)
 					Console.AddNewLine(athlete.stats.lastName + " requires a set with velocity: " + str(setSpeed) + "mps, and will cover")
-					#Console.AddNewLine("reception target: " + str(team.receptionTarget) + ", setTarget: " + str(athlete.setRequest.target))
+					Console.AddNewLine("reception target: " + str(team.receptionTarget) + ", setTarget: " + str(athlete.setRequest.target))
 					continue
 
 			if AthleteCanFullyTransition(athlete):
@@ -610,9 +619,9 @@ func ChooseSpiker(team:TeamNode):
 					if spiker.stats.spikeHeight> otherTeam.defendState.leftSideBlocker.stats.blockHeight:
 						Console.AddNewLine("Might be able to OTT with opposite")
 
-		Console.AddNewLine("Considering spiker skill...")
-		for spiker:Athlete in possibleSpikers:
-			Console.AddNewLine(spiker.stats.lastName + " spike: " + str(spiker.stats.spike))
+		#Console.AddNewLine("Considering spiker skill...")
+		#for spiker:Athlete in possibleSpikers:
+			#Console.AddNewLine(spiker.stats.lastName + " spike: " + str(spiker.stats.spike))
 
 		#Console.AddNewLine("How repetitive is our choice - are we predictable?")
 		#Console.AddNewLine("Do we have an explicit instruction from the coach?")
@@ -624,8 +633,8 @@ func ChooseSpiker(team:TeamNode):
 		var setChoice = randi()%possibleSpikers.size()
 
 		team.chosenSpiker = possibleSpikers[setChoice]
-		#if team.middleFront in possibleSpikers:
-			#team.chosenSpiker = team.middleFront
+		#if team.outsideFront in possibleSpikers:
+			#team.chosenSpiker = team.outsideFront
 
 
 

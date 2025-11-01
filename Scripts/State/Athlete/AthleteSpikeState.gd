@@ -63,10 +63,10 @@ func Update(athlete:Athlete):
 			CalculateTakeOffXZ(athlete)
 
 			var timeTillBallReachesSetTarget:float = CalculateTimeTillBallReachesSetTarget(athlete)
-			if athlete == athlete.team.oppositeHitter:
-				Console.AddNewLine("set request height: " + str(athlete.setRequest.height) + " ||| set request y: " + str(athlete.setRequest.target.y), Color.GOLDENROD)
-				Console.AddNewLine("time to set target: " + str("%0.3f" % timeTillBallReachesSetTarget), Color.GOLD)
-				Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)), Color.GOLD)
+			#if athlete == athlete.team.oppositeHitter:
+				#Console.AddNewLine("set request height: " + str(athlete.setRequest.height) + " ||| set request y: " + str(athlete.setRequest.target.y), Color.GOLDENROD)
+				#Console.AddNewLine("time to set target: " + str("%0.3f" % timeTillBallReachesSetTarget), Color.GOLD)
+				#Console.AddNewLine("time till jump peak: " + str("%0.3f" % athlete.CalculateTimeTillJumpPeak(takeOffXZ)), Color.GOLD)
 
 #			Console.AddNewLine("time till set target apparently... ")
 			if timeTillBallReachesSetTarget <= athlete.CalculateTimeTillJumpPeak(takeOffXZ) && athlete.team.stateMachine.currentState != athlete.team.receiveState:
@@ -648,8 +648,9 @@ func ReadBlock(athlete:Athlete, otherTeam:TeamNode):
 
 	var timeTillSpikeContact = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, athlete.stats.spikeHeight, 1.0)
 	# before I forget this - seems to always trigger when a non-setter standing sets the middle
-	if is_nan(timeTillSpikeContact):
+	if timeTillSpikeContact == null: #is_nan(timeTillSpikeContact):
 		Console.AddNewLine("Can't find time till spike contact", Color.CORNFLOWER_BLUE)
+		return
 	var timeDelay = athlete.myDelta * 5
 
 #	Console.AddNewLine("Assuming blocker will jump for max height at the time of spike contact")

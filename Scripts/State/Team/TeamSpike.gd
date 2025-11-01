@@ -17,7 +17,8 @@ func Update(team:TeamNode):
 
 	team.UpdateTimeTillDigTarget()
 #	Console.AddNewLine(str((team.ball.position - team.chosenSpiker.setRequest.target).length()))
-	if !hit &&team.ball.inPlay && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight:
+	if !hit &&team.ball.inPlay && team.ball.linear_velocity.y <= 0 && team.ball.position.y <= team.chosenSpiker.stats.spikeHeight && team.ball.position.distance_to(team.chosenSpiker.setRequest.target) <= 1:
+		Console.AddNewLine(str(team.ball.position))
 		team.ball.position = team.chosenSpiker.setRequest.target # lol, hacky but might make the predictions work
 		SpikeBall(team)
 		timeEnd = Time.get_unix_time_from_system()

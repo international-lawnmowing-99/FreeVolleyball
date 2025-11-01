@@ -209,8 +209,12 @@ func PlaceTeam():
 func UpdateTimeTillDigTarget():
 
 	if (stateMachine.currentState == setState):
+		var time = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, receptionTarget.y, 1.0) # Maths.XZVector(ball.position).distance_to(Maths.XZVector(receptionTarget)) / max(Maths.XZVector(ball.linear_velocity).length(),.0001)
+		if time == null:
+			timeTillDigTarget = 0
+			return
 
-		timeTillDigTarget = Maths.TimeTillBallReachesHeight(ball.position, ball.linear_velocity, receptionTarget.y, 1.0) # Maths.XZVector(ball.position).distance_to(Maths.XZVector(receptionTarget)) / max(Maths.XZVector(ball.linear_velocity).length(),.0001)
+		timeTillDigTarget = time
 #		if !mManager.isPaused:
 #			Console.AddNewLine(str("%.2f" % timeTillDigTarget) + " time till dig target updated")
 
@@ -631,9 +635,9 @@ func AutoSelectTeamLineup():
 		for list in aptitudeLists:
 			list.erase(nlibero2)
 		#libero2 = nlibero2
-	nsetter.verticalJump += 3.5
-	nsetter.jumpSetHeight += 3.5
-	nsetter.spikeHeight += 3.5
+	nsetter.verticalJump += 6.5
+	nsetter.jumpSetHeight += 6.5
+	nsetter.spikeHeight += 6.5
 
 func SwapPlayer(player:AthleteStats,newPostion:int):
 	#print("-----------")

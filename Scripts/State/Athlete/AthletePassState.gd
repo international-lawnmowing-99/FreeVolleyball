@@ -15,7 +15,7 @@ func Enter(athlete:Athlete):
 	athlete.animTree.set("parameters/state/transition_request", "digging")
 	ball = athlete.ball
 
-	#Make a determination as to whether the ball will land in the court
+	#Make a discrimination as to whether the ball will land in the court
 	#Ideally take into account:
 	# 1: confidence that it's in
 	# 2: confidence that it's my ball to take
@@ -33,7 +33,10 @@ func Enter(athlete:Athlete):
 
 
 	var servePos = ball.position
-
+	var ballPosAtReceptionHeight = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, athlete.stats.digHeight, ball.topspin)
+	if ballPosAtReceptionHeight == null:
+		Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, athlete.stats.digHeight, ball.topspin)
+		return
 	athlete.moveTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, athlete.stats.digHeight, ball.topspin) + Vector3(0,-athlete.stats.digHeight, randf_range(-.25,.25))
 	athlete.moveTarget += (athlete.moveTarget - Vector3(servePos.x, 0, servePos.z)).normalized()/2
 
@@ -67,21 +70,21 @@ func Enter(athlete:Athlete):
 	#Will the two meet??
 	# circle = line
 
-	var aDet = m*m + 1
-	var bDet = -2*h + 2*m*b - 2*k*m
-	var cDet = h*h + b*b + k*k -2*k*b - r*r
+	var aDisc = m*m + 1
+	var bDisc = -2*h + 2*m*b - 2*k*m
+	var cDisc = h*h + b*b + k*k -2*k*b - r*r
 
-	var determinate = bDet * bDet - 4 *aDet * cDet
+	var discriminate = bDisc * bDisc - 4 *aDisc * cDisc
 
 
 
-	if determinate == 0:
+	if discriminate == 0:
 		#Congrats, you have a tangent
-		intersectionPointX = (-bDet + sqrt(determinate))/(2*aDet)
-	elif determinate > 0:
+		intersectionPointX = (-bDisc + sqrt(discriminate))/(2*aDisc)
+	elif discriminate > 0:
 		# Choose t
-		var point1x =  (-bDet + sqrt(determinate))/(2*aDet)
-		var point2x = (-bDet - sqrt(determinate))/(2*aDet)
+		var point1x =  (-bDisc + sqrt(discriminate))/(2*aDisc)
+		var point2x = (-bDisc - sqrt(discriminate))/(2*aDisc)
 		if athlete.team.data.isHuman:
 			intersectionPointX = max(point1x, point2x)
 		else:
@@ -146,7 +149,7 @@ func PassBall(athlete:Athlete):
 	var receptionTarget
 	var ballMaxHeight
 	#perfect pass, 2-pass, 1-pass, shank, some sort of unSafety ball that hits the floor near your feet
-	var passRoll = randf_range(0, athlete.stats.reception)
+	var passRoll =1000# randf_range(0, athlete.stats.reception)
 #	Console.AddNewLine("PASSING || PASS ROLL: " + str(int(passRoll)) + " Difficulty: " + str(int(ball.difficultyOfReception)))
 	var rollOffDifference = passRoll - ball.difficultyOfReception
 #	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.AQUA)
