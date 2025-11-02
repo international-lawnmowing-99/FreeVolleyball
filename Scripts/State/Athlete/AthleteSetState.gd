@@ -69,9 +69,25 @@ func Update(athlete:Athlete):
 					athlete.ReEvaluateState()
 
 	if athlete.ball:
-		athlete.leftIKTarget.global_transform.origin = athlete.ball.global_transform.origin + athlete.model.transform.basis.x/8.0
-#		athlete.leftIKTarget.position.slerp (athlete.ball.position, athlete.myDelta * interpolationSpeed)
-		athlete.rightIKTarget.global_transform.origin = athlete.ball.global_transform.origin - athlete.model.transform.basis.x/8.0
+		#athlete.leftIKTarget.global_transform.origin = athlete.ball.global_transform.origin + athlete.model.transform.basis.x/8.0
+		#
+##		athlete.leftIKTarget.position.slerp (athlete.ball.position, athlete.myDelta * interpolationSpeed)
+		#athlete.rightIKTarget.global_transform.origin = athlete.ball.global_transform.origin - athlete.model.transform.basis.x/8.0
+
+		var local_ball_pos = athlete.model.to_local(athlete.ball.global_transform.origin)
+		if local_ball_pos.z < 0.2:
+			local_ball_pos.z = 0.0
+		local_ball_pos.x = clamp(local_ball_pos.x, -0.4, 0.4)
+		local_ball_pos.y = clamp(local_ball_pos.y, 0.3, 2.8)
+		var leftIKx = clamp(local_ball_pos.x, -0.2, .5)
+		var rightIKx = clamp(local_ball_pos.x, 0.2, -.5)
+
+		var localLeftIK = Vector3(leftIKx, local_ball_pos.y, local_ball_pos.z)
+		var localRightIK = Vector3(rightIKx, local_ball_pos.y, local_ball_pos.z)
+
+		athlete.leftIKTarget.global_transform.origin = athlete.model.to_global(local_ball_pos) + athlete.model.transform.basis.x / 8.0
+		athlete.rightIKTarget.global_transform.origin = athlete.model.to_global(local_ball_pos) - athlete.model.transform.basis.x / 8.0
+
 
 #		Console.AddNewLine("time till set " + str("%0.2f" % timeTillSet))
 #		athlete.team.mManager.cube.position = athlete.position + athlete.get_node("new new woman import").transform.basis.x

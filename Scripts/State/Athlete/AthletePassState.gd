@@ -36,6 +36,7 @@ func Enter(athlete:Athlete):
 	var ballPosAtReceptionHeight = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, athlete.stats.digHeight, ball.topspin)
 	if ballPosAtReceptionHeight == null:
 		Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, athlete.stats.digHeight, ball.topspin)
+		Console.AddNewLine("Ball not conventionally passable!", Color.RED)
 		return
 	athlete.moveTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, athlete.stats.digHeight, ball.topspin) + Vector3(0,-athlete.stats.digHeight, randf_range(-.25,.25))
 	athlete.moveTarget += (athlete.moveTarget - Vector3(servePos.x, 0, servePos.z)).normalized()/2
@@ -149,7 +150,7 @@ func PassBall(athlete:Athlete):
 	var receptionTarget
 	var ballMaxHeight
 	#perfect pass, 2-pass, 1-pass, shank, some sort of unSafety ball that hits the floor near your feet
-	var passRoll =1000# randf_range(0, athlete.stats.reception)
+	var passRoll = randf_range(0, athlete.stats.reception)
 #	Console.AddNewLine("PASSING || PASS ROLL: " + str(int(passRoll)) + " Difficulty: " + str(int(ball.difficultyOfReception)))
 	var rollOffDifference = passRoll - ball.difficultyOfReception
 #	Console.AddNewLine( str(int(passRoll)) + " out of a possible " + str(int(athlete.stats.reception)), Color.AQUA)
@@ -181,6 +182,13 @@ func PassBall(athlete:Athlete):
 
 		var timeForBallPeak = initialYVel/gravity
 		ballMaxHeight = initialYVel * initialYVel /(2 * gravity) + ball.position.y
+		if ballMaxHeight > 38: #will clip roof - this is usually because a setter with a riddiculous (3+metre) vertical
+								#jump has blocked and needs to hit the ground before they can jump again
+			Console.AddNewLine("Perfect pass impossible due to length of time for setter to return")
+			receptionTarget = Vector3(athlete.team.flip * randf_range(1.5, 2.5), 2.5, randf_range(-2, 2))
+			ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
+			Console.AddNewLine(athlete.stats.lastName + " 2-point pass (forced)")
+			return
 
 #		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 
@@ -213,7 +221,7 @@ func PassBall(athlete:Athlete):
 			receptionTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 2.5, 1.0)
 		else:
 			receptionTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0, 1.0)
-		if is_nan(receptionTarget.x) || is_nan(receptionTarget.z):
+		if receptionTarget == null || is_nan(receptionTarget.x) || is_nan(receptionTarget.z):
 			if ball.position.y > 0:
 				receptionTarget = Maths.BallPositionAtGivenHeight(ball.position, ball.linear_velocity, 0, 1.0)
 			else:

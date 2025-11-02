@@ -209,7 +209,7 @@ func FindDownwardsParabola(startPos:Vector3, endPos:Vector3):
 
 
 	else:
-		Console.AddNewLine("Attempting to find downwards parabola with lowest possible velocity", Color.POWDER_BLUE)
+		#Console.AddNewLine("Attempting to find downwards parabola with lowest possible velocity", Color.POWDER_BLUE)
 		#https://physics.stackexchange.com/questions/744596/calculate-the-angle-of-a-projectile-to-minimalize-the-initial-velocity
 		#var theta = atan((-yDist + sqrt(yDist * yDist + xzDist * xzDist))/xzDist)
 		#var theta2 = atan((yDist - sqrt(yDist * yDist + xzDist * xzDist))/xzDist)

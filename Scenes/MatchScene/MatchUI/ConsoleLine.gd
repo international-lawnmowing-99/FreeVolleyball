@@ -7,6 +7,6 @@ func _ready():
 
 func _process(delta):
 	self_modulate.a -= fadeSpeed * delta
-	
+
 	if self_modulate.a < 0.01:
 		queue_free()

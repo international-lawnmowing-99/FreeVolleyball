@@ -364,7 +364,12 @@ func AssignSetter(athlete:Athlete, team:TeamNode, isJumpSetting:bool):
 		team.receptionTarget = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.jumpSetHeight, 1.0)
 	else:
 		athlete.setState.internalSetState = athlete.setState.InternalSetState.StandingSet
-		team.receptionTarget = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.standingSetHeight, 1.0)
+		var testReceptionTarget = Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.standingSetHeight, 1.0)
+		if testReceptionTarget == null:
+			Console.AddNewLine("uh oh, no possible parabola for ball to reach standing set target position?")
+			Maths.BallPositionAtGivenHeight(athlete.ball.position, athlete.ball.linear_velocity, athlete.stats.standingSetHeight, 1.0)
+			return
+		team.receptionTarget = testReceptionTarget
 
 	athlete.stateMachine.SetCurrentState(athlete.setState)
 	team.chosenSetter = athlete
@@ -589,6 +594,15 @@ func ChooseSpiker(team:TeamNode):
 			Console.AddNewLine("$$$___~~~ No possible spikers, DUMPLING", Color.CRIMSON)
 
 		Console.AddNewLine("^^^___^^^  No possible spikers, release ball", Color.CRIMSON)
+		var highBall = Set.new(team.flip * 0.5, team.outsideFront.stats.spikeHeight, team.flip * 4.2, max(5, team.outsideFront.stats.spikeHeight + 2.5))
+		team.setTarget = highBall
+		team.chosenSpiker = team.outsideFront
+		team.chosenSpiker.setRequest = highBall
+		var state = team.chosenSpiker.stateMachine.currentState
+		team.chosenSpiker.WaitThenTransition(team.chosenSpiker.stats.reactionTime)
+		#team.chosenSpiker.stateMachine.SetCurrentState(team.chosenSpiker.transitionState)
+		team.chosenSpiker.spikeState.spikeState = team.chosenSpiker.spikeState.SpikeState.ChoiceConfirmed
+		state = team.chosenSpiker.stateMachine.currentState
 		return
 
 	else:
@@ -633,8 +647,9 @@ func ChooseSpiker(team:TeamNode):
 		var setChoice = randi()%possibleSpikers.size()
 
 		team.chosenSpiker = possibleSpikers[setChoice]
-		#if team.outsideFront in possibleSpikers:
-			#team.chosenSpiker = team.outsideFront
+		if team.outsideBack in possibleSpikers:
+			team.chosenSpiker = team.outsideBack
+
 
 
 
