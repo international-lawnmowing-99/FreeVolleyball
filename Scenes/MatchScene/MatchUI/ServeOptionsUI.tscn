@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bn7njj16hwoye"]
+[gd_scene load_steps=5 format=3 uid="uid://bn7njj16hwoye"]
 
 [ext_resource type="PackedScene" uid="uid://bpb8ra3kywlo6" path="res://Scenes/MatchScene/MatchUI/CourtRepresentationUI.tscn" id="1_o24n6"]
+[ext_resource type="Script" uid="uid://bd7qwn0vq2vnk" path="res://Scenes/MatchScene/MatchUI/ServeOptionsUI.gd" id="1_qgr5g"]
 
 [sub_resource type="Gradient" id="Gradient_rt5qm"]
 offsets = PackedFloat32Array(0, 0.524725, 1)
@@ -14,6 +15,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("1_qgr5g")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
@@ -25,61 +27,6 @@ offset_bottom = 1057.0
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 custom_minimum_size = Vector2(300, 1000)
 layout_mode = 2
-
-[node name="Button" type="Button" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button2" type="Button" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button3" type="Button" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button4" type="Button" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button5" type="Button" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button6" type="Button" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button7" type="Button" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button8" type="Button" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button9" type="Button" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button10" type="Button" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button11" type="Button" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
 [node name="Athlete1ServeOptionsUI" type="Control" parent="."]
 anchors_preset = 0
@@ -116,43 +63,6 @@ theme_override_font_sizes/font_size = 60
 text = "No Rotation Available"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="Athlete1ServeOptionsUI"]
-layout_mode = 0
-offset_left = 532.0
-offset_top = 338.0
-offset_right = 868.0
-offset_bottom = 936.0
-
-[node name="Button2" type="Button" parent="Athlete1ServeOptionsUI/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Target Weakest Receiver"
-
-[node name="Button5" type="Button" parent="Athlete1ServeOptionsUI/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Target Strongest Receiving Attacker"
-
-[node name="Button3" type="Button" parent="Athlete1ServeOptionsUI/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Target Player"
-
-[node name="Button4" type="Button" parent="Athlete1ServeOptionsUI/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Target Location"
-
-[node name="Button" type="Button" parent="Athlete1ServeOptionsUI/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Target Libero"
-
 [node name="ServeDir" type="Line2D" parent="Athlete1ServeOptionsUI"]
 position = Vector2(1555.11, 1058.65)
 rotation = -3.14159
@@ -165,3 +75,126 @@ end_cap_mode = 2
 sharp_limit = 9.0
 round_precision = 13
 antialiased = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Athlete1ServeOptionsUI"]
+layout_mode = 0
+offset_left = 496.0
+offset_top = 520.0
+offset_right = 1162.0
+offset_bottom = 771.0
+
+[node name="GridContainerStrategies" type="GridContainer" parent="Athlete1ServeOptionsUI/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonTargetWeakestReceiver" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerStrategies"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Weakest Receiver"
+
+[node name="Popup" type="PopupPanel" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerStrategies/ButtonTargetWeakestReceiver"]
+oversampling_override = 1.0
+title = "Warning - No Scouting Data"
+initial_position = 1
+size = Vector2i(682, 500)
+
+[node name="Label" type="Label" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerStrategies/ButtonTargetWeakestReceiver/Popup"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 678.0
+offset_bottom = 496.0
+text = "Warning! 
+
+We don't know who the worst passer on this team is because we haven't seen at least one of their passers in action. 
+
+An algoithm will decide who to target..."
+autowrap_mode = 3
+
+[node name="ButtonTargetStrongestAttacker" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerStrategies"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Strongest Receiving Attacker"
+
+[node name="ButtonAthlete" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerStrategies"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Individual Athlete"
+
+[node name="ButtonTargetLocation" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerStrategies"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Location"
+
+[node name="ButtonTargetLibero" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerStrategies"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Target Libero"
+
+[node name="ButtonTargetRandom" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerStrategies"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Random Location - No Target"
+
+[node name="GridContainerServeType" type="GridContainer" parent="Athlete1ServeOptionsUI/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonTopspinServe" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerServeType"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Topspin Serve"
+
+[node name="ButtonFloatServe" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerServeType"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Float Serve"
+
+[node name="ButtonUnderarmServe" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerServeType"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Underarm Serve"
+
+[node name="ButtonFutureTechnologyServe" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerServeType"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "? - Donate enough money and I'll consider adding funky serve types of your choosing"
+autowrap_mode = 3
+
+[node name="GridContainerServeType2" type="GridContainer" parent="Athlete1ServeOptionsUI/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonTopspinServe" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerServeType2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Aggressive Serve"
+
+[node name="ButtonFloatServe" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerServeType2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Float Serve"
+
+[node name="ButtonUnderarmServe" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerServeType2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Underarm Serve"
+
+[node name="ButtonFutureTechnologyServe" type="Button" parent="Athlete1ServeOptionsUI/HBoxContainer/GridContainerServeType2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "? - Donate enough money and I'll consider adding funky serve types of your choosing"
+autowrap_mode = 3

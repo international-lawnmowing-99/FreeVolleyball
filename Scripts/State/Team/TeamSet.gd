@@ -647,8 +647,8 @@ func ChooseSpiker(team:TeamNode):
 		var setChoice = randi()%possibleSpikers.size()
 
 		team.chosenSpiker = possibleSpikers[setChoice]
-		if team.outsideBack in possibleSpikers:
-			team.chosenSpiker = team.outsideBack
+		#if team.outsideBack in possibleSpikers:
+			#team.chosenSpiker = team.outsideBack
 
 
 

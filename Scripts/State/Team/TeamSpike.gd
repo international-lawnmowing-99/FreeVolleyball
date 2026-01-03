@@ -99,6 +99,7 @@ func SpikeBall(team:TeamNode):
 
 			### This doesn't always go over the net, especially at sharp angles
 			ball.linear_velocity = Maths.FindWellBehavedParabola(ball.position, ball.attackTarget,  max(2.8, team.setTarget.height + 0.5))
+			#ball.linear_velocity =
 			###
 
 

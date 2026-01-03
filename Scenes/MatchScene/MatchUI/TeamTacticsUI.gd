@@ -62,3 +62,5 @@ func Init(_teamA, _teamB):
 	receiveOptionsUI.teamA = teamA
 	receiveOptionsUI.teamB = teamB
 	receiveOptionsUI.Init()
+
+	serveOptionsUI.Init(teamA, teamB)

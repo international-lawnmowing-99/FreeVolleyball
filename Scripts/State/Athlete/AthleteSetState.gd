@@ -88,6 +88,23 @@ func Update(athlete:Athlete):
 		athlete.leftIKTarget.global_transform.origin = athlete.model.to_global(local_ball_pos) + athlete.model.transform.basis.x / 8.0
 		athlete.rightIKTarget.global_transform.origin = athlete.model.to_global(local_ball_pos) - athlete.model.transform.basis.x / 8.0
 
+		var leftHandTarget = athlete.leftIKTarget
+		var rightHandTarget = athlete.rightIKTarget
+
+		#leftHandTarget.look_at(athlete.leftIK.position, athlete.ball.global_transform.origin + Vector3.UP, Vector3.UP)
+		#rightHandTarget.look_at(athlete.rightIK.position, athlete.ball.global_transform.origin + Vector3.UP, Vector3.UP)
+#
+		#leftHandTarget.rotate_x(deg_to_rad(21))
+		#leftHandTarget.rotate_y(deg_to_rad(78.5))
+		#leftHandTarget.rotate_z(deg_to_rad(-60))
+#
+		#rightHandTarget.rotate_x(deg_to_rad(-21))
+		#rightHandTarget.rotate_y(deg_to_rad(-78.5))
+		#rightHandTarget.rotate_z(deg_to_rad(60))
+
+
+
+
 
 #		Console.AddNewLine("time till set " + str("%0.2f" % timeTillSet))
 #		athlete.team.mManager.cube.position = athlete.position + athlete.get_node("new new woman import").transform.basis.x
