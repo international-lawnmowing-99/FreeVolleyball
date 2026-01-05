@@ -75,3 +75,5 @@ var libero2:Athlete
 
 @export var playerToLiberoServe = []
 @export var playerToLiberoReceive = []
+
+@export var servingStrategies = []

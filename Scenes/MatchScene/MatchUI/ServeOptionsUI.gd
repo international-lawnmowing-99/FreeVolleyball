@@ -1,7 +1,8 @@
 class_name ServeOptionsUI
-
 extends Control
-var teamA
+
+@onready var infoLabel = $Athlete1ServeOptionsUI/Panel/InfoLabel
+var teamA:TeamNode
 var teamB
 
 
@@ -18,6 +19,7 @@ func Init(_teamA, _teamB) -> void:
 
 		button.text = athleteName
 
-func _on_player_button_pressed(player):
+func _on_player_button_pressed(player:Athlete):
 	# Tell us what sort of serve they're going to do
+	infoLabel.text = player.st
 	pass

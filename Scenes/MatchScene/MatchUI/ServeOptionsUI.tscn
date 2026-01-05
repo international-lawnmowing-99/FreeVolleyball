@@ -198,3 +198,15 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "? - Donate enough money and I'll consider adding funky serve types of your choosing"
 autowrap_mode = 3
+
+[node name="Panel" type="Panel" parent="Athlete1ServeOptionsUI"]
+layout_mode = 0
+offset_left = 494.0
+offset_top = 241.0
+offset_right = 1161.0
+offset_bottom = 474.0
+
+[node name="InfoLabel" type="Label" parent="Athlete1ServeOptionsUI/Panel"]
+layout_mode = 0
+offset_right = 669.0
+offset_bottom = 239.0
