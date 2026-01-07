@@ -21,6 +21,11 @@ func AddNewLine(text:String, colour:Color = Color.WHITE):
 		if is_instance_valid(lineToDelete):
 			lineToDelete.queue_free()
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ClearConsole"):
+		Clear()
+
+
 func Clear():
 	for child in get_children():
 		child.queue_free()

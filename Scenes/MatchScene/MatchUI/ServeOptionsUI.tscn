@@ -196,7 +196,7 @@ text = "Underarm Serve"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "? - Donate enough money and I'll consider adding funky serve types of your choosing"
+text = "Climb under the net and punch on with their libero"
 autowrap_mode = 3
 
 [node name="Panel" type="Panel" parent="Athlete1ServeOptionsUI"]

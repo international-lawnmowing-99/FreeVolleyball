@@ -21,5 +21,13 @@ func Init(_teamA, _teamB) -> void:
 
 func _on_player_button_pressed(player:Athlete):
 	# Tell us what sort of serve they're going to do
-	infoLabel.text = player.st
+	var serveType:String = "Error"
+	var serveAggression:String = "Error"
+
+	#match teamA.data.teamStrategy.servingStrategies
+
+	infoLabel.text = player.stats.firstName + " " + player.stats.lastName + "\n" \
+	+ "Is doing a " + serveType + ", " + serveAggression + "\n"\
+	+ "Some sort of strategy to be employed"
+
 	pass

@@ -76,4 +76,5 @@ var libero2:Athlete
 @export var playerToLiberoServe = []
 @export var playerToLiberoReceive = []
 
-@export var servingStrategies = []
+# need to store each player, each of their strategies against each known opposition, and a default, and whether this overrides all others
+@export var servingStrategies:Dictionary = {}
