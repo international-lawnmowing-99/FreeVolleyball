@@ -141,6 +141,9 @@ func Exit(athlete:Athlete):
 	pass
 
 func PassBall(athlete:Athlete):
+
+	var currentSet = athlete.team.mManager.score.teamBSetScore + athlete.team.mManager.score.teamBSetScore
+
 	isBallAlreadyPassed = true
 	ball.floating = false
 	ball.floatDisplacement = Vector3.ZERO
@@ -192,11 +195,14 @@ func PassBall(athlete:Athlete):
 
 #		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
 
+		athlete.stats.matchPassingStats.perfect[currentSet] = athlete.stats.matchPassingStats.perfect[currentSet] + 1
 		Console.AddNewLine(athlete.stats.lastName + " FUCKING MINT pass")
 
 	elif rollOffDifference >= -10:
 		receptionTarget = Vector3(athlete.team.flip * randf_range(1.5, 2.5), 2.5, randf_range(-2, 2))
 		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
+
+		athlete.stats.matchPassingStats.good[currentSet] = athlete.stats.matchPassingStats.good[currentSet] + 1
 		Console.AddNewLine(athlete.stats.lastName + " 2-point pass")
 		pass
 	elif rollOffDifference >= -50:
@@ -210,6 +216,8 @@ func PassBall(athlete:Athlete):
 		######################################################################
 
 		ballMaxHeight = randf_range(receptionTarget.y + 0.5, receptionTarget.y + 3.5)
+
+		athlete.stats.matchPassingStats.poor[currentSet] = athlete.stats.matchPassingStats.poor[currentSet] + 1
 		Console.AddNewLine(athlete.stats.lastName + " 1-point pass")
 #		athlete.team.mManager.cube.position = receptionTarget
 		pass
@@ -230,6 +238,8 @@ func PassBall(athlete:Athlete):
 				receptionTarget.y = 0
 				ball.linear_velocity = Vector3.ZERO
 		ballMaxHeight = Maths.BallMaxHeight(ball.position, ball.linear_velocity, 1.0)
+
+		athlete.stats.matchPassingStats.error[currentSet] = athlete.stats.matchPassingStats.error[currentSet] + 1
 		Console.AddNewLine(athlete.stats.lastName + " - Shit pass mate")
 
 	ball.gravity_scale = 1

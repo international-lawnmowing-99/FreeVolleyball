@@ -22,7 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://7v1fcf4qi42l" path="res://Scenes/MatchScene/MatchUI/ServeUI.tscn" id="19_gfg2l"]
 [ext_resource type="Script" uid="uid://cvyxcbjr78nhk" path="res://Scenes/TeamInfoUI.gd" id="20_mqewi"]
 [ext_resource type="PackedScene" uid="uid://c0t3dj6fskv0t" path="res://Scenes/MatchScene/MatchUI/TeamSubstitutionUI.tscn" id="21_mfp85"]
-[ext_resource type="Script" uid="uid://cs5dbpkrrudpu" path="res://Scenes/MatchScene/MatchUI/MatchStatistics.gd" id="22_jweii"]
+[ext_resource type="PackedScene" uid="uid://bhyx06qvsapgm" path="res://Scenes/MatchScene/MatchUI/stats_viewer_ui.tscn" id="22_mx5g7"]
 [ext_resource type="PackedScene" uid="uid://cts4mqjkgj1vj" path="res://Scenes/MatchScene/MatchUI/PlayerStatsTable.tscn" id="22_osxw1"]
 [ext_resource type="PackedScene" uid="uid://bas6swl121cf5" path="res://Scenes/MatchScene/MatchUI/OnCourtPlayer.tscn" id="23_sry0n"]
 [ext_resource type="PackedScene" uid="uid://dgn1arb8c8e44" path="res://Scenes/MatchScene/MatchUI/TeamTacticsUI.tscn" id="24_v8nr8"]
@@ -106,11 +106,12 @@ radial_segments = 32
 albedo_color = Color(0, 1, 0.929412, 0.584314)
 disable_receive_shadows = true
 
-[node name="MatchScene" type="Node3D"]
+[node name="MatchScene" type="Node3D" node_paths=PackedStringArray("statsViewerUI")]
 script = ExtResource("1_mqt8k")
 debugCylinder = ExtResource("2_uqyv5")
 debugCube = ExtResource("3_8wn1a")
 debugSphere = ExtResource("4_5aeaw")
+statsViewerUI = NodePath("UI/TeamInfoUI/StatsViewerUI")
 
 [node name="Lights" type="Node3D" parent="."]
 process_mode = 3
@@ -252,17 +253,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("12_gpj8b")
 
-[node name="sillydebug" type="Label" parent="UI"]
-layout_mode = 0
-offset_left = 78.0
-offset_top = 550.0
-offset_right = 588.0
-offset_bottom = 635.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 51
-text = "Set"
-script = ExtResource("14_d4rla")
-
 [node name="ToggleTeamTacticsUI" type="Button" parent="UI"]
 layout_mode = 0
 offset_left = 53.8174
@@ -280,7 +270,19 @@ offset_top = 558.0
 offset_right = 346.0
 offset_bottom = 623.0
 rotation = 89.5353
+focus_mode = 0
 text = "Stats"
+
+[node name="sillydebug" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 78.0
+offset_top = 550.0
+offset_right = 588.0
+offset_bottom = 635.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 51
+text = "Set"
+script = ExtResource("14_d4rla")
 
 [node name="ScoreCanvasLayer" type="CanvasLayer" parent="UI"]
 
@@ -882,69 +884,12 @@ anchor_bottom = 0.0
 grow_horizontal = 1
 grow_vertical = 1
 
-[node name="TeamStatsUI" type="Control" parent="UI/TeamInfoUI"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("22_jweii")
-
-[node name="ColourRect" type="ColorRect" parent="UI/TeamInfoUI/TeamStatsUI"]
-layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
-mouse_filter = 2
-color = Color(0, 0, 0, 0.458824)
-
-[node name="ColourRect2" type="ColorRect" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect"]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -823.5
-offset_top = -406.0
-offset_right = 823.5
-offset_bottom = 406.0
-color = Color(0.0235294, 0.0509804, 0.239216, 0.458824)
-
-[node name="TeamAName" type="Button" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect/ColourRect2"]
-layout_mode = 0
-offset_left = 41.349
-offset_top = -39.8882
-offset_right = 814.349
-offset_bottom = 0.111816
-text = "The Beatles"
-
-[node name="TeamBName" type="Button" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect/ColourRect2"]
-layout_mode = 0
-offset_left = 833.811
-offset_top = -39.8882
-offset_right = 1606.81
-offset_bottom = 0.111816
-text = "The Rolling Stones"
-
-[node name="Columns2" type="Control" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect/ColourRect2"]
-anchors_preset = 0
-offset_left = 110.0
-offset_top = 23.0
-offset_right = 1591.0
-offset_bottom = 68.0
-
-[node name="Name" type="Label" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect/ColourRect2/Columns2"]
-layout_mode = 0
-offset_right = 132.0
-offset_bottom = 45.0
-text = "Name"
-
-[node name="Passing" type="Label" parent="UI/TeamInfoUI/TeamStatsUI/ColourRect/ColourRect2/Columns2"]
-layout_mode = 0
-offset_left = 208.0
-offset_right = 340.0
-offset_bottom = 45.0
-text = "Passing (3-2-1-0)"
+[node name="StatsViewerUI" parent="UI/TeamInfoUI" node_paths=PackedStringArray("mm") instance=ExtResource("22_mx5g7")]
+visible = false
+mm = NodePath("../../..")
 
 [node name="OnCourtPlayers" type="Control" parent="UI/TeamInfoUI"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

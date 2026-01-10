@@ -31,6 +31,7 @@ var timer:Timer
 @onready var teamSubstitutionUI:TeamSubstitutionUI = $UI/TeamInfoUI/TeamSubstitutionUI
 @onready var liberoOptionsPanel:LiberoOptionsPanel = $UI/TeamInfoUI/TeamSubstitutionUI/LiberoOptionsPanel
 @onready var postMatchUI:PostMatchUI = $UI/PostMatchUI
+@export var statsViewerUI:StatsViewerUI
 
 var isTeamAServing:bool
 var isPaused:bool = false
@@ -130,6 +131,7 @@ func StartMatch():
 	liberoOptionsPanel.Init(teamA)
 
 	$UI/TeamInfoUI.InitialiseOnCourtPlayerUI()
+	statsViewerUI.Init()
 	camera._gui.UnlockCamera()
 
 func StartSet():

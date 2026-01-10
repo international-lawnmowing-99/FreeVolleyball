@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfbehxboubmto"]
+
+[ext_resource type="Script" uid="uid://dva1woca2nn1e" path="res://Scenes/MatchScene/MatchUI/PassingStatsRow.gd" id="1_fw3ss"]
+
+[node name="PassingStatsRow" type="HBoxContainer"]
+custom_minimum_size = Vector2(1780, 30)
+script = ExtResource("1_fw3ss")
+
+[node name="RecordNumber" type="Label" parent="."]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "#"
+horizontal_alignment = 1
+
+[node name="Nama" type="Label" parent="."]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Name"
+
+[node name="AttemptsLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "10"
+horizontal_alignment = 1
+
+[node name="PerfectLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "10"
+horizontal_alignment = 1
+
+[node name="GoodLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+horizontal_alignment = 1
+
+[node name="PoorLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-7"
+horizontal_alignment = 1
+
+[node name="ErrorLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "infinity"
+horizontal_alignment = 1
+
+[node name="PercentageLabel" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "99.94"
+horizontal_alignment = 1

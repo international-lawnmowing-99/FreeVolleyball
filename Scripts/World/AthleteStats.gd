@@ -44,6 +44,8 @@ class_name AthleteStats
 #public int age(System.DateTime timeNow)
 #return (int)(timeNow - dob).TotalDays/365;
 
+var matchPassingStats:AthleteMatchPassingStats = AthleteMatchPassingStats.new()
+
 func SetterEvaluation()->float:
 	var eval = set
 
@@ -62,7 +64,7 @@ func LiberoEvaluation()->float:
 func MiddleEvaluation()->float:
 	var eval = blockHeight * 10 + block
 	if blockHeight < 3:
-		eval -= (300 - blockHeight*100)
+		eval -= (350 - blockHeight*100)
 
 	eval += serve / 10
 	eval += spike / 4
@@ -82,7 +84,7 @@ func OppositeEvaluation()->float:
 func OutsideEvaluation()->float:
 	var eval = spike
 	if spikeHeight < 2.9:
-		eval -= (300 - spikeHeight * 100)
+		eval -= (330 - spikeHeight * 100)
 	eval += serve / 10
 	eval += block / 10
 	eval += reception / 2
