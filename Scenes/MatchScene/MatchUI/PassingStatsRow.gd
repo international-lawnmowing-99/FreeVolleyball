@@ -23,17 +23,20 @@ func UpdateRowDisplay(rowNumber, athlete:Athlete, setsExamined:Array[int] = [1,1
 	var percentage:float = 0
 
 	for i in range(setsExamined.size()):
-		perfect = perfect + athlete.stats.matchPassingStats.perfect[i] * setsExamined[i]
-		good = perfect + athlete.stats.matchPassingStats.good[i] * setsExamined[i]
-		poor = perfect + athlete.stats.matchPassingStats.poor[i] * setsExamined[i]
-		error = perfect + athlete.stats.matchPassingStats.error[i] * setsExamined[i]
+		perfect += athlete.stats.matchPassingStats.perfect[i] * setsExamined[i]
+		good += athlete.stats.matchPassingStats.good[i] * setsExamined[i]
+		poor += athlete.stats.matchPassingStats.poor[i] * setsExamined[i]
+		error += athlete.stats.matchPassingStats.error[i] * setsExamined[i]
 
 	attempts = perfect + good + poor + error
 	if attempts == 0:
 		percentage = 0
 	else:
-		percentage = (perfect * 3 + good * 2 + poor)/(attempts as float)
+		percentage = (perfect * 3.0 + good * 2.0 + poor)/(attempts as float)
 		#Console.AddNewLine(str(attempts))
+
+
+
 
 	attemptsLabel.text = str(attempts)
 	perfectLabel.text = str(perfect)

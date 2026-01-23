@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhyx06qvsapgm"]
+[gd_scene load_steps=3 format=3 uid="uid://bhyx06qvsapgm"]
 
 [ext_resource type="Script" uid="uid://cs5dbpkrrudpu" path="res://Scenes/MatchScene/MatchUI/MatchStatistics.gd" id="1_3i1gw"]
+[ext_resource type="Script" uid="uid://jaf0bai21vmi" path="res://Scenes/MatchScene/MatchUI/StatsTable.gd" id="2_6g6jy"]
 
 [node name="StatsViewerUI" type="Control"]
 layout_mode = 3
@@ -29,26 +30,20 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.023529412, 0.050980393, 0.23921569, 1)
 
-[node name="Columns2" type="Control" parent="ColourRect/ColourRect2"]
-visible = false
+[node name="FiltersPanel" type="Panel" parent="ColourRect/ColourRect2"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TeamOrPlayersSelection" type="Control" parent="ColourRect/ColourRect2/FiltersPanel"]
 anchors_preset = 0
-offset_left = 110.0
-offset_top = 65.0
-offset_right = 1591.0
-offset_bottom = 110.0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="Name" type="Label" parent="ColourRect/ColourRect2/Columns2"]
-layout_mode = 0
-offset_right = 132.0
-offset_bottom = 45.0
-text = "Name"
-
-[node name="Passing" type="Label" parent="ColourRect/ColourRect2/Columns2"]
-layout_mode = 0
-offset_left = 208.0
-offset_right = 340.0
-offset_bottom = 45.0
-text = "Passing (3-2-1-0)"
+[node name="SetSelection" type="Control" parent="ColourRect/ColourRect2/FiltersPanel"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="TeamButtons" type="HBoxContainer" parent="ColourRect/ColourRect2"]
 layout_mode = 0
@@ -72,31 +67,31 @@ offset_top = -1.0
 offset_right = 1780.0
 offset_bottom = 968.0
 
-[node name="StatChoiceButtons" type="HBoxContainer" parent="ColourRect/ColourRect2/VBoxContainer"]
+[node name="ModeSelector" type="HBoxContainer" parent="ColourRect/ColourRect2/VBoxContainer"]
 custom_minimum_size = Vector2(1780, 50)
 layout_mode = 2
 
-[node name="ServeButton" type="Button" parent="ColourRect/ColourRect2/VBoxContainer/StatChoiceButtons"]
+[node name="ServeButton" type="Button" parent="ColourRect/ColourRect2/VBoxContainer/ModeSelector"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Serving"
 
-[node name="PassingButton" type="Button" parent="ColourRect/ColourRect2/VBoxContainer/StatChoiceButtons"]
+[node name="PassingButton" type="Button" parent="ColourRect/ColourRect2/VBoxContainer/ModeSelector"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Passing"
 
-[node name="SetButton" type="Button" parent="ColourRect/ColourRect2/VBoxContainer/StatChoiceButtons"]
+[node name="SetButton" type="Button" parent="ColourRect/ColourRect2/VBoxContainer/ModeSelector"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Setting"
 
-[node name="BlockButton" type="Button" parent="ColourRect/ColourRect2/VBoxContainer/StatChoiceButtons"]
+[node name="BlockButton" type="Button" parent="ColourRect/ColourRect2/VBoxContainer/ModeSelector"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Blocking"
 
-[node name="AttackButton" type="Button" parent="ColourRect/ColourRect2/VBoxContainer/StatChoiceButtons"]
+[node name="AttackButton" type="Button" parent="ColourRect/ColourRect2/VBoxContainer/ModeSelector"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Attacking
@@ -151,18 +146,19 @@ size_flags_horizontal = 3
 text = "Some sort of summary stat"
 autowrap_mode = 3
 
-[node name="PassingStats" type="ScrollContainer" parent="ColourRect/ColourRect2/VBoxContainer"]
+[node name="StatsContainer" type="ScrollContainer" parent="ColourRect/ColourRect2/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+script = ExtResource("2_6g6jy")
 
-[node name="RowHolder" type="VBoxContainer" parent="ColourRect/ColourRect2/VBoxContainer/PassingStats"]
+[node name="RowHolder" type="VBoxContainer" parent="ColourRect/ColourRect2/VBoxContainer/StatsContainer"]
 custom_minimum_size = Vector2(1780, 1080)
 layout_mode = 2
 
 [connection signal="pressed" from="ColourRect/ColourRect2/TeamButtons/TeamAButton" to="." method="_on_team_a_button_pressed"]
 [connection signal="pressed" from="ColourRect/ColourRect2/TeamButtons/TeamBButton" to="." method="_on_team_b_button_pressed"]
-[connection signal="pressed" from="ColourRect/ColourRect2/VBoxContainer/StatChoiceButtons/ServeButton" to="." method="_on_serve_button_pressed"]
-[connection signal="pressed" from="ColourRect/ColourRect2/VBoxContainer/StatChoiceButtons/PassingButton" to="." method="_on_passing_button_pressed"]
-[connection signal="pressed" from="ColourRect/ColourRect2/VBoxContainer/StatChoiceButtons/SetButton" to="." method="_on_set_button_pressed"]
-[connection signal="pressed" from="ColourRect/ColourRect2/VBoxContainer/StatChoiceButtons/BlockButton" to="." method="_on_block_button_pressed"]
-[connection signal="pressed" from="ColourRect/ColourRect2/VBoxContainer/StatChoiceButtons/AttackButton" to="." method="_on_attack_button_pressed"]
+[connection signal="pressed" from="ColourRect/ColourRect2/VBoxContainer/ModeSelector/ServeButton" to="." method="_on_serve_button_pressed"]
+[connection signal="pressed" from="ColourRect/ColourRect2/VBoxContainer/ModeSelector/PassingButton" to="." method="_on_passing_button_pressed"]
+[connection signal="pressed" from="ColourRect/ColourRect2/VBoxContainer/ModeSelector/SetButton" to="." method="_on_set_button_pressed"]
+[connection signal="pressed" from="ColourRect/ColourRect2/VBoxContainer/ModeSelector/BlockButton" to="." method="_on_block_button_pressed"]
+[connection signal="pressed" from="ColourRect/ColourRect2/VBoxContainer/ModeSelector/AttackButton" to="." method="_on_attack_button_pressed"]

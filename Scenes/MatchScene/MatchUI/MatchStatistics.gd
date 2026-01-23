@@ -6,7 +6,7 @@ class_name  StatsViewerUI
 @onready var teamAButton:Button = $ColourRect/ColourRect2/TeamButtons/TeamAButton
 @onready var teamBButton:Button = $ColourRect/ColourRect2/TeamButtons/TeamBButton
 
-@onready var rowHolder = $ColourRect/ColourRect2/VBoxContainer/PassingStats/RowHolder
+@onready var rowHolder = $ColourRect/ColourRect2/VBoxContainer/StatsContainer/RowHolder
 
 var teamAPlayersCount:int = 0
 var teamBPlayersCount:int = 0
@@ -15,6 +15,13 @@ var statsRow:PackedScene = preload("res://Scenes/MatchScene/MatchUI/PassingStats
 
 var isTeamASelected = true
 var isTeamBSelected = false
+
+#
+#func set_mode(mode: String):pass
+#func set_team_filter(filter):pass
+#func set_set_filter(sets: Array[int]):pass
+#func refresh_view():pass
+
 
 func Init():
 	teamAButton.text = mm.teamA.data.teamName

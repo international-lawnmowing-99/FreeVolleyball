@@ -1,16 +1,1856 @@
-[gd_scene load_steps=5 format=3 uid="uid://mc50i6pbakuk"]
+[gd_scene load_steps=8 format=3 uid="uid://mc50i6pbakuk"]
 
 [ext_resource type="Texture2D" uid="uid://bamxyyq7k8h0o" path="res://Textures/Captain.png" id="1"]
 [ext_resource type="Script" uid="uid://burhy5b5kyutb" path="res://Scenes/ManagementScene/ManagementScene.gd" id="1_vgkfa"]
+[ext_resource type="Texture2D" uid="uid://df5v6c01cy25x" path="res://Textures/Calender-dynamic-premium.png" id="2_0iqff"]
+[ext_resource type="Texture2D" uid="uid://b5bxp73r55d64" path="res://icon.png" id="3_8s28i"]
 [ext_resource type="Theme" uid="uid://bgukpjan5jpl6" path="res://Scenes/PanelRoundEdges.tres" id="4"]
 [ext_resource type="Texture2D" uid="uid://dopbn4dj6p3ca" path="res://Textures/warning.png" id="4_t6drj"]
+[ext_resource type="Texture2D" uid="uid://bohxkkb71fd34" path="res://Textures/headIcon.jpg" id="4_uaxp5"]
 
 [node name="ManagementScene" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_vgkfa")
 
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="BasicInfo" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/BasicInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/BasicInfo/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Pitcairn Island Club Team 2"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/BasicInfo"]
+custom_minimum_size = Vector2(300, 150)
+layout_mode = 2
+text = "01/01/1970"
+icon = ExtResource("2_0iqff")
+expand_icon = true
+
+[node name="NextDayButton" type="Button" parent="MarginContainer/VBoxContainer/BasicInfo"]
+layout_mode = 2
+text = "-> Next Day ->"
+
+[node name="NextMatchButton" type="Button" parent="MarginContainer/VBoxContainer/BasicInfo"]
+layout_mode = 2
+text = "-> Next Match ->"
+
+[node name="TopBar" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/TopBar"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "Home"
+
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/TopBar"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "$$$"
+
+[node name="Button3" type="Button" parent="MarginContainer/VBoxContainer/TopBar"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "Team"
+
+[node name="Button4" type="Button" parent="MarginContainer/VBoxContainer/TopBar"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "World"
+
+[node name="MainContent" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NavigationColumn" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent"]
+layout_mode = 2
+
+[node name="Dashboard" type="VFlowContainer" parent="MarginContainer/VBoxContainer/MainContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+last_wrap_alignment = 2
+
+[node name="Panel" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "Standings"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer9" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer10" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer11" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer12" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer13" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer13"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer13"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer13"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer13"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer13"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer13"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer13"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer14" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer14"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer14"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer14"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer14"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer14"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer14"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer14"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer15" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer15"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer15"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer15"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer15"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer15"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer15"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer15"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer16" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer16"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer16"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer16"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer16"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer16"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer16"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer16"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer17" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer17"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer17"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer17"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer17"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer17"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer17"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer17"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer18" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer18"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer18"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer18"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer18"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer18"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer18"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer18"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer19" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer19"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer19"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer19"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer19"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer19"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer19"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer19"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer20" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer20"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer20"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer20"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer20"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer20"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer20"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer20"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer21" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer21"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer21"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer21"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer21"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer21"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer21"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer21"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer22" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer22"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer22"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer22"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer22"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer22"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer22"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer22"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="HBoxContainer23" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer23"]
+layout_mode = 2
+text = "Position"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer23"]
+layout_mode = 2
+text = "Pitcairn Very Long Name Island Club Team 1"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer23"]
+layout_mode = 2
+text = "Played"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer23"]
+layout_mode = 2
+text = "Won"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer23"]
+layout_mode = 2
+text = "Points"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer23"]
+layout_mode = 2
+text = "Set Ratio"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel/VBoxContainer/HBoxContainer23"]
+layout_mode = 2
+text = "Point Ratio"
+
+[node name="NextMatchPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/NextMatchPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/NextMatchPanel/VBoxContainer"]
+layout_mode = 2
+text = "Next Match"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/NextMatchPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/NextMatchPanel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_8s28i")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/NextMatchPanel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("4_uaxp5")
+stretch_mode = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/NextMatchPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/NextMatchPanel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Us"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/NextMatchPanel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Them"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/NextMatchPanel/VBoxContainer"]
+layout_mode = 2
+text = "01/02/1999"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/NextMatchPanel/VBoxContainer"]
+layout_mode = 2
+text = "Opponent Form: 
+WWLWW"
+horizontal_alignment = 1
+
+[node name="Panel3" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel3/VBoxContainer"]
+layout_mode = 2
+text = "Injuries"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel3/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Wassim Ranamadruta"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Broken Fingernail"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Returns 01/01/2030"
+
+[node name="Panel4" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel4"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel4/VBoxContainer"]
+layout_mode = 2
+text = "Budget"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel4/VBoxContainer"]
+layout_mode = 2
+text = "$0"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel4/VBoxContainer"]
+layout_mode = 2
+text = "Just like this game..."
+horizontal_alignment = 1
+
+[node name="Panel5" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+text = "Squad List (should this be it's own thing?)"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stat"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Stat"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stat"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Stat"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Stat"
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Stat"
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Stat"
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Stat"
+
+[node name="HBoxContainer9" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+text = "Stat"
+
+[node name="HBoxContainer10" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "Stat"
+
+[node name="HBoxContainer11" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer11"]
+layout_mode = 2
+text = "Stat"
+
+[node name="HBoxContainer12" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Role"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Secondary Role"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat Average"
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label7" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label8" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label9" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label10" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label11" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label12" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label13" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label14" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Label15" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel5/VBoxContainer/HBoxContainer12"]
+layout_mode = 2
+text = "Stat"
+
+[node name="Panel6" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel6"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel6/VBoxContainer"]
+layout_mode = 2
+text = "Expiring Contracts:"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel6/VBoxContainer"]
+layout_mode = 2
+text = "Your Mum"
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel6/VBoxContainer"]
+layout_mode = 2
+text = "Stevo"
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel6/VBoxContainer"]
+layout_mode = 2
+text = "Some link to transfers"
+
+[node name="Panel7" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel7"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel7/VBoxContainer"]
+layout_mode = 2
+text = "Scouting"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel7/VBoxContainer"]
+layout_mode = 2
+text = "Coming Soon...
+"
+
+[node name="Panel8" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel8"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel8/VBoxContainer"]
+layout_mode = 2
+text = "Youth Team"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel8/VBoxContainer"]
+layout_mode = 2
+text = "Can I be bothered simulating this now too? Can I be bothered si  "
+
+[node name="Panel9" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel9"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel9/VBoxContainer"]
+layout_mode = 2
+text = "Training"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel9/VBoxContainer"]
+layout_mode = 2
+text = "Some sort of summary"
+horizontal_alignment = 1
+
+[node name="Panel10" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel10"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel10/VBoxContainer"]
+layout_mode = 2
+text = "Fans' opinion of you"
+
+[node name="Panel11" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel11"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel11/VBoxContainer"]
+layout_mode = 2
+
+[node name="Panel12" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel12"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel12/VBoxContainer"]
+layout_mode = 2
+
+[node name="Panel13" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel13"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel13/VBoxContainer"]
+layout_mode = 2
+
+[node name="Panel14" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel14"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel14/VBoxContainer"]
+layout_mode = 2
+text = "Stadium"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel14/VBoxContainer"]
+layout_mode = 2
+text = "SCG"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel14/VBoxContainer"]
+layout_mode = 2
+text = "Capacity: 3"
+horizontal_alignment = 1
+
+[node name="Panel15" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel15"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MainContent/Dashboard/Panel15/VBoxContainer"]
+layout_mode = 2
+
 [node name="Background" type="ColorRect" parent="."]
+visible = false
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
