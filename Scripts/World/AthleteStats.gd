@@ -25,6 +25,8 @@ class_name AthleteStats
 
 @export var power:float
 @export var spikeHeight:float
+@export var stamina:float
+@export var freshness:float = 100.0
 
 @export var standingSetHeight:float
 @export var jumpSetHeight:float

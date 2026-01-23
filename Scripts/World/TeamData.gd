@@ -51,6 +51,8 @@ func Populate(_playerChoiceState, firstNames:Array[String], lastNames:Array[Stri
 		stats.jumpSetHeight = stats.standingSetHeight + stats.verticalJump
 		var age = 17 + randi()%28
 
+		stats.stamina = randf()
+
 		stats.dob["year"] = 2023 - age
 		stats.gameRead = skill/50.0 +  randf()/2.0 * age/(17.0+28.0)
 

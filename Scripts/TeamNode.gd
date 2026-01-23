@@ -147,9 +147,9 @@ func PlaceTeam():
 			pos = Vector3(flip * (i + 3), 0, 10)
 			rot = Vector3(0,flip * PI,0)
 
+		data.matchPlayers[i].freshness = 100.0
 		var lad:Athlete = AthleteScene.instantiate()
 		lad._ready()
-
 		lad.stats = data.matchPlayers[i]
 		add_child(lad)
 		#TODO - eventually there will be a set of blendshapes that will make the people look different
@@ -451,6 +451,7 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 				print ("court: " + lad.name + " " + str(lad.stats.rotationPosition))
 			for lad in benchPlayerNodes:
 				print ("bench: " + lad.name)
+			assert(false)
 
 		else:
 			Console.AddNewLine("Outgoing player was found in benchPlayerNodes", Color.LIME)
@@ -538,6 +539,8 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 	outgoing.stateMachine.SetCurrentState(outgoing.chillState)
 	incoming.ReEvaluateState()
 	assert(incoming.stats.rotationPosition != -1)
+
+	#mManager.teamInfoUI.InitialiseOnCourtPlayerUI()
 
 
 func CachePlayers():
@@ -658,6 +661,7 @@ func SwapPlayer(player:AthleteStats,newPostion:int):
 
 	#for i in range(matchPlayers.size()):
 	#	print(str(matchPlayers[i].stats.role) + " " + str(i))
+	#mManager.teamInfoUI.InitialiseOnCourtPlayerUI()
 
 func GetTransitionPosition(athlete):
 	if (setter.FrontCourt()):

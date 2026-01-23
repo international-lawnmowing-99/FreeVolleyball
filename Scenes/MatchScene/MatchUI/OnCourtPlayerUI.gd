@@ -1,9 +1,11 @@
 extends ColorRect
+class_name OnCourtPlayer
 
 var athlete:Athlete
 @onready var nameTextHolder = $VBoxContainer/Name
 @onready var roleTextHolder = $VBoxContainer/Role
 @onready var rotationPositionTextHolder = $VBoxContainer/RotationPosition
+@onready var freshnessBar:FreshnessBar = $VBoxContainer/FreshnessBar
 
 
 func UpdateFields():
@@ -15,3 +17,8 @@ func UpdateFields():
 
 	else:
 		rotationPositionTextHolder.text = ""
+
+	UpdateFreshnessBar(athlete.stats.freshness)
+
+func UpdateFreshnessBar(freshness):
+	freshnessBar.UpdateBar(freshness)

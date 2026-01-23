@@ -89,6 +89,7 @@ func Update(athlete:Athlete):
 					athlete.rb.freeze = false
 					athlete.rb.gravity_scale = 1
 					athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, athlete.position, athlete.stats.verticalJump)
+					athlete.stats.freshness -= 1/athlete.stats.stamina/300
 
 			InternalBlockState.Jump:
 				if blockingTarget.setRequest.target:

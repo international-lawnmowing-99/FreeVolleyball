@@ -94,6 +94,7 @@ func Update(athlete:Athlete):
 					# We want to contact the ball at our max height...
 					# This means a steeper jurightIKmp for more extreme verticals
 					athlete.rb.linear_velocity = Maths.FindWellBehavedParabola(athlete.position, landingXZ, athlete.stats.verticalJump)
+					athlete.stats.freshness -= 1/athlete.stats.stamina/300
 					if athlete == athlete.team.chosenSpiker:
 						ChooseSpikingStrategy(athlete)
 
