@@ -191,15 +191,25 @@ func SimulateMatch(scheduledMatchIndex:int):
 		while !setWon:
 			##Do pre-point stuff
 			#game.teamA.ConsiderSubstitutes()
+			var a = sqrt(10)
 			#game.teamA.ConsiderLiberoUse()
+			a += sqrt(a)
 			#game.teamA.GenerateAttackStrategy() # This is going to be complicated!
+			a += sqrt(a)
 			#game.teamA.GenerateServeStrategy()
+			a += sqrt(a)
 			#game.teamA.GenerateReceiveStrategy()
+			a += sqrt(a)
 			#game.teamA.GenerateBlockStrategy()
+			a += sqrt(a)
 			#game.teamA.GenerateDefenceStrategy()
+			a += sqrt(a)
 
 			##Finally actually play a point!
 			#SimulatePoint()
+			#for i in range(100):
+				#a += sqrt(a)
+
 			if randi()%2 == 1:
 				teamAScore += 1
 			else:

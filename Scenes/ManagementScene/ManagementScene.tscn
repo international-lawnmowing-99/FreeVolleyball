@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://mc50i6pbakuk"]
+[gd_scene load_steps=9 format=3 uid="uid://mc50i6pbakuk"]
 
 [ext_resource type="Texture2D" uid="uid://bamxyyq7k8h0o" path="res://Textures/Captain.png" id="1"]
 [ext_resource type="Script" uid="uid://burhy5b5kyutb" path="res://Scenes/ManagementScene/ManagementScene.gd" id="1_vgkfa"]
@@ -7,6 +7,7 @@
 [ext_resource type="Theme" uid="uid://bgukpjan5jpl6" path="res://Scenes/PanelRoundEdges.tres" id="4"]
 [ext_resource type="Texture2D" uid="uid://dopbn4dj6p3ca" path="res://Textures/warning.png" id="4_t6drj"]
 [ext_resource type="Texture2D" uid="uid://bohxkkb71fd34" path="res://Textures/headIcon.jpg" id="4_uaxp5"]
+[ext_resource type="PackedScene" uid="uid://ccj7p7uqu3r7p" path="res://Scenes/ManagementScene/Conventional Calendar Scene/CalendarStandard.tscn" id="8_uaxp5"]
 
 [node name="ManagementScene" type="Control"]
 layout_mode = 3
@@ -34,10 +35,10 @@ size_flags_horizontal = 3
 text = "Pitcairn Island Club Team 2"
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/BasicInfo"]
+[node name="CalendarButton" type="Button" parent="MarginContainer/VBoxContainer/BasicInfo"]
 custom_minimum_size = Vector2(300, 150)
 layout_mode = 2
-text = "01/01/1970"
+text = "01/01/1870"
 icon = ExtResource("2_0iqff")
 expand_icon = true
 
@@ -2034,6 +2035,13 @@ text = "Simulating Ides of March 44BC (Sorry if the date is slightly off). Contr
 horizontal_alignment = 1
 autowrap_mode = 2
 
+[node name="CalendarStandard" parent="." instance=ExtResource("8_uaxp5")]
+visible = false
+layout_mode = 1
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BasicInfo/CalendarButton" to="." method="_on_calendar_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BasicInfo/NextDayButton" to="." method="_on_next_day_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/BasicInfo/NextMatchButton" to="." method="_on_next_match_button_pressed"]
 [connection signal="pressed" from="Background/VBoxContainer/TricolourContainer/Column3/CalendarManagementScene/NextDayButton" to="." method="_on_next_day_button_pressed"]
 [connection signal="pressed" from="Background/VBoxContainer/TricolourContainer/Column3/CalendarManagementScene/NextMatchButton" to="." method="_on_next_match_button_pressed"]
 [connection signal="visibility_changed" from="SimulatingPopup" to="." method="_on_simulating_popup_visibility_changed"]
