@@ -10,8 +10,6 @@ func Enter(team:TeamNode):
 
 	pass
 func Update(team:TeamNode):
-	if team.ball.get_parent():
-		# Reparenting just doesn't work yet, come back in 4.0
-		pass
+	pass
 func Exit(_team:TeamNode):
 	pass

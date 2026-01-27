@@ -69,6 +69,9 @@ func Enter(athlete:Athlete):
 	athlete.rb.linear_velocity = Vector3.ZERO
 
 	if rememberSettings:
+		if rememberedWalkPosition:
+			athlete.position = rememberedWalkPosition
+			athlete.moveTarget = rememberedWalkPosition
 		if rememberedServeTarget:
 			serveTarget.position = rememberedServeTarget
 		if rememberedServeType:
@@ -77,9 +80,7 @@ func Enter(athlete:Athlete):
 		if rememberedServeAggression:
 			serveAggression = rememberedServeAggression
 			ChooseServeAggression(rememberedServeAggression)
-		if rememberedWalkPosition:
-			athlete.position = rememberedWalkPosition
-			athlete.moveTarget = rememberedWalkPosition
+
 	else:
 		serveAggression = ServeAggression.UNDEFINED
 		serveType = ServeType.UNDEFINED
@@ -313,7 +314,7 @@ func ChooseServeType(type):
 	serveType = type
 	if rememberSettings:
 		rememberedServeType = type
-		rememberedWalkPosition = _athlete.moveTarget
+		rememberedWalkPosition = Maths.XZVector(_athlete.position)
 
 	serveState = ServeState.ChoosingServeAggression
 
