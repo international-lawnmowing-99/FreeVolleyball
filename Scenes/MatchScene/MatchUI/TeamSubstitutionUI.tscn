@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c0t3dj6fskv0t"]
+[gd_scene format=3 uid="uid://c0t3dj6fskv0t"]
 
 [ext_resource type="Script" uid="uid://ddqv185m5xy4k" path="res://Scenes/MatchScene/MatchUI/TeamSubstitutionUI.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://duemdswibod36" path="res://Scenes/MatchScene/MatchUI/LiberoOptionsPanel.tscn" id="2_0atft"]
@@ -12,21 +12,21 @@ GridContainer/constants/h_separation = 50
 GridContainer/constants/v_separation = 20
 VBoxContainer/constants/separation = 20
 
-[node name="TeamSubstitutionUI" type="ColorRect"]
+[node name="TeamSubstitutionUI" type="ColorRect" unique_id=1816518983]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.243137, 0.352941, 0.298039, 1)
+color = Color(0.24313726, 0.3529412, 0.29803923, 0.89411765)
 script = ExtResource("1")
 
-[node name="Line2D" type="Line2D" parent="."]
+[node name="Line2D" type="Line2D" parent="." unique_id=999248042]
 position = Vector2(0, 100)
 points = PackedVector2Array(1920, 0, 0, 0)
 default_color = Color(0.839216, 0.623529, 0.207843, 1)
 
-[node name="HumanTeamBench" type="GridContainer" parent="."]
+[node name="HumanTeamBench" type="GridContainer" parent="." unique_id=1800229355]
 layout_mode = 0
 offset_left = 118.0
 offset_top = 121.0
@@ -35,35 +35,35 @@ offset_bottom = 625.0
 theme = SubResource("15")
 columns = 2
 
-[node name="NameCard1" parent="HumanTeamBench" instance=ExtResource("3")]
+[node name="NameCard1" parent="HumanTeamBench" unique_id=1945576121 instance=ExtResource("3")]
 layout_mode = 2
 size_flags_vertical = 6
 
-[node name="NameCard2" parent="HumanTeamBench" instance=ExtResource("3")]
+[node name="NameCard2" parent="HumanTeamBench" unique_id=785769933 instance=ExtResource("3")]
 layout_mode = 2
 size_flags_vertical = 6
 
-[node name="NameCard3" parent="HumanTeamBench" instance=ExtResource("3")]
+[node name="NameCard3" parent="HumanTeamBench" unique_id=928913561 instance=ExtResource("3")]
 layout_mode = 2
 size_flags_vertical = 6
 
-[node name="NameCard4" parent="HumanTeamBench" instance=ExtResource("3")]
+[node name="NameCard4" parent="HumanTeamBench" unique_id=680990869 instance=ExtResource("3")]
 layout_mode = 2
 size_flags_vertical = 6
 
-[node name="NameCard5" parent="HumanTeamBench" instance=ExtResource("3")]
+[node name="NameCard5" parent="HumanTeamBench" unique_id=1135451349 instance=ExtResource("3")]
 layout_mode = 2
 size_flags_vertical = 6
 
-[node name="NameCard6" parent="HumanTeamBench" instance=ExtResource("3")]
+[node name="NameCard6" parent="HumanTeamBench" unique_id=586904497 instance=ExtResource("3")]
 layout_mode = 2
 size_flags_vertical = 6
 
-[node name="NameCard7" parent="HumanTeamBench" instance=ExtResource("3")]
+[node name="NameCard7" parent="HumanTeamBench" unique_id=861519310 instance=ExtResource("3")]
 layout_mode = 2
 size_flags_vertical = 6
 
-[node name="CourtBackground" type="ColorRect" parent="."]
+[node name="CourtBackground" type="ColorRect" parent="." unique_id=659382668]
 layout_mode = 0
 offset_left = 808.0
 offset_top = 133.0
@@ -71,33 +71,33 @@ offset_right = 1796.0
 offset_bottom = 903.0
 color = Color(0.839216, 0.623529, 0.207843, 1)
 
-[node name="Libero1NameCard" parent="." instance=ExtResource("3")]
+[node name="Libero1NameCard" parent="." unique_id=2038274406 instance=ExtResource("3")]
 layout_mode = 0
 offset_left = 656.129
 offset_top = 646.075
 offset_right = 906.129
 offset_bottom = 746.075
 
-[node name="Libero2NameCard" parent="." instance=ExtResource("3")]
+[node name="Libero2NameCard" parent="." unique_id=549514751 instance=ExtResource("3")]
 layout_mode = 0
 offset_left = 656.129
 offset_top = 788.075
 offset_right = 906.129
 offset_bottom = 888.075
 
-[node name="Line2D2" type="Line2D" parent="."]
+[node name="Line2D2" type="Line2D" parent="." unique_id=782811728]
 position = Vector2(787.567, 382.377)
 scale = Vector2(0.326706, 1.39676)
 points = PackedVector2Array(3177, -3, -3, -3)
 default_color = Color(0.867188, 0.732952, 0.474243, 1)
 
-[node name="Line2D3" type="Line2D" parent="."]
+[node name="Line2D3" type="Line2D" parent="." unique_id=1531062910]
 position = Vector2(787.567, 138.695)
 scale = Vector2(0.326706, 2.57903)
 points = PackedVector2Array(3177, -3, -3, -3)
 default_color = Color(0, 0, 0, 1)
 
-[node name="TeamName" type="Label" parent="."]
+[node name="TeamName" type="Label" parent="." unique_id=833524873]
 layout_mode = 0
 offset_left = -1.0
 offset_top = 5.0
@@ -107,7 +107,7 @@ theme_override_font_sizes/font_size = 56
 text = "Australia"
 horizontal_alignment = 1
 
-[node name="AcceptButton" type="Button" parent="."]
+[node name="AcceptButton" type="Button" parent="." unique_id=26078623]
 layout_mode = 0
 offset_left = 1490.36
 offset_top = 947.916
@@ -115,7 +115,7 @@ offset_right = 1920.36
 offset_bottom = 1079.92
 text = "Accept"
 
-[node name="CancelSubButton" type="Button" parent="."]
+[node name="CancelSubButton" type="Button" parent="." unique_id=1059264188]
 layout_mode = 0
 offset_left = 1059.87
 offset_top = 948.024
@@ -123,52 +123,52 @@ offset_right = 1489.87
 offset_bottom = 1080.03
 text = "Cancel Sub"
 
-[node name="HumanTeam" type="Control" parent="."]
+[node name="HumanTeam" type="Control" parent="." unique_id=1955444173]
 anchors_preset = 0
 
-[node name="NameCard1" parent="HumanTeam" instance=ExtResource("3")]
+[node name="NameCard1" parent="HumanTeam" unique_id=1783320020 instance=ExtResource("3")]
 layout_mode = 0
 offset_left = 1532.31
 offset_top = 465.542
 offset_right = 1782.31
 offset_bottom = 565.542
 
-[node name="NameCard2" parent="HumanTeam" instance=ExtResource("3")]
+[node name="NameCard2" parent="HumanTeam" unique_id=1568245428 instance=ExtResource("3")]
 layout_mode = 0
 offset_left = 1531.58
 offset_top = 215.755
 offset_right = 1781.58
 offset_bottom = 315.755
 
-[node name="NameCard3" parent="HumanTeam" instance=ExtResource("3")]
+[node name="NameCard3" parent="HumanTeam" unique_id=496027532 instance=ExtResource("3")]
 layout_mode = 0
 offset_left = 1182.0
 offset_top = 216.0
 offset_right = 1432.0
 offset_bottom = 316.0
 
-[node name="NameCard4" parent="HumanTeam" instance=ExtResource("3")]
+[node name="NameCard4" parent="HumanTeam" unique_id=1249953407 instance=ExtResource("3")]
 layout_mode = 0
 offset_left = 832.0
 offset_top = 215.0
 offset_right = 1082.0
 offset_bottom = 315.0
 
-[node name="NameCard5" parent="HumanTeam" instance=ExtResource("3")]
+[node name="NameCard5" parent="HumanTeam" unique_id=1570612256 instance=ExtResource("3")]
 layout_mode = 0
 offset_left = 832.0
 offset_top = 466.0
 offset_right = 1082.0
 offset_bottom = 566.0
 
-[node name="NameCard6" parent="HumanTeam" instance=ExtResource("3")]
+[node name="NameCard6" parent="HumanTeam" unique_id=395472936 instance=ExtResource("3")]
 layout_mode = 0
 offset_left = 1183.0
 offset_top = 466.0
 offset_right = 1433.0
 offset_bottom = 566.0
 
-[node name="PlayerStatsViewer" type="Panel" parent="."]
+[node name="PlayerStatsViewer" type="Panel" parent="." unique_id=1796751308]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 867.0
@@ -176,14 +176,14 @@ offset_right = 577.0
 offset_bottom = 1079.0
 script = ExtResource("5")
 
-[node name="Name" type="Label" parent="PlayerStatsViewer"]
+[node name="Name" type="Label" parent="PlayerStatsViewer" unique_id=1500479161]
 layout_mode = 0
 offset_top = 10.0
 offset_right = 576.0
 offset_bottom = 47.0
 text = "Karteez Arminhalf"
 
-[node name="Serve" type="Label" parent="PlayerStatsViewer"]
+[node name="Serve" type="Label" parent="PlayerStatsViewer" unique_id=1186354927]
 layout_mode = 0
 offset_left = 36.0
 offset_top = 58.0
@@ -191,7 +191,7 @@ offset_right = 290.0
 offset_bottom = 95.0
 text = "Serve: 99"
 
-[node name="Receive" type="Label" parent="PlayerStatsViewer"]
+[node name="Receive" type="Label" parent="PlayerStatsViewer" unique_id=1781076924]
 layout_mode = 0
 offset_left = 36.0
 offset_top = 90.0
@@ -199,7 +199,7 @@ offset_right = 288.0
 offset_bottom = 127.0
 text = "Receive: 99"
 
-[node name="Set" type="Label" parent="PlayerStatsViewer"]
+[node name="Set" type="Label" parent="PlayerStatsViewer" unique_id=2104605304]
 layout_mode = 0
 offset_left = 36.0
 offset_top = 123.0
@@ -207,7 +207,7 @@ offset_right = 284.0
 offset_bottom = 160.0
 text = "Set: 99"
 
-[node name="Block" type="Label" parent="PlayerStatsViewer"]
+[node name="Block" type="Label" parent="PlayerStatsViewer" unique_id=1759710631]
 layout_mode = 0
 offset_left = 36.0
 offset_top = 155.0
@@ -215,7 +215,7 @@ offset_right = 287.0
 offset_bottom = 192.0
 text = "Block: 99"
 
-[node name="Spike" type="Label" parent="PlayerStatsViewer"]
+[node name="Spike" type="Label" parent="PlayerStatsViewer" unique_id=923893696]
 layout_mode = 0
 offset_left = 300.0
 offset_top = 58.0
@@ -223,7 +223,7 @@ offset_right = 577.0
 offset_bottom = 95.0
 text = "Spike: 99"
 
-[node name="Speed" type="Label" parent="PlayerStatsViewer"]
+[node name="Speed" type="Label" parent="PlayerStatsViewer" unique_id=2032103911]
 layout_mode = 0
 offset_left = 300.0
 offset_top = 90.0
@@ -231,7 +231,7 @@ offset_right = 578.0
 offset_bottom = 127.0
 text = "Speed: 99"
 
-[node name="SpikeHeight" type="Label" parent="PlayerStatsViewer"]
+[node name="SpikeHeight" type="Label" parent="PlayerStatsViewer" unique_id=917167448]
 layout_mode = 0
 offset_left = 300.0
 offset_top = 123.0
@@ -239,7 +239,7 @@ offset_right = 576.0
 offset_bottom = 160.0
 text = "Spike Height: 99"
 
-[node name="BlockHeight" type="Label" parent="PlayerStatsViewer"]
+[node name="BlockHeight" type="Label" parent="PlayerStatsViewer" unique_id=491797458]
 layout_mode = 0
 offset_left = 300.0
 offset_top = 155.0
@@ -247,12 +247,12 @@ offset_right = 576.0
 offset_bottom = 192.0
 text = "Block Height: 99"
 
-[node name="RotationControl" type="Control" parent="."]
+[node name="RotationControl" type="Control" parent="." unique_id=1128263913]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ClockwiseButton" type="Button" parent="RotationControl"]
+[node name="ClockwiseButton" type="Button" parent="RotationControl" unique_id=324083968]
 layout_mode = 0
 offset_left = 989.731
 offset_top = 719.47
@@ -261,7 +261,7 @@ offset_bottom = 847.47
 icon = ExtResource("7")
 expand_icon = true
 
-[node name="AntiClockwiseButton" type="Button" parent="RotationControl"]
+[node name="AntiClockwiseButton" type="Button" parent="RotationControl" unique_id=1946678459]
 layout_mode = 0
 offset_left = 1425.57
 offset_top = 717.02
@@ -270,7 +270,7 @@ offset_bottom = 849.02
 icon = ExtResource("6")
 expand_icon = true
 
-[node name="Label" type="Label" parent="RotationControl"]
+[node name="Label" type="Label" parent="RotationControl" unique_id=1627670866]
 layout_mode = 0
 offset_left = 1100.27
 offset_top = 705.615
@@ -282,7 +282,7 @@ text = "Rotate"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SubsRemainingLabel" type="Label" parent="."]
+[node name="SubsRemainingLabel" type="Label" parent="." unique_id=314349655]
 layout_mode = 0
 offset_left = 1330.0
 offset_top = 866.0
@@ -295,10 +295,10 @@ theme_override_constants/shadow_outline_size = 3
 theme_override_font_sizes/font_size = 21
 text = "Substitutions remaining: Unlimited (Pre Set)"
 
-[node name="LiberoOptionsPanel" parent="." instance=ExtResource("2_0atft")]
+[node name="LiberoOptionsPanel" parent="." unique_id=1936321305 instance=ExtResource("2_0atft")]
 visible = false
 
-[node name="LiberoOptionsButton" type="Button" parent="."]
+[node name="LiberoOptionsButton" type="Button" parent="." unique_id=1211979288]
 layout_mode = 0
 offset_left = 732.0
 offset_top = 608.0

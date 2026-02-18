@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://c62uwhs35dmk"]
+[gd_scene format=3 uid="uid://c62uwhs35dmk"]
 
 [ext_resource type="Script" uid="uid://dg6fi20bc0khh" path="res://Scenes/MatchScene/MatchUI/NameCard.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://bamxyyq7k8h0o" path="res://Textures/Captain.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://b7ieonjvgxqyi" path="res://Textures/LiberoIcon.png" id="4"]
 
-[node name="NameCard" type="ColorRect"]
+[node name="NameCard" type="ColorRect" unique_id=1662855686]
 custom_minimum_size = Vector2(250, 100)
 offset_right = 250.0
 offset_bottom = 80.0
@@ -12,7 +12,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 script = ExtResource("2")
 
-[node name="FirstName" type="Label" parent="."]
+[node name="FirstName" type="Label" parent="." unique_id=819354456]
 layout_mode = 0
 offset_left = 22.0
 offset_top = 32.0
@@ -22,7 +22,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 14
 text = "Karteez"
 
-[node name="LastName" type="Label" parent="."]
+[node name="LastName" type="Label" parent="." unique_id=382989099]
 layout_mode = 0
 offset_left = 22.0
 offset_top = 52.0
@@ -32,7 +32,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Arminhalf"
 
-[node name="Skill" type="Label" parent="."]
+[node name="Skill" type="Label" parent="." unique_id=1507195045]
 layout_mode = 0
 offset_right = 250.0
 offset_bottom = 27.0
@@ -40,7 +40,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "84"
 horizontal_alignment = 2
 
-[node name="Role" type="Label" parent="."]
+[node name="Role" type="Label" parent="." unique_id=496596700]
 layout_mode = 0
 offset_right = 250.0
 offset_bottom = 27.0
@@ -48,14 +48,14 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Opposite"
 horizontal_alignment = 1
 
-[node name="Height" type="Label" parent="."]
+[node name="Height" type="Label" parent="." unique_id=736082275]
 layout_mode = 0
 offset_right = 250.0
 offset_bottom = 27.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "199.9cm"
 
-[node name="CaptainIcon" type="TextureRect" parent="."]
+[node name="CaptainIcon" type="TextureRect" parent="." unique_id=1874727940]
 layout_mode = 0
 offset_left = 222.499
 offset_top = 66.9187
@@ -64,7 +64,7 @@ offset_bottom = 106.919
 texture = ExtResource("3")
 expand_mode = 1
 
-[node name="LiberoIcon" type="TextureRect" parent="."]
+[node name="LiberoIcon" type="TextureRect" parent="." unique_id=1531229982]
 modulate = Color(0.898039, 1, 0, 1)
 layout_mode = 0
 offset_left = 222.499
@@ -74,7 +74,7 @@ offset_bottom = 61.9187
 texture = ExtResource("4")
 expand_mode = 1
 
-[node name="SubstituteButton" type="Button" parent="."]
+[node name="SubstituteButton" type="Button" parent="." unique_id=1597122347]
 layout_mode = 0
 offset_left = 6.0
 offset_top = 89.0
@@ -82,7 +82,7 @@ offset_right = 94.0
 offset_bottom = 109.0
 text = "Substitute"
 
-[node name="CaptainButton" type="Button" parent="."]
+[node name="CaptainButton" type="Button" parent="." unique_id=1080589973]
 layout_mode = 0
 offset_left = 104.0
 offset_top = 89.0

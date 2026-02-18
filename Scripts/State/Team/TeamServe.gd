@@ -9,7 +9,7 @@ func Enter(team:TeamNode):
 	athleteToServe.stateMachine.SetCurrentState(athleteToServe.serveState)
 
 	pass
-func Update(team:TeamNode):
+func Update(_team:TeamNode):
 	pass
 func Exit(_team:TeamNode):
 	pass

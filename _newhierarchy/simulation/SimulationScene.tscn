@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://uxcy0qdrdfti"]
+
+[ext_resource type="Script" uid="uid://bqfk3t626gtaa" path="res://_newhierarchy/simulation/simulation_scene.gd" id="1_dsvq6"]
+[ext_resource type="Texture2D" uid="uid://deh4jlm2ve8a" path="res://Models/makehumanTest_shoes05_diffuse.png" id="2_dsvq6"]
+
+[node name="SimulationScene" type="Node2D" unique_id=1582641790]
+script = ExtResource("1_dsvq6")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1348153897]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_dsvq6")

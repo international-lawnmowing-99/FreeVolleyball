@@ -1,0 +1,2 @@
+extends AttemptOutcome
+class_name SetOutcome

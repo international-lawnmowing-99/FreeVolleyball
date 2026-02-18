@@ -8,7 +8,7 @@ class_name PostMatchUI
 #func _ready():
 
 
-func Show(score:Score):
+func Show(score:ScoreUI):
 	visible = true
 	winnerLabel.text = score.teamANameText.text + " Won!"
 	if score.teamASetScore > score.teamBSetScore:

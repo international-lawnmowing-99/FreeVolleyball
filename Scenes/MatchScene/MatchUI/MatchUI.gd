@@ -22,3 +22,12 @@ func _on_toggle_stats_button_pressed() -> void:
 	teamTacticsUICanvas.visible = false
 
 	pass # Replace with function body.
+
+
+func _on_request_time_out_button_pressed() -> void:
+	Console.AddNewLine("Time out requested by team A")
+	#Do something...
+
+
+func _on_toggle_substitutions_button_pressed() -> void:
+	teamInfoUI.ToggleTeamInfo()

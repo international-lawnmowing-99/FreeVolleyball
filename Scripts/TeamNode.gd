@@ -432,8 +432,13 @@ func InstantaneouslySwapPlayers(outgoing:Athlete, incoming:Athlete):
 		originalRotation1Player = incoming
 
 	if outgoing.stats.rotationPosition == -1:
-		for athlete:Athlete in courtPlayerNodes:
-			Console.AddNewLine("Position " + str(athlete.stats.rotationPosition) + ": " + athlete.stats.lastName)
+		if outgoing == playerCurrentlyLiberoedOff:
+			InstantaneouslySwapPlayers(activeLibero, playerCurrentlyLiberoedOff)
+			playerCurrentlyLiberoedOff = null
+			data.isLiberoOnCourt = false
+		else:
+			for athlete:Athlete in courtPlayerNodes:
+				Console.AddNewLine("Position " + str(athlete.stats.rotationPosition) + ": " + athlete.stats.lastName)
 
 	incoming.stats.rotationPosition = outgoing.stats.rotationPosition
 	outgoing.stats.rotationPosition = -1

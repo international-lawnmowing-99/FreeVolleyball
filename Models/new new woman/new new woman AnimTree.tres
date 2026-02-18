@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=12 format=3 uid="uid://ow68ywnb7vxl"]
+[gd_resource type="AnimationNodeBlendTree" format=3 uid="uid://ow68ywnb7vxl"]
 
 [sub_resource type="AnimationNodeAnimation" id="1"]
 animation = &"DigPreparation"

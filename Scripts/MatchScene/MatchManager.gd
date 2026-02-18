@@ -21,7 +21,7 @@ var preSet:bool = true
 var timer:Timer
 @onready var ball = $ball
 
-@onready var score:Score = $UI/ScoreCanvasLayer/Score
+@onready var score:ScoreUI = $UI/ScoreCanvasLayer/Score
 @onready var preMatchUI:PreMatchUI = $UI/PreMatchUI
 @onready var teamInfoUI:TeamInfoUI = $UI/TeamInfoUI
 @onready var TESTteamRepresentation = $UI/TeamTacticsUICanvas/TeamTacticsUI/ServeOptionsUI/Athlete1ServeOptionsUI/CourtRepresentationUI
@@ -111,6 +111,10 @@ func ConfirmTeams():
 	teamB.teamCaptain = teamB.matchPlayerNodes[randi_range(0, teamB.matchPlayerNodes.size() - 1)]
 
 
+	for athlete:Athlete in teamA.courtPlayerNodes:
+		assert(athlete.substitutionInfo.startingRotationPosition != -1)
+
+
 func StartMatch():
 	preMatch = false
 	preSet = false
@@ -186,9 +190,6 @@ func _input(_event):
 		PointToTeamA()
 	elif Input.is_key_pressed(KEY_C) && !preSet:
 		PointToTeamB()
-
-	if Input.is_action_just_pressed("ui_focus_next"):
-		pass
 
 	if Input.is_key_pressed(KEY_F2):
 		if isPaused:
@@ -286,8 +287,8 @@ func NewSet():
 
 
 	# If an even number of sets have been completed, the original team serves first
-	Console.AddNewLine(str(score.teamASetScore + score.teamBSetScore) + " score.teamASetScore + score.teamBSetScore")
-	Console.AddNewLine(str((score.teamASetScore + score.teamBSetScore) % 2) + " (score.teamASetScore + score.teamBSetScore) % 2")
+	#Console.AddNewLine(str(score.teamASetScore + score.teamBSetScore) + " score.teamASetScore + score.teamBSetScore")
+	#Console.AddNewLine(str((score.teamASetScore + score.teamBSetScore) % 2) + " (score.teamASetScore + score.teamBSetScore) % 2")
 	if (score.teamASetScore + score.teamBSetScore) % 2 == 0:
 		isTeamAServing = newMatch.isTeamAServing
 	else:

@@ -1,111 +1,73 @@
-extends TextureRect
+extends RefCounted
 class_name Score
 
-var mManager:MatchManager
+var previous_set_scores := []
 
-@onready var teamANameText = $ScoreTeamAText
-@onready var teamBNameText = $ScoreTeamBText
-@onready var teamAScoreText = $ScoreTeamAPointScore
-@onready var teamBScoreText = $ScoreTeamBPointScore
-@onready var teamASetsText = $ScoreTeamASetScore
-@onready var teamBSetsText = $ScoreTeamBSetScore
+var team_a: TeamData
+var team_b: TeamData
 
-var teamAScore:int = 0
-var teamBScore:int = 0
-var teamASetScore:int = 0
-var teamBSetScore:int = 0
+var points := {}
+var sets_won := {}
 
-var teamAPreviousScores:Array = []
-var teamBPreviousScores:Array = []
+func _init(a: TeamData, b: TeamData) -> void:
+	team_a = a
+	team_b = b
 
-func _ready():
-	mManager = get_tree().root.get_node("MatchScene")
-	teamAScoreText.text = str(teamAScore)
-	teamASetsText.text = str(teamASetScore)
-	teamBScoreText.text = str(teamBScore)
-	teamBSetsText.text = str(teamBSetScore)
+	points[team_a] = 0
+	points[team_b] = 0
 
-func PointToTeamA():
-	teamAScore += 1
-
-	# Set 5
-	if teamASetScore == 2 && teamBSetScore == 2:
-		if teamAScore > 14 && teamAScore > teamBScore + 1:
-			teamAPreviousScores.append(teamAScore)
-			teamBPreviousScores.append(teamBScore)
-
-			teamASetScore += 1
-			teamAScore = 0
-
-			TeamAWon()
+	sets_won[team_a] = 0
+	sets_won[team_b] = 0
 
 
-	# Sets 1 - 4
-	elif teamAScore > 24 && teamAScore > teamBScore + 1:
-		teamASetScore += 1
+func award_point(team: TeamData):
+	if not points.has(team):
+		push_error("Score received unknown team")
+		return
 
-		teamAPreviousScores.append(teamAScore)
-		teamBPreviousScores.append(teamBScore)
+	var other = team_b if team == team_a else team_a
 
-		teamAScore = 0
+	points[team] += 1
 
-		if teamASetScore > 2:
-			TeamAWon()
+	# Fifth set
+	if sets_won[team_a] == 2 and sets_won[team_b] == 2:
+		if points[team] >= 15 and points[team] >= points[other] + 2:
+			return _win_set(team)
 
-		else:
-			mManager.NewSet()
-			teamBScore = 0
-			teamBScoreText.text = str(teamBScore)
+	# Sets 1–4
+	elif points[team] >= 25 and points[team] >= points[other] + 2:
+		return _win_set(team)
 
-	teamAScoreText.text = str(teamAScore)
-	teamASetsText.text = str(teamASetScore)
+	return {"type": "point"}
 
-func PointToTeamB():
-	teamBScore += 1
-	# Set 5
-	if teamASetScore == 2 && teamBSetScore == 2:
-		if teamBScore > 14 && teamBScore > teamAScore + 1:
-			teamAPreviousScores.append(teamAScore)
-			teamBPreviousScores.append(teamBScore)
+func _win_set(team: TeamData) -> Dictionary:
+	var other := team_b if team == team_a else team_a
 
-			teamBSetScore += 1
-			teamBScore = 0
+	previous_set_scores.append({
+		team_a: points[team_a],
+		team_b: points[team_b]
+	})
 
-			TeamBWon()
+	sets_won[team] += 1
+	points[team_a] = 0
+	points[team_b] = 0
 
-	# Sets 1 - 4
-	elif teamBScore > 24 && teamBScore > teamAScore + 1:
+	if sets_won[team] >= 3:
+		return {
+			"type": "match_over",
+			"winner": team
+		}
 
-		teamAPreviousScores.append(teamAScore)
-		teamBPreviousScores.append(teamBScore)
+	return {
+		"type": "set_over",
+		"winner": team
+	}
 
-		teamBSetScore += 1
-		teamBScore = 0
-
-		if teamBSetScore > 2:
-			TeamBWon()
-
-		else:
-			mManager.NewSet()
-			teamAScore = 0
-			teamAScoreText.text = str(teamAScore)
-
-	teamBScoreText.text = str(teamBScore)
-	teamBSetsText.text = str(teamBSetScore)
-
-
-func TeamAWon():
-	for i in range(40):
-		Console.AddNewLine("game over. Team A won", Color(randf(), randf(), randf(), randf()*255))
-
-	teamBScore = 0
-	teamBScoreText.text = str(teamBScore)
-	mManager.GameOver(true)
-
-func TeamBWon():
-	for i in range(40):
-		Console.AddNewLine("game over. team B won well done chaps", Color(randf(), randf(), randf(), 1.0))
-
-	teamAScore = 0
-	teamAScoreText.text = str(teamAScore)
-	mManager.GameOver(false)
+func get_match_winner() -> TeamData:
+	if sets_won[team_a] >= 3:
+		return team_a
+	elif sets_won[team_b] >= 3:
+		return team_b
+	else:
+		push_error("no winner, but queried")
+		return null

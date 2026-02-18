@@ -1,6 +1,9 @@
 extends Resource
 class_name TeamData
 
+
+
+
 # Anything we might want to save goes in here
 @export var teamName:String
 @export var teamStrategy:TeamStrategy = TeamStrategy.new()
@@ -57,3 +60,10 @@ func Populate(_playerChoiceState, firstNames:Array[String], lastNames:Array[Stri
 		stats.gameRead = skill/50.0 +  randf()/2.0 * age/(17.0+28.0)
 
 		matchPlayers.append(stats)
+
+func choose_server() -> AthleteStats:
+	if courtPlayers.is_empty():
+		push_error("No court players available for serving.")
+		return null
+
+	return courtPlayers[0]
