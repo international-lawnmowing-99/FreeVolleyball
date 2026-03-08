@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://dmu0b2wanhyv7"]
+[gd_scene format=3 uid="uid://dmu0b2wanhyv7"]
 
 [ext_resource type="Texture2D" uid="uid://hrehrqgjk1yk" path="res://Textures/Scorecard.png" id="2"]
-[ext_resource type="Script" uid="uid://smskaogspg0k" path="res://Scenes/Score.gd" id="3"]
+[ext_resource type="Script" uid="uid://bje8y2wo4qci8" path="res://Scenes/ScoreUI.gd" id="2_tv1gn"]
 [ext_resource type="Texture2D" uid="uid://b5bxp73r55d64" path="res://icon.png" id="3_y7ruu"]
 
-[node name="Score" type="TextureRect"]
+[node name="Score" type="TextureRect" unique_id=241741934]
 anchors_preset = -1
 anchor_left = 0.025
 anchor_top = 0.025
@@ -13,9 +13,9 @@ anchor_bottom = 0.025
 offset_right = -1561.0
 offset_bottom = 108.0
 texture = ExtResource("2")
-script = ExtResource("3")
+script = ExtResource("2_tv1gn")
 
-[node name="ScoreTeamAText" type="Label" parent="."]
+[node name="ScoreTeamAText" type="Label" parent="." unique_id=275417403]
 layout_mode = 0
 offset_left = 108.0
 offset_top = 6.0
@@ -25,7 +25,7 @@ theme_override_constants/line_spacing = -3
 text = "AUS"
 autowrap_mode = 3
 
-[node name="ScoreTeamBText" type="Label" parent="."]
+[node name="ScoreTeamBText" type="Label" parent="." unique_id=9116351]
 layout_mode = 0
 offset_left = 109.89
 offset_top = 57.6568
@@ -35,7 +35,7 @@ theme_override_constants/line_spacing = -3
 text = "FRA"
 autowrap_mode = 3
 
-[node name="ScoreTeamASetScore" type="Label" parent="."]
+[node name="ScoreTeamASetScore" type="Label" parent="." unique_id=74914554]
 layout_mode = 0
 offset_left = 239.0
 offset_top = 24.0
@@ -43,7 +43,7 @@ offset_right = 260.0
 offset_bottom = 51.0
 text = "0"
 
-[node name="ScoreTeamBSetScore" type="Label" parent="."]
+[node name="ScoreTeamBSetScore" type="Label" parent="." unique_id=665465319]
 layout_mode = 0
 offset_left = 239.0
 offset_top = 75.5466
@@ -51,7 +51,7 @@ offset_right = 260.0
 offset_bottom = 102.547
 text = "0"
 
-[node name="ScoreTeamAPointScore" type="Label" parent="."]
+[node name="ScoreTeamAPointScore" type="Label" parent="." unique_id=1717257526]
 layout_mode = 0
 offset_left = 258.0
 offset_top = 3.0
@@ -59,7 +59,7 @@ offset_right = 308.0
 offset_bottom = 53.0
 text = "13"
 
-[node name="ScoreTeamBPointScore" type="Label" parent="."]
+[node name="ScoreTeamBPointScore" type="Label" parent="." unique_id=1840515074]
 layout_mode = 0
 offset_left = 258.0
 offset_top = 55.0
@@ -67,7 +67,7 @@ offset_right = 308.0
 offset_bottom = 105.0
 text = "13"
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1607813506]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 4.0

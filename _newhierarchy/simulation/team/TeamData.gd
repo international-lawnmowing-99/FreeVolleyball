@@ -1,12 +1,9 @@
 extends Resource
 class_name TeamData
 
-
-
-
 # Anything we might want to save goes in here
 @export var teamName:String
-@export var teamStrategy:TeamStrategy = TeamStrategy.new()
+@export var teamStrategy:TeamStrategy = TeamStrategy.new(self)
 #@export var nation:String
 @export var isHuman:bool = false
 @export var isLiberoOnCourt:bool
@@ -19,11 +16,13 @@ class_name TeamData
 
 @export var playerChoiceState:PlayerChoiceState
 
+@export var teamLineupWeightProfile: TeamLineupWeightProfile
+
+@export var squad:Array[AthleteData] = []
+
+
 func Populate(_playerChoiceState, firstNames:Array[String], lastNames:Array[String]):
 	playerChoiceState = _playerChoiceState
-	#.continentIndex = continentIndex
-	#playerChoiceState.nationIndices[continentIndex] = nationIndex
-	#playerChoiceState.clubTeamIndices[continentIndex][nationIndex] = clubTeamIndex
 
 	if matchPlayers.size() != 0:
 		for i in range (32):

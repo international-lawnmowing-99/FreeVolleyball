@@ -17,7 +17,7 @@ var rng := RandomNumberGenerator.new()
 
 var rally_engine:RallyEngine = RallyEngine.new(rng)
 
-func _init(_team_a, _team_b, _seed: int = -1) -> void:
+func _init(_team_a:TeamData, _team_b:TeamData, _seed: int = -1) -> void:
 	team_a = _team_a
 	team_b = _team_b
 
@@ -30,8 +30,9 @@ func _init(_team_a, _team_b, _seed: int = -1) -> void:
 
 	serving_team = team_a if rng.randf() < 0.5 else team_b
 
-	team_a.set_starting_rotation(team_a.strategy.choose_starting_rotation())
-	team_b.set_starting_rotation(team_b.strategy.choose_starting_rotation())
+
+	#team_a.set_starting_rotation(team_a.teamStrategy.choose_starting_rotation())
+	#team_b.set_starting_rotation(team_b.teamStrategy.choose_starting_rotation())
 
 
 func play_match() -> Dictionary:
@@ -89,7 +90,7 @@ func create_save_data() -> MatchSaveData:
 	save.score_data = score.serialize()
 	save.rally_number = rally_number
 	save.serving_team_name = serving_team.teamName
-	save.team_a_rotation_index = team_a_state.rotation_index
-	save.team_b_rotation_index = team_b_state.rotation_index
+	#save.team_a_rotation_index = team_a_state.rotation_index
+	#save.team_b_rotation_index = team_b_state.rotation_index
 
 	return save

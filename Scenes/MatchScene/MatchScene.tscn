@@ -19,6 +19,7 @@
 [ext_resource type="Script" uid="uid://c7wyxx7aegsah" path="res://Scenes/sillydebug.gd" id="14_d4rla"]
 [ext_resource type="PackedScene" uid="uid://dmu0b2wanhyv7" path="res://Scenes/MatchScene/MatchUI/ScoreUIMatch.tscn" id="15_w0aqi"]
 [ext_resource type="PackedScene" uid="uid://cycfwen4jhh1v" path="res://Scenes/MatchScene/MatchUI/PreMatchUI.tscn" id="18_0pm8c"]
+[ext_resource type="Script" uid="uid://bje8y2wo4qci8" path="res://Scenes/ScoreUI.gd" id="19_7omtj"]
 [ext_resource type="PackedScene" uid="uid://7v1fcf4qi42l" path="res://Scenes/MatchScene/MatchUI/ServeUI.tscn" id="19_gfg2l"]
 [ext_resource type="Script" uid="uid://cvyxcbjr78nhk" path="res://Scenes/TeamInfoUI.gd" id="20_mqewi"]
 [ext_resource type="PackedScene" uid="uid://c0t3dj6fskv0t" path="res://Scenes/MatchScene/MatchUI/TeamSubstitutionUI.tscn" id="21_mfp85"]
@@ -843,6 +844,8 @@ offset_bottom = 88.0
 script = ExtResource("14_3hya6")
 
 [node name="Score" parent="UI/ScoreCanvasLayer" unique_id=556258281 instance=ExtResource("15_w0aqi")]
+script = ExtResource("19_7omtj")
+metadata/_edit_use_anchors_ = true
 
 [node name="ColourRect2" type="ColorRect" parent="UI/ScoreCanvasLayer" unique_id=1299019845]
 visible = false

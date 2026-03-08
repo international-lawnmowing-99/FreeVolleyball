@@ -4,6 +4,8 @@ func _ready() -> void:
 	var team_a := TeamData.new()
 	team_a.teamName = "Alpha"
 	team_a.Populate(PlayerChoiceState.new(), ["Cameron"], ["Borgas"])
+	for athlete:AthleteStats in team_a.matchPlayers:
+		print(str(athlete.lastName) + " " + str(athlete.block))
 	team_a.courtPlayers = team_a.matchPlayers.slice(0, 6)
 
 	var team_b := TeamData.new()

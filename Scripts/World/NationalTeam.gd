@@ -1,4 +1,4 @@
-extends "res://Scripts/World/TeamData.gd"
+extends "res://_newhierarchy/simulation/team/TeamData.gd"
 
 class_name NationalTeam
 @export var nationalPlayers = []

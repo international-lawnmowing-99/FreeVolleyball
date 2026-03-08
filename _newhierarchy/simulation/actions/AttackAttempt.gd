@@ -1,6 +1,6 @@
 extends Attempt
 class_name AttackAttempt
 
-func resolve() -> ServeOutcome:
-	var outcome := ServeOutcome.new()
+func resolve() -> AttackOutcome:
+	var outcome := AttackOutcome.new()
 	return outcome

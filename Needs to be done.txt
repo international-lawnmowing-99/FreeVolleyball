@@ -1,0 +1,23 @@
+decompose all of 5-1 into modules
+
+Choose starting lineup
+
+choose starting rotation
+
+server chooses serving strategy
+
+reception modelled
+
+set remodelled
+
+spike remodelled
+
+block remodelled
+
+dump remodelled
+
+add timeouts
+
+fatigue remodelled better
+
+substitute ai logic
