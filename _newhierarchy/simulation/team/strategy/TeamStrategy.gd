@@ -1,13 +1,108 @@
 extends Resource
 class_name TeamStrategy
-#Holds all the input the user/ai has generated to direct their team
+# Holds all the input the user/ai has generated to direct their team
 
-var teamData:TeamData
+var teamData: TeamData
 
+enum SetterSystem {
+	ONE_SETTER,
+	TWO_SETTER,
+	FIXED_POSITION_SETTER
+}
 
+const ONE_SETTER_REQUIREMENTS := {
+	"setter": 1,
+	"middle": 2,
+	"outside": 2,
+	"opposite": 1
+}
+
+const TWO_SETTER_REQUIREMENTS := {
+	"setter": 2,
+	"middle": 2,
+	"outside": 1,
+	"opposite": 1
+}
+
+const ROLE_ATTRIBUTE_WEIGHTS := {
+	"setter": {
+		"set": 1.9,
+		"reception": 0.7,
+		"serve": 0.6,
+		"gameRead": 0.8,
+		"speed": 0.3,
+		"stamina": 0.2
+	},
+	"middle": {
+		"block": 1.6,
+		"spike": 1.0,
+		"spikeHeight": 0.8,
+		"blockHeight": 1.0,
+		"serve": 0.3,
+		"speed": 0.2
+	},
+	"outside": {
+		"spike": 1.2,
+		"reception": 1.3,
+		"serve": 0.8,
+		"block": 0.4,
+		"gameRead": 0.6,
+		"stamina": 0.3
+	},
+	"opposite": {
+		"spike": 1.6,
+		"serve": 0.8,
+		"block": 0.9,
+		"spikeHeight": 0.8,
+		"blockHeight": 0.6,
+		"reception": 0.2
+	},
+	"libero": {
+		"reception": 1.8,
+		"set": 0.6,
+		"speed": 0.5,
+		"gameRead": 0.8,
+		"stamina": 0.4
+	}
+}
+
+const SYSTEM_ROLE_WEIGHT_MULTIPLIERS := {
+	SetterSystem.ONE_SETTER: {
+		"setter": {"set": 1.1},
+		"outside": {"reception": 1.05}
+	},
+	SetterSystem.TWO_SETTER: {
+		"setter": {"set": 1.2, "reception": 1.05},
+		"outside": {"spike": 1.1},
+		"opposite": {"spike": 0.95}
+	},
+	SetterSystem.FIXED_POSITION_SETTER: {
+		"setter": {"set": 1.15, "reception": 1.1}
+	}
+}
+
+const ROLE_POOL_LIMITS := {
+	"setter": 2,
+	"middle": 3,
+	"outside": 3,
+	"opposite": 2
+}
+
+@export var preferred_setter_system: SetterSystem = SetterSystem.ONE_SETTER
+@export_range(1, 6) var fixed_setter_position: int = 1
+
+# Team style weights for whole-lineup evaluation.
+@export var lineup_component_weights := {
+	"offense": 1.0,
+	"defense": 1.0,
+	"serve_pressure": 1.0,
+	"passing_stability": 1.0,
+	"blocking": 1.0,
+	"role_fit": 1.0,
+	"role_mismatch_penalty": 1.0
+}
 
 @export var defaultReceiveRotations =  [
-	# Assuming setter starts in 1
 	[#setter in 1
 		Vector3(5.5, 0, -4), # pos 1
 		Vector3(5.0, 0, -2.8), # pos 2
@@ -81,7 +176,7 @@ var teamData:TeamData
 # need to store each player, each of their strategies against each known opposition, and a default, and whether this overrides all others
 @export var servingStrategies:Dictionary = {}
 
-func _init(_teamData:TeamData) -> void:
+func _init(_teamData:TeamData = null) -> void:
 	teamData = _teamData
 
 func choose_starting_rotation() -> int:
@@ -96,31 +191,385 @@ func choose_starting_rotation() -> int:
 
 	return best_rotation
 
-
 func score_rotation(rotation:int) -> float:
-	# Access starting six
-	var six := teamData.matchPlayers.slice(0, 6)
+	var six: Array[AthleteStats] = teamData.courtPlayers if not teamData.courtPlayers.is_empty() else teamData.matchPlayers.slice(0, 6)
+	if six.size() < 6:
+		return -INF
 
-	# Apply virtual rotation
-	var rotated := []
+	var rotated: Array[AthleteStats] = []
 	for i in range(6):
 		rotated.append(six[(i + rotation) % 6])
 
-	var score := 0.0
+	var score: float = 0.0
 
-	# Example heuristics (extend later):
-	# Prefer setter starting back row
 	if rotated[0].role == Enums.Role.Setter \
 	or rotated[4].role == Enums.Role.Setter \
 	or rotated[5].role == Enums.Role.Setter:
 		score += 1.0
 
-	# Prefer strong passers in back row
-	for i in [0,4,5]:
+	for i in [0, 4, 5]:
 		score += rotated[i].reception * 0.2
 
-	# Prefer strong attackers in front row
-	for i in [1,2,3]:
+	for i in [1, 2, 3]:
 		score += rotated[i].spike * 0.2
 
 	return score
+
+func select_starting_lineup(players: Array[AthleteStats]) -> Array[AthleteStats]:
+	if players.size() < 6:
+		return players.duplicate()
+
+	var requirements: Dictionary = _system_role_requirements(preferred_setter_system)
+	var role_keys: Array[String] = []
+	for key in requirements.keys():
+		role_keys.append(key)
+
+	var pools: Dictionary = _build_role_pools(players, requirements)
+	var assignments: Array = []
+	_generate_assignments(role_keys, 0, requirements, pools, {}, {}, assignments)
+
+	if assignments.is_empty():
+		var fallback: Array[AthleteStats] = players.slice(0, 6)
+		_assign_roles_from_system(fallback)
+		return fallback
+
+	var best_assignment = assignments[0]
+	var best_score: float = -INF
+
+	for assignment in assignments:
+		var candidate_lineup: Array[AthleteStats] = _assignment_to_lineup(assignment, role_keys)
+		if candidate_lineup.size() != 6:
+			continue
+
+		_apply_assignment_roles(assignment)
+		candidate_lineup = _apply_system_position_rules(candidate_lineup)
+		var candidate_score: float = _score_lineup(candidate_lineup, assignment)
+
+		if candidate_score > best_score:
+			best_score = candidate_score
+			best_assignment = assignment
+
+	_apply_assignment_roles(best_assignment)
+	var best_lineup: Array[AthleteStats] = _assignment_to_lineup(best_assignment, role_keys)
+	return _apply_system_position_rules(best_lineup)
+
+func choose_passer(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
+	var players := _resolve_players(team_match_data)
+	return _choose_player_by_skill(players, "reception", _rng)
+
+func choose_setter(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
+	var players: Array[AthleteStats] = _resolve_players(team_match_data)
+	if players.is_empty():
+		return null
+
+	if preferred_setter_system == SetterSystem.FIXED_POSITION_SETTER:
+		var fixed_index: int = int(clamp(fixed_setter_position - 1, 0, players.size() - 1))
+		return players[fixed_index]
+
+	var setter_candidates: Array[AthleteStats] = []
+	for player in players:
+		if player.role == Enums.Role.Setter:
+			setter_candidates.append(player)
+
+	if setter_candidates.is_empty():
+		setter_candidates = players
+
+	return _choose_player_by_skill(setter_candidates, "set", _rng)
+
+func choose_attacker(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
+	var players := _resolve_players(team_match_data)
+	return _choose_player_by_skill(players, "spike", _rng)
+
+func choose_blocker(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
+	var players := _resolve_players(team_match_data)
+	return _choose_player_by_skill(players, "block", _rng)
+
+func _resolve_players(team_match_data: TeamMatchData) -> Array[AthleteStats]:
+	if team_match_data != null and not team_match_data.court_players.is_empty():
+		return team_match_data.court_players
+	return teamData.courtPlayers
+
+func _choose_player_by_skill(players: Array[AthleteStats], skill_property: String, _rng: RandomNumberGenerator = null) -> AthleteStats:
+	if players.is_empty():
+		return null
+
+	var chosen: AthleteStats = players[0]
+	var best_score := -INF
+
+	for player in players:
+		var base_score: float = float(player.get(skill_property))
+		var noise := 0.0
+		if _rng != null:
+			noise = _rng.randf_range(-10.0, 10.0)
+		else:
+			noise = randf_range(-10.0, 10.0)
+
+		var sampled_score := base_score + noise
+		if sampled_score > best_score:
+			best_score = sampled_score
+			chosen = player
+
+	return chosen
+
+func _system_role_requirements(system: SetterSystem) -> Dictionary:
+	match system:
+		SetterSystem.TWO_SETTER:
+			return TWO_SETTER_REQUIREMENTS
+		SetterSystem.FIXED_POSITION_SETTER:
+			return ONE_SETTER_REQUIREMENTS
+		_:
+			return ONE_SETTER_REQUIREMENTS
+
+func _build_role_pools(players: Array[AthleteStats], requirements: Dictionary) -> Dictionary:
+	var pools: Dictionary = {}
+
+	for role_key in requirements.keys():
+		var scored: Array = []
+		for player in players:
+			var suitability: float = _score_player_for_role(player, role_key)
+			scored.append({"player": player, "score": suitability})
+
+		scored.sort_custom(func(a, b): return a["score"] > b["score"])
+
+		var limit: int = int(ROLE_POOL_LIMITS.get(role_key, int(requirements[role_key]) + 1))
+		limit = min(limit, scored.size())
+
+		var pool: Array[AthleteStats] = []
+		for i in range(limit):
+			pool.append(scored[i]["player"])
+		pools[role_key] = pool
+
+	return pools
+
+func _generate_assignments(
+	role_keys: Array[String],
+	role_index: int,
+	requirements: Dictionary,
+	pools: Dictionary,
+	used_players: Dictionary,
+	current_assignment: Dictionary,
+	output: Array
+) -> void:
+	if role_index >= role_keys.size():
+		output.append(current_assignment.duplicate(true))
+		return
+
+	var role_key: String = role_keys[role_index]
+	var required_count: int = int(requirements[role_key])
+	var pool = pools.get(role_key, [])
+	var combos: Array = []
+	_collect_combos(pool, required_count, 0, [], used_players, combos)
+
+	for combo in combos:
+		for player in combo:
+			used_players[player] = true
+
+		current_assignment[role_key] = combo
+		_generate_assignments(role_keys, role_index + 1, requirements, pools, used_players, current_assignment, output)
+		current_assignment.erase(role_key)
+
+		for player in combo:
+			used_players.erase(player)
+
+func _collect_combos(
+	pool: Array[AthleteStats],
+	needed: int,
+	start_index: int,
+	picked: Array,
+	used_players: Dictionary,
+	output: Array
+) -> void:
+	if picked.size() == needed:
+		output.append(picked.duplicate())
+		return
+
+	var remaining_needed: int = needed - picked.size()
+	for i in range(start_index, pool.size()):
+		if pool.size() - i < remaining_needed:
+			break
+
+		var player: AthleteStats = pool[i]
+		if used_players.has(player):
+			continue
+
+		picked.append(player)
+		_collect_combos(pool, needed, i + 1, picked, used_players, output)
+		picked.pop_back()
+
+func _assignment_to_lineup(assignment: Dictionary, role_keys: Array[String]) -> Array[AthleteStats]:
+	var lineup: Array[AthleteStats] = []
+	for role_key in role_keys:
+		var role_players: Array = assignment.get(role_key, [])
+		for player in role_players:
+			lineup.append(player)
+	return lineup
+
+func _apply_assignment_roles(assignment: Dictionary) -> void:
+	for role_key in assignment.keys():
+		var players: Array = assignment[role_key]
+		for player in players:
+			player.role = _role_enum_for_key(role_key)
+
+func _apply_system_position_rules(lineup: Array[AthleteStats]) -> Array[AthleteStats]:
+	if preferred_setter_system != SetterSystem.FIXED_POSITION_SETTER:
+		return lineup
+
+	if lineup.is_empty():
+		return lineup
+
+	var target_index: int = int(clamp(fixed_setter_position - 1, 0, lineup.size() - 1))
+	var setter_candidate: AthleteStats = _best_player_for_role(lineup, "setter")
+	if setter_candidate == null:
+		return lineup
+
+	var setter_index := lineup.find(setter_candidate)
+	if setter_index == -1:
+		return lineup
+
+	if setter_index != target_index:
+		var temp: AthleteStats = lineup[target_index]
+		lineup[target_index] = lineup[setter_index]
+		lineup[setter_index] = temp
+
+	lineup[target_index].role = Enums.Role.Setter
+	return lineup
+
+func _best_player_for_role(players: Array[AthleteStats], role_key: String) -> AthleteStats:
+	if players.is_empty():
+		return null
+
+	var best: AthleteStats = players[0]
+	var best_score: float = _score_player_for_role(best, role_key)
+	for player in players:
+		var score: float = _score_player_for_role(player, role_key)
+		if score > best_score:
+			best = player
+			best_score = score
+	return best
+
+func _score_lineup(lineup: Array[AthleteStats], assignment: Dictionary) -> float:
+	var offensive_score: float = 0.0
+	var defensive_score: float = 0.0
+	var serve_pressure_score: float = 0.0
+	var passing_stability_score: float = 0.0
+	var blocking_score: float = 0.0
+	var role_fit_score: float = 0.0
+	var mismatch_penalty: float = 0.0
+
+	for player in lineup:
+		offensive_score += player.spike + player.dump * 0.35
+		defensive_score += player.reception * 0.7 + player.gameRead * 100.0 * 0.3
+		serve_pressure_score += player.serve
+		blocking_score += player.block + player.blockHeight * 100.0 * 0.4
+
+	for role_key in assignment.keys():
+		for player in assignment[role_key]:
+			var fit: float = _score_player_for_role(player, role_key)
+			role_fit_score += fit
+			mismatch_penalty += max(0.0, 200.0 - fit)
+
+	for player in lineup:
+		if player.role == Enums.Role.Outside or player.role == Enums.Role.Libero or player.role == Enums.Role.Setter:
+			passing_stability_score += player.reception
+
+	var total_score: float = 0.0
+	total_score += offensive_score * lineup_component_weights.get("offense", 1.0)
+	total_score += defensive_score * lineup_component_weights.get("defense", 1.0)
+	total_score += serve_pressure_score * lineup_component_weights.get("serve_pressure", 1.0)
+	total_score += passing_stability_score * lineup_component_weights.get("passing_stability", 1.0)
+	total_score += blocking_score * lineup_component_weights.get("blocking", 1.0)
+	total_score += role_fit_score * lineup_component_weights.get("role_fit", 1.0)
+	total_score -= mismatch_penalty * lineup_component_weights.get("role_mismatch_penalty", 1.0) * 0.05
+	return total_score
+
+func _score_player_for_role(player: AthleteStats, role_key: String) -> float:
+	var weights: Dictionary = _weights_for_role(role_key)
+	var score: float = 0.0
+	for attribute_key in weights.keys():
+		score += _attribute_value(player, attribute_key) * float(weights[attribute_key])
+	return score
+
+func _weights_for_role(role_key: String) -> Dictionary:
+	var base = ROLE_ATTRIBUTE_WEIGHTS.get(role_key, {})
+	var merged: Dictionary = base.duplicate(true)
+
+	var system_overrides = SYSTEM_ROLE_WEIGHT_MULTIPLIERS.get(preferred_setter_system, {})
+	var role_overrides = system_overrides.get(role_key, {})
+	for attribute_key in role_overrides.keys():
+		merged[attribute_key] = float(merged.get(attribute_key, 1.0)) * float(role_overrides[attribute_key])
+
+	return merged
+
+func _attribute_value(player: AthleteStats, attribute_key: String) -> float:
+	match attribute_key:
+		"serve":
+			return player.serve
+		"reception":
+			return player.reception
+		"set":
+			return player.set
+		"dump":
+			return player.dump
+		"spike":
+			return player.spike
+		"block":
+			return player.block
+		"stamina":
+			return player.stamina * 100.0
+		"speed":
+			return player.speed * 10.0
+		"height":
+			return player.height * 100.0
+		"verticalJump":
+			return player.verticalJump * 100.0
+		"spikeHeight":
+			return player.spikeHeight * 100.0
+		"blockHeight":
+			return player.blockHeight * 100.0
+		"gameRead":
+			return player.gameRead * 100.0
+		_:
+			return 0.0
+
+func _role_enum_for_key(role_key: String) -> Enums.Role:
+	match role_key:
+		"setter":
+			return Enums.Role.Setter
+		"middle":
+			return Enums.Role.Middle
+		"outside":
+			return Enums.Role.Outside
+		"opposite":
+			return Enums.Role.Opposite
+		"libero":
+			return Enums.Role.Libero
+		_:
+			return Enums.Role.UNDEFINED
+
+func _assign_roles_from_system(lineup: Array[AthleteStats]) -> void:
+	if lineup.size() < 6:
+		return
+
+	var requirements: Dictionary = _system_role_requirements(preferred_setter_system)
+	var taken: Dictionary = {}
+
+	for role_key in ["setter", "middle", "outside", "opposite"]:
+		var needed: int = int(requirements.get(role_key, 0))
+		for _i in range(needed):
+			var best := _best_available_for_role(lineup, role_key, taken)
+			if best == null:
+				continue
+			taken[best] = true
+			best.role = _role_enum_for_key(role_key)
+
+func _best_available_for_role(lineup: Array[AthleteStats], role_key: String, taken: Dictionary) -> AthleteStats:
+	var best: AthleteStats = null
+	var best_score: float = -INF
+	for player in lineup:
+		if taken.has(player):
+			continue
+		var score: float = _score_player_for_role(player, role_key)
+		if score > best_score:
+			best = player
+			best_score = score
+	return best

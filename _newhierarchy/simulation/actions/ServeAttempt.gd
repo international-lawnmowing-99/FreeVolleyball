@@ -2,35 +2,33 @@ extends Attempt
 class_name ServeAttempt
 
 func resolve() -> ServeOutcome:
-	var outcome := ServeOutcome.new()
+	var outcome: ServeOutcome = ServeOutcome.new()
 
-	var roll = rng.randf()
 	outcome.actor = actor
 
-	var error_threshold = 1 - actor.serve/100
-	var ace_threshold = error_threshold + actor.serve/100/3
-	print (str(roll) + " vs. " + str(error_threshold)+ " vs. " + str(ace_threshold))
+	var error_threshold: float = float(clamp(1.0 - actor.serve / 100.0, 0.02, 0.45))
+	var execution: float = float(clamp(actor.serve / 100.0 + rng.randf_range(-0.25, 0.25), 0.0, 1.0))
+	var receive_difficulty: float = float(clamp(0.2 + execution * 0.75 + rng.randf_range(-0.08, 0.08), 0.05, 1.0))
 
-	if roll < error_threshold:
-		print("serve error")
+	ctx.serve_execution = execution
+	ctx.serve_receive_difficulty = receive_difficulty
+
+	outcome.metadata["execution"] = execution
+	outcome.metadata["receive_difficulty"] = receive_difficulty
+	outcome.metadata["action"] = "serve"
+
+	if execution < error_threshold:
 		# Service error
 		outcome.success = false
 		outcome.service_error = true
 		outcome.terminal = true
 		outcome.point_winner = ctx.defender
-
-	elif roll < ace_threshold:
-		print("ace")
-		# Ace
-		outcome.success = true
-		outcome.ace = true
-		outcome.terminal = true
-		outcome.point_winner = ctx.attacker
+		outcome.metadata["result"] = "service_error"
 
 	else:
-		print("ball in play")
 		# Ball in play
 		outcome.success = true
 		outcome.terminal = false
+		outcome.metadata["result"] = "in_play"
 
 	return outcome

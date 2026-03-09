@@ -20,6 +20,14 @@ class_name TeamData
 
 @export var squad:Array[AthleteData] = []
 
+func _init() -> void:
+	if teamStrategy == null:
+		teamStrategy = TeamStrategy.new(self)
+	else:
+		teamStrategy.teamData = self
+
+	if teamLineupWeightProfile == null:
+		teamLineupWeightProfile = TeamLineupWeightProfile.new()
 
 func Populate(_playerChoiceState, firstNames:Array[String], lastNames:Array[String]):
 	playerChoiceState = _playerChoiceState
@@ -59,6 +67,28 @@ func Populate(_playerChoiceState, firstNames:Array[String], lastNames:Array[Stri
 		stats.gameRead = skill/50.0 +  randf()/2.0 * age/(17.0+28.0)
 
 		matchPlayers.append(stats)
+
+	select_starting_lineup()
+
+func select_starting_lineup() -> void:
+	if teamStrategy == null:
+		teamStrategy = TeamStrategy.new(self)
+	else:
+		teamStrategy.teamData = self
+
+	var selected: Array[AthleteStats] = teamStrategy.select_starting_lineup(matchPlayers)
+	courtPlayers = selected
+	benchPlayers.clear()
+
+	for athlete in matchPlayers:
+		if not courtPlayers.has(athlete):
+			benchPlayers.append(athlete)
+
+	_sync_rotation_positions()
+
+func _sync_rotation_positions() -> void:
+	for i in range(courtPlayers.size()):
+		courtPlayers[i].rotationPosition = i + 1
 
 func choose_server() -> AthleteStats:
 	if courtPlayers.is_empty():

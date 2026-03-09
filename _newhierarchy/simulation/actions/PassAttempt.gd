@@ -10,20 +10,31 @@ class_name PassAttempt
 extends Attempt
 
 func resolve() -> AttemptOutcome:
-	var outcome := PassOutcome.new()
+	var outcome: PassOutcome = PassOutcome.new()
 
-	var quality = actor.pass_rating
-	var roll = rng.randf()
+	var receiver_skill: float = float(clamp(actor.reception / 100.0, 0.15, 0.95))
+	var receive_difficulty: float = float(clamp(ctx.serve_receive_difficulty, 0.05, 1.0))
+	var instability: float = float(clamp(0.5 + receive_difficulty - receiver_skill, 0.05, 0.95))
+	var roll: float = rng.randf()
 
 	outcome.actor = actor
-	outcome.success = roll < quality
+	outcome.success = roll > instability
+	outcome.pass_quality = float(clamp(receiver_skill - receive_difficulty * 0.45 + rng.randf_range(-0.15, 0.15), 0.0, 1.0))
 	outcome.metadata["roll"] = roll
+	outcome.metadata["receiver_skill"] = receiver_skill
+	outcome.metadata["receive_difficulty"] = receive_difficulty
+	outcome.metadata["instability"] = instability
+	outcome.metadata["action"] = "receive"
 
 	if not outcome.success:
+		var ace_cutoff: float = float(clamp(instability * (0.45 + receive_difficulty * 0.55), 0.05, 0.8))
+		var is_ace: bool = receive_difficulty > 0.55 and roll < ace_cutoff
 		outcome.terminal = true
 		outcome.point_winner = ctx.attacker
+		outcome.metadata["result"] = "ace" if is_ace else "overpass_or_shank"
 	else:
 		outcome.terminal = false
+		outcome.metadata["result"] = "controlled_pass"
 
 	return outcome
 
