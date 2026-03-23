@@ -32,6 +32,10 @@ anchor_bottom = 0.27
 [node name="Buttons" type="HBoxContainer" parent="CanvasLayer/Control/VBoxContainer" unique_id=1647743793]
 layout_mode = 2
 
+[node name="GenerateWorldButton" type="Button" parent="CanvasLayer/Control/VBoxContainer/Buttons" unique_id=146707844]
+layout_mode = 2
+text = "Generate World"
+
 [node name="PlayPointButton" type="Button" parent="CanvasLayer/Control/VBoxContainer/Buttons" unique_id=1771507445]
 layout_mode = 2
 text = "Play Point"

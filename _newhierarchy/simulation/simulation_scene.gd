@@ -1,12 +1,32 @@
 extends Node2D
 
+@export_enum("Basic", "Intermediate", "Verbose") var demo_log_verbosity: int = 1
+
+@onready var generate_world_button: Button = $CanvasLayer/Control/VBoxContainer/Buttons/GenerateWorldButton
 @onready var play_point_button: Button = $CanvasLayer/Control/VBoxContainer/Buttons/PlayPointButton
 @onready var play_set_button: Button = $CanvasLayer/Control/VBoxContainer/Buttons/PlaySetButton
 @onready var status_label: Label = $CanvasLayer/Control/VBoxContainer/StatusLabel
 
 var sim: MatchSimulation
+var director: SimulationDirector
+var workflow_log: SimulationEventLog
+var simulation_world: SimulationWorldState
 
 func _ready() -> void:
+	workflow_log = SimulationEventLog.new()
+	workflow_log.configure(demo_log_verbosity)
+	director = SimulationDirector.new(workflow_log)
+
+	generate_world_button.pressed.connect(_on_generate_world_button_pressed)
+	play_point_button.pressed.connect(_on_play_point_button_pressed)
+	play_set_button.pressed.connect(_on_play_set_button_pressed)
+	_set_match_buttons_enabled(false)
+	_refresh_status_text("Ready to generate world")
+
+func _on_generate_world_button_pressed() -> void:
+	simulation_world = SimulationWorldState.new()
+	director.generate_game_world(simulation_world)
+
 	var team_a := TeamData.new()
 	team_a.teamName = "Alpha"
 	team_a.Populate(PlayerChoiceState.new(), ["Cameron"], ["Borgas"])
@@ -19,13 +39,14 @@ func _ready() -> void:
 	_prefix_generated_player_names(team_b)
 	team_b.select_starting_lineup()
 
-	sim = MatchSimulation.new(team_a, team_b)
-
-	play_point_button.pressed.connect(_on_play_point_button_pressed)
-	play_set_button.pressed.connect(_on_play_set_button_pressed)
-	_refresh_status_text("Ready")
+	sim = MatchSimulation.new(team_a, team_b, -1, workflow_log)
+	_set_match_buttons_enabled(true)
+	_refresh_status_text("Game world generated")
 
 func _on_play_point_button_pressed() -> void:
+	if sim == null:
+		_refresh_status_text("Generate world first")
+		return
 	var result := sim.play_point()
 	if result["type"] == "match_over":
 		_refresh_status_text("Match complete")
@@ -41,6 +62,9 @@ func _on_play_point_button_pressed() -> void:
 	_refresh_status_text(summary)
 
 func _on_play_set_button_pressed() -> void:
+	if sim == null:
+		_refresh_status_text("Generate world first")
+		return
 	var result := sim.play_set()
 	if result["type"] == "match_over":
 		_refresh_status_text("Match complete")
@@ -56,6 +80,13 @@ func _on_play_set_button_pressed() -> void:
 	_refresh_status_text(summary)
 
 func _refresh_status_text(prefix: String) -> void:
+	if sim == null:
+		var world_state := "not generated"
+		if simulation_world != null:
+			world_state = "generated"
+		status_label.text = "%s\nNo active match\nWorld: %s" % [prefix, world_state]
+		return
+
 	var sets_a: int = int(sim.score.sets_won[sim.team_a])
 	var sets_b: int = int(sim.score.sets_won[sim.team_b])
 	var points_a: int = int(sim.score.points[sim.team_a])
@@ -75,6 +106,10 @@ func _refresh_status_text(prefix: String) -> void:
 		serving_team_name, server_name,
 		sim.rally_number
 	]
+
+func _set_match_buttons_enabled(enabled: bool) -> void:
+	play_point_button.disabled = not enabled
+	play_set_button.disabled = not enabled
 
 func _prefix_generated_player_names(team: TeamData) -> void:
 	for i in range(team.matchPlayers.size()):

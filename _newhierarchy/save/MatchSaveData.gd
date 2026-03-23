@@ -8,3 +8,4 @@ extends Resource
 @export var serving_team_name: String
 @export var team_a_rotation_index: int
 @export var team_b_rotation_index: int
+@export var rally_replays: Array[Dictionary] = []

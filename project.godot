@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="FreeVolleyball"
-run/main_scene="res://Scenes/MatchScene/MatchScene.tscn"
+run/main_scene="uid://uxcy0qdrdfti"
 config/features=PackedStringArray("4.6")
 boot_splash/image="res://icon.png"
 config/icon="res://icon.png"

@@ -14,14 +14,17 @@ var team_a_match_data: TeamMatchData
 var team_b_match_data: TeamMatchData
 var rally_number: int = 0
 var match_over: bool = false
+var rally_replays: Array[Dictionary] = []
+var workflow_log: SimulationEventLog
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
-var rally_engine:RallyEngine = RallyEngine.new(rng)
+var rally_engine:RallyEngine
 
-func _init(_team_a:TeamData, _team_b:TeamData, _seed: int = -1) -> void:
+func _init(_team_a:TeamData, _team_b:TeamData, _seed: int = -1, _workflow_log: SimulationEventLog = null) -> void:
 	team_a = _team_a
 	team_b = _team_b
+	workflow_log = _workflow_log
 
 	score = Score.new(team_a, team_b)
 
@@ -32,6 +35,7 @@ func _init(_team_a:TeamData, _team_b:TeamData, _seed: int = -1) -> void:
 
 	team_a_match_data = TeamMatchData.new(team_a)
 	team_b_match_data = TeamMatchData.new(team_b)
+	rally_engine = RallyEngine.new(rng, workflow_log)
 
 	serving_team = team_a if rng.randf() < 0.5 else team_b
 
@@ -93,18 +97,28 @@ func step() -> void:
 
 func _play_rally() -> Dictionary:
 	rally_number += 1
+	if workflow_log != null:
+		workflow_log.log("rally", "Starting rally simulation.", serving_team, get_current_server())
 
 	var previous_serving_team: TeamData = serving_team
 	var rally_ctx = _create_rally_context()
 
 	var rally_result = rally_engine.Resolve(rally_ctx)
+	rally_replays.append({
+		"rally_number": rally_number,
+		"point_winner_name": rally_result.point_winner.teamName,
+		"replay": rally_result.event_log.serialize_for_replay()
+	})
 	if rally_result.point_winner != previous_serving_team:
 		_team_match_data_for(rally_result.point_winner).rotate_on_sideout()
 	serving_team = rally_result.point_winner
 
 	var score_event: Dictionary = score.award_point(rally_result.point_winner)
+	if workflow_log != null:
+		workflow_log.log("rally", "Rally completed.", rally_result.point_winner)
 	print("[Match] Rally %d winner: %s" % [rally_number, rally_result.point_winner.teamName])
 	print("[Match] Current score: %s %d - %s %d" % [team_a.teamName, score.points[team_a], team_b.teamName, score.points[team_b]])
+	print ("=============================")
 
 	_handle_score_event(score_event)
 
@@ -164,6 +178,7 @@ func create_save_data() -> MatchSaveData:
 	save.score_data = score.serialize()
 	save.rally_number = rally_number
 	save.serving_team_name = serving_team.teamName
+	save.rally_replays = rally_replays.duplicate(true)
 	#save.team_a_rotation_index = team_a_state.rotation_index
 	#save.team_b_rotation_index = team_b_state.rotation_index
 
