@@ -16,6 +16,8 @@ var rally_number: int = 0
 var match_over: bool = false
 var rally_replays: Array[Dictionary] = []
 var workflow_log: SimulationEventLog
+var pending_rally_steps: Array[String] = []
+var pending_rally_result: Dictionary = {}
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -95,40 +97,47 @@ func step() -> void:
 	if not match_over:
 		play_point()
 
-func _play_rally() -> Dictionary:
-	rally_number += 1
-	if workflow_log != null:
-		workflow_log.log("rally", "Starting rally simulation.", serving_team, get_current_server())
+func next_rally_step() -> Dictionary:
+	if match_over and pending_rally_steps.is_empty():
+		var winner := score.get_match_winner()
+		return {
+			"type": "match_over",
+			"message": "Match complete",
+			"winner": winner,
+			"winner_name": winner.teamName if winner != null else ""
+		}
 
-	var previous_serving_team: TeamData = serving_team
-	var rally_ctx = _create_rally_context()
+	if pending_rally_steps.is_empty():
+		if not _prepare_pending_rally():
+			var winner := score.get_match_winner()
+			return {
+				"type": "match_over",
+				"message": "Match complete",
+				"winner": winner,
+				"winner_name": winner.teamName if winner != null else ""
+			}
 
-	var rally_result = rally_engine.Resolve(rally_ctx)
-	rally_replays.append({
-		"rally_number": rally_number,
-		"point_winner_name": rally_result.point_winner.teamName,
-		"replay": rally_result.event_log.serialize_for_replay()
-	})
-	if rally_result.point_winner != previous_serving_team:
-		_team_match_data_for(rally_result.point_winner).rotate_on_sideout()
-	serving_team = rally_result.point_winner
-
-	var score_event: Dictionary = score.award_point(rally_result.point_winner)
-	if workflow_log != null:
-		workflow_log.log("rally", "Rally completed.", rally_result.point_winner)
-	print("[Match] Rally %d winner: %s" % [rally_number, rally_result.point_winner.teamName])
-	print("[Match] Current score: %s %d - %s %d" % [team_a.teamName, score.points[team_a], team_b.teamName, score.points[team_b]])
-	print ("=============================")
-
-	_handle_score_event(score_event)
-
-	return {
-		"type": "point_complete",
-		"rally_number": rally_number,
-		"point_winner": rally_result.point_winner,
-		"point_winner_name": rally_result.point_winner.teamName,
-		"score_event": score_event
+	var message: String = pending_rally_steps.pop_front()
+	var step_complete: bool = pending_rally_steps.is_empty()
+	var result: Dictionary = {
+		"type": "rally_step",
+		"message": message,
+		"step_complete": step_complete,
+		"rally_committed": false
 	}
+
+	if step_complete:
+		var point_result := _commit_pending_rally()
+		result["rally_committed"] = true
+		result["point_result"] = point_result
+
+	return result
+
+func _play_rally() -> Dictionary:
+	_prepare_pending_rally()
+	while not pending_rally_steps.is_empty():
+		pending_rally_steps.pop_front()
+	return _commit_pending_rally()
 
 
 func _create_rally_context() -> RallyState:
@@ -169,6 +178,75 @@ func _handle_score_event(score_attempt):
 		match_over = true
 		print("[Match] Match won by %s" % score_attempt["winner"].teamName)
 	return {}
+
+func _prepare_pending_rally() -> bool:
+	if match_over:
+		return false
+	if not pending_rally_steps.is_empty():
+		return true
+
+	rally_number += 1
+	var rally_ctx := _create_rally_context()
+	var start_message := ""
+	if workflow_log != null:
+		var team_name := serving_team.teamName if serving_team != null else "N/A"
+		var athlete_name := "N/A"
+		if rally_ctx.server != null:
+			athlete_name = "%s %s" % [rally_ctx.server.firstName, rally_ctx.server.lastName]
+		start_message = "[Sim][rally] Starting rally simulation. | Team=%s | Player=%s" % [team_name, athlete_name]
+		workflow_log.log("rally", "Starting rally simulation.", serving_team, rally_ctx.server)
+
+	var rally_result = rally_engine.Resolve(rally_ctx)
+	pending_rally_steps = rally_result.step_messages.duplicate()
+	if start_message != "":
+		pending_rally_steps.push_front(start_message)
+	pending_rally_result = {
+		"rally_number": rally_number,
+		"previous_serving_team": serving_team,
+		"rally_result": rally_result
+	}
+	return true
+
+func _commit_pending_rally() -> Dictionary:
+	if pending_rally_result.is_empty():
+		return {
+			"type": "point_complete",
+			"rally_number": rally_number,
+			"point_winner": null,
+			"point_winner_name": "",
+			"score_event": {"type": "point"}
+		}
+
+	var rally_result: RallyState = pending_rally_result["rally_result"]
+	var previous_serving_team: TeamData = pending_rally_result["previous_serving_team"]
+	rally_replays.append({
+		"rally_number": rally_result.rally_number,
+		"point_winner_name": rally_result.point_winner.teamName,
+		"replay": rally_result.event_log.serialize_for_replay()
+	})
+	if rally_result.point_winner != previous_serving_team:
+		_team_match_data_for(rally_result.point_winner).rotate_on_sideout()
+	serving_team = rally_result.point_winner
+
+	var score_event: Dictionary = score.award_point(rally_result.point_winner)
+	if workflow_log != null:
+		workflow_log.log("rally", "Rally completed.", rally_result.point_winner)
+	print("[Match] Rally %d winner: %s" % [rally_result.rally_number, rally_result.point_winner.teamName])
+	print("[Match] Current score: %s %d - %s %d" % [team_a.teamName, score.points[team_a], team_b.teamName, score.points[team_b]])
+	print ("=============================")
+
+	_handle_score_event(score_event)
+
+	var point_result := {
+		"type": "point_complete",
+		"rally_number": rally_result.rally_number,
+		"point_winner": rally_result.point_winner,
+		"point_winner_name": rally_result.point_winner.teamName,
+		"score_event": score_event
+	}
+	pending_rally_result = {}
+	pending_rally_steps.clear()
+	return point_result
 
 func create_save_data() -> MatchSaveData:
 	var save := MatchSaveData.new()

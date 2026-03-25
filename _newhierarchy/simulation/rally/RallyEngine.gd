@@ -15,32 +15,32 @@ func _init(_rng, _workflow_log: SimulationEventLog = null) -> void:
 	workflow_log = _workflow_log
 
 func Resolve(ctx: RallyState) -> RallyState:
-	_log_phase("serve", "Choosing serving strategy for this rally.", ctx.serving_team, ctx.server)
-	_log_phase("receive", "Choosing receive-side attacking strategy.", ctx.receiving_team)
+	_log_phase(ctx, "serve", "Choosing serving strategy for this rally.", ctx.serving_team, ctx.server)
+	_choose_serving_strategy(ctx)
+	_log_phase(ctx, "receive", "Choosing receive-side attacking strategy.", ctx.receiving_team)
 	var current_result = _resolve_serve(ctx)
 
 	while not current_result.is_terminal:
-		_log_phase("receive", "Choosing serve receiver.", current_result.defender)
+		_log_phase(ctx, "receive", "Choosing serve receiver.", current_result.defender)
 		current_result = _resolve_pass(current_result)
 		if current_result.is_terminal: break
 
-		_log_phase("pass", "Both teams assessing pass quality.")
-		_log_phase("pass", "Passing team assessing setter access and attack timing.", current_result.defender)
-		_log_phase("pass", "Defending team assessing likely set threats.", current_result.attacker)
-		_log_phase("set", "Choosing set option.", current_result.defender)
+		_log_phase(ctx, "pass", "Passing team assessing setter access and attack timing.", current_result.defender)
+		_log_phase(ctx, "pass", "Defending team assessing likely set threats.", current_result.attacker)
+		_log_phase(ctx, "set", "Choosing set option.", current_result.defender)
 		current_result = _resolve_set(current_result)
 		if current_result.is_terminal: break
 
-		_log_phase("attack", "Attackers reacting to the actual set trajectory.", current_result.defender)
-		_log_phase("defence", "Defending team reacting to set.", current_result.attacker)
-		_log_phase("attack", "Attacker assessing defence and attack type.", current_result.defender)
+		_log_phase(ctx, "attack", "Attackers reacting to the actual set trajectory.", current_result.defender)
+		_log_phase(ctx, "defence", "Defending team reacting to set.", current_result.attacker)
+		_log_phase(ctx, "attack", "Attacker assessing defence and attack type.", current_result.defender)
 		current_result = _resolve_attack(current_result)
 		if current_result.is_terminal: break
 
 		current_result = _resolve_block(current_result)
 		if current_result.is_terminal: break
 
-		_log_phase("rally", "Resolving continuation after block phase.")
+		_log_phase(ctx, "rally", "Resolving continuation after block phase.")
 		current_result = _resolve_defence_phase(current_result)
 		if current_result.is_terminal: break
 
@@ -48,7 +48,7 @@ func Resolve(ctx: RallyState) -> RallyState:
 	return current_result
 
 func _resolve_serve(ctx: RallyState) -> RallyState:
-	_log_phase("serve", "Executing serve.", ctx.serving_team, ctx.server)
+	_log_phase(ctx, "serve", "Executing serve.", ctx.serving_team, ctx.server)
 	var server: AthleteStats = ctx.server
 	if server == null and ctx.serving_team_match_data != null:
 		server = ctx.serving_team_match_data.choose_server()
@@ -66,7 +66,7 @@ func _resolve_serve(ctx: RallyState) -> RallyState:
 
 func _resolve_pass(ctx: RallyState) -> RallyState:
 	var passer = ctx.defender.teamStrategy.choose_passer(ctx.defender_match_data, rng)
-	_log_phase("pass", "Executing pass.", ctx.defender, passer)
+	_log_phase(ctx, "pass", "Executing pass.", ctx.defender, passer)
 	var attempt := PassAttempt.new(passer, ctx, rng)
 
 	var outcome := attempt.resolve()
@@ -80,7 +80,7 @@ func _resolve_pass(ctx: RallyState) -> RallyState:
 
 func _resolve_set(ctx:RallyState) -> RallyState:
 	var setter = ctx.defender.teamStrategy.choose_setter(ctx.defender_match_data, rng)
-	_log_phase("set", "Executing set.", ctx.defender, setter)
+	_log_phase(ctx, "set", "Executing set.", ctx.defender, setter)
 	var attempt := SetAttempt.new(setter, ctx, rng)
 
 	var outcome := attempt.resolve()
@@ -93,7 +93,7 @@ func _resolve_set(ctx:RallyState) -> RallyState:
 
 func _resolve_attack(ctx:RallyState) -> RallyState:
 	var attacker = ctx.defender.teamStrategy.choose_attacker(ctx.defender_match_data, rng)
-	_log_phase("attack", "Executing spike.", ctx.defender, attacker)
+	_log_phase(ctx, "attack", "Executing spike.", ctx.defender, attacker)
 	var attempt := AttackAttempt.new(attacker, ctx, rng)
 
 	var outcome := attempt.resolve()
@@ -106,7 +106,7 @@ func _resolve_attack(ctx:RallyState) -> RallyState:
 
 func _resolve_block(ctx:RallyState) -> RallyState:
 	var blocker = ctx.attacker.teamStrategy.choose_blocker(ctx.attacker_match_data, rng)
-	_log_phase("block", "Executing block.", ctx.attacker, blocker)
+	_log_phase(ctx, "block", "Executing block.", ctx.attacker, blocker)
 	var attempt := BlockAttempt.new(blocker, ctx, rng)
 
 	var outcome := attempt.resolve()
@@ -134,13 +134,13 @@ func _apply_outcome(ctx: RallyState, outcome: AttemptOutcome) -> void:
 func _log_action(ctx: RallyState, action: String, outcome: AttemptOutcome, team: TeamData) -> void:
 	var athlete_name := _athlete_name(outcome.actor)
 	var result := str(outcome.metadata.get("result", ""))
-	print(
+	_emit_step(ctx,
 		"[Rally %d] %s | %s: %s (%s)"
 		% [ctx.rally_number, team.teamName, athlete_name, action, result]
 	)
 
 func _log_rally_end(ctx: RallyState) -> void:
-	print("[Rally %d] RALLY END: %s wins point" % [ctx.rally_number, ctx.point_winner.teamName])
+	_emit_step(ctx, "[Rally %d] RALLY END: %s wins point" % [ctx.rally_number, ctx.point_winner.teamName])
 
 func _athlete_name(athlete: AthleteStats) -> String:
 	if athlete == null:
@@ -163,7 +163,7 @@ func _record_ball_touch(ctx: RallyState, outcome: AttemptOutcome, phase: String,
 	ctx.event_log.add_ball_touch(_serialize_ball_snapshot(snapshot))
 	ctx.event_log.add_context_snapshot(phase_context.duplicate(true))
 
-	print(
+	_emit_step(ctx,
 		"[Rally %d] BALL %s | pos=%s vel=%s topspin=%.3f"
 		% [
 			ctx.rally_number,
@@ -365,7 +365,55 @@ func _serialize_ball_snapshot(snapshot: Dictionary) -> Dictionary:
 		"result": snapshot["result"]
 	}
 
-func _log_phase(phase: String, message: String, team: TeamData = null, athlete: AthleteStats = null) -> void:
+func _choose_serving_strategy(ctx: RallyState) -> void:
+	if ctx.serving_team == null or ctx.serving_team.teamStrategy == null:
+		return
+
+	if ctx.server == null and ctx.serving_team_match_data != null:
+		ctx.server = ctx.serving_team_match_data.choose_server()
+	if ctx.server == null:
+		ctx.server = ctx.serving_team.choose_server()
+	if ctx.server == null:
+		return
+
+	var plan: Dictionary = ctx.serving_team.teamStrategy.choose_serve_plan(
+		ctx.server,
+		ctx.serving_team_match_data,
+		ctx.receiving_team_match_data,
+		rng
+	)
+	ctx.serve_target = plan.get("target", Vector3.ZERO)
+	ctx.serve_type = str(plan.get("serve_type", "float"))
+	ctx.serve_aggression = str(plan.get("aggression", "moderate"))
+	ctx.serve_target_strategy = str(plan.get("strategy", ""))
+	ctx.serve_target_receiver_name = str(plan.get("target_player_name", ""))
+	ctx.serve_target_reception = float(plan.get("target_player_reception", 0.0))
+
+	var target_summary := "target=%s type=%s aggression=%s strategy=%s" % [
+		str(ctx.serve_target),
+		ctx.serve_type,
+		ctx.serve_aggression,
+		ctx.serve_target_strategy
+	]
+	if ctx.serve_target_receiver_name != "":
+		target_summary += " receiver=%s" % ctx.serve_target_receiver_name
+	_emit_step(ctx, "[Sim][serve] Serve plan locked in | %s" % target_summary)
+
+func _log_phase(ctx: RallyState, phase: String, message: String, team: TeamData = null, athlete: AthleteStats = null) -> void:
+	if ctx != null and workflow_log != null and workflow_log.verbosity >= SimulationEventLog.Verbosity.BASIC:
+		var team_name := "N/A"
+		var athlete_name := "N/A"
+		if team != null:
+			team_name = team.teamName
+		if athlete != null:
+			athlete_name = "%s %s" % [athlete.firstName, athlete.lastName]
+		_emit_step(ctx, "[Sim][%s] %s | Team=%s | Player=%s" % [phase, message, team_name, athlete_name])
+
 	if workflow_log == null:
 		return
 	workflow_log.log(phase, message, team, athlete)
+
+func _emit_step(ctx: RallyState, message: String) -> void:
+	if ctx != null:
+		ctx.step_messages.append(message)
+	print(message)

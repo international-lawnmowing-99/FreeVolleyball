@@ -44,6 +44,16 @@ text = "Play Point"
 layout_mode = 2
 text = "Play Set"
 
+[node name="NextRallyStepButton" type="Button" parent="CanvasLayer/Control/VBoxContainer/Buttons" unique_id=153008901]
+layout_mode = 2
+text = "Next Rally Step"
+
 [node name="StatusLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer" unique_id=577530019]
 layout_mode = 2
 text = "Initializing..."
+
+[node name="RallyStepLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer" unique_id=635190022]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+text = "Rally Step Output:"
+autowrap_mode = 3

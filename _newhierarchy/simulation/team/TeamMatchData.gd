@@ -44,6 +44,66 @@ func choose_server() -> AthleteStats:
 		return null
 	return court_players[0]
 
+func get_phase_position_for_player(athlete: AthleteStats, phase: String, team_side: float, highlighted_player: AthleteStats = null, has_ball_control: bool = false) -> Vector3:
+	if athlete == null:
+		return Vector3.ZERO
+	return _phase_court_position(athlete, phase, team_side, highlighted_player, has_ball_control)
+
+func get_libero_on_court() -> AthleteStats:
+	for athlete in court_players:
+		if athlete.role == Enums.Role.Libero:
+			return athlete
+	return null
+
+func get_serve_receive_candidates() -> Array[AthleteStats]:
+	var primary: Array[AthleteStats] = []
+	var secondary: Array[AthleteStats] = []
+	for athlete in court_players:
+		if athlete.role == Enums.Role.Outside or athlete.role == Enums.Role.Libero or athlete.role == Enums.Role.Opposite:
+			primary.append(athlete)
+		elif athlete.role != Enums.Role.Middle:
+			secondary.append(athlete)
+
+	if not primary.is_empty():
+		return primary
+	if not secondary.is_empty():
+		return secondary
+	return court_players.duplicate()
+
+func get_best_receiver() -> AthleteStats:
+	var candidates: Array[AthleteStats] = get_serve_receive_candidates()
+	if candidates.is_empty():
+		return null
+
+	var best: AthleteStats = candidates[0]
+	for athlete in candidates:
+		if athlete.reception > best.reception:
+			best = athlete
+	return best
+
+func get_worst_receiver() -> AthleteStats:
+	var candidates: Array[AthleteStats] = get_serve_receive_candidates()
+	if candidates.is_empty():
+		return null
+
+	var worst: AthleteStats = candidates[0]
+	for athlete in candidates:
+		if athlete.reception < worst.reception:
+			worst = athlete
+	return worst
+
+func get_best_middle_attacker() -> AthleteStats:
+	var best: AthleteStats = null
+	var best_score: float = -INF
+	for athlete in court_players:
+		if athlete.role != Enums.Role.Middle:
+			continue
+		var score: float = athlete.spike + athlete.spikeHeight * 100.0 * 0.35
+		if score > best_score:
+			best = athlete
+			best_score = score
+	return best
+
 func build_phase_context(phase: String, team_side: float, highlighted_player: AthleteStats = null, has_ball_control: bool = false) -> Dictionary:
 	var players: Array[Dictionary] = []
 	for athlete in court_players:

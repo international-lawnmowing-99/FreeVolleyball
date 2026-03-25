@@ -5,7 +5,9 @@ extends Node2D
 @onready var generate_world_button: Button = $CanvasLayer/Control/VBoxContainer/Buttons/GenerateWorldButton
 @onready var play_point_button: Button = $CanvasLayer/Control/VBoxContainer/Buttons/PlayPointButton
 @onready var play_set_button: Button = $CanvasLayer/Control/VBoxContainer/Buttons/PlaySetButton
+@onready var next_rally_step_button: Button = $CanvasLayer/Control/VBoxContainer/Buttons/NextRallyStepButton
 @onready var status_label: Label = $CanvasLayer/Control/VBoxContainer/StatusLabel
+@onready var rally_step_label: Label = $CanvasLayer/Control/VBoxContainer/RallyStepLabel
 
 var sim: MatchSimulation
 var director: SimulationDirector
@@ -20,8 +22,10 @@ func _ready() -> void:
 	generate_world_button.pressed.connect(_on_generate_world_button_pressed)
 	play_point_button.pressed.connect(_on_play_point_button_pressed)
 	play_set_button.pressed.connect(_on_play_set_button_pressed)
+	next_rally_step_button.pressed.connect(_on_next_rally_step_button_pressed)
 	_set_match_buttons_enabled(false)
 	_refresh_status_text("Ready to generate world")
+	_refresh_rally_step_text("No rally steps yet")
 
 func _on_generate_world_button_pressed() -> void:
 	simulation_world = SimulationWorldState.new()
@@ -42,11 +46,13 @@ func _on_generate_world_button_pressed() -> void:
 	sim = MatchSimulation.new(team_a, team_b, -1, workflow_log)
 	_set_match_buttons_enabled(true)
 	_refresh_status_text("Game world generated")
+	_refresh_rally_step_text("No rally steps yet")
 
 func _on_play_point_button_pressed() -> void:
 	if sim == null:
 		_refresh_status_text("Generate world first")
 		return
+	_refresh_rally_step_text("Rally step output cleared")
 	var result := sim.play_point()
 	if result["type"] == "match_over":
 		_refresh_status_text("Match complete")
@@ -65,6 +71,7 @@ func _on_play_set_button_pressed() -> void:
 	if sim == null:
 		_refresh_status_text("Generate world first")
 		return
+	_refresh_rally_step_text("Rally step output cleared")
 	var result := sim.play_set()
 	if result["type"] == "match_over":
 		_refresh_status_text("Match complete")
@@ -78,6 +85,34 @@ func _on_play_set_button_pressed() -> void:
 		summary = "Set %d over: %s" % [result["set_number"], ending_event["winner"].teamName]
 
 	_refresh_status_text(summary)
+
+func _on_next_rally_step_button_pressed() -> void:
+	if sim == null:
+		_refresh_status_text("Generate world first")
+		_refresh_rally_step_text("No rally steps yet")
+		return
+
+	var result := sim.next_rally_step()
+	_refresh_rally_step_text(result.get("message", ""))
+
+	if result["type"] == "match_over":
+		_refresh_status_text("Match complete")
+		return
+
+	if result.get("rally_committed", false):
+		var point_result: Dictionary = result["point_result"]
+		var score_event: Dictionary = point_result["score_event"]
+		var summary := "Rally step complete"
+		if score_event["type"] == "set_over":
+			summary = "Set over: %s" % score_event["winner"].teamName
+		elif score_event["type"] == "match_over":
+			summary = "Match over: %s" % score_event["winner"].teamName
+		else:
+			summary = "Point played"
+		_refresh_status_text(summary)
+		return
+
+	_refresh_status_text("Rally %d in progress" % sim.rally_number)
 
 func _refresh_status_text(prefix: String) -> void:
 	if sim == null:
@@ -110,6 +145,10 @@ func _refresh_status_text(prefix: String) -> void:
 func _set_match_buttons_enabled(enabled: bool) -> void:
 	play_point_button.disabled = not enabled
 	play_set_button.disabled = not enabled
+	next_rally_step_button.disabled = not enabled
+
+func _refresh_rally_step_text(message: String) -> void:
+	rally_step_label.text = "Rally Step Output:\n%s" % message
 
 func _prefix_generated_player_names(team: TeamData) -> void:
 	for i in range(team.matchPlayers.size()):

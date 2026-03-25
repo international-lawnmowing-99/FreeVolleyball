@@ -176,6 +176,35 @@ const ROLE_POOL_LIMITS := {
 # need to store each player, each of their strategies against each known opposition, and a default, and whether this overrides all others
 @export var servingStrategies:Dictionary = {}
 
+const SERVE_TARGET_BOUNDS := {
+	"min_x": 0.65,
+	"max_x": 4.35,
+	"min_z": -4.1,
+	"max_z": 4.1
+}
+
+const DEFAULT_SERVE_TARGET_WEIGHTS := {
+	"target_weakest_receiver": 1.5,
+	"target_libero": 0.8,
+	"target_strongest_receiver": 0.35,
+	"target_middle_attacker": 1.0,
+	"target_deep_middle": 0.9,
+	"target_short_zone": 0.6,
+	"target_seam": 1.1
+}
+
+const DEFAULT_SERVE_TYPE_WEIGHTS := {
+	"underarm": 0.15,
+	"float": 1.0,
+	"jump": 0.8
+}
+
+const DEFAULT_SERVE_AGGRESSION_WEIGHTS := {
+	"safety": 0.45,
+	"moderate": 1.0,
+	"aggressive": 0.75
+}
+
 func _init(_teamData:TeamData = null) -> void:
 	teamData = _teamData
 
@@ -284,10 +313,193 @@ func choose_blocker(team_match_data: TeamMatchData = null, _rng: RandomNumberGen
 	var players := _resolve_players(team_match_data)
 	return _choose_player_by_skill(players, "block", _rng)
 
+func choose_serve_plan(server: AthleteStats, team_match_data: TeamMatchData = null, opponent_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> Dictionary:
+	if server == null:
+		return {
+			"target": Vector3(4.0, 0.0, 0.0),
+			"serve_type": "float",
+			"aggression": "moderate",
+			"strategy": "target_deep_middle",
+			"target_player_name": "",
+			"target_player_reception": 0.0
+		}
+
+	var rng_to_use: RandomNumberGenerator = _rng if _rng != null else RandomNumberGenerator.new()
+	if _rng == null:
+		rng_to_use.randomize()
+
+	var target_strategy: String = _weighted_string_choice(_serve_target_weights(), rng_to_use)
+	var target_data: Dictionary = _resolve_serve_target(target_strategy, opponent_match_data, rng_to_use)
+	var serve_type: String = _weighted_string_choice(_serve_type_weights_for_server(server), rng_to_use)
+	var aggression: String = _weighted_string_choice(_serve_aggression_weights_for_server(server, serve_type), rng_to_use)
+
+	return {
+		"target": _clamp_serve_target(target_data.get("target", Vector3(4.0, 0.0, 0.0))),
+		"serve_type": serve_type,
+		"aggression": aggression,
+		"strategy": target_strategy,
+		"target_player_name": str(target_data.get("target_player_name", "")),
+		"target_player_reception": float(target_data.get("target_player_reception", 0.0))
+	}
+
 func _resolve_players(team_match_data: TeamMatchData) -> Array[AthleteStats]:
 	if team_match_data != null and not team_match_data.court_players.is_empty():
 		return team_match_data.court_players
 	return teamData.courtPlayers
+
+func _serve_target_weights() -> Dictionary:
+	var weights: Dictionary = DEFAULT_SERVE_TARGET_WEIGHTS.duplicate(true)
+	var pressure: float = float(lineup_component_weights.get("serve_pressure", 1.0))
+
+	if pressure >= 1.1:
+		weights["target_weakest_receiver"] *= 1.2
+		weights["target_seam"] *= 1.15
+		weights["target_middle_attacker"] *= 1.15
+	elif pressure <= 0.9:
+		weights["target_libero"] *= 1.15
+		weights["target_deep_middle"] *= 1.2
+		weights["target_short_zone"] *= 1.15
+
+	for key in weights.keys():
+		if servingStrategies.has(key):
+			weights[key] = float(servingStrategies[key])
+
+	return weights
+
+func _serve_type_weights_for_server(server: AthleteStats) -> Dictionary:
+	var weights: Dictionary = DEFAULT_SERVE_TYPE_WEIGHTS.duplicate(true)
+	var serve_skill: float = float(server.serve)
+
+	if serve_skill >= 75.0:
+		weights["jump"] *= 1.45
+		weights["underarm"] *= 0.25
+	elif serve_skill >= 55.0:
+		weights["jump"] *= 1.15
+		weights["float"] *= 1.1
+		weights["underarm"] *= 0.45
+	else:
+		weights["underarm"] *= 1.45
+		weights["jump"] *= 0.55
+
+	var configured: Dictionary = servingStrategies.get("serve_types", {})
+	for key in weights.keys():
+		if configured.has(key):
+			weights[key] = float(configured[key])
+
+	return weights
+
+func _serve_aggression_weights_for_server(server: AthleteStats, serve_type: String) -> Dictionary:
+	var weights: Dictionary = DEFAULT_SERVE_AGGRESSION_WEIGHTS.duplicate(true)
+	var serve_skill: float = float(server.serve)
+
+	if serve_skill >= 75.0:
+		weights["aggressive"] *= 1.35
+		weights["safety"] *= 0.7
+	elif serve_skill < 50.0:
+		weights["safety"] *= 1.35
+		weights["aggressive"] *= 0.6
+
+	match serve_type:
+		"jump":
+			weights["aggressive"] *= 1.2
+			weights["safety"] *= 0.75
+		"underarm":
+			weights["safety"] *= 1.4
+			weights["aggressive"] *= 0.35
+		"float":
+			weights["moderate"] *= 1.1
+
+	var configured: Dictionary = servingStrategies.get("aggression", {})
+	for key in weights.keys():
+		if configured.has(key):
+			weights[key] = float(configured[key])
+
+	return weights
+
+func _resolve_serve_target(strategy: String, opponent_match_data: TeamMatchData, _rng: RandomNumberGenerator) -> Dictionary:
+	var rng_to_use: RandomNumberGenerator = _rng if _rng != null else RandomNumberGenerator.new()
+	if _rng == null:
+		rng_to_use.randomize()
+
+	if opponent_match_data == null:
+		return {"target": Vector3(4.0, 0.0, 0.0)}
+
+	var target_player: AthleteStats = null
+	var target: Vector3 = Vector3(4.0, 0.0, 0.0)
+	var receive_phase := "receive"
+	var receive_side := 1.0
+
+	match strategy:
+		"target_libero":
+			target_player = opponent_match_data.get_libero_on_court()
+			if target_player == null:
+				target_player = opponent_match_data.get_best_receiver()
+		"target_strongest_receiver":
+			target_player = opponent_match_data.get_best_receiver()
+		"target_middle_attacker":
+			target_player = opponent_match_data.get_best_middle_attacker()
+		"target_seam":
+			var candidates: Array[AthleteStats] = opponent_match_data.get_serve_receive_candidates()
+			if candidates.size() >= 2:
+				candidates.sort_custom(func(a, b): return a.reception > b.reception)
+				var first_pos: Vector3 = opponent_match_data.get_phase_position_for_player(candidates[0], receive_phase, receive_side)
+				var second_pos: Vector3 = opponent_match_data.get_phase_position_for_player(candidates[1], receive_phase, receive_side)
+				target = (first_pos + second_pos) * 0.5
+			else:
+				target_player = opponent_match_data.get_worst_receiver()
+		"target_short_zone":
+			target = Vector3(rng_to_use.randf_range(1.2, 2.2), 0.0, rng_to_use.randf_range(-2.8, 2.8))
+		"target_deep_middle":
+			target = Vector3(rng_to_use.randf_range(3.7, 4.3), 0.0, rng_to_use.randf_range(-0.8, 0.8))
+		_:
+			target_player = opponent_match_data.get_worst_receiver()
+
+	if target_player != null:
+		target = opponent_match_data.get_phase_position_for_player(target_player, receive_phase, receive_side, target_player, false)
+		target += Vector3(
+			rng_to_use.randf_range(-0.35, 0.35),
+			0.0,
+			rng_to_use.randf_range(-0.45, 0.45)
+		)
+
+	return {
+		"target": _clamp_serve_target(target),
+		"target_player_name": _athlete_name(target_player),
+		"target_player_reception": float(target_player.reception) if target_player != null else 0.0
+	}
+
+func _clamp_serve_target(target: Vector3) -> Vector3:
+	return Vector3(
+		clamp(target.x, float(SERVE_TARGET_BOUNDS["min_x"]), float(SERVE_TARGET_BOUNDS["max_x"])),
+		0.0,
+		clamp(target.z, float(SERVE_TARGET_BOUNDS["min_z"]), float(SERVE_TARGET_BOUNDS["max_z"]))
+	)
+
+func _weighted_string_choice(weights: Dictionary, _rng: RandomNumberGenerator) -> String:
+	var total: float = 0.0
+	for value in weights.values():
+		total += max(0.0, float(value))
+
+	if total <= 0.0:
+		for key in weights.keys():
+			return str(key)
+		return ""
+
+	var roll: float = _rng.randf_range(0.0, total)
+	var cumulative: float = 0.0
+	for key in weights.keys():
+		cumulative += max(0.0, float(weights[key]))
+		if roll <= cumulative:
+			return str(key)
+
+	for key in weights.keys():
+		return str(key)
+	return ""
+
+func _athlete_name(player: AthleteStats) -> String:
+	if player == null:
+		return ""
+	return "%s %s" % [player.firstName, player.lastName]
 
 func _choose_player_by_skill(players: Array[AthleteStats], skill_property: String, _rng: RandomNumberGenerator = null) -> AthleteStats:
 	if players.is_empty():
