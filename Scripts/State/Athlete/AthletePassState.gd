@@ -120,6 +120,13 @@ func Update(athlete:Athlete):
 	athlete.timeTillBallReachesMe = Vector3(ball.position.x, 0, ball.position.z).distance_to(Vector3(athlete.position.x, 0, athlete.position.z))\
 				/max(Vector3(ball.linear_velocity.x, 0, ball.linear_velocity.z).length(), 0.001)
 
+	var contactPoint = Vector3(intersectionPointX, 0, intersectionPointZ)
+	var targetDir = (contactPoint - athlete.position).normalized()
+	athlete.digAngle = lerp_angle(
+	athlete.digAngle,
+	Maths.SignedAngle(-athlete.model.transform.basis.z, targetDir, Vector3.UP),
+	6 * athlete.myDelta
+)
 
 	if athlete.timeTillBallReachesMe <1.5:
 		athlete.animTree.set("parameters/state/current", 1)
@@ -130,7 +137,7 @@ func Update(athlete:Athlete):
 	else:
 		var a = athlete.animTree.get("parameters/Dig/blend_amount")
 		athlete.animTree.set("parameters/Dig/blend_amount", lerp(a, 0.0, 5*athlete.myDelta))
-		athlete.digAngle = lerp(athlete.digAngle,0.0,3*athlete.myDelta)
+		#athlete.digAngle = lerp(athlete.digAngle,0.0,3*athlete.myDelta)
 		athlete.RotateDigPlatform(athlete.digAngle)
 	if !isBallAlreadyPassed && ball.position.y < athlete.stats.digHeight && ball.position.y > .35 &&\
 		(Vector3(ball.position.x,0, ball.position.z)).distance_to(athlete.position) < 1:

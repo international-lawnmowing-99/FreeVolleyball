@@ -159,12 +159,12 @@ func _create_rally_context() -> RallyState:
 	state.attacker_match_data = serving_match_data
 	state.defender_match_data = receiving_match_data
 
-	state.server = serving_match_data.choose_server()
+	state.server = serving_match_data.get_server()
 	return state
 
 func get_current_server() -> AthleteStats:
 	var serving_match_data: TeamMatchData = _team_match_data_for(serving_team)
-	return serving_match_data.choose_server()
+	return serving_match_data.get_server()
 
 func _team_match_data_for(team: TeamData) -> TeamMatchData:
 	if team == team_a:

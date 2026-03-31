@@ -38,7 +38,7 @@ func rotate_on_sideout() -> void:
 	sideout_rotations += 1
 	_sync_rotation_positions()
 
-func choose_server() -> AthleteStats:
+func get_server() -> AthleteStats:
 	if court_players.is_empty():
 		push_error("No court players available for serving.")
 		return null

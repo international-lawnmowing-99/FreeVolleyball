@@ -90,7 +90,7 @@ func _sync_rotation_positions() -> void:
 	for i in range(courtPlayers.size()):
 		courtPlayers[i].rotationPosition = i + 1
 
-func choose_server() -> AthleteStats:
+func get_server() -> AthleteStats:
 	if courtPlayers.is_empty():
 		push_error("No court players available for serving.")
 		return null

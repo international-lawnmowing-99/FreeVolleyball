@@ -51,9 +51,9 @@ func _resolve_serve(ctx: RallyState) -> RallyState:
 	_log_phase(ctx, "serve", "Executing serve.", ctx.serving_team, ctx.server)
 	var server: AthleteStats = ctx.server
 	if server == null and ctx.serving_team_match_data != null:
-		server = ctx.serving_team_match_data.choose_server()
+		server = ctx.serving_team_match_data.get_server()
 	if server == null:
-		server = ctx.serving_team.choose_server()
+		server = ctx.serving_team.get_server()
 	var attempt := ServeAttempt.new(server, ctx, rng)
 
 	var outcome := attempt.resolve()
@@ -370,9 +370,9 @@ func _choose_serving_strategy(ctx: RallyState) -> void:
 		return
 
 	if ctx.server == null and ctx.serving_team_match_data != null:
-		ctx.server = ctx.serving_team_match_data.choose_server()
+		ctx.server = ctx.serving_team_match_data.get_server()
 	if ctx.server == null:
-		ctx.server = ctx.serving_team.choose_server()
+		ctx.server = ctx.serving_team.get_server()
 	if ctx.server == null:
 		return
 
