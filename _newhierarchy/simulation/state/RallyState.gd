@@ -28,6 +28,14 @@ var ball_time: float = 0.0
 var phase_context: Dictionary = {}
 var phase_context_history: Array[Dictionary] = []
 var step_messages: Array[String] = []
+var last_pass_target: Vector3 = Vector3.ZERO
+var last_pass_band: String = ""
+var last_pass_quality: float = 0.0
+var set_options: Array[Dictionary] = []
+var chosen_set_option: Dictionary = {}
+var defensive_set_read: Dictionary = {}
+var defensive_positioning_plan: Dictionary = {}
+var chosen_blocker: AthleteStats = null
 
 var is_terminal: bool = false
 var point_winner: TeamData = null

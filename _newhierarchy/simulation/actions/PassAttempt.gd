@@ -56,9 +56,11 @@ func resolve() -> AttemptOutcome:
 	outcome.metadata["pass_band"] = pass_band
 	outcome.metadata["result"] = _result_for_pass_band(pass_band)
 	outcome.metadata["reception_target"] = _serialize_vector3(reception_target)
+	outcome.metadata["projected_target_position"] = _serialize_vector3(reception_target)
 	outcome.metadata["ball_max_height"] = ball_max_height
 	outcome.metadata["projected_velocity"] = _serialize_vector3(result_velocity)
 	outcome.metadata["projected_topspin"] = PASS_TOPSPIN
+	outcome.metadata["projected_flight_time"] = _time_till_ball_at_position(ctx.ball_position, result_velocity, reception_target)
 	outcome.metadata["pass_description"] = _description_for_pass_band(pass_band)
 
 	return outcome
@@ -193,6 +195,14 @@ func _find_well_behaved_parabola(start_position: Vector3, end_position: Vector3,
 
 	xz_direction = xz_direction.normalized()
 	return Vector3(xz_direction.x * xz_velocity, y_velocity, xz_direction.z * xz_velocity)
+
+func _time_till_ball_at_position(position: Vector3, linear_velocity: Vector3, reception_target: Vector3) -> float:
+	var ball_xz_velocity: float = Vector3(linear_velocity.x, 0.0, linear_velocity.z).length()
+	if ball_xz_velocity <= 0.0:
+		return 0.0
+
+	var ball_xz_distance: float = Vector3(position.x - reception_target.x, 0.0, position.z - reception_target.z).length()
+	return ball_xz_distance / ball_xz_velocity
 
 func _team_side_sign(team: TeamData) -> float:
 	if team == ctx.serving_team:

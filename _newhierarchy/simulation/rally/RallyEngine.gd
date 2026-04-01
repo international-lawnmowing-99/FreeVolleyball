@@ -2,6 +2,8 @@ extends RefCounted
 
 class_name RallyEngine
 
+const SetPlayAnalysis = preload("res://_newhierarchy/simulation/tactics/SetPlayAnalysis.gd")
+
 var rng:RandomNumberGenerator
 var workflow_log: SimulationEventLog
 
@@ -25,6 +27,7 @@ func Resolve(ctx: RallyState) -> RallyState:
 		current_result = _resolve_pass(current_result)
 		if current_result.is_terminal: break
 
+		_assess_set_phase(current_result)
 		_log_phase(ctx, "pass", "Passing team assessing setter access and attack timing.", current_result.defender)
 		_log_phase(ctx, "pass", "Defending team assessing likely set threats.", current_result.attacker)
 		_log_phase(ctx, "set", "Choosing set option.", current_result.defender)
@@ -73,6 +76,9 @@ func _resolve_pass(ctx: RallyState) -> RallyState:
 
 	_apply_outcome(ctx, outcome)
 	ctx.event_log.add(outcome)
+	ctx.last_pass_target = _vector3_from_metadata(outcome.metadata.get("reception_target", {}), ctx.last_pass_target)
+	ctx.last_pass_band = str(outcome.metadata.get("pass_band", ""))
+	ctx.last_pass_quality = float(outcome.pass_quality)
 	_record_ball_touch(ctx, outcome, "receive", ctx.defender, ctx.attacker)
 	_log_action(ctx, "RECEIVE", outcome, ctx.defender)
 
@@ -80,6 +86,8 @@ func _resolve_pass(ctx: RallyState) -> RallyState:
 
 func _resolve_set(ctx:RallyState) -> RallyState:
 	var setter = ctx.defender.teamStrategy.choose_setter(ctx.defender_match_data, rng)
+	if ctx.chosen_set_option.is_empty():
+		_assess_set_phase(ctx, setter)
 	_log_phase(ctx, "set", "Executing set.", ctx.defender, setter)
 	var attempt := SetAttempt.new(setter, ctx, rng)
 
@@ -92,7 +100,9 @@ func _resolve_set(ctx:RallyState) -> RallyState:
 	return ctx
 
 func _resolve_attack(ctx:RallyState) -> RallyState:
-	var attacker = ctx.defender.teamStrategy.choose_attacker(ctx.defender_match_data, rng)
+	var attacker: AthleteStats = ctx.chosen_set_option.get("attacker", null)
+	if attacker == null:
+		attacker = ctx.defender.teamStrategy.choose_attacker(ctx.defender_match_data, rng)
 	_log_phase(ctx, "attack", "Executing spike.", ctx.defender, attacker)
 	var attempt := AttackAttempt.new(attacker, ctx, rng)
 
@@ -105,7 +115,11 @@ func _resolve_attack(ctx:RallyState) -> RallyState:
 	return ctx
 
 func _resolve_block(ctx:RallyState) -> RallyState:
-	var blocker = ctx.attacker.teamStrategy.choose_blocker(ctx.attacker_match_data, rng)
+	var blocker = ctx.chosen_blocker
+	if blocker == null:
+		blocker = SetPlayAnalysis.choose_reacting_blocker(ctx.defensive_positioning_plan, ctx.chosen_set_option)
+	if blocker == null:
+		blocker = ctx.attacker.teamStrategy.choose_blocker(ctx.attacker_match_data, rng)
 	_log_phase(ctx, "block", "Executing block.", ctx.attacker, blocker)
 	var attempt := BlockAttempt.new(blocker, ctx, rng)
 
@@ -124,6 +138,7 @@ func _resolve_defence_phase(ctx:RallyState) -> RallyState:
 	ctx.attacker_match_data = ctx.defender_match_data
 	ctx.defender = previous_attacker
 	ctx.defender_match_data = previous_attacker_match_data
+	_reset_sideout_assessment(ctx)
 	return ctx
 
 func _apply_outcome(ctx: RallyState, outcome: AttemptOutcome) -> void:
@@ -175,6 +190,9 @@ func _record_ball_touch(ctx: RallyState, outcome: AttemptOutcome, phase: String,
 	)
 
 func _build_ball_snapshot(ctx: RallyState, outcome: AttemptOutcome, phase: String, source_team: TeamData, target_team: TeamData) -> Dictionary:
+	if outcome.metadata.has("projected_velocity"):
+		return _projected_ball_snapshot(ctx, outcome, phase, source_team)
+
 	var source_side: float = _team_side_sign(ctx, source_team)
 	var target_side: float = _team_side_sign(ctx, target_team)
 	var trajectory: Dictionary = _phase_trajectory(phase)
@@ -204,6 +222,25 @@ func _build_ball_snapshot(ctx: RallyState, outcome: AttemptOutcome, phase: Strin
 		"velocity": velocity,
 		"topspin": topspin,
 		"timestamp": ctx.ball_time + TOUCH_TIME_STEP,
+		"result": str(outcome.metadata.get("result", ""))
+	}
+
+func _projected_ball_snapshot(ctx: RallyState, outcome: AttemptOutcome, phase: String, source_team: TeamData) -> Dictionary:
+	var position: Vector3 = ctx.ball_position
+	var velocity: Vector3 = _vector3_from_metadata(outcome.metadata.get("projected_velocity", {}), Vector3.ZERO)
+	var target_position: Vector3 = _vector3_from_metadata(outcome.metadata.get("projected_target_position", {}), position)
+	var flight_time: float = float(outcome.metadata.get("projected_flight_time", TOUCH_TIME_STEP))
+	var topspin: float = float(outcome.metadata.get("projected_topspin", _phase_topspin(phase, outcome)))
+
+	return {
+		"touch_index": ctx.touch_count,
+		"phase": phase,
+		"actor_name": _athlete_name(outcome.actor),
+		"team_name": source_team.teamName if source_team != null else "",
+		"position": target_position,
+		"velocity": velocity,
+		"topspin": topspin,
+		"timestamp": ctx.ball_time + max(flight_time, 0.01),
 		"result": str(outcome.metadata.get("result", ""))
 	}
 
@@ -349,6 +386,99 @@ func _match_data_for_team(ctx: RallyState, team: TeamData) -> TeamMatchData:
 	if team == ctx.receiving_team:
 		return ctx.receiving_team_match_data
 	return null
+
+func _assess_set_phase(ctx: RallyState, provided_setter: AthleteStats = null) -> void:
+	if ctx == null or ctx.defender == null or ctx.defender_match_data == null:
+		return
+
+	var setter: AthleteStats = provided_setter
+	if setter == null:
+		setter = ctx.defender.teamStrategy.choose_setter(ctx.defender_match_data, rng)
+	if setter == null:
+		return
+
+	var side_sign := _team_side_sign(ctx, ctx.defender)
+	var set_origin := ctx.last_pass_target
+	if set_origin == Vector3.ZERO:
+		set_origin = Vector3(side_sign * 0.5, max(float(setter.jumpSetHeight), 2.4), 0.0)
+
+	ctx.set_options = SetPlayAnalysis.evaluate_attacking_options(
+		set_origin,
+		side_sign,
+		ctx.defender_match_data,
+		setter,
+		ctx.defender.teamStrategy
+	)
+	ctx.chosen_set_option = SetPlayAnalysis.choose_attacking_option(ctx.set_options, ctx.defender.teamStrategy, rng)
+	ctx.defensive_set_read = SetPlayAnalysis.build_defensive_read(
+		ctx.set_options,
+		ctx.defender.teamStrategy,
+		ctx.attacker.teamStrategy if ctx.attacker != null else null,
+		rng
+	)
+	ctx.defensive_positioning_plan = SetPlayAnalysis.build_defensive_positioning_plan(
+		_team_side_sign(ctx, ctx.attacker),
+		ctx.attacker_match_data,
+		ctx.attacker.teamStrategy if ctx.attacker != null else null,
+		ctx.defensive_set_read
+	)
+	ctx.chosen_blocker = SetPlayAnalysis.choose_reacting_blocker(ctx.defensive_positioning_plan, ctx.chosen_set_option)
+
+	_emit_step(ctx, _set_assessment_summary(ctx))
+	_emit_step(ctx, _defensive_read_summary(ctx))
+
+func _set_assessment_summary(ctx: RallyState) -> String:
+	if ctx.chosen_set_option.is_empty():
+		return "[Rally %d] SET READ | no viable set options found after %s pass" % [ctx.rally_number, ctx.last_pass_band]
+
+	return "[Rally %d] SET READ | %s pass -> %s selected (difficulty=%.2f, time=%.2fs, lane=%s)" % [
+		ctx.rally_number,
+		ctx.last_pass_band,
+		str(ctx.chosen_set_option.get("attacker_name", "")),
+		float(ctx.chosen_set_option.get("set_difficulty", 0.0)),
+		float(ctx.chosen_set_option.get("set_time", 0.0)),
+		str(ctx.chosen_set_option.get("attack_lane", ""))
+	]
+
+func _defensive_read_summary(ctx: RallyState) -> String:
+	var predicted_primary: Dictionary = ctx.defensive_set_read.get("predicted_primary", {})
+	if predicted_primary.is_empty():
+		return "[Rally %d] BLOCK PLAN | defence has no clear set read" % [ctx.rally_number]
+
+	var blocker_name := ""
+	if ctx.chosen_blocker != null:
+		blocker_name = _athlete_name(ctx.chosen_blocker)
+	var moving_defenders: int = 0
+	for defender_plan in ctx.defensive_positioning_plan.get("backcourt", []):
+		if bool(defender_plan.get("should_move", false)):
+			moving_defenders += 1
+
+	return "[Rally %d] BLOCK PLAN | read=%s scout=%.2f blocker=%s backcourt_shifts=%d" % [
+		ctx.rally_number,
+		str(predicted_primary.get("attacker_name", "")),
+		float(ctx.defensive_set_read.get("scouting_confidence", 0.0)),
+		blocker_name,
+		moving_defenders
+	]
+
+func _reset_sideout_assessment(ctx: RallyState) -> void:
+	ctx.last_pass_target = Vector3.ZERO
+	ctx.last_pass_band = ""
+	ctx.last_pass_quality = 0.0
+	ctx.set_options.clear()
+	ctx.chosen_set_option = {}
+	ctx.defensive_set_read = {}
+	ctx.defensive_positioning_plan = {}
+	ctx.chosen_blocker = null
+
+func _vector3_from_metadata(serialized: Variant, fallback: Vector3 = Vector3.ZERO) -> Vector3:
+	if typeof(serialized) != TYPE_DICTIONARY:
+		return fallback
+	return Vector3(
+		float(serialized.get("x", fallback.x)),
+		float(serialized.get("y", fallback.y)),
+		float(serialized.get("z", fallback.z))
+	)
 
 func _serialize_ball_snapshot(snapshot: Dictionary) -> Dictionary:
 	var position: Vector3 = snapshot["position"]

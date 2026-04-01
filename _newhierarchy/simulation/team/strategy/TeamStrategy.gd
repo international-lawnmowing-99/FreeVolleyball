@@ -101,6 +101,14 @@ const ROLE_POOL_LIMITS := {
 	"role_fit": 1.0,
 	"role_mismatch_penalty": 1.0
 }
+@export_range(0.0, 1.0) var set_distribution_preference: float = 0.55
+@export_range(0.2, 2.5) var prefer_front_court_sets: float = 1.15
+@export_range(0.2, 2.5) var prefer_back_court_sets: float = 0.9
+@export_range(0.2, 2.5) var prefer_middle_sets: float = 1.0
+@export_range(0.2, 2.5) var prefer_outside_sets: float = 1.0
+@export_range(0.0, 1.0) var opponent_setter_scouting_budget: float = 0.35
+@export_range(0.3, 1.7) var block_commit_tendency: float = 1.0
+@export_range(0.3, 1.7) var backcourt_shift_tendency: float = 1.0
 
 @export var defaultReceiveRotations =  [
 	[#setter in 1
@@ -312,6 +320,25 @@ func choose_attacker(team_match_data: TeamMatchData = null, _rng: RandomNumberGe
 func choose_blocker(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
 	var players := _resolve_players(team_match_data)
 	return _choose_player_by_skill(players, "block", _rng)
+
+func setting_preference_weight_for_attacker(attacker: AthleteStats) -> float:
+	if attacker == null:
+		return 1.0
+
+	var weight: float = 1.0
+	var is_front_row := attacker.rotationPosition >= 2 and attacker.rotationPosition <= 4
+	weight *= prefer_front_court_sets if is_front_row else prefer_back_court_sets
+
+	if attacker.role == Enums.Role.Middle:
+		weight *= prefer_middle_sets
+	elif attacker.role == Enums.Role.Outside or attacker.role == Enums.Role.Opposite:
+		weight *= prefer_outside_sets
+
+	return max(weight, 0.05)
+
+func setter_tendency_scouting_confidence() -> float:
+	var defense_weight: float = float(lineup_component_weights.get("defense", 1.0))
+	return clamp(opponent_setter_scouting_budget * (0.75 + defense_weight * 0.25), 0.0, 1.0)
 
 func choose_serve_plan(server: AthleteStats, team_match_data: TeamMatchData = null, opponent_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> Dictionary:
 	if server == null:
