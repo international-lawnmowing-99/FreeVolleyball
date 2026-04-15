@@ -48,6 +48,14 @@ text = "Play Set"
 layout_mode = 2
 text = "Next Rally Step"
 
+[node name="ReplayLastPointButton" type="Button" parent="CanvasLayer/Control/VBoxContainer/Buttons" unique_id=1678231901]
+layout_mode = 2
+text = "Replay Last Point"
+
+[node name="NextReplayFrameButton" type="Button" parent="CanvasLayer/Control/VBoxContainer/Buttons" unique_id=507119201]
+layout_mode = 2
+text = "Next Replay Frame"
+
 [node name="StatusLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer" unique_id=577530019]
 layout_mode = 2
 text = "Initializing..."
@@ -57,3 +65,146 @@ custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
 text = "Rally Step Output:"
 autowrap_mode = 3
+
+[node name="ReplayLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer" unique_id=160417205]
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 2
+text = "Replay Output:"
+autowrap_mode = 3
+
+[node name="StrategyPanel" type="PanelContainer" parent="CanvasLayer/Control" unique_id=32200611]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.36
+anchor_top = 0.03
+anchor_right = 0.69
+anchor_bottom = 0.74
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/StrategyPanel" unique_id=68300214]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="StrategyVBox" type="VBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer" unique_id=83700426]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StrategyTitle" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=73300839]
+layout_mode = 2
+text = "Team Alpha Strategy"
+
+[node name="StrategySummaryLabel" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=96500852]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+text = "Generate world to inspect strategy."
+autowrap_mode = 3
+
+[node name="SetterSystemRow" type="HBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=32500863]
+layout_mode = 2
+
+[node name="SetterSystemLabel" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/SetterSystemRow" unique_id=11400877]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Setter System"
+
+[node name="SetterSystemOption" type="OptionButton" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/SetterSystemRow" unique_id=55300890]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FixedSetterRow" type="HBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=87500904]
+layout_mode = 2
+
+[node name="FixedSetterLabel" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/FixedSetterRow" unique_id=40700917]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Fixed Setter Position"
+
+[node name="FixedSetterOption" type="OptionButton" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/FixedSetterRow" unique_id=20300928]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SetDistributionRow" type="HBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=61400941]
+layout_mode = 2
+
+[node name="SetDistributionLabel" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/SetDistributionRow" unique_id=91800953]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Set Distribution"
+
+[node name="SetDistributionOption" type="OptionButton" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/SetDistributionRow" unique_id=22200965]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FrontCourtRow" type="HBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=53700976]
+layout_mode = 2
+
+[node name="FrontCourtLabel" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/FrontCourtRow" unique_id=85000988]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Front-Court Bias"
+
+[node name="FrontCourtOption" type="OptionButton" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/FrontCourtRow" unique_id=17101000]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MiddleSetRow" type="HBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=48201011]
+layout_mode = 2
+
+[node name="MiddleSetLabel" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/MiddleSetRow" unique_id=77901025]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Middle Preference"
+
+[node name="MiddleSetOption" type="OptionButton" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/MiddleSetRow" unique_id=11801039]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OutsideSetRow" type="HBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=43301051]
+layout_mode = 2
+
+[node name="OutsideSetLabel" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/OutsideSetRow" unique_id=73101063]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Outside Preference"
+
+[node name="OutsideSetOption" type="OptionButton" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/OutsideSetRow" unique_id=45001076]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScoutingRow" type="HBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=68301089]
+layout_mode = 2
+
+[node name="ScoutingLabel" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/ScoutingRow" unique_id=97201102]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Setter Scouting"
+
+[node name="ScoutingOption" type="OptionButton" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/ScoutingRow" unique_id=29301114]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BlockCommitRow" type="HBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=61201126]
+layout_mode = 2
+
+[node name="BlockCommitLabel" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/BlockCommitRow" unique_id=90101139]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Block Commit"
+
+[node name="BlockCommitOption" type="OptionButton" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/BlockCommitRow" unique_id=22001152]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackcourtShiftRow" type="HBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=54101164]
+layout_mode = 2
+
+[node name="BackcourtShiftLabel" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/BackcourtShiftRow" unique_id=82901178]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+text = "Backcourt Shift"
+
+[node name="BackcourtShiftOption" type="OptionButton" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/BackcourtShiftRow" unique_id=15401192]
+layout_mode = 2
+size_flags_horizontal = 3

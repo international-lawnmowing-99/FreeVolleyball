@@ -1,9 +1,9 @@
 extends "res://Scripts/State/Team/TeamState.gd"
 
-func Enter(team:Team):
+func Enter(team:TeamNode):
 	nameOfState = "Celebrate"
 	pass
-func Update(team:Team):
+func Update(team:TeamNode):
 	pass
-func Exit(team:Team):
+func Exit(team:TeamNode):
 	pass

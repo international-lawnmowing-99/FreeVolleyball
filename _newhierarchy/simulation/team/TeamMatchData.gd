@@ -44,6 +44,11 @@ func get_server() -> AthleteStats:
 		return null
 	return court_players[0]
 
+func player_key_for_athlete(athlete: AthleteStats) -> String:
+	if athlete == null:
+		return ""
+	return "%s %s#%d" % [athlete.firstName, athlete.lastName, int(athlete.rotationPosition)]
+
 func get_phase_position_for_player(athlete: AthleteStats, phase: String, team_side: float, highlighted_player: AthleteStats = null, has_ball_control: bool = false) -> Vector3:
 	if athlete == null:
 		return Vector3.ZERO
@@ -104,11 +109,32 @@ func get_best_middle_attacker() -> AthleteStats:
 			best_score = score
 	return best
 
-func build_phase_context(phase: String, team_side: float, highlighted_player: AthleteStats = null, has_ball_control: bool = false) -> Dictionary:
+func build_phase_context(
+	phase: String,
+	team_side: float,
+	highlighted_player: AthleteStats = null,
+	has_ball_control: bool = false,
+	movement_states: Dictionary = {},
+	current_time: float = 0.0
+) -> Dictionary:
 	var players: Array[Dictionary] = []
 	for athlete in court_players:
-		var court_position: Vector3 = _phase_court_position(athlete, phase, team_side, highlighted_player, has_ball_control)
-		players.append(_serialize_player_context(athlete, court_position, phase, highlighted_player, has_ball_control))
+		var player_key: String = player_key_for_athlete(athlete)
+		var tracking_key: String = "%s::%s" % [team.teamName, player_key]
+		var movement_state: Dictionary = movement_states.get(tracking_key, {})
+		var court_position: Vector3 = movement_state.get(
+			"position",
+			_phase_court_position(athlete, phase, team_side, highlighted_player, has_ball_control)
+		)
+		players.append(_serialize_player_context(
+			athlete,
+			court_position,
+			phase,
+			highlighted_player,
+			has_ball_control,
+			movement_state,
+			current_time
+		))
 
 	return {
 		"team_name": team.teamName,
@@ -169,12 +195,21 @@ func _phase_court_position(athlete: AthleteStats, phase: String, team_side: floa
 
 	return Vector3(local.x * team_side, local.y, local.z)
 
-func _serialize_player_context(athlete: AthleteStats, court_position: Vector3, phase: String, highlighted_player: AthleteStats, has_ball_control: bool) -> Dictionary:
+func _serialize_player_context(
+	athlete: AthleteStats,
+	court_position: Vector3,
+	phase: String,
+	highlighted_player: AthleteStats,
+	has_ball_control: bool,
+	movement_state: Dictionary = {},
+	current_time: float = 0.0
+) -> Dictionary:
 	var role_id: int = int(athlete.role)
 	var rotation_position: int = int(athlete.rotationPosition)
 	var is_highlighted: bool = athlete == highlighted_player
 	var is_front_row: bool = rotation_position >= 2 and rotation_position <= 4
 	var stamina: float = float(athlete.stamina)
+	var animation_state := _build_replay_animation_state(athlete, phase, is_highlighted, has_ball_control, is_front_row)
 	var internal_state := {
 		"role_id": role_id,
 		"role_name": _role_name(role_id),
@@ -201,15 +236,106 @@ func _serialize_player_context(athlete: AthleteStats, court_position: Vector3, p
 			"block": float(athlete.block)
 		}
 	}
+	if not movement_state.is_empty():
+		internal_state["movement"] = {
+			"current_position": {
+				"x": court_position.x,
+				"y": court_position.y,
+				"z": court_position.z
+			},
+			"goal_position": _vector3_to_dict(movement_state.get("goal_position", court_position)),
+			"start_position": _vector3_to_dict(movement_state.get("start_position", court_position)),
+			"phase": str(movement_state.get("phase", phase)),
+			"state": str(movement_state.get("movement_state", "")),
+			"intent": str(movement_state.get("movement_intent", "")),
+			"plan_type": str(movement_state.get("plan_type", "ground")),
+			"plan_start_time": float(movement_state.get("plan_start_time", current_time)),
+			"expected_arrival_time": float(movement_state.get("expected_arrival_time", current_time)),
+			"time_remaining": float(movement_state.get("time_remaining", 0.0)),
+			"distance_to_goal": float(movement_state.get("distance_to_goal", 0.0)),
+			"movement_complete": bool(movement_state.get("movement_complete", true)),
+			"is_airborne": bool(movement_state.get("is_airborne", false)),
+			"takeoff_time": float(movement_state.get("takeoff_time", -1.0)),
+			"contact_time": float(movement_state.get("contact_time", -1.0)),
+			"landing_time": float(movement_state.get("landing_time", -1.0)),
+			"jump_height": float(movement_state.get("jump_height", 0.0)),
+			"substeps": movement_state.get("substeps", []).duplicate(true)
+		}
 
 	return {
+		"player_key": player_key_for_athlete(athlete),
 		"player_name": "%s %s" % [athlete.firstName, athlete.lastName],
 		"position": {
 			"x": court_position.x,
 			"y": court_position.y,
 			"z": court_position.z
 		},
+		"animation": animation_state,
 		"internal_state": internal_state
+	}
+
+func _build_replay_animation_state(
+	athlete: AthleteStats,
+	phase: String,
+	is_highlighted: bool,
+	has_ball_control: bool,
+	is_front_row: bool
+) -> Dictionary:
+	var animation_name := "idle_base_stub"
+	var playback_mode := "loop"
+	var intent := "hold_shape"
+
+	if is_highlighted:
+		match phase:
+			"serve":
+				animation_name = "serve_contact_stub"
+				playback_mode = "one_shot"
+				intent = "strike_ball"
+			"receive":
+				animation_name = "dig_contact_stub"
+				playback_mode = "one_shot"
+				intent = "absorb_ball"
+			"set":
+				animation_name = "jump_set_stub"
+				playback_mode = "one_shot"
+				intent = "distribute_ball"
+			"attack":
+				animation_name = "spike_contact_stub"
+				playback_mode = "one_shot"
+				intent = "terminal_attack"
+			"block":
+				animation_name = "block_press_stub"
+				playback_mode = "one_shot"
+				intent = "seal_net"
+	else:
+		match phase:
+			"serve":
+				animation_name = "serve_receive_shape_stub"
+				intent = "prepare_transition"
+			"receive":
+				animation_name = "receive_ready_stub"
+				intent = "form_passing_shape"
+			"set":
+				animation_name = "approach_adjust_stub" if is_front_row else "coverage_balance_stub"
+				intent = "attack_window_adjustment" if is_front_row else "coverage_balance"
+			"attack":
+				animation_name = "approach_run_stub" if is_front_row else "coverage_read_stub"
+				intent = "attack_approach" if is_front_row else "coverage_read"
+			"block":
+				animation_name = "block_ready_stub" if is_front_row else "defensive_cover_stub"
+				intent = "net_press_ready" if is_front_row else "dig_cover"
+
+	if has_ball_control and not is_highlighted:
+		animation_name = "transition_support_stub"
+		intent = "support_ball_control"
+
+	return {
+		"name": animation_name,
+		"intent": intent,
+		"playback_mode": playback_mode,
+		"speed_scale": clamp(0.8 + float(athlete.speed) * 0.08, 0.7, 1.5),
+		"is_stub": true,
+		"source": "phase_context_heuristic"
 	}
 
 func _phase_focus_label(phase: String, is_highlighted: bool, has_ball_control: bool, is_front_row: bool) -> String:
@@ -270,3 +396,10 @@ func _role_name(role_id: int) -> String:
 			return "libero"
 		_:
 			return "unknown"
+
+func _vector3_to_dict(value: Vector3) -> Dictionary:
+	return {
+		"x": value.x,
+		"y": value.y,
+		"z": value.z
+	}

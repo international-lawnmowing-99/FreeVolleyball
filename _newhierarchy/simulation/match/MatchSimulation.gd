@@ -219,10 +219,11 @@ func _commit_pending_rally() -> Dictionary:
 
 	var rally_result: RallyState = pending_rally_result["rally_result"]
 	var previous_serving_team: TeamData = pending_rally_result["previous_serving_team"]
+	var replay_payload: Dictionary = rally_result.build_replay_data()
 	rally_replays.append({
 		"rally_number": rally_result.rally_number,
 		"point_winner_name": rally_result.point_winner.teamName,
-		"replay": rally_result.event_log.serialize_for_replay()
+		"replay": replay_payload
 	})
 	if rally_result.point_winner != previous_serving_team:
 		_team_match_data_for(rally_result.point_winner).rotate_on_sideout()
@@ -242,7 +243,8 @@ func _commit_pending_rally() -> Dictionary:
 		"rally_number": rally_result.rally_number,
 		"point_winner": rally_result.point_winner,
 		"point_winner_name": rally_result.point_winner.teamName,
-		"score_event": score_event
+		"score_event": score_event,
+		"replay": replay_payload
 	}
 	pending_rally_result = {}
 	pending_rally_steps.clear()

@@ -1,6 +1,8 @@
 class_name RallyState
 extends RefCounted
 
+const RallyReplayBuilder = preload("res://_newhierarchy/simulation/replay/RallyReplayBuilder.gd")
+
 var event_log: RallyEventLog = RallyEventLog.new()
 
 var server:AthleteStats
@@ -36,6 +38,11 @@ var chosen_set_option: Dictionary = {}
 var defensive_set_read: Dictionary = {}
 var defensive_positioning_plan: Dictionary = {}
 var chosen_blocker: AthleteStats = null
+var available_blockers: Array[AthleteStats] = []
+var available_blocker_plans: Array[Dictionary] = []
+var movement_time: float = 0.0
+var player_tracking_states: Dictionary = {}
+var initial_player_tracking_states: Dictionary = {}
 
 var is_terminal: bool = false
 var point_winner: TeamData = null
@@ -45,3 +52,6 @@ var defender: TeamData
 var attacker_match_data: TeamMatchData
 var defender_match_data: TeamMatchData
 var rally_over: bool = false
+
+func build_replay_data() -> Dictionary:
+	return RallyReplayBuilder.build(self)

@@ -277,7 +277,7 @@ func ScrambleForBadSet(team:TeamNode):
 			var timeToReachGround
 			if athlete.rb.linear_velocity.y > 0:
 				# They're going up
-				timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 + athlete.g * athlete.stats.verticalJump)/athlete.g
+				timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 * athlete.g * athlete.stats.verticalJump)/athlete.g
 			else:
 				# They're falling
 				timeToReachGround = sqrt(2 * athlete.g * athlete.position.y)
@@ -432,7 +432,7 @@ func AttemptToFindSetterOutOfSystem(team:TeamNode)->bool:
 		if !lad.rb.freeze:
 			if lad.rb.linear_velocity.y > 0:
 				#they're going up
-				timeToReachGround = lad.linear_velocity.y/-lad.g + sqrt(2 + lad.g * lad.stats.verticalJump)/lad.g
+				timeToReachGround = lad.linear_velocity.y/-lad.g + sqrt(2 * lad.g * lad.stats.verticalJump)/lad.g
 			else:
 				#they're falling
 				timeToReachGround = sqrt(2 * lad.g * lad.position.y)
@@ -461,7 +461,7 @@ func DesperatelyAttemptToFindSomeoneToPlayTheSecondBall(team:TeamNode)->bool:
 		if !lad.rb.freeze:
 			if lad.rb.linear_velocity.y > 0:
 				#they're going up
-				timeToReachGround = lad.linear_velocity.y/-lad.g + sqrt(2 + lad.g * lad.stats.verticalJump)/lad.g
+				timeToReachGround = lad.linear_velocity.y/-lad.g + sqrt(2 * lad.g * lad.stats.verticalJump)/lad.g
 			else:
 				#they're falling
 				timeToReachGround = sqrt(2 * lad.g * lad.position.y)
@@ -522,7 +522,7 @@ func ChooseSpiker(team:TeamNode):
 
 	for athlete:Athlete in team.courtPlayerNodes:
 		if athlete!= team.chosenSetter && athlete.stats.role != Enums.Role.Libero && athlete != team.middleBack:
-			if team.receptionTarget.x == NAN:
+			if is_nan(team.receptionTarget.x):
 				var dfsdfds = 1
 			var potentialSet = Maths.FindWellBehavedParabola(team.receptionTarget, athlete.setRequest.target, athlete.setRequest.height)
 			if potentialSet == null:
@@ -661,7 +661,7 @@ func AthleteCanFullyTransition(athlete) -> bool:
 	if !athlete.rb.freeze:
 		if athlete.rb.linear_velocity.y > 0:
 			#they're going up
-			timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 + athlete.g * athlete.stats.verticalJump)/athlete.g
+			timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 * athlete.g * athlete.stats.verticalJump)/athlete.g
 		else:
 			#they're falling
 			timeToReachGround = sqrt(2 * athlete.g * athlete.position.y)
@@ -692,7 +692,7 @@ func AthleteCanDiagonallyTransition(athlete)-> bool:
 		return false
 	var timeToTakeOffXZ = athlete.position.distance_to(athlete.spikeState.takeOffXZ)/athlete.stats.speed
 	var jumpYVel = sqrt(2 * athlete.g * athlete.stats.verticalJump)
-	var jumpTime = jumpYVel / -athlete.g
+	var jumpTime = jumpYVel / athlete.g
 	var timeToJumpPeak = timeToTakeOffXZ + jumpTime
 
 	# Assumes the team's reception target has been updated
@@ -733,7 +733,7 @@ func AthleteCanSpikeBadSet(athlete:Athlete)-> bool:
 
 		if athlete.rb.linear_velocity.y > 0:
 			# They're going up
-			timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 + athlete.g * athlete.stats.verticalJump)/athlete.g
+			timeToReachGround = athlete.linear_velocity.y/-athlete.g + sqrt(2 * athlete.g * athlete.stats.verticalJump)/athlete.g
 		else:
 			# They're falling
 			timeToReachGround = sqrt(2 * athlete.g * athlete.position.y)

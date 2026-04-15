@@ -141,6 +141,7 @@ static func build_defensive_positioning_plan(
 	var backcourt_positions: Array[Dictionary] = []
 	var best_primary: Dictionary = {}
 	var best_primary_fit: float = -INF
+	var sorted_front_row: Array[Dictionary] = []
 
 	for athlete in defending_match_data.court_players:
 		var base_position: Vector3 = defending_match_data.get_phase_position_for_player(athlete, "block", team_side, athlete, false)
@@ -165,6 +166,7 @@ static func build_defensive_positioning_plan(
 				if fit > best_primary_fit:
 					best_primary_fit = fit
 					best_primary = assignment
+			sorted_front_row.append(assignment)
 		else:
 			var shifted_z_back: float = lerp(base_position.z, threat_center_z, clamp(backcourt_shift * 0.45, 0.0, 0.85))
 			backcourt_positions.append({
@@ -176,23 +178,29 @@ static func build_defensive_positioning_plan(
 				"should_move": abs(shifted_z_back - base_position.z) > 0.2 and threat_spread < 2.1
 			})
 
+	sorted_front_row.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return float(a.get("base_position", Vector3.ZERO).z) > float(b.get("base_position", Vector3.ZERO).z)
+	)
+	var lane_assignments := _build_lane_assignments(sorted_front_row)
+
 	return {
 		"threat_center_z": threat_center_z,
 		"threat_spread": threat_spread,
 		"blockers": blocker_positions,
 		"backcourt": backcourt_positions,
-		"primary_blocker": best_primary
+		"primary_blocker": best_primary,
+		"lane_assignments": lane_assignments
 	}
 
 static func choose_reacting_blocker(positioning_plan: Dictionary, actual_option: Dictionary) -> AthleteStats:
-	var blockers: Array = positioning_plan.get("blockers", [])
-	if blockers.is_empty() or actual_option.is_empty():
+	var reachable_blockers: Array[Dictionary] = identify_reachable_blockers(positioning_plan, actual_option)
+	if reachable_blockers.is_empty():
 		return null
 
 	var target_position: Vector3 = actual_option.get("contact_position", Vector3.ZERO)
 	var best: AthleteStats = null
 	var best_score: float = -INF
-	for blocker_plan in blockers:
+	for blocker_plan in reachable_blockers:
 		var athlete: AthleteStats = blocker_plan.get("athlete")
 		if athlete == null:
 			continue
@@ -204,6 +212,38 @@ static func choose_reacting_blocker(positioning_plan: Dictionary, actual_option:
 			best = athlete
 
 	return best
+
+static func identify_reachable_blockers(positioning_plan: Dictionary, actual_option: Dictionary) -> Array[Dictionary]:
+	var reachable: Array[Dictionary] = []
+	if positioning_plan.is_empty() or actual_option.is_empty():
+		return reachable
+
+	var contact_position: Vector3 = actual_option.get("contact_position", Vector3.ZERO)
+	var attack_lane: String = str(actual_option.get("attack_lane", "middle"))
+	var lane_assignments: Dictionary = positioning_plan.get("lane_assignments", {})
+	var prioritized_blockers: Array = lane_assignments.get(attack_lane, [])
+	if prioritized_blockers.is_empty():
+		prioritized_blockers = positioning_plan.get("blockers", [])
+
+	for blocker_plan_variant in prioritized_blockers:
+		var blocker_plan: Dictionary = blocker_plan_variant
+		var athlete: AthleteStats = blocker_plan.get("athlete")
+		if athlete == null:
+			continue
+		var start_position: Vector3 = blocker_plan.get("start_position", Vector3.ZERO)
+		var lateral_reach: float = max(float(athlete.height) / 3.0, 0.55)
+		var reaches_lane: bool = abs(contact_position.z - start_position.z) <= lateral_reach
+		var reaches_height: bool = contact_position.y <= float(athlete.blockHeight)
+		if not reaches_lane or not reaches_height:
+			continue
+
+		var enriched_plan: Dictionary = blocker_plan.duplicate(true)
+		enriched_plan["lane_delta"] = abs(contact_position.z - start_position.z)
+		enriched_plan["lateral_reach"] = lateral_reach
+		enriched_plan["height_margin"] = float(athlete.blockHeight) - contact_position.y
+		reachable.append(enriched_plan)
+
+	return reachable
 
 static func _eligible_attackers(team_match_data: TeamMatchData, setter: AthleteStats) -> Array[AthleteStats]:
 	var attackers: Array[AthleteStats] = []
@@ -373,6 +413,47 @@ static func _weighted_z_spread(options: Array, weight_key: String, center_z: flo
 	if total <= 0.0:
 		return 0.0
 	return weighted / total
+
+static func _build_lane_assignments(sorted_front_row: Array[Dictionary]) -> Dictionary:
+	var lane_assignments := {
+		"left": [],
+		"middle": [],
+		"right": []
+	}
+	if sorted_front_row.is_empty():
+		return lane_assignments
+
+	if sorted_front_row.size() == 1:
+		for lane in lane_assignments.keys():
+			lane_assignments[lane] = [sorted_front_row[0]]
+		return lane_assignments
+
+	var left_blocker: Dictionary = sorted_front_row[0]
+	var right_blocker: Dictionary = sorted_front_row[sorted_front_row.size() - 1]
+	var middle_index: int = mini(1, sorted_front_row.size() - 1)
+	if sorted_front_row.size() >= 3:
+		middle_index = 1
+	var middle_blocker: Dictionary = sorted_front_row[middle_index]
+
+	lane_assignments["left"] = _compact_blocker_group([left_blocker, middle_blocker])
+	lane_assignments["middle"] = _compact_blocker_group([middle_blocker, left_blocker, right_blocker])
+	lane_assignments["right"] = _compact_blocker_group([right_blocker, middle_blocker])
+	return lane_assignments
+
+static func _compact_blocker_group(candidates: Array) -> Array[Dictionary]:
+	var unique_by_name := {}
+	var compacted: Array[Dictionary] = []
+	for candidate_variant in candidates:
+		var candidate: Dictionary = candidate_variant
+		var athlete: AthleteStats = candidate.get("athlete")
+		if athlete == null:
+			continue
+		var athlete_name := _athlete_name(athlete)
+		if unique_by_name.has(athlete_name):
+			continue
+		unique_by_name[athlete_name] = true
+		compacted.append(candidate)
+	return compacted
 
 static func _role_bucket(attacker: AthleteStats) -> String:
 	if attacker.role == Enums.Role.Middle:

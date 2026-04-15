@@ -3,6 +3,7 @@ extends RefCounted
 class_name RallyEngine
 
 const SetPlayAnalysis = preload("res://_newhierarchy/simulation/tactics/SetPlayAnalysis.gd")
+const PlayerMovementPlanner = preload("res://_newhierarchy/simulation/team/PlayerMovementPlanner.gd")
 
 var rng:RandomNumberGenerator
 var workflow_log: SimulationEventLog
@@ -17,6 +18,7 @@ func _init(_rng, _workflow_log: SimulationEventLog = null) -> void:
 	workflow_log = _workflow_log
 
 func Resolve(ctx: RallyState) -> RallyState:
+	PlayerMovementPlanner.initialize_rally_tracking(ctx)
 	_log_phase(ctx, "serve", "Choosing serving strategy for this rally.", ctx.serving_team, ctx.server)
 	_choose_serving_strategy(ctx)
 	_log_phase(ctx, "receive", "Choosing receive-side attacking strategy.", ctx.receiving_team)
@@ -170,6 +172,7 @@ func _record_ball_touch(ctx: RallyState, outcome: AttemptOutcome, phase: String,
 	ctx.ball_velocity = snapshot["velocity"]
 	ctx.ball_topspin = snapshot["topspin"]
 	ctx.ball_time = snapshot["timestamp"]
+	PlayerMovementPlanner.advance_phase(ctx, phase, source_team, target_team, outcome, ctx.ball_time)
 	var phase_context: Dictionary = _build_phase_context_snapshot(ctx, phase, outcome, source_team, target_team)
 	ctx.phase_context = phase_context
 	ctx.phase_context_history.append(phase_context.duplicate(true))
@@ -253,9 +256,23 @@ func _build_phase_context_snapshot(ctx: RallyState, phase: String, outcome: Atte
 	var target_context: Dictionary = {}
 
 	if source_match_data != null:
-		source_context = source_match_data.build_phase_context(phase, source_side, outcome.actor, true)
+		source_context = source_match_data.build_phase_context(
+			phase,
+			source_side,
+			outcome.actor,
+			true,
+			ctx.player_tracking_states,
+			ctx.ball_time
+		)
 	if target_match_data != null:
-		target_context = target_match_data.build_phase_context(phase, target_side, outcome.actor, false)
+		target_context = target_match_data.build_phase_context(
+			phase,
+			target_side,
+			outcome.actor,
+			false,
+			ctx.player_tracking_states,
+			ctx.ball_time
+		)
 
 	var position: Vector3 = ctx.ball_position
 	var velocity: Vector3 = ctx.ball_velocity
@@ -470,6 +487,8 @@ func _reset_sideout_assessment(ctx: RallyState) -> void:
 	ctx.defensive_set_read = {}
 	ctx.defensive_positioning_plan = {}
 	ctx.chosen_blocker = null
+	ctx.available_blockers.clear()
+	ctx.available_blocker_plans.clear()
 
 func _vector3_from_metadata(serialized: Variant, fallback: Vector3 = Vector3.ZERO) -> Vector3:
 	if typeof(serialized) != TYPE_DICTIONARY:
