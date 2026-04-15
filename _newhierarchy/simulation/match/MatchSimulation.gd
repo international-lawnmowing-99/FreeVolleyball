@@ -18,6 +18,8 @@ var rally_replays: Array[Dictionary] = []
 var workflow_log: SimulationEventLog
 var pending_rally_steps: Array[String] = []
 var pending_rally_result: Dictionary = {}
+var pending_court_snapshots: Array[Dictionary] = []
+var pending_court_snapshot_index: int = -1
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -119,11 +121,16 @@ func next_rally_step() -> Dictionary:
 
 	var message: String = pending_rally_steps.pop_front()
 	var step_complete: bool = pending_rally_steps.is_empty()
+	var snapshot: Dictionary = {}
+	if not pending_court_snapshots.is_empty():
+		pending_court_snapshot_index = mini(pending_court_snapshot_index + 1, pending_court_snapshots.size() - 1)
+		snapshot = pending_court_snapshots[pending_court_snapshot_index].duplicate(true)
 	var result: Dictionary = {
 		"type": "rally_step",
 		"message": message,
 		"step_complete": step_complete,
-		"rally_committed": false
+		"rally_committed": false,
+		"court_snapshot": snapshot
 	}
 
 	if step_complete:
@@ -200,6 +207,8 @@ func _prepare_pending_rally() -> bool:
 	pending_rally_steps = rally_result.step_messages.duplicate()
 	if start_message != "":
 		pending_rally_steps.push_front(start_message)
+	pending_court_snapshots = _build_pending_court_snapshots(rally_result)
+	pending_court_snapshot_index = -1
 	pending_rally_result = {
 		"rally_number": rally_number,
 		"previous_serving_team": serving_team,
@@ -248,7 +257,52 @@ func _commit_pending_rally() -> Dictionary:
 	}
 	pending_rally_result = {}
 	pending_rally_steps.clear()
+	pending_court_snapshots.clear()
+	pending_court_snapshot_index = -1
 	return point_result
+
+func _build_pending_court_snapshots(rally_result: RallyState) -> Array[Dictionary]:
+	var snapshots: Array[Dictionary] = []
+	if rally_result == null:
+		return snapshots
+
+	var setup_snapshot := {
+		"phase": "serve_setup",
+		"timestamp": 0.0,
+		"teams": []
+	}
+	if rally_result.serving_team_match_data != null:
+		setup_snapshot["teams"].append(
+			rally_result.serving_team_match_data.build_phase_context(
+				"serve",
+				-1.0,
+				rally_result.server,
+				true,
+				rally_result.initial_player_tracking_states,
+				0.0
+			)
+		)
+	if rally_result.receiving_team_match_data != null:
+		setup_snapshot["teams"].append(
+			rally_result.receiving_team_match_data.build_phase_context(
+				"receive",
+				1.0,
+				null,
+				false,
+				rally_result.initial_player_tracking_states,
+				0.0
+			)
+		)
+	snapshots.append(setup_snapshot)
+
+	for phase_context in rally_result.phase_context_history:
+		snapshots.append({
+			"phase": str(phase_context.get("phase", "")),
+			"timestamp": float(phase_context.get("timestamp", 0.0)),
+			"teams": phase_context.get("teams", []).duplicate(true)
+		})
+
+	return snapshots
 
 func create_save_data() -> MatchSaveData:
 	var save := MatchSaveData.new()

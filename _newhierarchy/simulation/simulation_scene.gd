@@ -24,6 +24,7 @@ const TeamStrategyScript = preload("res://_newhierarchy/simulation/team/strategy
 @onready var scouting_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/ScoutingRow/ScoutingOption
 @onready var block_commit_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/BlockCommitRow/BlockCommitOption
 @onready var backcourt_shift_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/BackcourtShiftRow/BackcourtShiftOption
+@onready var court_mini_map: CourtMiniMap = $CanvasLayer/Control/CourtMiniMap
 
 var sim: MatchSimulation
 var director: SimulationDirector
@@ -51,6 +52,7 @@ func _ready() -> void:
 	_refresh_rally_step_text("No rally steps yet")
 	_refresh_replay_text("No replay loaded")
 	_refresh_strategy_ui()
+	court_mini_map.clear_snapshot()
 
 func _on_generate_world_button_pressed() -> void:
 	simulation_world = SimulationWorldState.new()
@@ -74,6 +76,7 @@ func _on_generate_world_button_pressed() -> void:
 	_refresh_rally_step_text("No rally steps yet")
 	_clear_active_replay("No replay loaded")
 	_refresh_strategy_ui()
+	court_mini_map.clear_snapshot()
 
 func _on_play_point_button_pressed() -> void:
 	if sim == null:
@@ -85,6 +88,7 @@ func _on_play_point_button_pressed() -> void:
 		_refresh_status_text("Match complete")
 		return
 	_load_replay(result.get("replay", {}))
+	_update_court_from_replay()
 
 	var score_event: Dictionary = result["score_event"]
 	var summary := "Point played"
@@ -106,6 +110,7 @@ func _on_play_set_button_pressed() -> void:
 		return
 	if not sim.rally_replays.is_empty():
 		_load_replay(sim.rally_replays[sim.rally_replays.size() - 1].get("replay", {}))
+		_update_court_from_replay()
 
 	var ending_event: Dictionary = result["ending_event"]
 	var summary := "Set %d completed (%d rallies)" % [result["set_number"], result["rallies_played"]]
@@ -124,6 +129,8 @@ func _on_next_rally_step_button_pressed() -> void:
 
 	var result := sim.next_rally_step()
 	_refresh_rally_step_text(result.get("message", ""))
+	if not result.get("court_snapshot", {}).is_empty():
+		court_mini_map.set_snapshot(result.get("court_snapshot", {}))
 
 	if result["type"] == "match_over":
 		_refresh_status_text("Match complete")
@@ -150,6 +157,7 @@ func _on_replay_last_point_button_pressed() -> void:
 		_refresh_replay_text("No completed point replay available")
 		return
 	_load_replay(sim.rally_replays[sim.rally_replays.size() - 1].get("replay", {}))
+	_update_court_from_replay()
 	_show_next_replay_frame()
 
 func _on_next_replay_frame_button_pressed() -> void:
@@ -235,6 +243,7 @@ func _show_next_replay_frame() -> void:
 
 	var frame: Dictionary = active_replay_frames[replay_frame_index]
 	_refresh_replay_text(_describe_replay_frame(frame))
+	court_mini_map.set_snapshot(frame)
 
 func _describe_replay_frame(frame: Dictionary) -> String:
 	var ball: Dictionary = frame.get("ball", {})
@@ -299,6 +308,20 @@ func _join_variant_list(values: Array) -> String:
 	for value in values:
 		parts.append(str(value))
 	return ", ".join(parts)
+
+func _update_court_from_replay() -> void:
+	if active_replay.is_empty():
+		court_mini_map.clear_snapshot()
+		return
+	var keyframes: Array = active_replay.get("keyframes", [])
+	if not keyframes.is_empty():
+		court_mini_map.set_snapshot(keyframes[0])
+		return
+	var frames: Array = active_replay.get("frames", [])
+	if not frames.is_empty():
+		court_mini_map.set_snapshot(frames[0])
+		return
+	court_mini_map.clear_snapshot()
 
 func _setup_strategy_ui() -> void:
 	strategy_option_maps["setter_system"] = _fill_option_button(
