@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bqfk3t626gtaa" path="res://_newhierarchy/simulation/simulation_scene.gd" id="1_dsvq6"]
 [ext_resource type="Texture2D" uid="uid://deh4jlm2ve8a" path="res://Models/makehumanTest_shoes05_diffuse.png" id="2_dsvq6"]
-[ext_resource type="Script" path="res://_newhierarchy/simulation/ui/CourtMiniMap.gd" id="3_jh7vy"]
+[ext_resource type="Script" uid="uid://ctr1x1n3flcr5" path="res://_newhierarchy/simulation/ui/CourtMiniMap.gd" id="3_jh7vy"]
 
 [node name="SimulationScene" type="Node2D" unique_id=1582641790]
 script = ExtResource("1_dsvq6")
@@ -213,14 +213,10 @@ size_flags_horizontal = 3
 [node name="CourtMiniMap" type="Control" parent="CanvasLayer/Control" unique_id=188501260]
 custom_minimum_size = Vector2(0, 180)
 layout_mode = 1
-anchors_preset = -1
 anchor_left = 0.03
 anchor_top = 0.78
 anchor_right = 0.97
 anchor_bottom = 0.98
 offset_bottom = -8.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-script = ExtResource("3_jh7vy")
 mouse_filter = 2
+script = ExtResource("3_jh7vy")

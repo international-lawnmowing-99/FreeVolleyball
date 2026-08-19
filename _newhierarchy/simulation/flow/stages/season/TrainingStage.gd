@@ -11,7 +11,7 @@ func run_training_block(team: TeamData, plan: TeamSeasonPlan) -> void:
 	schedule_weekly_training(team, plan)
 	train_skills(team)
 	train_physical_attributes(team)
-	mitigate_age_related_decline(team)
+	#mitigate_age_related_decline(team)
 	develop_team_plays(team)
 	build_connection_bonus(team)
 	log.log("training", "Training block completed.", team)
@@ -27,10 +27,10 @@ func train_skills(team: TeamData) -> void:
 func train_physical_attributes(team: TeamData) -> void:
 	log.log("training", "Improving physical attributes toward potential.", team)
 	# TODO: Train jump, speed, acceleration, and arm-swing power.
-
-func mitigate_age_related_decline(team: TeamData) -> void:
-	log.log("training", "Applying older-player physical maintenance plan.", team)
-	# TODO: Slow age-related decline from roughly age 28 onward with targeted physical work.
+#
+#func mitigate_age_related_decline(team: TeamData) -> void:
+	#log.log("training", "Applying older-player physical maintenance plan.", team)
+	## TODO: Slow age-related decline from roughly age 28 onward with targeted physical work.
 
 func develop_team_plays(team: TeamData) -> void:
 	log.log("training", "Developing new team plays and dummy-run patterns.", team)

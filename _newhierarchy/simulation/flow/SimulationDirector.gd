@@ -21,10 +21,14 @@ func _init(_log: SimulationEventLog = null) -> void:
 	season_planning = SeasonPlanningStage.new(log)
 	training = TrainingStage.new(log)
 	match_preparation = MatchPreparationStage.new(log)
-	load_tracking = LoadTrackingStage.new(log)
+
+	#these belong in the match sim
 	point_break = PointBreakStage.new(log)
 	set_review = SetReviewStage.new(log)
 	match_review = MatchReviewStage.new(log)
+	load_tracking = LoadTrackingStage.new(log)
+	#
+
 	player_condition = PlayerConditionStage.new(log)
 
 func generate_game_world(world: SimulationWorldState) -> void:

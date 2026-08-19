@@ -132,21 +132,35 @@ static func _plan_serve_phase(
 		return
 
 	if is_source_team:
-		var defensive_home: Vector3 = team_match_data.get_phase_position_for_player(athlete, "block", team_side)
+		var defensive_home: Vector3 = _defensive_target(team_match_data, athlete, team_side)
 		_apply_ground_plan(state, athlete, defensive_home, "serve", "serve_cover", "transition_to_defence", start_time, end_time)
 		return
 
-	var receive_target: Vector3 = team_match_data.get_phase_position_for_player(athlete, "receive", team_side)
 	var target_receiver_name: String = str(ctx.serve_target_receiver_name)
-	if target_receiver_name != "" and target_receiver_name == "%s %s" % [athlete.firstName, athlete.lastName]:
+	var player_name := "%s %s" % [athlete.firstName, athlete.lastName]
+	var is_target_receiver: bool = target_receiver_name != "" and target_receiver_name == player_name
+	var receive_target: Vector3
+	var movement_state := "receive_shape"
+	var movement_intent := "serve_receive_positioning"
+	if athlete.role == Enums.Role.Setter:
+		receive_target = _setter_window_target(team_match_data, athlete, team_side)
+		movement_state = "setter_release"
+		movement_intent = "beat_ball_to_window"
+	elif is_target_receiver:
 		receive_target = Vector3(team_side * abs(ctx.serve_target.x), 0.0, ctx.serve_target.z)
+		movement_state = "track_serve_target"
+		movement_intent = "receive_first_ball"
+	else:
+		receive_target = _receive_transition_target(team_match_data, athlete, team_side, "", Vector3.ZERO, {})
+		movement_state = "transition_shape"
+		movement_intent = "unfold_sideout_pattern"
 	_apply_ground_plan(
 		state,
 		athlete,
 		receive_target,
 		"serve",
-		"receive_shape" if target_receiver_name != "%s %s" % [athlete.firstName, athlete.lastName] else "track_serve_target",
-		"serve_receive_positioning",
+		movement_state,
+		movement_intent,
 		start_time,
 		end_time
 	)
@@ -169,13 +183,23 @@ static func _plan_receive_phase(
 		return
 
 	if is_source_team:
-		var transition_target: Vector3 = _transition_target(team_match_data, athlete, team_side, ctx.last_pass_target)
+		var transition_target: Vector3 = _receive_transition_target(
+			team_match_data,
+			athlete,
+			team_side,
+			ctx.last_pass_band,
+			ctx.last_pass_target,
+			ctx.chosen_set_option
+		)
 		var movement_state: String = "transition_to_set" if athlete.role == Enums.Role.Setter else "transition_to_attack"
-		var movement_intent: String = "setter_window" if athlete.role == Enums.Role.Setter else "approach_window"
+		var movement_intent: String = "setter_window" if athlete.role == Enums.Role.Setter else "attack_timing"
+		if athlete != ctx.chosen_set_option.get("attacker", null) and athlete.role != Enums.Role.Setter:
+			movement_state = "coverage_balance"
+			movement_intent = "preserve_transition_spacing"
 		_apply_ground_plan(state, athlete, transition_target, "receive", movement_state, movement_intent, start_time, end_time)
 		return
 
-	var defensive_target: Vector3 = team_match_data.get_phase_position_for_player(athlete, "block", team_side)
+	var defensive_target: Vector3 = _defensive_target(team_match_data, athlete, team_side)
 	_apply_ground_plan(state, athlete, defensive_target, "receive", "defensive_read", "read_sideout_shape", start_time, end_time)
 
 static func _plan_set_phase(
@@ -193,7 +217,7 @@ static func _plan_set_phase(
 		var chosen_attacker: AthleteStats = ctx.chosen_set_option.get("attacker", null)
 		var contact_position: Vector3 = ctx.chosen_set_option.get("contact_position", Vector3.ZERO)
 		if athlete == chosen_attacker and contact_position != Vector3.ZERO:
-			var runup_start: Vector3 = _attack_runup_start(contact_position, team_side, athlete)
+			var runup_start: Vector3 = _attack_runup_start(contact_position, team_side, athlete, team_match_data)
 			_apply_ground_plan(state, athlete, runup_start, "set", "approach_preparation", "attack_runup_start", start_time, end_time)
 			return
 
@@ -204,8 +228,8 @@ static func _plan_set_phase(
 			_apply_ground_plan(state, athlete, Vector3(set_origin.x, 0.0, set_origin.z), "set", "setting_window", "arrive_for_set", start_time, end_time)
 			return
 
-		var transition_target: Vector3 = _transition_target(team_match_data, athlete, team_side, ctx.last_pass_target)
-		_apply_ground_plan(state, athlete, transition_target, "set", "off_ball_adjust", "support_sideout", start_time, end_time)
+		var transition_target: Vector3 = _attack_cover_target(team_match_data, athlete, team_side, ctx.chosen_set_option)
+		_apply_ground_plan(state, athlete, transition_target, "set", "off_ball_adjust", "cover_for_attack", start_time, end_time)
 		return
 
 	var blocker_target: Vector3 = _block_plan_target(ctx, athlete, team_match_data, team_side)
@@ -226,7 +250,7 @@ static func _plan_attack_phase(
 ) -> void:
 	if is_source_team and athlete == ctx.chosen_set_option.get("attacker", null):
 		var contact_position: Vector3 = ctx.chosen_set_option.get("contact_position", Vector3.ZERO)
-		var geometry: Dictionary = _build_attack_geometry(state["position"], contact_position, team_side, athlete)
+		var geometry: Dictionary = _build_attack_geometry(state["position"], contact_position, team_side, athlete, team_match_data)
 		var recovery_position: Vector3 = team_match_data.get_phase_position_for_player(athlete, "receive", team_side)
 		_apply_jump_recovery_plan(
 			state,
@@ -246,7 +270,7 @@ static func _plan_attack_phase(
 		return
 
 	if is_source_team:
-		var cover_target: Vector3 = team_match_data.get_phase_position_for_player(athlete, "receive", team_side)
+		var cover_target: Vector3 = _attack_cover_target(team_match_data, athlete, team_side, ctx.chosen_set_option)
 		_apply_ground_plan(state, athlete, cover_target, "attack", "attack_cover", "cover_recycled_ball", start_time, end_time)
 		return
 
@@ -495,8 +519,8 @@ static func _build_serve_motion_plan(ctx: RallyState, athlete: AthleteStats, tea
 		"jump_height": max(float(athlete.verticalJump), 0.0)
 	}
 
-static func _build_attack_geometry(current_position: Vector3, contact_position: Vector3, team_side: float, athlete: AthleteStats) -> Dictionary:
-	var runup_start: Vector3 = _attack_runup_start(contact_position, team_side, athlete)
+static func _build_attack_geometry(current_position: Vector3, contact_position: Vector3, team_side: float, athlete: AthleteStats, team_match_data: TeamMatchData = null) -> Dictionary:
+	var runup_start: Vector3 = _attack_runup_start(contact_position, team_side, athlete, team_match_data)
 	var direction: Vector3 = (contact_position - runup_start)
 	direction.y = 0.0
 	if direction.length() <= 0.001:
@@ -520,9 +544,12 @@ static func _build_attack_geometry(current_position: Vector3, contact_position: 
 		"jump_height": max(float(athlete.verticalJump), 0.2)
 	}
 
-static func _attack_runup_start(contact_position: Vector3, team_side: float, athlete: AthleteStats) -> Vector3:
+static func _attack_runup_start(contact_position: Vector3, team_side: float, athlete: AthleteStats, team_match_data: TeamMatchData = null) -> Vector3:
 	if contact_position == Vector3.ZERO:
 		return Vector3(team_side * 3.2, 0.0, 0.0)
+	if team_match_data != null and team_match_data.team != null and team_match_data.team.teamStrategy != null:
+		var local_contact := Vector3(abs(contact_position.x), contact_position.y, contact_position.z)
+		return _local_to_world(team_match_data.team.teamStrategy.attack_runup_start_local(local_contact, athlete), team_side)
 	return Vector3(
 		contact_position.x + team_side * (3.0 + float(athlete.verticalJump) * 0.5),
 		0.0,
@@ -540,7 +567,48 @@ static func _transition_target(team_match_data: TeamMatchData, athlete: AthleteS
 	var x_sign: float = -1.0 if transition_base.x < 0.0 else 1.0
 	return Vector3(max(abs(transition_base.x), 0.8) * x_sign, 0.0, transition_base.z)
 
+static func _receive_transition_target(
+	team_match_data: TeamMatchData,
+	athlete: AthleteStats,
+	team_side: float,
+	pass_band: String,
+	pass_target: Vector3,
+	chosen_option: Dictionary
+) -> Vector3:
+	if team_match_data == null or team_match_data.team == null or team_match_data.team.teamStrategy == null:
+		return _transition_target(team_match_data, athlete, team_side, pass_target)
+	var local_target: Vector3 = team_match_data.team.teamStrategy.receive_transition_local(
+		team_match_data,
+		athlete,
+		pass_band,
+		pass_target,
+		chosen_option
+	)
+	return _local_to_world(local_target, team_side)
+
+static func _attack_cover_target(team_match_data: TeamMatchData, athlete: AthleteStats, team_side: float, chosen_option: Dictionary) -> Vector3:
+	if team_match_data == null:
+		return Vector3(team_side * 3.0, 0.0, 0.0)
+	if team_match_data.team == null or team_match_data.team.teamStrategy == null:
+		return team_match_data.get_phase_position_for_player(athlete, "receive", team_side)
+	var local_target: Vector3 = team_match_data.team.teamStrategy.attack_cover_local(athlete, chosen_option)
+	return _local_to_world(local_target, team_side)
+
+static func _setter_window_target(team_match_data: TeamMatchData, athlete: AthleteStats, team_side: float) -> Vector3:
+	if team_match_data != null and team_match_data.team != null and team_match_data.team.teamStrategy != null:
+		return team_match_data.team.teamStrategy.reception_target_for_side(team_side)
+	return team_match_data.get_phase_position_for_player(athlete, "set", team_side, athlete, true)
+
+static func _defensive_target(team_match_data: TeamMatchData, athlete: AthleteStats, team_side: float) -> Vector3:
+	if team_match_data == null or team_match_data.team == null or team_match_data.team.teamStrategy == null:
+		return team_match_data.get_phase_position_for_player(athlete, "block", team_side)
+	var local_target: Vector3 = team_match_data.team.teamStrategy.defensive_plan_local_target(athlete, {})
+	return _local_to_world(local_target, team_side)
+
 static func _block_plan_target(ctx: RallyState, athlete: AthleteStats, team_match_data: TeamMatchData, team_side: float) -> Vector3:
+	if team_match_data != null and team_match_data.team != null and team_match_data.team.teamStrategy != null:
+		var local_target: Vector3 = team_match_data.team.teamStrategy.defensive_plan_local_target(athlete, ctx.defensive_positioning_plan)
+		return _local_to_world(local_target, team_side)
 	for blocker_plan in ctx.defensive_positioning_plan.get("blockers", []):
 		if blocker_plan.get("athlete") == athlete:
 			return blocker_plan.get("start_position", team_match_data.get_phase_position_for_player(athlete, "block", team_side))
@@ -548,6 +616,9 @@ static func _block_plan_target(ctx: RallyState, athlete: AthleteStats, team_matc
 		if backcourt_plan.get("athlete") == athlete:
 			return backcourt_plan.get("target_position", team_match_data.get_phase_position_for_player(athlete, "block", team_side))
 	return team_match_data.get_phase_position_for_player(athlete, "block", team_side)
+
+static func _local_to_world(local_position: Vector3, team_side: float) -> Vector3:
+	return Vector3(abs(local_position.x) * team_side, local_position.y, local_position.z)
 
 static func _ensure_tracking_state(ctx: RallyState, team_match_data: TeamMatchData, athlete: AthleteStats, team_side: float) -> Dictionary:
 	var key: String = _tracking_key(team_match_data.team, team_match_data.player_key_for_athlete(athlete))

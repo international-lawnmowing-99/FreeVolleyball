@@ -36,7 +36,13 @@ func resolve() -> BlockOutcome:
 		return outcome
 
 	var support_factor: float = 1.0 + max(0.0, float(available_blockers.size() - 1)) * 0.18
-	var block_roll: float = rng.randf_range(1.0, max(actor.block * block_alignment * support_factor, 1.0))
+	var predicted_primary: Dictionary = ctx.defensive_set_read.get("predicted_primary", {})
+	var anticipated_correctly: bool = (
+		not predicted_primary.is_empty()
+		and predicted_primary.get("attacker") == actual_option.get("attacker")
+	)
+	var anticipation_bonus: float = 1.0 + (0.12 * float(ctx.defensive_set_read.get("scouting_confidence", 0.0)) if anticipated_correctly else 0.0)
+	var block_roll: float = rng.randf_range(1.0, max(actor.block * block_alignment * support_factor * anticipation_bonus, 1.0))
 	var attacking_athlete: AthleteStats = actual_option.get("attacker", null)
 	var attack_skill: float = float(ctx.chosen_set_option.get("spike_skill", attacking_athlete.spike if attacking_athlete != null else 1.0))
 	var attack_roll: float = rng.randf_range(1.0, max(attack_skill, 1.0))
@@ -48,6 +54,8 @@ func resolve() -> BlockOutcome:
 	outcome.metadata["attack_roll"] = attack_roll
 	outcome.metadata["block_roll"] = block_roll
 	outcome.metadata["support_factor"] = support_factor
+	outcome.metadata["anticipation_bonus"] = anticipation_bonus
+	outcome.metadata["anticipated_correctly"] = anticipated_correctly
 	outcome.metadata["lane_delta"] = lane_delta
 	outcome.metadata["primary_blocker_name"] = "%s %s" % [actor.firstName, actor.lastName]
 

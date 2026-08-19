@@ -150,49 +150,15 @@ func _sync_rotation_positions() -> void:
 		court_players[i].rotationPosition = i + 1
 
 func _phase_court_position(athlete: AthleteStats, phase: String, team_side: float, highlighted_player: AthleteStats, has_ball_control: bool) -> Vector3:
-	var rotation_position: int = int(clamp(athlete.rotationPosition, 1, 6))
-	var base_local: Vector3 = ROTATION_BASE_POSITIONS.get(rotation_position, Vector3(3.0, 0.0, 0.0))
-	var local: Vector3 = base_local
-	var is_highlighted: bool = athlete == highlighted_player
-	var is_front_row: bool = rotation_position >= 2 and rotation_position <= 4
-
-	match phase:
-		"serve":
-			if is_highlighted:
-				local = Vector3(4.9, 0.0, base_local.z)
-			else:
-				local.x = max(base_local.x - 0.45, 0.9)
-		"receive":
-			local.x = base_local.x + (0.4 if not is_front_row else 0.15)
-			if athlete.role == Enums.Role.Setter:
-				local = Vector3(1.2, 0.0, -0.6 if base_local.z < 0.0 else 0.6)
-			elif is_highlighted:
-				local = Vector3(3.6, 0.0, base_local.z)
-		"set":
-			if is_highlighted:
-				local = Vector3(0.85, 0.0, clamp(base_local.z * 0.3, -1.0, 1.0))
-			elif is_front_row:
-				local = Vector3(max(base_local.x - 0.55, 0.7), 0.0, base_local.z)
-			else:
-				local.x = base_local.x + 0.2
-		"attack":
-			if is_highlighted:
-				local = Vector3(0.55, 0.0, base_local.z)
-			elif is_front_row:
-				local = Vector3(max(base_local.x - 0.75, 0.6), 0.0, base_local.z * 0.9)
-			else:
-				local.x = base_local.x + 0.35
-		"block":
-			if is_front_row:
-				local = Vector3(0.35, 0.0, base_local.z * 0.7)
-			else:
-				local = Vector3(base_local.x + 0.2, 0.0, base_local.z * 0.9)
-			if is_highlighted:
-				local.x = 0.2
-
-	if not has_ball_control and phase in ["receive", "set", "attack"]:
-		local.x = min(local.x + 0.25, 4.4)
-
+	var local: Vector3 = ROTATION_BASE_POSITIONS.get(int(clamp(athlete.rotationPosition, 1, 6)), Vector3(3.0, 0.0, 0.0))
+	if team != null and team.teamStrategy != null:
+		local = team.teamStrategy.phase_local_target(
+			athlete,
+			self,
+			phase,
+			highlighted_player,
+			has_ball_control
+		)
 	return Vector3(local.x * team_side, local.y, local.z)
 
 func _serialize_player_context(

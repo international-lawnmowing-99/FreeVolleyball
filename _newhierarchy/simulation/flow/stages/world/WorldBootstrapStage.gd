@@ -13,9 +13,9 @@ func create_initial_world(world: SimulationWorldState) -> void:
 	for team in world.professional_teams:
 		assign_team_strategic_preferences(team)
 		negotiate_contracts(team, world.free_agents)
-		apply_international_player_limits(team)
-		finalize_roster(team)
-		allocate_team_investments(team)
+		#apply_international_player_limits(team)
+		#finalize_roster(team)
+		allocate_team_budget(team)
 	log.log("world", "Initial world creation completed.")
 
 func generate_professional_athletes(world: SimulationWorldState) -> void:
@@ -39,14 +39,14 @@ func negotiate_contracts(team: TeamData, free_agents: Array[AthleteData]) -> voi
 	# TODO: Track athlete happiness and future re-sign desire based on offer quality and promises kept.
 	# TODO: Move signed players from free_agents into the team roster.
 
-func apply_international_player_limits(team: TeamData) -> void:
-	log.log("world", "Applying international-player restrictions for league context.", team)
-	# TODO: Enforce league-specific foreign-player caps where applicable.
+#func apply_international_player_limits(team: TeamData) -> void:
+	#log.log("world", "Applying international-player restrictions for league context.", team)
+	## TODO: Enforce league-specific foreign-player caps where applicable.
 
-func finalize_roster(team: TeamData) -> void:
-	log.log("world", "Finalizing roster after negotiations.", team)
-	# TODO: Confirm final roster size, role balance, and depth chart.
+#func finalize_roster(team: TeamData) -> void:
+	#log.log("world", "Finalizing roster after negotiations.", team)
+	## TODO: Confirm final roster size, role balance, and depth chart.
 
-func allocate_team_investments(team: TeamData) -> void:
+func allocate_team_budget(team: TeamData) -> void:
 	log.log("world", "Allocating budget to training, facilities, and operations.", team)
 	# TODO: Decide budget split for training, facilities, staff, scouting, and other operating expenses.

@@ -20,8 +20,8 @@ const ONE_SETTER_REQUIREMENTS := {
 const TWO_SETTER_REQUIREMENTS := {
 	"setter": 2,
 	"middle": 2,
-	"outside": 1,
-	"opposite": 1
+	"outside": 2,
+	"opposite": 0
 }
 
 const ROLE_ATTRIBUTE_WEIGHTS := {
@@ -213,6 +213,76 @@ const DEFAULT_SERVE_AGGRESSION_WEIGHTS := {
 	"aggressive": 0.75
 }
 
+const ROTATION_BASE_POSITIONS := {
+	1: Vector3(4.2, 0.0, -3.0),
+	2: Vector3(1.4, 0.0, -3.0),
+	3: Vector3(1.1, 0.0, 0.0),
+	4: Vector3(1.4, 0.0, 3.0),
+	5: Vector3(4.2, 0.0, 3.0),
+	6: Vector3(4.0, 0.0, 0.0)
+}
+
+const DEFENSIVE_HOME_BY_ROTATION := {
+	1: Vector3(3.65, 0.0, -2.55),
+	2: Vector3(0.45, 0.0, -2.65),
+	3: Vector3(0.35, 0.0, 0.0),
+	4: Vector3(0.45, 0.0, 2.65),
+	5: Vector3(3.55, 0.0, 2.55),
+	6: Vector3(3.75, 0.0, 0.0)
+}
+
+const SERVE_DEFENCE_SETUP_BY_ROTATION := {
+	1: Vector3(3.95, 0.0, -2.15),
+	2: Vector3(0.85, 0.0, -2.05),
+	3: Vector3(0.75, 0.0, 0.0),
+	4: Vector3(0.85, 0.0, 2.05),
+	5: Vector3(3.75, 0.0, 2.15),
+	6: Vector3(3.55, 0.0, 0.0)
+}
+
+const ATTACK_TRANSITION_BY_ROLE := {
+	"outside_left": Vector3(2.35, 0.0, 3.55),
+	"outside_right": Vector3(2.35, 0.0, -3.55),
+	"middle": Vector3(1.75, 0.0, 0.0),
+	"opposite_front": Vector3(2.05, 0.0, -2.65),
+	"back_left": Vector3(3.35, 0.0, 1.6),
+	"back_middle": Vector3(3.45, 0.0, 0.0),
+	"back_right": Vector3(3.35, 0.0, -1.6)
+}
+
+const ATTACK_CONTACT_BY_ROLE := {
+	"outside_left": Vector3(0.55, 0.0, 4.05),
+	"outside_right": Vector3(0.55, 0.0, -4.05),
+	"middle": Vector3(0.45, 0.0, 0.0),
+	"opposite_front": Vector3(0.65, 0.0, -3.15),
+	"back_left": Vector3(2.75, 0.0, 2.4),
+	"back_middle": Vector3(2.95, 0.0, 0.0),
+	"back_right": Vector3(2.75, 0.0, -2.4)
+}
+
+const BLOCK_START_BY_ROLE := {
+	"left_front": Vector3(0.22, 0.0, 2.7),
+	"middle_front": Vector3(0.18, 0.0, 0.0),
+	"right_front": Vector3(0.22, 0.0, -2.7)
+}
+
+const BACKCOURT_DEFENCE_BY_ROTATION := {
+	1: Vector3(3.2, 0.0, -2.5),
+	5: Vector3(3.15, 0.0, 2.5),
+	6: Vector3(3.65, 0.0, 0.0)
+}
+
+const ATTACK_COVER_OFFSETS := {
+	"front_left": Vector3(1.25, 0.0, 0.95),
+	"front_middle": Vector3(1.05, 0.0, 0.0),
+	"front_right": Vector3(1.25, 0.0, -0.95),
+	"back_left": Vector3(2.55, 0.0, 1.45),
+	"back_middle": Vector3(2.8, 0.0, 0.0),
+	"back_right": Vector3(2.55, 0.0, -1.45)
+}
+
+@export var reception_target_local: Vector3 = Vector3(0.85, 0.0, 0.0)
+
 func _init(_teamData:TeamData = null) -> void:
 	teamData = _teamData
 
@@ -227,6 +297,136 @@ func choose_starting_rotation() -> int:
 			best_rotation = rotation
 
 	return best_rotation
+
+func phase_local_target(
+	athlete: AthleteStats,
+	team_match_data: TeamMatchData,
+	phase: String,
+	highlighted_player: AthleteStats = null,
+	has_ball_control: bool = false
+) -> Vector3:
+	if athlete == null:
+		return Vector3.ZERO
+
+	var rotation_position: int = int(clamp(athlete.rotationPosition, 1, 6))
+	var base_local: Vector3 = ROTATION_BASE_POSITIONS.get(rotation_position, Vector3(3.0, 0.0, 0.0))
+	var is_highlighted: bool = athlete == highlighted_player
+	var is_front_row: bool = rotation_position >= 2 and rotation_position <= 4
+
+	match phase:
+		"serve":
+			if is_highlighted:
+				return Vector3(4.95, 0.0, clamp(base_local.z, -3.6, 3.6))
+			return _serve_defence_setup_local(athlete)
+		"receive":
+			return _receive_layout_local(team_match_data, athlete)
+		"set":
+			if athlete.role == Enums.Role.Setter:
+				return _setter_window_local(team_match_data, athlete)
+			if is_highlighted:
+				return _setter_window_local(team_match_data, athlete)
+			return _attack_transition_local(athlete)
+		"attack":
+			if is_highlighted:
+				return _attack_contact_local(athlete)
+			return _attack_cover_base_local(athlete)
+		"block":
+			if is_front_row:
+				return _block_start_local(athlete)
+			return _backcourt_defence_local(athlete)
+
+	if not has_ball_control and phase in ["receive", "set", "attack"]:
+		base_local.x = min(base_local.x + 0.25, 4.35)
+	return base_local
+
+func reception_target_for_side(team_side: float) -> Vector3:
+	return Vector3(abs(reception_target_local.x) * team_side, reception_target_local.y, reception_target_local.z)
+
+func receive_transition_local(
+	team_match_data: TeamMatchData,
+	athlete: AthleteStats,
+	pass_band: String = "",
+	pass_target_world: Vector3 = Vector3.ZERO,
+	chosen_option: Dictionary = {}
+) -> Vector3:
+	if athlete == null:
+		return Vector3.ZERO
+	if athlete.role == Enums.Role.Setter:
+		return _setter_window_local(team_match_data, athlete)
+	if athlete.role == Enums.Role.Libero:
+		var libero_base := _backcourt_defence_local(athlete)
+		return _shade_toward_ball(libero_base, _localize_world_position(pass_target_world), 0.18, 3.75)
+
+	var transition := _attack_transition_local(athlete)
+	var pass_target_local := _localize_world_position(pass_target_world)
+	match pass_band:
+		"good":
+			transition = _shade_toward_ball(transition, pass_target_local, 0.12, 3.55)
+		"poor", "error":
+			transition.x = max(transition.x, 2.55 if athlete.rotationPosition >= 2 and athlete.rotationPosition <= 4 else 3.2)
+			transition = _shade_toward_ball(transition, pass_target_local, 0.28, 3.85)
+
+	if not chosen_option.is_empty():
+		var contact_local := _localize_world_position(chosen_option.get("contact_position", Vector3.ZERO))
+		var runup_start := attack_runup_start_local(contact_local, athlete)
+		var approach_time := attack_approach_time(transition, runup_start, athlete)
+		var set_time := float(chosen_option.get("set_time", 0.0))
+		if contact_local != Vector3.ZERO and set_time <= approach_time + 0.18:
+			return runup_start
+
+	return transition
+
+func attack_runup_start_local(contact_local: Vector3, athlete: AthleteStats) -> Vector3:
+	if athlete == null:
+		return contact_local
+	if contact_local == Vector3.ZERO:
+		return _attack_transition_local(athlete)
+	return Vector3(
+		min(max(contact_local.x + 2.2 + float(athlete.verticalJump) * 0.45, 2.2), 4.15),
+		0.0,
+		clamp(contact_local.z, -4.15, 4.15)
+	)
+
+func attack_approach_time(from_local: Vector3, runup_start_local: Vector3, athlete: AthleteStats) -> float:
+	if athlete == null:
+		return 0.0
+	var speed: float = max(float(athlete.speed), 0.5)
+	var jump_buffer: float = 0.24 + max(float(athlete.verticalJump), 0.0) * 0.12
+	return from_local.distance_to(runup_start_local) / speed + jump_buffer
+
+func attack_cover_local(athlete: AthleteStats, chosen_option: Dictionary) -> Vector3:
+	if athlete == null:
+		return Vector3.ZERO
+	if chosen_option.is_empty():
+		return _attack_cover_base_local(athlete)
+
+	var contact_local := _localize_world_position(chosen_option.get("contact_position", Vector3.ZERO))
+	if contact_local == Vector3.ZERO:
+		return _attack_cover_base_local(athlete)
+
+	var cover_key := _cover_role_bucket(athlete)
+	var offset: Vector3 = ATTACK_COVER_OFFSETS.get(cover_key, ATTACK_COVER_OFFSETS["back_middle"])
+	var cover_target := Vector3(
+		min(contact_local.x + offset.x, 4.1),
+		0.0,
+		clamp(contact_local.z + offset.z, -4.15, 4.15)
+	)
+	if athlete.rotationPosition >= 2 and athlete.rotationPosition <= 4:
+		cover_target.x = max(cover_target.x, 1.35)
+	return cover_target
+
+func defensive_plan_local_target(athlete: AthleteStats, positioning_plan: Dictionary) -> Vector3:
+	if athlete == null:
+		return Vector3.ZERO
+	for blocker_plan_variant in positioning_plan.get("blockers", []):
+		var blocker_plan: Dictionary = blocker_plan_variant
+		if blocker_plan.get("athlete") == athlete:
+			return _localize_world_position(blocker_plan.get("start_position", _block_start_local(athlete)))
+	for backcourt_plan_variant in positioning_plan.get("backcourt", []):
+		var backcourt_plan: Dictionary = backcourt_plan_variant
+		if backcourt_plan.get("athlete") == athlete:
+			return _localize_world_position(backcourt_plan.get("target_position", _backcourt_defence_local(athlete)))
+	return _block_start_local(athlete) if athlete.rotationPosition >= 2 and athlete.rotationPosition <= 4 else _backcourt_defence_local(athlete)
 
 func score_rotation(rotation:int) -> float:
 	var six: Array[AthleteStats] = teamData.courtPlayers if not teamData.courtPlayers.is_empty() else teamData.matchPlayers.slice(0, 6)
@@ -501,6 +701,154 @@ func _clamp_serve_target(target: Vector3) -> Vector3:
 		0.0,
 		clamp(target.z, float(SERVE_TARGET_BOUNDS["min_z"]), float(SERVE_TARGET_BOUNDS["max_z"]))
 	)
+
+func _serve_defence_setup_local(athlete: AthleteStats) -> Vector3:
+	return SERVE_DEFENCE_SETUP_BY_ROTATION.get(int(clamp(athlete.rotationPosition, 1, 6)), Vector3(3.0, 0.0, 0.0))
+
+func defensive_home_local(athlete: AthleteStats) -> Vector3:
+	return DEFENSIVE_HOME_BY_ROTATION.get(int(clamp(athlete.rotationPosition, 1, 6)), Vector3(3.2, 0.0, 0.0))
+
+func _receive_layout_local(team_match_data: TeamMatchData, athlete: AthleteStats) -> Vector3:
+	var setter_rotation: int = _setter_rotation_position(team_match_data)
+	var rotation_index: int = int(clamp(setter_rotation - 1, 0, defaultReceiveRotations.size() - 1))
+	var layout: Array = defaultReceiveRotations[rotation_index]
+	var athlete_index: int = int(clamp(athlete.rotationPosition - 1, 0, layout.size() - 1))
+	if athlete_index < layout.size():
+		return layout[athlete_index]
+	return ROTATION_BASE_POSITIONS.get(int(clamp(athlete.rotationPosition, 1, 6)), Vector3(3.0, 0.0, 0.0))
+
+func _setter_rotation_position(team_match_data: TeamMatchData) -> int:
+	var setter: AthleteStats = _current_setter_for_match_data(team_match_data)
+	if setter != null:
+		return int(clamp(setter.rotationPosition, 1, 6))
+	return 1
+
+func _current_setter_for_match_data(team_match_data: TeamMatchData) -> AthleteStats:
+	var players: Array[AthleteStats] = _resolve_players(team_match_data)
+	for athlete in players:
+		if athlete.role == Enums.Role.Setter:
+			return athlete
+	return _best_player_for_role(players, "setter")
+
+func _setter_window_local(team_match_data: TeamMatchData, athlete: AthleteStats) -> Vector3:
+	var window := reception_target_local
+	var setter_rotation: int = _setter_rotation_position(team_match_data)
+	var z_bias: float = 0.0
+	if setter_rotation in [1, 2, 6]:
+		z_bias = -0.55
+	elif setter_rotation in [4, 5]:
+		z_bias = 0.55
+	elif athlete != null and int(athlete.rotationPosition) <= 3:
+		z_bias = -0.25
+	else:
+		z_bias = 0.25
+	return Vector3(window.x, 0.0, z_bias)
+
+func _attack_transition_local(athlete: AthleteStats) -> Vector3:
+	match _attack_role_bucket(athlete):
+		"outside_left":
+			return ATTACK_TRANSITION_BY_ROLE["outside_left"]
+		"outside_right":
+			return ATTACK_TRANSITION_BY_ROLE["outside_right"]
+		"middle":
+			return ATTACK_TRANSITION_BY_ROLE["middle"]
+		"opposite_front":
+			return ATTACK_TRANSITION_BY_ROLE["opposite_front"]
+		"back_left":
+			return ATTACK_TRANSITION_BY_ROLE["back_left"]
+		"back_right":
+			return ATTACK_TRANSITION_BY_ROLE["back_right"]
+		_:
+			return ATTACK_TRANSITION_BY_ROLE["back_middle"]
+
+func _attack_contact_local(athlete: AthleteStats) -> Vector3:
+	match _attack_role_bucket(athlete):
+		"outside_left":
+			return ATTACK_CONTACT_BY_ROLE["outside_left"]
+		"outside_right":
+			return ATTACK_CONTACT_BY_ROLE["outside_right"]
+		"middle":
+			return ATTACK_CONTACT_BY_ROLE["middle"]
+		"opposite_front":
+			return ATTACK_CONTACT_BY_ROLE["opposite_front"]
+		"back_left":
+			return ATTACK_CONTACT_BY_ROLE["back_left"]
+		"back_right":
+			return ATTACK_CONTACT_BY_ROLE["back_right"]
+		_:
+			return ATTACK_CONTACT_BY_ROLE["back_middle"]
+
+func _attack_cover_base_local(athlete: AthleteStats) -> Vector3:
+	var transition := _attack_transition_local(athlete)
+	var cover_x: float = max(transition.x, 1.85)
+	if int(athlete.rotationPosition) < 2 or int(athlete.rotationPosition) > 4:
+		cover_x = max(transition.x, 3.15)
+	return Vector3(cover_x, 0.0, transition.z * 0.65)
+
+func _block_start_local(athlete: AthleteStats) -> Vector3:
+	var rotation_position: int = int(clamp(athlete.rotationPosition, 1, 6))
+	match rotation_position:
+		4:
+			return BLOCK_START_BY_ROLE["left_front"]
+		3:
+			return BLOCK_START_BY_ROLE["middle_front"]
+		2:
+			return BLOCK_START_BY_ROLE["right_front"]
+		_:
+			return defensive_home_local(athlete)
+
+func _backcourt_defence_local(athlete: AthleteStats) -> Vector3:
+	return BACKCOURT_DEFENCE_BY_ROTATION.get(int(clamp(athlete.rotationPosition, 1, 6)), defensive_home_local(athlete))
+
+func _shade_toward_ball(base_position: Vector3, ball_local: Vector3, weight: float, max_x: float) -> Vector3:
+	if ball_local == Vector3.ZERO:
+		return base_position
+	return Vector3(
+		min(lerp(base_position.x, clamp(ball_local.x, 0.6, max_x), weight), max_x),
+		0.0,
+		lerp(base_position.z, clamp(ball_local.z, -4.1, 4.1), weight)
+	)
+
+func _localize_world_position(world_position: Vector3) -> Vector3:
+	return Vector3(abs(world_position.x), world_position.y, world_position.z)
+
+func _attack_role_bucket(athlete: AthleteStats) -> String:
+	if athlete == null:
+		return "back_middle"
+
+	var rotation_position: int = int(clamp(athlete.rotationPosition, 1, 6))
+	if athlete.role == Enums.Role.Middle:
+		return "middle"
+	if rotation_position >= 2 and rotation_position <= 4:
+		if athlete.role == Enums.Role.Opposite or rotation_position == 2:
+			return "opposite_front"
+		return "outside_left" if rotation_position == 4 or athlete.role == Enums.Role.Outside else "outside_right"
+
+	match rotation_position:
+		5:
+			return "back_left"
+		1:
+			return "back_right"
+		_:
+			return "back_middle"
+
+func _cover_role_bucket(athlete: AthleteStats) -> String:
+	if athlete == null:
+		return "back_middle"
+	var rotation_position: int = int(clamp(athlete.rotationPosition, 1, 6))
+	if rotation_position >= 2 and rotation_position <= 4:
+		if rotation_position == 4:
+			return "front_left"
+		if rotation_position == 3:
+			return "front_middle"
+		return "front_right"
+	match rotation_position:
+		5:
+			return "back_left"
+		1:
+			return "back_right"
+		_:
+			return "back_middle"
 
 func _weighted_string_choice(weights: Dictionary, _rng: RandomNumberGenerator) -> String:
 	var total: float = 0.0

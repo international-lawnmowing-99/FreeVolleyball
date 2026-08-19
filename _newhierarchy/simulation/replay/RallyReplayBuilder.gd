@@ -7,16 +7,13 @@ const DEFAULT_BALL_CONTACT_HEIGHT: float = 2.6
 static func build(ctx: RallyState) -> Dictionary:
 	var replay: Dictionary = ctx.event_log.serialize_for_replay()
 	var keyframes: Array[Dictionary] = _build_keyframes(ctx, replay)
-	var frames: Array[Dictionary] = _build_interpolated_frames(keyframes)
 
 	replay["keyframes"] = keyframes
-	replay["frames"] = frames
 	replay["summary"] = {
 		"rally_number": ctx.rally_number,
 		"serving_team_name": ctx.serving_team.teamName if ctx.serving_team != null else "",
 		"receiving_team_name": ctx.receiving_team.teamName if ctx.receiving_team != null else "",
 		"point_winner_name": ctx.point_winner.teamName if ctx.point_winner != null else "",
-		"frame_count": frames.size(),
 		"keyframe_count": keyframes.size(),
 		"touch_count": ctx.touch_count,
 		"has_stub_data": true
@@ -161,108 +158,6 @@ static func _build_terminal_stub_keyframe(ctx: RallyState) -> Dictionary:
 			"terminal_replay_stub"
 		]
 	}
-
-static func _build_interpolated_frames(keyframes: Array[Dictionary]) -> Array[Dictionary]:
-	var frames: Array[Dictionary] = []
-	if keyframes.is_empty():
-		return frames
-
-	var first_frame: Dictionary = keyframes[0].duplicate(true)
-	first_frame["frame_index"] = 0
-	frames.append(first_frame)
-
-	for i in range(1, keyframes.size()):
-		var previous_frame: Dictionary = keyframes[i - 1]
-		var target_frame: Dictionary = keyframes[i]
-		var duration: float = max(float(target_frame.get("timestamp", 0.0)) - float(previous_frame.get("timestamp", 0.0)), REPLAY_FRAME_STEP)
-		var steps: int = max(1, int(ceil(duration / REPLAY_FRAME_STEP)))
-
-		for step in range(1, steps + 1):
-			var weight: float = float(step) / float(steps)
-			var frame: Dictionary = _interpolate_frame(previous_frame, target_frame, weight)
-			frame["frame_index"] = frames.size()
-			frame["is_keyframe"] = step == steps
-			frame["keyframe_index"] = int(target_frame.get("keyframe_index", i)) if step == steps else -1
-			frames.append(frame)
-
-	return frames
-
-static func _interpolate_frame(previous_frame: Dictionary, target_frame: Dictionary, weight: float) -> Dictionary:
-	var interpolated_ball := {
-		"position": _lerp_vector3_dict(
-			previous_frame.get("ball", {}).get("position", _vector3_to_dict(Vector3.ZERO)),
-			target_frame.get("ball", {}).get("position", _vector3_to_dict(Vector3.ZERO)),
-			weight
-		),
-		"velocity": _lerp_vector3_dict(
-			previous_frame.get("ball", {}).get("velocity", _vector3_to_dict(Vector3.ZERO)),
-			target_frame.get("ball", {}).get("velocity", _vector3_to_dict(Vector3.ZERO)),
-			weight
-		),
-		"topspin": lerpf(
-			float(previous_frame.get("ball", {}).get("topspin", 0.0)),
-			float(target_frame.get("ball", {}).get("topspin", 0.0)),
-			weight
-		)
-	}
-
-	return {
-		"timestamp": lerpf(float(previous_frame.get("timestamp", 0.0)), float(target_frame.get("timestamp", 0.0)), weight),
-		"phase": str(target_frame.get("phase", previous_frame.get("phase", ""))),
-		"source": "interpolated_stub",
-		"ball": interpolated_ball,
-		"teams": _interpolate_teams(previous_frame.get("teams", []), target_frame.get("teams", []), weight),
-		"focus": target_frame.get("focus", {}).duplicate(true),
-		"stub_flags": [
-			"interpolated_ball_path",
-			"interpolated_player_path",
-			"player_animation_assignment_stub"
-		]
-	}
-
-static func _interpolate_teams(previous_teams: Array, target_teams: Array, weight: float) -> Array[Dictionary]:
-	var team_count: int = max(previous_teams.size(), target_teams.size())
-	var teams: Array[Dictionary] = []
-
-	for i in range(team_count):
-		var previous_team: Dictionary = previous_teams[i] if i < previous_teams.size() else {}
-		var target_team: Dictionary = target_teams[i] if i < target_teams.size() else previous_team
-		if previous_team.is_empty():
-			teams.append(target_team.duplicate(true))
-			continue
-		if target_team.is_empty():
-			teams.append(previous_team.duplicate(true))
-			continue
-
-		var interpolated_team: Dictionary = target_team.duplicate(true)
-		var previous_players: Array = previous_team.get("players", [])
-		var target_players: Array = target_team.get("players", [])
-		var players: Array[Dictionary] = []
-		var player_count: int = max(previous_players.size(), target_players.size())
-
-		for player_index in range(player_count):
-			var previous_player: Dictionary = previous_players[player_index] if player_index < previous_players.size() else {}
-			var target_player: Dictionary = target_players[player_index] if player_index < target_players.size() else previous_player
-			if previous_player.is_empty():
-				players.append(target_player.duplicate(true))
-				continue
-			if target_player.is_empty():
-				players.append(previous_player.duplicate(true))
-				continue
-
-			var player: Dictionary = target_player.duplicate(true)
-			player["position"] = _lerp_vector3_dict(
-				previous_player.get("position", _vector3_to_dict(Vector3.ZERO)),
-				target_player.get("position", _vector3_to_dict(Vector3.ZERO)),
-				weight
-			)
-			player["animation"] = _select_animation(previous_player.get("animation", {}), target_player.get("animation", {}), weight)
-			players.append(player)
-
-		interpolated_team["players"] = players
-		teams.append(interpolated_team)
-
-	return teams
 
 static func _select_animation(previous_animation: Dictionary, target_animation: Dictionary, weight: float) -> Dictionary:
 	if weight < 0.5 and not previous_animation.is_empty():

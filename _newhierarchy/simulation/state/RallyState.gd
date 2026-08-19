@@ -1,5 +1,6 @@
 class_name RallyState
 extends RefCounted
+const Enums = preload("res://Scripts/World/Enums.gd")
 
 const RallyReplayBuilder = preload("res://_newhierarchy/simulation/replay/RallyReplayBuilder.gd")
 
@@ -13,6 +14,7 @@ var receiving_team_match_data: TeamMatchData
 var current_team: TeamData
 
 var rally_number: int
+var next_phase:Enums.Phase = Enums.Phase.PreMatch
 
 var touch_count: int = 0
 var serve_execution: float = 0.5
@@ -31,8 +33,6 @@ var phase_context: Dictionary = {}
 var phase_context_history: Array[Dictionary] = []
 var step_messages: Array[String] = []
 var last_pass_target: Vector3 = Vector3.ZERO
-var last_pass_band: String = ""
-var last_pass_quality: float = 0.0
 var set_options: Array[Dictionary] = []
 var chosen_set_option: Dictionary = {}
 var defensive_set_read: Dictionary = {}

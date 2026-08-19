@@ -11,7 +11,6 @@ var workflow_log: SimulationEventLog
 const COURT_HALF_LENGTH: float = 4.5
 const NET_HEIGHT: float = 2.43
 const CONTACT_HEIGHT_MARGIN: float = 0.35
-const TOUCH_TIME_STEP: float = 0.35
 
 func _init(_rng, _workflow_log: SimulationEventLog = null) -> void:
 	rng = _rng
@@ -19,35 +18,44 @@ func _init(_rng, _workflow_log: SimulationEventLog = null) -> void:
 
 func Resolve(ctx: RallyState) -> RallyState:
 	PlayerMovementPlanner.initialize_rally_tracking(ctx)
-	_log_phase(ctx, "serve", "Choosing serving strategy for this rally.", ctx.serving_team, ctx.server)
+	_log_phase(ctx, "pre serve", "Choosing serving strategy for this rally.", ctx.serving_team, ctx.server)
 	_choose_serving_strategy(ctx)
+	_log_phase(ctx, "pre serve - receiving team", "Choosing serve-receive strategy for this rally.", ctx.serving_team, ctx.server)
+	_choose_receiving_strategy(ctx)
+
 	_log_phase(ctx, "receive", "Choosing receive-side attacking strategy.", ctx.receiving_team)
-	var current_result = _resolve_serve(ctx)
+	var current_result:RallyState = _resolve_serve(ctx)
 
 	while not current_result.is_terminal:
-		_log_phase(ctx, "receive", "Choosing serve receiver.", current_result.defender)
-		current_result = _resolve_pass(current_result)
-		if current_result.is_terminal: break
+		match current_result.next_phase:
+			Enums.Phase.Receive:
 
-		_assess_set_phase(current_result)
-		_log_phase(ctx, "pass", "Passing team assessing setter access and attack timing.", current_result.defender)
-		_log_phase(ctx, "pass", "Defending team assessing likely set threats.", current_result.attacker)
-		_log_phase(ctx, "set", "Choosing set option.", current_result.defender)
-		current_result = _resolve_set(current_result)
-		if current_result.is_terminal: break
+				_log_phase(ctx, "receive", "Executing receive. Choosing serve receiver/resolving outcome", current_result.defender)
+				current_result = _resolve_pass(current_result)
+				if current_result.is_terminal: break
 
-		_log_phase(ctx, "attack", "Attackers reacting to the actual set trajectory.", current_result.defender)
-		_log_phase(ctx, "defence", "Defending team reacting to set.", current_result.attacker)
-		_log_phase(ctx, "attack", "Attacker assessing defence and attack type.", current_result.defender)
-		current_result = _resolve_attack(current_result)
-		if current_result.is_terminal: break
+			Enums.Phase.Set:
+				if current_result.chosen_set_option.is_empty():
+					_assess_set_phase(current_result)
+				_log_phase(ctx, "pass", "Defending team assessing likely set threats.", current_result.attacker)
+				_log_phase(ctx, "set", "Choosing set option.", current_result.defender)
+				current_result = _resolve_set(current_result)
+				if current_result.is_terminal: break
 
-		current_result = _resolve_block(current_result)
-		if current_result.is_terminal: break
+			Enums.Phase.Attack:
+				_log_phase(ctx, "attack", "Attackers reacting to the actual set trajectory.", current_result.defender)
+				_log_phase(ctx, "defence", "Defending team reacting to set.", current_result.attacker)
+				_log_phase(ctx, "attack", "Attacker assessing defence and attack type.", current_result.defender)
+				current_result = _resolve_attack(current_result)
+				if current_result.is_terminal: break
 
-		_log_phase(ctx, "rally", "Resolving continuation after block phase.")
-		current_result = _resolve_defence_phase(current_result)
-		if current_result.is_terminal: break
+			Enums.Phase.Block:
+				current_result = _resolve_block(current_result)
+				if current_result.is_terminal: break
+
+				_log_phase(ctx, "rally", "Resolving continuation after block phase.")
+				current_result = _resolve_defence_phase(current_result)
+				if current_result.is_terminal: break
 
 	_log_rally_end(current_result)
 	return current_result
@@ -70,6 +78,11 @@ func _resolve_serve(ctx: RallyState) -> RallyState:
 	return ctx
 
 func _resolve_pass(ctx: RallyState) -> RallyState:
+
+	_log_phase(ctx, "prePass", "TODO: consult strategy to decide if attacking (dog-shotting the serve), or setting off the serve is a desirable option")
+	if true: #how do we decide this?
+		ctx.next_phase = Enums.Phase.Set
+
 	var passer = ctx.defender.teamStrategy.choose_passer(ctx.defender_match_data, rng)
 	_log_phase(ctx, "pass", "Executing pass.", ctx.defender, passer)
 	var attempt := PassAttempt.new(passer, ctx, rng)
@@ -81,12 +94,18 @@ func _resolve_pass(ctx: RallyState) -> RallyState:
 	ctx.last_pass_target = _vector3_from_metadata(outcome.metadata.get("reception_target", {}), ctx.last_pass_target)
 	ctx.last_pass_band = str(outcome.metadata.get("pass_band", ""))
 	ctx.last_pass_quality = float(outcome.pass_quality)
+	_assess_set_phase(ctx)
 	_record_ball_touch(ctx, outcome, "receive", ctx.defender, ctx.attacker)
 	_log_action(ctx, "RECEIVE", outcome, ctx.defender)
 
 	return ctx
 
 func _resolve_set(ctx:RallyState) -> RallyState:
+
+	_log_phase(ctx, "prePass", "TODO: consult strategy to decide if attacking (dumping) is a desirable option")
+	if true:
+		ctx.next_phase = Enums.Phase.Attack
+
 	var setter = ctx.defender.teamStrategy.choose_setter(ctx.defender_match_data, rng)
 	if ctx.chosen_set_option.is_empty():
 		_assess_set_phase(ctx, setter)
@@ -102,6 +121,7 @@ func _resolve_set(ctx:RallyState) -> RallyState:
 	return ctx
 
 func _resolve_attack(ctx:RallyState) -> RallyState:
+	ctx.next_phase = Enums.Phase.Block
 	var attacker: AthleteStats = ctx.chosen_set_option.get("attacker", null)
 	if attacker == null:
 		attacker = ctx.defender.teamStrategy.choose_attacker(ctx.defender_match_data, rng)
@@ -171,7 +191,6 @@ func _record_ball_touch(ctx: RallyState, outcome: AttemptOutcome, phase: String,
 	ctx.ball_position = snapshot["position"]
 	ctx.ball_velocity = snapshot["velocity"]
 	ctx.ball_topspin = snapshot["topspin"]
-	ctx.ball_time = snapshot["timestamp"]
 	PlayerMovementPlanner.advance_phase(ctx, phase, source_team, target_team, outcome, ctx.ball_time)
 	var phase_context: Dictionary = _build_phase_context_snapshot(ctx, phase, outcome, source_team, target_team)
 	ctx.phase_context = phase_context
@@ -224,7 +243,6 @@ func _build_ball_snapshot(ctx: RallyState, outcome: AttemptOutcome, phase: Strin
 		"position": position,
 		"velocity": velocity,
 		"topspin": topspin,
-		"timestamp": ctx.ball_time + TOUCH_TIME_STEP,
 		"result": str(outcome.metadata.get("result", ""))
 	}
 
@@ -232,7 +250,6 @@ func _projected_ball_snapshot(ctx: RallyState, outcome: AttemptOutcome, phase: S
 	var position: Vector3 = ctx.ball_position
 	var velocity: Vector3 = _vector3_from_metadata(outcome.metadata.get("projected_velocity", {}), Vector3.ZERO)
 	var target_position: Vector3 = _vector3_from_metadata(outcome.metadata.get("projected_target_position", {}), position)
-	var flight_time: float = float(outcome.metadata.get("projected_flight_time", TOUCH_TIME_STEP))
 	var topspin: float = float(outcome.metadata.get("projected_topspin", _phase_topspin(phase, outcome)))
 
 	return {
@@ -243,7 +260,6 @@ func _projected_ball_snapshot(ctx: RallyState, outcome: AttemptOutcome, phase: S
 		"position": target_position,
 		"velocity": velocity,
 		"topspin": topspin,
-		"timestamp": ctx.ball_time + max(flight_time, 0.01),
 		"result": str(outcome.metadata.get("result", ""))
 	}
 
@@ -426,6 +442,7 @@ func _assess_set_phase(ctx: RallyState, provided_setter: AthleteStats = null) ->
 		setter,
 		ctx.defender.teamStrategy
 	)
+	ctx.set_options = _refine_set_options_for_pass(ctx.set_options, ctx.last_pass_band, ctx.last_pass_quality)
 	ctx.chosen_set_option = SetPlayAnalysis.choose_attacking_option(ctx.set_options, ctx.defender.teamStrategy, rng)
 	ctx.defensive_set_read = SetPlayAnalysis.build_defensive_read(
 		ctx.set_options,
@@ -490,6 +507,48 @@ func _reset_sideout_assessment(ctx: RallyState) -> void:
 	ctx.available_blockers.clear()
 	ctx.available_blocker_plans.clear()
 
+func _refine_set_options_for_pass(options: Array[Dictionary], pass_band: String, pass_quality: float) -> Array[Dictionary]:
+	if options.is_empty():
+		return options
+
+	var difficulty_limit: float = 1.0
+	var back_row_penalty: float = 1.0
+	match pass_band:
+		"perfect":
+			difficulty_limit = 1.0
+		"good":
+			difficulty_limit = 0.82
+			back_row_penalty = 0.92
+		"poor":
+			difficulty_limit = 0.62
+			back_row_penalty = 0.62
+		_:
+			difficulty_limit = 0.48
+			back_row_penalty = 0.5
+
+	var refined: Array[Dictionary] = []
+	for option_variant in options:
+		var option: Dictionary = option_variant.duplicate(true)
+		var difficulty: float = float(option.get("set_difficulty", 1.0))
+		var is_back_row: bool = str(option.get("court_bucket", "")) == "back"
+		if difficulty > difficulty_limit and refined.size() >= 2:
+			continue
+		var availability: float = clamp(1.1 - difficulty + pass_quality * 0.55, 0.12, 1.35)
+		if is_back_row:
+			availability *= back_row_penalty
+		option["availability_weight"] = availability
+		option["tendency_weight"] = max(float(option.get("tendency_weight", 1.0)) * availability, 0.01)
+		refined.append(option)
+
+	if refined.is_empty():
+		var fallback: Array[Dictionary] = options.duplicate(true)
+		fallback.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+			return float(a.get("set_difficulty", 1.0)) < float(b.get("set_difficulty", 1.0))
+		)
+		return fallback.slice(0, min(2, fallback.size()))
+
+	return refined
+
 func _vector3_from_metadata(serialized: Variant, fallback: Vector3 = Vector3.ZERO) -> Vector3:
 	if typeof(serialized) != TYPE_DICTIONARY:
 		return fallback
@@ -514,9 +573,17 @@ func _serialize_ball_snapshot(snapshot: Dictionary) -> Dictionary:
 		"result": snapshot["result"]
 	}
 
+
+
+func _choose_receiving_strategy(ctx: RallyState) -> void:
+	if ctx.receiving_team == null or ctx.receiving_team.teamStrategy == null:
+		return
+	_emit_step(ctx, "To do: have the receiving team decide on a serve reception layout")
+
 func _choose_serving_strategy(ctx: RallyState) -> void:
 	if ctx.serving_team == null or ctx.serving_team.teamStrategy == null:
 		return
+
 
 	if ctx.server == null and ctx.serving_team_match_data != null:
 		ctx.server = ctx.serving_team_match_data.get_server()

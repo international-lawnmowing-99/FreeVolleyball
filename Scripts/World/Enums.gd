@@ -1,5 +1,18 @@
 extends Node
 
+enum Phase {
+	PreMatch,
+	PreSet,
+	PreServe,
+	Serve,
+	Receive,
+	Set,
+	Attack,
+	Block,
+	CelebrateOrCommiserate
+}
+
+
 enum ClubOrInternational {
 NotSelected,
 Club,
