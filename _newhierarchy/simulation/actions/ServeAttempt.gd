@@ -54,11 +54,11 @@ func resolve() -> ServeOutcome:
 		outcome.service_error = true
 		outcome.terminal = true
 		outcome.point_winner = ctx.defender
-		outcome.metadata["result"] = "service_error"
+		#outcome.metadata["result"] = "service_error"
 	else:
 		outcome.success = true
 		outcome.terminal = false
-		outcome.metadata["result"] = "in_play"
+		#outcome.metadata["result"] = "in_play"
 
 	return outcome
 

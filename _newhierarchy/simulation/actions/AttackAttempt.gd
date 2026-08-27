@@ -17,10 +17,10 @@ func resolve() -> AttackOutcome:
 
 	if outcome.success:
 		outcome.terminal = false
-		outcome.metadata["result"] = "attack_in_play"
+		#outcome.metadata["result"] = "attack_in_play"
 	else:
 		outcome.terminal = true
 		outcome.point_winner = ctx.defender
-		outcome.metadata["result"] = "attack_error"
+		#outcome.metadata["result"] = "attack_error"
 
 	return outcome

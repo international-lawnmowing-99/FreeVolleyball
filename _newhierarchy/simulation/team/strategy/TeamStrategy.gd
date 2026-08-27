@@ -345,7 +345,6 @@ func reception_target_for_side(team_side: float) -> Vector3:
 func receive_transition_local(
 	team_match_data: TeamMatchData,
 	athlete: AthleteStats,
-	pass_band: String = "",
 	pass_target_world: Vector3 = Vector3.ZERO,
 	chosen_option: Dictionary = {}
 ) -> Vector3:
@@ -359,12 +358,12 @@ func receive_transition_local(
 
 	var transition := _attack_transition_local(athlete)
 	var pass_target_local := _localize_world_position(pass_target_world)
-	match pass_band:
-		"good":
-			transition = _shade_toward_ball(transition, pass_target_local, 0.12, 3.55)
-		"poor", "error":
-			transition.x = max(transition.x, 2.55 if athlete.rotationPosition >= 2 and athlete.rotationPosition <= 4 else 3.2)
-			transition = _shade_toward_ball(transition, pass_target_local, 0.28, 3.85)
+	#match pass_band:
+		#"good":
+			#transition = _shade_toward_ball(transition, pass_target_local, 0.12, 3.55)
+		#"poor", "error":
+			#transition.x = max(transition.x, 2.55 if athlete.rotationPosition >= 2 and athlete.rotationPosition <= 4 else 3.2)
+			#transition = _shade_toward_ball(transition, pass_target_local, 0.28, 3.85)
 
 	if not chosen_option.is_empty():
 		var contact_local := _localize_world_position(chosen_option.get("contact_position", Vector3.ZERO))

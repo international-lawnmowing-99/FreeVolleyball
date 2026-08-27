@@ -75,6 +75,7 @@ func _resolve_serve(ctx: RallyState) -> RallyState:
 	_record_ball_touch(ctx, outcome, "serve", ctx.serving_team, ctx.defender)
 	_log_action(ctx, "SERVE", outcome, ctx.serving_team)
 
+	ctx.next_phase = Enums.Phase.Receive
 	return ctx
 
 func _resolve_pass(ctx: RallyState) -> RallyState:
@@ -92,8 +93,6 @@ func _resolve_pass(ctx: RallyState) -> RallyState:
 	_apply_outcome(ctx, outcome)
 	ctx.event_log.add(outcome)
 	ctx.last_pass_target = _vector3_from_metadata(outcome.metadata.get("reception_target", {}), ctx.last_pass_target)
-	ctx.last_pass_band = str(outcome.metadata.get("pass_band", ""))
-	ctx.last_pass_quality = float(outcome.pass_quality)
 	_assess_set_phase(ctx)
 	_record_ball_touch(ctx, outcome, "receive", ctx.defender, ctx.attacker)
 	_log_action(ctx, "RECEIVE", outcome, ctx.defender)
@@ -569,10 +568,8 @@ func _serialize_ball_snapshot(snapshot: Dictionary) -> Dictionary:
 		"position": {"x": position.x, "y": position.y, "z": position.z},
 		"velocity": {"x": velocity.x, "y": velocity.y, "z": velocity.z},
 		"topspin": snapshot["topspin"],
-		"timestamp": snapshot["timestamp"],
-		"result": snapshot["result"]
+		#"timestamp": snapshot["timestamp"],
 	}
-
 
 
 func _choose_receiving_strategy(ctx: RallyState) -> void:

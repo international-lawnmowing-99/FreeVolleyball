@@ -187,7 +187,6 @@ static func _plan_receive_phase(
 			team_match_data,
 			athlete,
 			team_side,
-			ctx.last_pass_band,
 			ctx.last_pass_target,
 			ctx.chosen_set_option
 		)
@@ -571,7 +570,6 @@ static func _receive_transition_target(
 	team_match_data: TeamMatchData,
 	athlete: AthleteStats,
 	team_side: float,
-	pass_band: String,
 	pass_target: Vector3,
 	chosen_option: Dictionary
 ) -> Vector3:
@@ -580,7 +578,6 @@ static func _receive_transition_target(
 	var local_target: Vector3 = team_match_data.team.teamStrategy.receive_transition_local(
 		team_match_data,
 		athlete,
-		pass_band,
 		pass_target,
 		chosen_option
 	)

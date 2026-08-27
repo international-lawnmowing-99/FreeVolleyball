@@ -38,7 +38,7 @@ func resolve() -> SetOutcome:
 		outcome.point_winner = ctx.attacker
 		set_result = "setting_error"
 		set_quality = "error"
-		outcome.metadata["result"] = set_result
+		#outcome.metadata["result"] = set_result
 		outcome.metadata["set_quality"] = set_quality
 		return outcome
 
@@ -50,7 +50,7 @@ func resolve() -> SetOutcome:
 			outcome.point_winner = ctx.attacker
 			set_result = "setting_error"
 			set_quality = "error"
-			outcome.metadata["result"] = set_result
+			#outcome.metadata["result"] = set_result
 			outcome.metadata["set_quality"] = set_quality
 			return outcome
 		actual_target = desired_target
@@ -64,7 +64,7 @@ func resolve() -> SetOutcome:
 			outcome.point_winner = ctx.attacker
 			set_result = "setting_error"
 			set_quality = "error"
-			outcome.metadata["result"] = set_result
+			#outcome.metadata["result"] = set_result
 			outcome.metadata["set_quality"] = set_quality
 			return outcome
 		actual_target = adjusted_target
@@ -76,7 +76,7 @@ func resolve() -> SetOutcome:
 	outcome.metadata["projected_target_position"] = _serialize_vector3(actual_target)
 	outcome.metadata["projected_flight_time"] = _time_till_ball_at_position(set_origin, projected_velocity, actual_target)
 	outcome.metadata["set_quality"] = set_quality
-	outcome.metadata["result"] = set_result
+	#outcome.metadata["result"] = set_result
 
 	# Carry the old project behavior forward by letting an imperfect set move the attack contact.
 	ctx.chosen_set_option["contact_position"] = actual_target

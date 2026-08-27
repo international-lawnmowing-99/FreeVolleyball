@@ -31,7 +31,7 @@ func resolve() -> BlockOutcome:
 		outcome.success = false
 		outcome.terminal = true
 		outcome.point_winner = ctx.defender
-		outcome.metadata["result"] = "attack_scores"
+		#outcome.metadata["result"] = "attack_scores"
 		outcome.metadata["reason"] = "no_reachable_blocker"
 		return outcome
 
@@ -63,15 +63,15 @@ func resolve() -> BlockOutcome:
 		outcome.success = false
 		outcome.terminal = true
 		outcome.point_winner = ctx.defender
-		outcome.metadata["result"] = "attack_scores"
+		#outcome.metadata["result"] = "attack_scores"
 	elif block_roll > attack_roll * (1.0 + deflect_gradient):
 		outcome.success = true
 		outcome.terminal = true
 		outcome.point_winner = ctx.defender
-		outcome.metadata["result"] = "stuff_block"
+		#outcome.metadata["result"] = "stuff_block"
 	else:
 		outcome.success = true
 		outcome.terminal = false
-		outcome.metadata["result"] = "soft_touch_continues"
+		#outcome.metadata["result"] = "soft_touch_continues"
 
 	return outcome

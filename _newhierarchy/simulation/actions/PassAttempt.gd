@@ -12,7 +12,6 @@ func resolve() -> AttemptOutcome:
 	var reception_target: Vector3
 	var ball_max_height: float
 	var result_velocity: Vector3 = Vector3.ZERO
-	var pass_band: String = "error"
 
 	outcome.actor = actor
 	outcome.metadata["action"] = "receive"
@@ -22,26 +21,26 @@ func resolve() -> AttemptOutcome:
 	outcome.metadata["incoming_ball"] = _serialize_ball_state(ctx.ball_position, ctx.ball_velocity, ctx.ball_topspin)
 
 	if roll_off_difference >= 19.0:
-		pass_band = "perfect"
+		#pass_band = "perfect"
 		reception_target = _perfect_pass_target()
 		ball_max_height = _perfect_pass_max_height(reception_target)
 		if ball_max_height > 38.0:
-			pass_band = "good"
+			#pass_band = "good"
 			reception_target = _good_pass_target()
 			ball_max_height = _standard_pass_max_height(reception_target)
 		outcome.pass_quality = 1.0
 	elif roll_off_difference >= -10.0:
-		pass_band = "good"
+		#pass_band = "good"
 		reception_target = _good_pass_target()
 		ball_max_height = _standard_pass_max_height(reception_target)
 		outcome.pass_quality = 0.75
 	elif roll_off_difference >= -50.0:
-		pass_band = "poor"
+		#pass_band = "poor"
 		reception_target = _poor_pass_target()
 		ball_max_height = _standard_pass_max_height(reception_target)
 		outcome.pass_quality = 0.4
 	else:
-		pass_band = "error"
+		#pass_band = "error"
 		var shank_result: Dictionary = _shank_pass_result()
 		reception_target = shank_result["target"]
 		ball_max_height = float(shank_result["ball_max_height"])
@@ -51,17 +50,14 @@ func resolve() -> AttemptOutcome:
 	if result_velocity == Vector3.ZERO:
 		result_velocity = _find_well_behaved_parabola(ctx.ball_position, reception_target, ball_max_height)
 
-	outcome.success = pass_band != "error"
+	outcome.success = outcome.pass_quality > 0.1
 	outcome.terminal = false
-	outcome.metadata["pass_band"] = pass_band
-	outcome.metadata["result"] = _result_for_pass_band(pass_band)
 	outcome.metadata["reception_target"] = _serialize_vector3(reception_target)
 	outcome.metadata["projected_target_position"] = _serialize_vector3(reception_target)
 	outcome.metadata["ball_max_height"] = ball_max_height
 	outcome.metadata["projected_velocity"] = _serialize_vector3(result_velocity)
 	outcome.metadata["projected_topspin"] = PASS_TOPSPIN
 	outcome.metadata["projected_flight_time"] = _time_till_ball_at_position(ctx.ball_position, result_velocity, reception_target)
-	outcome.metadata["pass_description"] = _description_for_pass_band(pass_band)
 
 	return outcome
 
