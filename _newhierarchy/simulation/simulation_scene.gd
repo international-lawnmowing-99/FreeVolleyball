@@ -23,7 +23,6 @@ const TeamStrategyScript = preload("res://_newhierarchy/simulation/team/strategy
 @onready var outside_set_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/OutsideSetRow/OutsideSetOption
 @onready var scouting_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/ScoutingRow/ScoutingOption
 @onready var block_commit_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/BlockCommitRow/BlockCommitOption
-@onready var backcourt_shift_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/BackcourtShiftRow/BackcourtShiftOption
 @onready var court_mini_map: CourtMiniMap = $CanvasLayer/Control/CourtMiniMap
 
 var sim: MatchSimulation
@@ -391,14 +390,6 @@ func _setup_strategy_ui() -> void:
 			{"label": "Hard Commit", "value": 1.35}
 		]
 	)
-	strategy_option_maps["backcourt_shift"] = _fill_option_button(
-		backcourt_shift_option,
-		[
-			{"label": "Hold Base", "value": 0.7},
-			{"label": "Balanced", "value": 1.0},
-			{"label": "Aggressive Shift", "value": 1.35}
-		]
-	)
 
 	setter_system_option.item_selected.connect(_on_setter_system_selected)
 	fixed_setter_option.item_selected.connect(_on_fixed_setter_selected)
@@ -408,7 +399,6 @@ func _setup_strategy_ui() -> void:
 	outside_set_option.item_selected.connect(_on_outside_set_selected)
 	scouting_option.item_selected.connect(_on_scouting_selected)
 	block_commit_option.item_selected.connect(_on_block_commit_selected)
-	backcourt_shift_option.item_selected.connect(_on_backcourt_shift_selected)
 
 func _fill_option_button(button: OptionButton, entries: Array) -> Array:
 	button.clear()
@@ -427,7 +417,6 @@ func _refresh_strategy_ui() -> void:
 	outside_set_option.disabled = not has_strategy
 	scouting_option.disabled = not has_strategy
 	block_commit_option.disabled = not has_strategy
-	backcourt_shift_option.disabled = not has_strategy
 
 	if not has_strategy:
 		strategy_summary_label.text = "Generate world to inspect Team Alpha's strategy."
@@ -441,7 +430,6 @@ func _refresh_strategy_ui() -> void:
 	_select_option_for_value(outside_set_option, strategy_option_maps["outside"], strategy.prefer_outside_sets)
 	_select_option_for_value(scouting_option, strategy_option_maps["scouting"], strategy.opponent_setter_scouting_budget)
 	_select_option_for_value(block_commit_option, strategy_option_maps["block_commit"], strategy.block_commit_tendency)
-	_select_option_for_value(backcourt_shift_option, strategy_option_maps["backcourt_shift"], strategy.backcourt_shift_tendency)
 	fixed_setter_option.disabled = strategy.preferred_setter_system != TeamStrategyScript.SetterSystem.FIXED_POSITION_SETTER
 
 	strategy_summary_label.text = _describe_alpha_strategy(strategy)

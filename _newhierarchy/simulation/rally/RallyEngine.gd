@@ -23,7 +23,6 @@ func Resolve(ctx: RallyState) -> RallyState:
 	_log_phase(ctx, "pre serve - receiving team", "Choosing serve-receive strategy for this rally.", ctx.serving_team, ctx.server)
 	_choose_receiving_strategy(ctx)
 
-	_log_phase(ctx, "receive", "Choosing receive-side attacking strategy.", ctx.receiving_team)
 	var current_result:RallyState = _resolve_serve(ctx)
 
 	while not current_result.is_terminal:
@@ -441,7 +440,7 @@ func _assess_set_phase(ctx: RallyState, provided_setter: AthleteStats = null) ->
 		setter,
 		ctx.defender.teamStrategy
 	)
-	ctx.set_options = _refine_set_options_for_pass(ctx.set_options, ctx.last_pass_band, ctx.last_pass_quality)
+	ctx.set_options = _refine_set_options_for_pass(ctx.set_options)
 	ctx.chosen_set_option = SetPlayAnalysis.choose_attacking_option(ctx.set_options, ctx.defender.teamStrategy, rng)
 	ctx.defensive_set_read = SetPlayAnalysis.build_defensive_read(
 		ctx.set_options,
@@ -464,9 +463,8 @@ func _set_assessment_summary(ctx: RallyState) -> String:
 	if ctx.chosen_set_option.is_empty():
 		return "[Rally %d] SET READ | no viable set options found after %s pass" % [ctx.rally_number, ctx.last_pass_band]
 
-	return "[Rally %d] SET READ | %s pass -> %s selected (difficulty=%.2f, time=%.2fs, lane=%s)" % [
+	return "[Rally %d] SET READ | > %s selected (difficulty=%.2f, time=%.2fs, lane=%s)" % [
 		ctx.rally_number,
-		ctx.last_pass_band,
 		str(ctx.chosen_set_option.get("attacker_name", "")),
 		float(ctx.chosen_set_option.get("set_difficulty", 0.0)),
 		float(ctx.chosen_set_option.get("set_time", 0.0)),
@@ -496,8 +494,6 @@ func _defensive_read_summary(ctx: RallyState) -> String:
 
 func _reset_sideout_assessment(ctx: RallyState) -> void:
 	ctx.last_pass_target = Vector3.ZERO
-	ctx.last_pass_band = ""
-	ctx.last_pass_quality = 0.0
 	ctx.set_options.clear()
 	ctx.chosen_set_option = {}
 	ctx.defensive_set_read = {}
@@ -506,24 +502,13 @@ func _reset_sideout_assessment(ctx: RallyState) -> void:
 	ctx.available_blockers.clear()
 	ctx.available_blocker_plans.clear()
 
-func _refine_set_options_for_pass(options: Array[Dictionary], pass_band: String, pass_quality: float) -> Array[Dictionary]:
+func _refine_set_options_for_pass(options: Array[Dictionary]) -> Array[Dictionary]:
 	if options.is_empty():
 		return options
 
 	var difficulty_limit: float = 1.0
 	var back_row_penalty: float = 1.0
-	match pass_band:
-		"perfect":
-			difficulty_limit = 1.0
-		"good":
-			difficulty_limit = 0.82
-			back_row_penalty = 0.92
-		"poor":
-			difficulty_limit = 0.62
-			back_row_penalty = 0.62
-		_:
-			difficulty_limit = 0.48
-			back_row_penalty = 0.5
+
 
 	var refined: Array[Dictionary] = []
 	for option_variant in options:
@@ -532,7 +517,7 @@ func _refine_set_options_for_pass(options: Array[Dictionary], pass_band: String,
 		var is_back_row: bool = str(option.get("court_bucket", "")) == "back"
 		if difficulty > difficulty_limit and refined.size() >= 2:
 			continue
-		var availability: float = clamp(1.1 - difficulty + pass_quality * 0.55, 0.12, 1.35)
+		var availability: float = clamp(1.1 - difficulty, 0.12, 1.35)
 		if is_back_row:
 			availability *= back_row_penalty
 		option["availability_weight"] = availability

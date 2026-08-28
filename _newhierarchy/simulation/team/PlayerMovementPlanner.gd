@@ -151,7 +151,7 @@ static func _plan_serve_phase(
 		movement_state = "track_serve_target"
 		movement_intent = "receive_first_ball"
 	else:
-		receive_target = _receive_transition_target(team_match_data, athlete, team_side, "", Vector3.ZERO, {})
+		receive_target = _receive_transition_target(team_match_data, athlete, team_side, Vector3.ZERO, {})
 		movement_state = "transition_shape"
 		movement_intent = "unfold_sideout_pattern"
 	_apply_ground_plan(

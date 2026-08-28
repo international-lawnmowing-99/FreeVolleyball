@@ -80,6 +80,8 @@ anchor_left = 0.36
 anchor_top = 0.03
 anchor_right = 0.69
 anchor_bottom = 0.74
+offset_left = 408.8
+offset_right = 408.80017
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control/StrategyPanel" unique_id=68300214]
 layout_mode = 2

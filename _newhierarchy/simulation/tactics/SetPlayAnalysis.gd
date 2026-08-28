@@ -130,10 +130,8 @@ static func build_defensive_positioning_plan(
 		return {}
 
 	var block_commit: float = 1.0
-	var backcourt_shift: float = 1.0
 	if defending_strategy != null:
 		block_commit = defending_strategy.block_commit_tendency
-		backcourt_shift = defending_strategy.backcourt_shift_tendency
 
 	var threat_center_z: float = _weighted_average_z(weighted_options, "threat_weight")
 	var threat_spread: float = _weighted_z_spread(weighted_options, "threat_weight", threat_center_z)
@@ -168,7 +166,6 @@ static func build_defensive_positioning_plan(
 					best_primary = assignment
 			sorted_front_row.append(assignment)
 		else:
-			var shifted_z_back: float = lerp(base_position.z, threat_center_z, clamp(backcourt_shift * 0.45, 0.0, 0.85))
 			backcourt_positions.append({
 				"athlete": athlete,
 				"athlete_name": _athlete_name(athlete),

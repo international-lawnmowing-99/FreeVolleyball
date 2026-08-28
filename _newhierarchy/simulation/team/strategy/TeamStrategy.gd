@@ -108,7 +108,6 @@ const ROLE_POOL_LIMITS := {
 @export_range(0.2, 2.5) var prefer_outside_sets: float = 1.0
 @export_range(0.0, 1.0) var opponent_setter_scouting_budget: float = 0.35
 @export_range(0.3, 1.7) var block_commit_tendency: float = 1.0
-@export_range(0.3, 1.7) var backcourt_shift_tendency: float = 1.0
 
 @export var defaultReceiveRotations =  [
 	[#setter in 1
