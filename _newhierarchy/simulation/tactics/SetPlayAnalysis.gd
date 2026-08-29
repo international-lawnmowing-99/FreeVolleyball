@@ -133,12 +133,8 @@ static func build_defensive_positioning_plan(
 	if defending_strategy != null:
 		block_commit = defending_strategy.block_commit_tendency
 
-	var threat_center_z: float = _weighted_average_z(weighted_options, "threat_weight")
-	var threat_spread: float = _weighted_z_spread(weighted_options, "threat_weight", threat_center_z)
 	var blocker_positions: Array[Dictionary] = []
 	var backcourt_positions: Array[Dictionary] = []
-	var best_primary: Dictionary = {}
-	var best_primary_fit: float = -INF
 	var sorted_front_row: Array[Dictionary] = []
 
 	for athlete in defending_match_data.court_players:
@@ -146,11 +142,9 @@ static func build_defensive_positioning_plan(
 		var is_front_row: bool = athlete.rotationPosition >= 2 and athlete.rotationPosition <= 4
 		if is_front_row:
 			var role_pull: float = 1.0 if athlete.role == Enums.Role.Middle else 0.72
-			var shifted_z: float = lerp(base_position.z, threat_center_z, clamp(block_commit * role_pull * 0.55, 0.0, 0.95))
 			var assignment: Dictionary = {
 				"athlete": athlete,
 				"athlete_name": _athlete_name(athlete),
-				"start_position": Vector3(base_position.x, base_position.y, shifted_z),
 				"base_position": base_position,
 				"block_role_pull": role_pull
 			}
@@ -159,20 +153,13 @@ static func build_defensive_positioning_plan(
 			var predicted_target: Dictionary = defensive_read.get("predicted_primary", {})
 			if not predicted_target.is_empty():
 				var predicted_contact: Vector3 = predicted_target.get("contact_position", Vector3.ZERO)
-				var fit: float = 1.0 / max(abs(shifted_z - predicted_contact.z), 0.35)
-				fit *= max(float(athlete.block), 10.0)
-				if fit > best_primary_fit:
-					best_primary_fit = fit
-					best_primary = assignment
+
 			sorted_front_row.append(assignment)
 		else:
 			backcourt_positions.append({
 				"athlete": athlete,
 				"athlete_name": _athlete_name(athlete),
 				"base_position": base_position,
-				"target_position": Vector3(base_position.x, base_position.y, shifted_z_back),
-				"move_distance": abs(shifted_z_back - base_position.z),
-				"should_move": abs(shifted_z_back - base_position.z) > 0.2 and threat_spread < 2.1
 			})
 
 	sorted_front_row.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
@@ -181,11 +168,8 @@ static func build_defensive_positioning_plan(
 	var lane_assignments := _build_lane_assignments(sorted_front_row)
 
 	return {
-		"threat_center_z": threat_center_z,
-		"threat_spread": threat_spread,
 		"blockers": blocker_positions,
 		"backcourt": backcourt_positions,
-		"primary_blocker": best_primary,
 		"lane_assignments": lane_assignments
 	}
 
@@ -387,29 +371,7 @@ static func _weighted_option_choice(options: Array[Dictionary], weight_key: Stri
 
 	return options[0]
 
-static func _weighted_average_z(options: Array, weight_key: String) -> float:
-	var total: float = 0.0
-	var weighted: float = 0.0
-	for option in options:
-		var contact_position: Vector3 = option.get("contact_position", Vector3.ZERO)
-		var weight: float = max(0.0, float(option.get(weight_key, 0.0)))
-		total += weight
-		weighted += contact_position.z * weight
-	if total <= 0.0:
-		return 0.0
-	return weighted / total
 
-static func _weighted_z_spread(options: Array, weight_key: String, center_z: float) -> float:
-	var total: float = 0.0
-	var weighted: float = 0.0
-	for option in options:
-		var contact_position: Vector3 = option.get("contact_position", Vector3.ZERO)
-		var weight: float = max(0.0, float(option.get(weight_key, 0.0)))
-		total += weight
-		weighted += abs(contact_position.z - center_z) * weight
-	if total <= 0.0:
-		return 0.0
-	return weighted / total
 
 static func _build_lane_assignments(sorted_front_row: Array[Dictionary]) -> Dictionary:
 	var lane_assignments := {

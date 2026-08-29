@@ -474,10 +474,9 @@ func _describe_alpha_strategy(strategy) -> String:
 		strategy.prefer_middle_sets,
 		strategy.prefer_outside_sets
 	])
-	lines.append("Scout %.2f | block commit %.2f | backcourt shift %.2f" % [
+	lines.append("Scout %.2f | block commit %.2f" % [
 		strategy.opponent_setter_scouting_budget,
 		strategy.block_commit_tendency,
-		strategy.backcourt_shift_tendency
 	])
 	return "\n".join(lines)
 
