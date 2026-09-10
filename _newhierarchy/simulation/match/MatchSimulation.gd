@@ -12,6 +12,8 @@ var score: Score
 var serving_team: TeamData
 var team_a_match_data: TeamMatchData
 var team_b_match_data: TeamMatchData
+var team_a_initial_side: float = -1.0
+var team_a_fifth_set_side: float = 0.0
 var rally_number: int = 0
 var match_over: bool = false
 var rally_replays: Array[Dictionary] = []
@@ -38,9 +40,12 @@ func _init(_team_a:TeamData, _team_b:TeamData, _seed: int = -1, _workflow_log: S
 		rng.randomize()
 
 	team_a_match_data = TeamMatchData.new(team_a)
+	team_a_match_data.team_slot = "a"
 	team_b_match_data = TeamMatchData.new(team_b)
+	team_b_match_data.team_slot = "b"
 	rally_engine = RallyEngine.new(rng, workflow_log)
 
+	team_a_initial_side = -1.0 if rng.randf() < 0.5 else 1.0
 	serving_team = team_a if rng.randf() < 0.5 else team_b
 
 
@@ -149,6 +154,15 @@ func _play_rally() -> Dictionary:
 
 func _create_rally_context() -> RallyState:
 	var state := RallyState.new()
+	state.team_a = team_a
+	state.team_b = team_b
+	state.set_number = score.previous_set_scores.size() + 1
+	state.team_a_points = int(score.points.get(team_a, 0))
+	state.team_b_points = int(score.points.get(team_b, 0))
+	state.team_a_initial_side = team_a_initial_side
+	if state.set_number == 5 and team_a_fifth_set_side == 0.0:
+		team_a_fifth_set_side = -1.0 if rng.randf() < 0.5 else 1.0
+	state.team_a_fifth_set_side = team_a_fifth_set_side
 	var serving_match_data: TeamMatchData = _team_match_data_for(serving_team)
 	var receiving_team: TeamData = team_b if serving_team == team_a else team_a
 	var receiving_match_data: TeamMatchData = _team_match_data_for(receiving_team)
@@ -207,7 +221,10 @@ func _prepare_pending_rally() -> bool:
 	pending_rally_steps = rally_result.step_messages.duplicate()
 	if start_message != "":
 		pending_rally_steps.push_front(start_message)
-	pending_court_snapshots = _build_pending_court_snapshots(rally_result)
+	pending_court_snapshots = _snapshots_for_rally_steps(
+		_build_pending_court_snapshots(rally_result),
+		pending_rally_steps.size()
+	)
 	pending_court_snapshot_index = -1
 	pending_rally_result = {
 		"rally_number": rally_number,
@@ -293,16 +310,38 @@ func _build_pending_court_snapshots(rally_result: RallyState) -> Array[Dictionar
 				0.0
 			)
 		)
+	var setup_ball_position := {"x": -4.7, "y": 2.6, "z": 0.0}
+	if not setup_snapshot["teams"].is_empty():
+		for player_data in setup_snapshot["teams"][0].get("players", []):
+			var internal_state: Dictionary = player_data.get("internal_state", {})
+			if bool(internal_state.get("is_server", false)):
+				setup_ball_position = player_data.get("position", {}).duplicate(true)
+				setup_ball_position["y"] = 2.6
+				break
+		setup_snapshot["ball_state"] = {"position": setup_ball_position}
 	snapshots.append(setup_snapshot)
 
 	for phase_context in rally_result.phase_context_history:
 		snapshots.append({
 			"phase": str(phase_context.get("phase", "")),
 			"timestamp": float(phase_context.get("timestamp", 0.0)),
+			"ball_state": phase_context.get("ball_state", {}).duplicate(true),
 			"teams": phase_context.get("teams", []).duplicate(true)
 		})
 
 	return snapshots
+
+func _snapshots_for_rally_steps(raw_snapshots: Array[Dictionary], step_count: int) -> Array[Dictionary]:
+	if raw_snapshots.is_empty() or step_count <= 0:
+		return []
+	if step_count == 1:
+		return [raw_snapshots[0].duplicate(true)]
+
+	var aligned: Array[Dictionary] = []
+	for step_index in range(step_count):
+		var raw_index := roundi(float(step_index) * float(raw_snapshots.size() - 1) / float(step_count - 1))
+		aligned.append(raw_snapshots[raw_index].duplicate(true))
+	return aligned
 
 func create_save_data() -> MatchSaveData:
 	var save := MatchSaveData.new()

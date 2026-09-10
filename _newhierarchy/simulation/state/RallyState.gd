@@ -7,6 +7,13 @@ const RallyReplayBuilder = preload("res://_newhierarchy/simulation/replay/RallyR
 var event_log: RallyEventLog = RallyEventLog.new()
 
 var server:AthleteStats
+var team_a: TeamData
+var team_b: TeamData
+var set_number: int = 1
+var team_a_points: int = 0
+var team_b_points: int = 0
+var team_a_initial_side: float = -1.0
+var team_a_fifth_set_side: float = 0.0
 var serving_team: TeamData
 var receiving_team: TeamData
 var serving_team_match_data: TeamMatchData
@@ -52,6 +59,21 @@ var defender: TeamData
 var attacker_match_data: TeamMatchData
 var defender_match_data: TeamMatchData
 var rally_over: bool = false
+
+func court_side_for(team: TeamData) -> float:
+	var team_a_side: float = team_a_initial_side
+	if set_number >= 2 and set_number <= 4 and set_number % 2 == 0:
+		team_a_side *= -1.0
+	elif set_number >= 5:
+		team_a_side = team_a_fifth_set_side if team_a_fifth_set_side != 0.0 else team_a_initial_side
+		if max(team_a_points, team_b_points) >= 8:
+			team_a_side *= -1.0
+
+	if team == team_a:
+		return team_a_side
+	if team == team_b:
+		return -team_a_side
+	return 1.0
 
 func build_replay_data() -> Dictionary:
 	return RallyReplayBuilder.build(self)

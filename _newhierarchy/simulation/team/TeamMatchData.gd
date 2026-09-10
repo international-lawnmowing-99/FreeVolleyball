@@ -2,6 +2,7 @@ class_name TeamMatchData
 extends RefCounted
 
 var team: TeamData
+var team_slot: String
 var court_players: Array[AthleteStats]
 var bench_players: Array[AthleteStats]
 var sideout_rotations: int = 0
@@ -138,8 +139,7 @@ func build_phase_context(
 
 	return {
 		"team_name": team.teamName,
-		"side_sign": team_side,
-		"side_label": "left" if team_side < 0.0 else "right",
+		"team_slot": team_slot,
 		"phase": phase,
 		"sideout_rotations": sideout_rotations,
 		"players": players

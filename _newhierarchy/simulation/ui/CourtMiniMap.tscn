@@ -1,0 +1,361 @@
+[gd_scene format=3 uid="uid://bgtr3yrgj0bdo"]
+
+[ext_resource type="Script" uid="uid://ctr1x1n3flcr5" path="res://_newhierarchy/simulation/ui/CourtMiniMap.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
+bg_color = Color(0.035, 0.055, 0.075, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.42, 0.46, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_court"]
+bg_color = Color(0.08, 0.35, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.75, 0.82, 0.86, 0.75)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_card"]
+bg_color = Color(0.04, 0.08, 0.12, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.75, 0.82, 0.86, 0.75)
+
+[node name="CourtMiniMap" type="Control" unique_id=792957180]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Panel" type="Panel" parent="." unique_id=556296519]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="Title" type="Label" parent="Panel" unique_id=128312611]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.01
+anchor_right = 0.98
+anchor_bottom = 0.07
+theme_override_colors/font_color = Color(1, 1, 1, 0.95)
+theme_override_font_sizes/font_size = 16
+text = "Court View"
+
+[node name="Court" type="Panel" parent="Panel" unique_id=2001243501]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.1
+anchor_right = 0.98
+anchor_bottom = 0.94
+theme_override_styles/panel = SubResource("StyleBox_court")
+
+[node name="Net" type="ColorRect" parent="Panel/Court" unique_id=1439113639]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.495
+anchor_right = 1.0
+anchor_bottom = 0.505
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.96, 0.96, 0.96, 0.8)
+
+[node name="TopTeamLabel" type="Label" parent="Panel/Court" unique_id=1477465363]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.01
+anchor_right = 0.3
+anchor_bottom = 0.07
+theme_override_font_sizes/font_size = 14
+text = "Team"
+
+[node name="BottomTeamLabel" type="Label" parent="Panel/Court" unique_id=2083934012]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.93
+anchor_right = 0.3
+anchor_bottom = 0.99
+theme_override_font_sizes/font_size = 14
+text = "Team"
+
+[node name="TopPosition2" type="Panel" parent="Panel/Court" unique_id=1000451276]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.08
+anchor_right = 0.32
+anchor_bottom = 0.23
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/TopPosition2" unique_id=328973201]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="TopPosition3" type="Panel" parent="Panel/Court" unique_id=1283849257]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.34
+anchor_top = 0.08
+anchor_right = 0.66
+anchor_bottom = 0.23
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/TopPosition3" unique_id=1785284572]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="TopPosition4" type="Panel" parent="Panel/Court" unique_id=2017983076]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.68
+anchor_top = 0.08
+anchor_right = 0.98
+anchor_bottom = 0.23
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/TopPosition4" unique_id=283754757]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="TopPosition1" type="Panel" parent="Panel/Court" unique_id=473281852]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.27
+anchor_right = 0.32
+anchor_bottom = 0.42
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/TopPosition1" unique_id=733151915]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="TopPosition6" type="Panel" parent="Panel/Court" unique_id=29609353]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.34
+anchor_top = 0.27
+anchor_right = 0.66
+anchor_bottom = 0.42
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/TopPosition6" unique_id=69800158]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="TopPosition5" type="Panel" parent="Panel/Court" unique_id=1229583614]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.68
+anchor_top = 0.27
+anchor_right = 0.98
+anchor_bottom = 0.42
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/TopPosition5" unique_id=160089172]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition1" type="Panel" parent="Panel/Court" unique_id=923777444]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.58
+anchor_right = 0.32
+anchor_bottom = 0.73
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/BottomPosition1" unique_id=1777891901]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition6" type="Panel" parent="Panel/Court" unique_id=230412293]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.34
+anchor_top = 0.58
+anchor_right = 0.66
+anchor_bottom = 0.73
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/BottomPosition6" unique_id=867306686]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition5" type="Panel" parent="Panel/Court" unique_id=2089798796]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.68
+anchor_top = 0.58
+anchor_right = 0.98
+anchor_bottom = 0.73
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/BottomPosition5" unique_id=514898675]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition2" type="Panel" parent="Panel/Court" unique_id=1343959115]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.77
+anchor_right = 0.32
+anchor_bottom = 0.92
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/BottomPosition2" unique_id=237175391]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition3" type="Panel" parent="Panel/Court" unique_id=483225872]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.34
+anchor_top = 0.77
+anchor_right = 0.66
+anchor_bottom = 0.92
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/BottomPosition3" unique_id=1431889512]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition4" type="Panel" parent="Panel/Court" unique_id=1093755540]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.68
+anchor_top = 0.77
+anchor_right = 0.98
+anchor_bottom = 0.92
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Panel/Court/BottomPosition4" unique_id=1032900629]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true

@@ -1,146 +1,181 @@
 extends Control
 class_name CourtMiniMap
 
-const COURT_LENGTH: float = 18.0
-const COURT_WIDTH: float = 9.0
-const THREE_METER_LINE_FROM_NET: float = 3.0
-const COURT_LINE_COLOR := Color(0.92, 0.94, 0.96, 0.95)
-const THREE_METER_COLOR := Color(0.92, 0.94, 0.96, 0.35)
-const TEAM_COLORS := {
-	"Alpha": Color(0.13, 0.72, 0.98, 1.0),
-	"Bravo": Color(1.0, 0.42, 0.32, 1.0)
-}
-const TARGET_COLOR := Color(1.0, 1.0, 1.0, 0.28)
-const ARROW_COLOR := Color(1.0, 1.0, 1.0, 0.22)
+const COURT_LENGTH := 9.0
+const COURT_WIDTH := 9.0
+const PLAYER_CARD_SIZE := Vector2(82.0, 34.0)
+const BALL_SIZE := Vector2(12.0, 12.0)
+const HUMAN_COLOR := Color(0.13, 0.72, 0.98, 1.0)
+const OPPONENT_COLOR := Color(1.0, 0.42, 0.32, 1.0)
+const LIBERO_COLOR := Color(0.95, 0.9, 0.25, 1.0)
 
-var phase_name: String = "No phase"
+@onready var title_label: Label = $Panel/Title
+@onready var top_team_label: Label = $Panel/Court/TopTeamLabel
+@onready var bottom_team_label: Label = $Panel/Court/BottomTeamLabel
+@onready var player_cards: Array[Panel] = [
+	$Panel/Court/TopPosition2, $Panel/Court/TopPosition3, $Panel/Court/TopPosition4,
+	$Panel/Court/TopPosition1, $Panel/Court/TopPosition6, $Panel/Court/TopPosition5,
+	$Panel/Court/BottomPosition1, $Panel/Court/BottomPosition6, $Panel/Court/BottomPosition5,
+	$Panel/Court/BottomPosition2, $Panel/Court/BottomPosition3, $Panel/Court/BottomPosition4
+]
+var goal_cards: Array[Panel] = []
+var ball_marker: Panel
+
+var phase_name := "No phase"
 var teams: Array = []
+var ball_state: Dictionary = {}
 
 func _ready() -> void:
-	top_level = false
-	z_index = 10
-	queue_redraw()
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_RESIZED:
-		queue_redraw()
-
-func _process(_delta: float) -> void:
-	queue_redraw()
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_create_goal_cards()
+	_create_ball_marker()
+	refresh_styles()
+	refresh()
 
 func set_snapshot(snapshot: Dictionary) -> void:
 	phase_name = str(snapshot.get("phase", "No phase"))
 	teams = snapshot.get("teams", []).duplicate(true)
-	queue_redraw()
+	ball_state = snapshot.get("ball_state", {}).duplicate(true)
+	refresh()
 
 func clear_snapshot() -> void:
 	phase_name = "No phase"
 	teams = []
-	queue_redraw()
+	ball_state = {}
+	refresh()
 
-func _draw() -> void:
-	var rect := Rect2(Vector2.ZERO, size).grow(-10.0)
-	if rect.size.x <= 0.0 or rect.size.y <= 0.0:
+func refresh() -> void:
+	if not is_node_ready():
 		return
+	title_label.text = "Court View: %s" % phase_name.capitalize()
+	_update_team_headers()
+	_update_players()
+	_update_ball()
 
-	draw_rect(rect, Color(0.06, 0.35, 0.17, 0.88), true)
-	_draw_court_lines(rect)
-	_draw_phase_label(rect)
+func refresh_styles() -> void:
+	_apply_style($Panel, Color(0.035, 0.055, 0.075, 0.96), Color(0.35, 0.42, 0.46, 0.8))
+	_apply_style($Panel/Court, Color(0.08, 0.35, 0.2, 1.0), Color(0.75, 0.82, 0.86, 0.75))
+	for card in player_cards:
+		_apply_style(card, Color(0.04, 0.08, 0.12, 0.96), Color.WHITE)
+	for card in goal_cards:
+		_apply_style(card, Color(0.04, 0.08, 0.12, 0.16), Color.WHITE)
+	_apply_style(ball_marker, Color(1.0, 0.86, 0.22, 1.0), Color(1.0, 1.0, 0.85, 1.0))
 
+func _create_goal_cards() -> void:
+	for index in range(player_cards.size()):
+		var goal_card := Panel.new()
+		goal_card.name = "GoalCard%d" % (index + 1)
+		goal_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		goal_card.z_index = -1
+		$Panel/Court.add_child(goal_card)
+		goal_cards.append(goal_card)
+
+func _create_ball_marker() -> void:
+	ball_marker = Panel.new()
+	ball_marker.name = "BallMarker"
+	ball_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ball_marker.z_index = 4
+	$Panel/Court.add_child(ball_marker)
+	var style := StyleBoxFlat.new()
+	style.corner_radius_top_left = 6
+	style.corner_radius_top_right = 6
+	style.corner_radius_bottom_left = 6
+	style.corner_radius_bottom_right = 6
+	ball_marker.add_theme_stylebox_override("panel", style)
+
+func _update_team_headers() -> void:
+	var top_name := ""
+	var bottom_name := ""
 	for team_data in teams:
-		_draw_team(team_data, rect)
+		var team_slot := str(team_data.get("team_slot", ""))
+		if team_slot == "a":
+			top_name = str(team_data.get("team_name", "Team"))
+		else:
+			bottom_name = str(team_data.get("team_name", "Team"))
+	top_team_label.text = top_name if not top_name.is_empty() else "Team"
+	bottom_team_label.text = bottom_name if not bottom_name.is_empty() else "Team"
+	top_team_label.add_theme_color_override("font_color", _team_color_by_name(top_name))
+	bottom_team_label.add_theme_color_override("font_color", _team_color_by_name(bottom_name))
 
-	if teams.is_empty():
-		_draw_empty_state(rect)
+func _update_players() -> void:
+	var player_index := 0
+	for team_data in teams:
+		var team_color := _team_color_by_name(str(team_data.get("team_name", "")))
+		for player_data in team_data.get("players", []):
+			if player_index >= player_cards.size():
+				break
+			_update_player_card(player_index, player_data, team_color)
+			player_index += 1
+	for index in range(player_index, player_cards.size()):
+		player_cards[index].visible = false
+		goal_cards[index].visible = false
 
-func _draw_court_lines(rect: Rect2) -> void:
-	draw_rect(rect, COURT_LINE_COLOR, false, 2.0)
-	var net_y := rect.position.y + rect.size.y * 0.5
-	draw_line(Vector2(rect.position.x, net_y), Vector2(rect.end.x, net_y), COURT_LINE_COLOR, 2.0)
-
-	var front_line_offset: float = rect.size.y * (THREE_METER_LINE_FROM_NET / COURT_LENGTH)
-	draw_line(
-		Vector2(rect.position.x, net_y - front_line_offset),
-		Vector2(rect.end.x, net_y - front_line_offset),
-		THREE_METER_COLOR,
-		2.0
-	)
-	draw_line(
-		Vector2(rect.position.x, net_y + front_line_offset),
-		Vector2(rect.end.x, net_y + front_line_offset),
-		THREE_METER_COLOR,
-		2.0
-	)
-
-func _draw_phase_label(rect: Rect2) -> void:
-	var font := ThemeDB.fallback_font
-	if font == null:
-		return
-	draw_string(font, rect.position + Vector2(6, 18), "Court View: %s" % phase_name.capitalize(), HORIZONTAL_ALIGNMENT_LEFT, -1.0, 14, Color(1, 1, 1, 0.88))
-
-func _draw_empty_state(rect: Rect2) -> void:
-	var font := ThemeDB.fallback_font
-	if font == null:
-		return
-	var message := "Generate world and step the rally to populate the court map."
-	var text_size := font.get_multiline_string_size(message, HORIZONTAL_ALIGNMENT_CENTER, rect.size.x - 24.0, 14)
-	var origin := Vector2(
-		rect.position.x + rect.size.x * 0.5 - text_size.x * 0.5,
-		rect.position.y + rect.size.y * 0.5
-	)
-	draw_multiline_string(font, origin, message, HORIZONTAL_ALIGNMENT_CENTER, rect.size.x - 24.0, 14, -1, Color(1, 1, 1, 0.55))
-
-func _draw_team(team_data: Dictionary, rect: Rect2) -> void:
-	var team_name: String = str(team_data.get("team_name", "Team"))
-	var players: Array = team_data.get("players", [])
-	var team_color: Color = TEAM_COLORS.get(team_name, Color(0.95, 0.95, 0.95, 1.0))
-	for player in players:
-		_draw_player(player, rect, team_color)
-
-func _draw_player(player: Dictionary, rect: Rect2, team_color: Color) -> void:
-	var position_data: Dictionary = player.get("position", {})
-	var player_point := _court_to_canvas(position_data, rect)
-	var internal_state: Dictionary = player.get("internal_state", {})
+func _update_player_card(index: int, player_data: Dictionary, team_color: Color) -> void:
+	var card: Panel = player_cards[index]
+	var goal_card: Panel = goal_cards[index]
+	var current_position: Dictionary = player_data.get("position", {})
+	var internal_state: Dictionary = player_data.get("internal_state", {})
 	var movement: Dictionary = internal_state.get("movement", {})
-	if not movement.is_empty():
-		_draw_target_and_arrow(player_point, movement, rect)
-	_draw_player_token(player_point, str(internal_state.get("rotation_position", "?")), team_color)
+	var rotation_position := int(internal_state.get("rotation_position", index + 1))
+	var player_name := str(player_data.get("player_name", "Unknown"))
+	var is_libero := _is_libero(player_data, internal_state)
+	var label: Label = card.get_node("Label")
+	var text_lines: Array[String] = [player_name, "R%d" % rotation_position]
+	if is_libero:
+		text_lines.append("LIBERO")
+	label.text = "\n".join(text_lines)
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", LIBERO_COLOR if is_libero else Color.WHITE)
+	card.visible = true
+	card.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	card.size = PLAYER_CARD_SIZE
+	card.position = _court_to_canvas(current_position) - PLAYER_CARD_SIZE * 0.5
+	_apply_style(card, team_color.darkened(0.45), team_color)
 
-func _draw_target_and_arrow(player_point: Vector2, movement: Dictionary, rect: Rect2) -> void:
 	var goal_position: Dictionary = movement.get("goal_position", {})
-	if goal_position.is_empty():
+	var has_goal := not movement.is_empty() and not goal_position.is_empty() and _distance_xz(current_position, goal_position) > 0.05
+	goal_card.visible = has_goal
+	if has_goal:
+		goal_card.size = PLAYER_CARD_SIZE
+		goal_card.position = _court_to_canvas(goal_position) - PLAYER_CARD_SIZE * 0.5
+		_apply_style(goal_card, Color(team_color, 0.12), Color(team_color, 0.7))
+
+func _update_ball() -> void:
+	ball_marker.visible = not ball_state.is_empty()
+	if not ball_marker.visible:
 		return
-	var target_point := _court_to_canvas(goal_position, rect)
-	if player_point.distance_to(target_point) < 3.0:
-		return
+	var ball_position: Dictionary = ball_state.get("position", {})
+	ball_marker.size = BALL_SIZE
+	ball_marker.position = _court_to_canvas(ball_position) - BALL_SIZE * 0.5
 
-	draw_line(player_point, target_point, ARROW_COLOR, 1.5)
-	var arrow_dir := (player_point - target_point).normalized()
-	var arrow_left := target_point + arrow_dir.rotated(0.45) * 8.0
-	var arrow_right := target_point + arrow_dir.rotated(-0.45) * 8.0
-	draw_line(target_point, arrow_left, ARROW_COLOR, 1.5)
-	draw_line(target_point, arrow_right, ARROW_COLOR, 1.5)
-	_draw_transparent_label(target_point, "[x]", TARGET_COLOR)
-
-func _draw_player_token(point: Vector2, number_text: String, team_color: Color) -> void:
-	_draw_transparent_label(point, "[%s]" % number_text, team_color)
-
-func _draw_transparent_label(point: Vector2, text: String, color: Color) -> void:
-	var font := ThemeDB.fallback_font
-	if font == null:
-		return
-	var font_size := 16
-	var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size)
-	var origin := point - Vector2(text_size.x * 0.5, -text_size.y * 0.3)
-	draw_string_outline(font, origin, text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, 2, Color(0, 0, 0, color.a * 0.8))
-	draw_string(font, origin, text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, font_size, color)
-
-func _court_to_canvas(position_data: Dictionary, rect: Rect2) -> Vector2:
-	var world_x: float = float(position_data.get("x", 0.0))
-	var world_z: float = float(position_data.get("z", 0.0))
-	var normalized_x: float = clamp((world_z + COURT_WIDTH * 0.5) / COURT_WIDTH, 0.0, 1.0)
-	var normalized_y: float = clamp((COURT_LENGTH * 0.5 - world_x) / COURT_LENGTH, 0.0, 1.0)
+func _court_to_canvas(position_data: Dictionary) -> Vector2:
+	var court_size: Vector2 = $Panel/Court.size
+	var world_x := float(position_data.get("x", 0.0))
+	var world_z := float(position_data.get("z", 0.0))
 	return Vector2(
-		rect.position.x + normalized_x * rect.size.x,
-		rect.position.y + normalized_y * rect.size.y
+		clamp((world_z + COURT_WIDTH * 0.5) / COURT_WIDTH, 0.0, 1.0) * court_size.x,
+		clamp((COURT_LENGTH * 0.5 - world_x) / COURT_LENGTH, 0.0, 1.0) * court_size.y
 	)
+
+func _distance_xz(first: Dictionary, second: Dictionary) -> float:
+	return Vector2(
+		float(first.get("x", 0.0)) - float(second.get("x", 0.0)),
+		float(first.get("z", 0.0)) - float(second.get("z", 0.0))
+	).length()
+
+func _apply_style(control: Control, fill_color: Color, border_color: Color) -> void:
+	var style := control.get_theme_stylebox("panel")
+	if style == null:
+		style = StyleBoxFlat.new()
+	var card_style := style.duplicate()
+	card_style.bg_color = fill_color
+	card_style.border_color = border_color
+	control.add_theme_stylebox_override("panel", card_style)
+
+func _is_libero(player_data: Dictionary, internal_state: Dictionary) -> bool:
+	if str(internal_state.get("role_name", "")).to_lower() == "libero":
+		return true
+	return str(player_data.get("player_name", "")).findn("libero") != -1
+
+func _team_color_by_name(team_name: String) -> Color:
+	return HUMAN_COLOR if team_name == "Alpha" else OPPONENT_COLOR

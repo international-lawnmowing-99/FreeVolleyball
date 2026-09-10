@@ -213,8 +213,8 @@ func _build_ball_snapshot(ctx: RallyState, outcome: AttemptOutcome, phase: Strin
 	if outcome.metadata.has("projected_velocity"):
 		return _projected_ball_snapshot(ctx, outcome, phase, source_team)
 
-	var source_side: float = _team_side_sign(ctx, source_team)
-	var target_side: float = _team_side_sign(ctx, target_team)
+	var source_side: float = ctx.court_side_for(source_team)
+	var target_side: float = ctx.court_side_for(target_team)
 	var trajectory: Dictionary = _phase_trajectory(phase)
 	var position: Vector3 = Vector3(
 		source_side * float(trajectory["source_x"]),
@@ -264,8 +264,8 @@ func _projected_ball_snapshot(ctx: RallyState, outcome: AttemptOutcome, phase: S
 func _build_phase_context_snapshot(ctx: RallyState, phase: String, outcome: AttemptOutcome, source_team: TeamData, target_team: TeamData) -> Dictionary:
 	var source_match_data: TeamMatchData = _match_data_for_team(ctx, source_team)
 	var target_match_data: TeamMatchData = _match_data_for_team(ctx, target_team)
-	var source_side: float = _team_side_sign(ctx, source_team)
-	var target_side: float = _team_side_sign(ctx, target_team)
+	var source_side: float = ctx.court_side_for(source_team)
+	var target_side: float = ctx.court_side_for(target_team)
 	var source_context: Dictionary = {}
 	var target_context: Dictionary = {}
 
@@ -400,13 +400,6 @@ func _phase_topspin(phase: String, outcome: AttemptOutcome) -> float:
 		_:
 			return 0.0
 
-func _team_side_sign(ctx: RallyState, team: TeamData) -> float:
-	if team == null:
-		return 1.0
-	if team == ctx.serving_team:
-		return -1.0
-	return 1.0
-
 func _match_data_for_team(ctx: RallyState, team: TeamData) -> TeamMatchData:
 	if team == ctx.attacker:
 		return ctx.attacker_match_data
@@ -428,14 +421,14 @@ func _assess_set_phase(ctx: RallyState, provided_setter: AthleteStats = null) ->
 	if setter == null:
 		return
 
-	var side_sign := _team_side_sign(ctx, ctx.defender)
+	var defender_side := ctx.court_side_for(ctx.defender)
 	var set_origin := ctx.last_pass_target
 	if set_origin == Vector3.ZERO:
-		set_origin = Vector3(side_sign * 0.5, max(float(setter.jumpSetHeight), 2.4), 0.0)
+		set_origin = Vector3(defender_side * 0.5, max(float(setter.jumpSetHeight), 2.4), 0.0)
 
 	ctx.set_options = SetPlayAnalysis.evaluate_attacking_options(
 		set_origin,
-		side_sign,
+		defender_side,
 		ctx.defender_match_data,
 		setter,
 		ctx.defender.teamStrategy
@@ -449,7 +442,7 @@ func _assess_set_phase(ctx: RallyState, provided_setter: AthleteStats = null) ->
 		rng
 	)
 	ctx.defensive_positioning_plan = SetPlayAnalysis.build_defensive_positioning_plan(
-		_team_side_sign(ctx, ctx.attacker),
+		ctx.court_side_for(ctx.attacker),
 		ctx.attacker_match_data,
 		ctx.attacker.teamStrategy if ctx.attacker != null else null,
 		ctx.defensive_set_read

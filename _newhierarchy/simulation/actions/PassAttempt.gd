@@ -65,7 +65,7 @@ func _receive_difficulty_rating() -> float:
 	return float(clamp(ctx.serve_receive_difficulty, 0.05, 1.0) * 100.0)
 
 func _perfect_pass_target() -> Vector3:
-	var defender_side: float = _team_side_sign(ctx.defender)
+	var defender_side: float = ctx.court_side_for(ctx.defender)
 	var setter: AthleteStats = ctx.defender.teamStrategy.choose_setter(ctx.defender_match_data, rng)
 	var jump_set_height: float = 2.8
 	if setter != null:
@@ -91,7 +91,7 @@ func _perfect_pass_max_height(reception_target: Vector3) -> float:
 	return initial_y_velocity * initial_y_velocity / (2.0 * GRAVITY) + ctx.ball_position.y
 
 func _good_pass_target() -> Vector3:
-	var defender_side: float = _team_side_sign(ctx.defender)
+	var defender_side: float = ctx.court_side_for(ctx.defender)
 	return Vector3(
 		defender_side * rng.randf_range(1.5, 2.5),
 		2.5,
@@ -99,7 +99,7 @@ func _good_pass_target() -> Vector3:
 	)
 
 func _poor_pass_target() -> Vector3:
-	var defender_side: float = _team_side_sign(ctx.defender)
+	var defender_side: float = ctx.court_side_for(ctx.defender)
 	var target := Vector3(
 		ctx.ball_position.x + rng.randf_range(-3.0, 3.0),
 		2.5,
@@ -199,11 +199,6 @@ func _time_till_ball_at_position(position: Vector3, linear_velocity: Vector3, re
 
 	var ball_xz_distance: float = Vector3(position.x - reception_target.x, 0.0, position.z - reception_target.z).length()
 	return ball_xz_distance / ball_xz_velocity
-
-func _team_side_sign(team: TeamData) -> float:
-	if team == ctx.serving_team:
-		return -1.0
-	return 1.0
 
 func _result_for_pass_band(pass_band: String) -> String:
 	match pass_band:

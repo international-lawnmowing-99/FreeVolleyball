@@ -23,7 +23,8 @@ const TeamStrategyScript = preload("res://_newhierarchy/simulation/team/strategy
 @onready var outside_set_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/OutsideSetRow/OutsideSetOption
 @onready var scouting_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/ScoutingRow/ScoutingOption
 @onready var block_commit_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/BlockCommitRow/BlockCommitOption
-@onready var court_mini_map: CourtMiniMap = $CanvasLayer/Control/CourtMiniMap
+@onready var court_mini_map: CourtMiniMap = $CanvasLayer/Control/CourtMiniMap as CourtMiniMap
+@onready var court_lineup_view: CourtLineupView = $CanvasLayer/Control/CourtLineupView
 
 var sim: MatchSimulation
 var director: SimulationDirector
@@ -59,6 +60,7 @@ func _on_generate_world_button_pressed() -> void:
 
 	var team_a := TeamData.new()
 	team_a.teamName = "Alpha"
+	team_a.isHuman = true
 	team_a.Populate(PlayerChoiceState.new(), ["Cameron"], ["Borgas"])
 	_prefix_generated_player_names(team_a)
 	team_a.select_starting_lineup()
@@ -70,12 +72,14 @@ func _on_generate_world_button_pressed() -> void:
 	team_b.select_starting_lineup()
 
 	sim = MatchSimulation.new(team_a, team_b, -1, workflow_log)
+	court_lineup_view.set_teams(sim.team_a, sim.team_b)
 	_set_match_buttons_enabled(true)
 	_refresh_status_text("Game world generated")
 	_refresh_rally_step_text("No rally steps yet")
 	_clear_active_replay("No replay loaded")
 	_refresh_strategy_ui()
 	court_mini_map.clear_snapshot()
+	court_lineup_view.queue_redraw()
 
 func _on_play_point_button_pressed() -> void:
 	if sim == null:
@@ -88,6 +92,7 @@ func _on_play_point_button_pressed() -> void:
 		return
 	_load_replay(result.get("replay", {}))
 	_update_court_from_replay()
+	court_lineup_view.queue_redraw()
 
 	var score_event: Dictionary = result["score_event"]
 	var summary := "Point played"
@@ -110,6 +115,7 @@ func _on_play_set_button_pressed() -> void:
 	if not sim.rally_replays.is_empty():
 		_load_replay(sim.rally_replays[sim.rally_replays.size() - 1].get("replay", {}))
 		_update_court_from_replay()
+	court_lineup_view.queue_redraw()
 
 	var ending_event: Dictionary = result["ending_event"]
 	var summary := "Set %d completed (%d rallies)" % [result["set_number"], result["rallies_played"]]
@@ -127,6 +133,7 @@ func _on_next_rally_step_button_pressed() -> void:
 		return
 
 	var result := sim.next_rally_step()
+	court_lineup_view.queue_redraw()
 	_refresh_rally_step_text(result.get("message", ""))
 	if not result.get("court_snapshot", {}).is_empty():
 		court_mini_map.set_snapshot(result.get("court_snapshot", {}))
@@ -541,13 +548,6 @@ func _on_block_commit_selected(index: int) -> void:
 	if strategy == null:
 		return
 	strategy.block_commit_tendency = float(_entry_value(strategy_option_maps["block_commit"], index, strategy.block_commit_tendency))
-	_refresh_strategy_ui()
-
-func _on_backcourt_shift_selected(index: int) -> void:
-	var strategy = _alpha_strategy()
-	if strategy == null:
-		return
-	strategy.backcourt_shift_tendency = float(_entry_value(strategy_option_maps["backcourt_shift"], index, strategy.backcourt_shift_tendency))
 	_refresh_strategy_ui()
 
 func _prefix_generated_player_names(team: TeamData) -> void:

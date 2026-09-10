@@ -327,7 +327,9 @@ static func _find_parabola_for_given_speed(start_pos: Vector3, target: Vector3, 
 	var xz_dist := Vector3(start_pos.x, 0.0, start_pos.z).distance_to(Vector3(target.x, 0.0, target.z))
 	var y_dist := target.y - start_pos.y
 	if xz_dist <= 0.001:
-		return Vector3.ZERO if abs(y_dist) <= 0.001 else null
+		if abs(y_dist) <= 0.001:
+			return Vector3.ZERO
+		return null
 
 	var discriminant := pow(speed, 4) - g * (g * xz_dist * xz_dist + 2.0 * y_dist * speed * speed)
 	if discriminant < 0.0:

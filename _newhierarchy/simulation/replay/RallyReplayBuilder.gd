@@ -46,8 +46,8 @@ static func _build_setup_keyframe(ctx: RallyState) -> Dictionary:
 	var highlighted_server: AthleteStats = ctx.server
 	if highlighted_server == null and ctx.serving_team_match_data != null:
 		highlighted_server = ctx.serving_team_match_data.get_server()
-	var serving_side: float = -1.0
-	var receiving_side: float = 1.0
+	var serving_side: float = ctx.court_side_for(ctx.serving_team)
+	var receiving_side: float = ctx.court_side_for(ctx.receiving_team)
 	var serving_context: Dictionary = {}
 	var receiving_context: Dictionary = {}
 

@@ -1,0 +1,515 @@
+[gd_scene format=3 uid="uid://xuwu7itsxmff"]
+
+[ext_resource type="Script" uid="uid://br7qtgjl8wu5n" path="res://_newhierarchy/simulation/ui/CourtLineupView.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
+bg_color = Color(0.035, 0.055, 0.075, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.42, 0.46, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_court"]
+bg_color = Color(0.08, 0.35, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.75, 0.82, 0.86, 0.75)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_card"]
+bg_color = Color(0.04, 0.08, 0.12, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.75, 0.82, 0.86, 0.75)
+
+[node name="CourtLineupView" type="Control" unique_id=1070764074]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Panel" type="Panel" parent="." unique_id=42860233]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="Title" type="Label" parent="." unique_id=1323467388]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.01
+anchor_right = 0.98
+anchor_bottom = 0.07
+theme_override_colors/font_color = Color(1, 1, 1, 0.95)
+theme_override_font_sizes/font_size = 16
+text = "Lineups"
+
+[node name="Court" type="Panel" parent="." unique_id=745374344]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.22
+anchor_top = 0.08
+anchor_right = 0.78
+anchor_bottom = 0.97
+theme_override_styles/panel = SubResource("StyleBox_court")
+
+[node name="Net" type="ColorRect" parent="Court" unique_id=1630860514]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.495
+anchor_right = 1.0
+anchor_bottom = 0.505
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.96, 0.96, 0.96, 0.8)
+
+[node name="TopPosition2" type="Panel" parent="Court" unique_id=1368857523]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.02
+anchor_right = 0.32
+anchor_bottom = 0.235
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/TopPosition2" unique_id=1402438882]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 2
+Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="TopPosition3" type="Panel" parent="Court" unique_id=101659852]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.02
+anchor_right = 0.65
+anchor_bottom = 0.235
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/TopPosition3" unique_id=99367166]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 3
+Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="TopPosition4" type="Panel" parent="Court" unique_id=202094932]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.68
+anchor_top = 0.02
+anchor_right = 0.98
+anchor_bottom = 0.235
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/TopPosition4" unique_id=785660552]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 4
+Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition1" type="Panel" parent="Court" unique_id=988552196]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.765
+anchor_right = 0.32
+anchor_bottom = 0.98
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/BottomPosition1" unique_id=191023524]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 1
+Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition6" type="Panel" parent="Court" unique_id=1320978700]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.765
+anchor_right = 0.65
+anchor_bottom = 0.98
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/BottomPosition6" unique_id=1968901888]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 6
+Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition5" type="Panel" parent="Court" unique_id=731583494]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.68
+anchor_top = 0.765
+anchor_right = 0.98
+anchor_bottom = 0.98
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/BottomPosition5" unique_id=2009472893]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 5
+Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="TopPosition1" type="Panel" parent="Court"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.265
+anchor_right = 0.32
+anchor_bottom = 0.48
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/TopPosition1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 1\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="TopPosition6" type="Panel" parent="Court"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.265
+anchor_right = 0.65
+anchor_bottom = 0.48
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/TopPosition6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 6\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="TopPosition5" type="Panel" parent="Court"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.68
+anchor_top = 0.265
+anchor_right = 0.98
+anchor_bottom = 0.48
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/TopPosition5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 5\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition2" type="Panel" parent="Court"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.52
+anchor_right = 0.32
+anchor_bottom = 0.735
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/BottomPosition2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 2\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition3" type="Panel" parent="Court"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.52
+anchor_right = 0.65
+anchor_bottom = 0.735
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/BottomPosition3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 3\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="BottomPosition4" type="Panel" parent="Court"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.68
+anchor_top = 0.52
+anchor_right = 0.98
+anchor_bottom = 0.735
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Label" type="Label" parent="Court/BottomPosition4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Position 4\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+
+[node name="TopTeamLabel" type="Label" parent="." unique_id=148786185]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.22
+anchor_top = 0.08
+anchor_right = 0.78
+anchor_bottom = 0.12
+theme_override_colors/font_color = Color(1, 0.42, 0.32, 1)
+text = "Opponent"
+
+[node name="BottomTeamLabel" type="Label" parent="." unique_id=1828610959]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.22
+anchor_top = 0.93
+anchor_right = 0.78
+anchor_bottom = 0.97
+theme_override_colors/font_color = Color(0.13, 0.72, 0.98, 1)
+text = "Human Team"
+
+[node name="TopBenchLabel" type="Label" parent="." unique_id=941958833]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_top = 0.08
+anchor_right = 0.98
+anchor_bottom = 0.12
+theme_override_colors/font_color = Color(1, 0.42, 0.32, 1)
+text = "Bench"
+horizontal_alignment = 1
+
+[node name="BottomBenchLabel" type="Label" parent="." unique_id=1232780670]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.50
+anchor_right = 0.2
+anchor_bottom = 0.54
+theme_override_colors/font_color = Color(0.13, 0.72, 0.98, 1)
+text = "Bench"
+horizontal_alignment = 1
+
+[node name="TopBench" type="VBoxContainer" parent="." unique_id=362967113]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_top = 0.14
+anchor_right = 0.98
+anchor_bottom = 0.9
+theme_override_constants/separation = 4
+
+[node name="Player1" type="Label" parent="TopBench" unique_id=1322947111]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Player2" type="Label" parent="TopBench" unique_id=1421261399]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Player3" type="Label" parent="TopBench" unique_id=1282512598]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Player4" type="Label" parent="TopBench" unique_id=2047712951]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Player5" type="Label" parent="TopBench" unique_id=1729207523]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Player6" type="Label" parent="TopBench" unique_id=1517072033]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="BottomBench" type="VBoxContainer" parent="." unique_id=488989315]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.50
+anchor_right = 0.2
+anchor_bottom = 0.9
+theme_override_constants/separation = 4
+
+[node name="Player1" type="Label" parent="BottomBench" unique_id=912572046]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Player2" type="Label" parent="BottomBench" unique_id=775706020]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Player3" type="Label" parent="BottomBench" unique_id=2043918760]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Player4" type="Label" parent="BottomBench" unique_id=1323818242]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Player5" type="Label" parent="BottomBench" unique_id=128959806]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Player6" type="Label" parent="BottomBench" unique_id=2107885360]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_card")
+text = "Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true

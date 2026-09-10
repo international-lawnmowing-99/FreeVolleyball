@@ -11,8 +11,8 @@ const NET_BUFFER: float = 0.1
 static func initialize_rally_tracking(ctx: RallyState) -> void:
 	ctx.movement_time = 0.0
 	ctx.player_tracking_states = {}
-	_initialize_team_tracking(ctx, ctx.serving_team_match_data, -1.0, true)
-	_initialize_team_tracking(ctx, ctx.receiving_team_match_data, 1.0, false)
+	_initialize_team_tracking(ctx, ctx.serving_team_match_data, ctx.court_side_for(ctx.serving_team), true)
+	_initialize_team_tracking(ctx, ctx.receiving_team_match_data, ctx.court_side_for(ctx.receiving_team), false)
 	ctx.initial_player_tracking_states = _duplicate_tracking_snapshot(ctx.player_tracking_states)
 
 static func advance_phase(
@@ -27,8 +27,8 @@ static func advance_phase(
 		initialize_rally_tracking(ctx)
 
 	var start_time: float = ctx.movement_time
-	_plan_team_phase(ctx, phase, source_team, _match_data_for(ctx, source_team), _team_side_sign(ctx, source_team), outcome, start_time, end_time, true)
-	_plan_team_phase(ctx, phase, target_team, _match_data_for(ctx, target_team), _team_side_sign(ctx, target_team), outcome, start_time, end_time, false)
+	_plan_team_phase(ctx, phase, source_team, _match_data_for(ctx, source_team), ctx.court_side_for(source_team), outcome, start_time, end_time, true)
+	_plan_team_phase(ctx, phase, target_team, _match_data_for(ctx, target_team), ctx.court_side_for(target_team), outcome, start_time, end_time, false)
 	ctx.movement_time = end_time
 
 static func _initialize_team_tracking(ctx: RallyState, team_match_data: TeamMatchData, team_side: float, is_serving_team: bool) -> void:
@@ -657,13 +657,6 @@ static func _vector3_to_dict(value: Vector3) -> Dictionary:
 		"y": value.y,
 		"z": value.z
 	}
-
-static func _team_side_sign(ctx: RallyState, team: TeamData) -> float:
-	if team == null:
-		return 1.0
-	if team == ctx.serving_team:
-		return -1.0
-	return 1.0
 
 static func _match_data_for(ctx: RallyState, team: TeamData) -> TeamMatchData:
 	if team == ctx.serving_team:
