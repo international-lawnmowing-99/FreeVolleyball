@@ -60,7 +60,6 @@ func _on_generate_world_button_pressed() -> void:
 
 	var team_a := TeamData.new()
 	team_a.teamName = "Alpha"
-	team_a.isHuman = true
 	team_a.Populate(PlayerChoiceState.new(), ["Cameron"], ["Borgas"])
 	_prefix_generated_player_names(team_a)
 	team_a.select_starting_lineup()

@@ -339,7 +339,7 @@ func phase_local_target(
 	return base_local
 
 func reception_target_for_side(team_side: float) -> Vector3:
-	return Vector3(abs(reception_target_local.x) * team_side, reception_target_local.y, reception_target_local.z)
+	return Vector3(abs(reception_target_local.x) * team_side, reception_target_local.y, reception_target_local.z * team_side)
 
 func receive_transition_local(
 	team_match_data: TeamMatchData,
@@ -712,7 +712,8 @@ func _receive_layout_local(team_match_data: TeamMatchData, athlete: AthleteStats
 	var layout: Array = defaultReceiveRotations[rotation_index]
 	var athlete_index: int = int(clamp(athlete.rotationPosition - 1, 0, layout.size() - 1))
 	if athlete_index < layout.size():
-		return layout[athlete_index]
+		var receive_position: Vector3 = layout[athlete_index]
+		return Vector3(receive_position.x * 0.5, receive_position.y, receive_position.z)
 	return ROTATION_BASE_POSITIONS.get(int(clamp(athlete.rotationPosition, 1, 6)), Vector3(3.0, 0.0, 0.0))
 
 func _setter_rotation_position(team_match_data: TeamMatchData) -> int:

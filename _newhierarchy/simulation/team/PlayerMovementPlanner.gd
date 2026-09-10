@@ -615,7 +615,7 @@ static func _block_plan_target(ctx: RallyState, athlete: AthleteStats, team_matc
 	return team_match_data.get_phase_position_for_player(athlete, "block", team_side)
 
 static func _local_to_world(local_position: Vector3, team_side: float) -> Vector3:
-	return Vector3(abs(local_position.x) * team_side, local_position.y, local_position.z)
+	return Vector3(abs(local_position.x) * team_side, local_position.y, local_position.z * team_side)
 
 static func _ensure_tracking_state(ctx: RallyState, team_match_data: TeamMatchData, athlete: AthleteStats, team_side: float) -> Dictionary:
 	var key: String = _tracking_key(team_match_data.team, team_match_data.player_key_for_athlete(athlete))

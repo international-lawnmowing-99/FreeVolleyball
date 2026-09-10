@@ -5,8 +5,8 @@ const COURT_LENGTH := 9.0
 const COURT_WIDTH := 9.0
 const PLAYER_CARD_SIZE := Vector2(82.0, 34.0)
 const BALL_SIZE := Vector2(12.0, 12.0)
-const HUMAN_COLOR := Color(0.13, 0.72, 0.98, 1.0)
-const OPPONENT_COLOR := Color(1.0, 0.42, 0.32, 1.0)
+const TEAM_A_COLOR := Color(0.13, 0.72, 0.98, 1.0)
+const TEAM_B_COLOR := Color(1.0, 0.42, 0.32, 1.0)
 const LIBERO_COLOR := Color(0.95, 0.9, 0.25, 1.0)
 
 @onready var title_label: Label = $Panel/Title
@@ -86,21 +86,34 @@ func _create_ball_marker() -> void:
 func _update_team_headers() -> void:
 	var top_name := ""
 	var bottom_name := ""
+	var top_color := TEAM_A_COLOR
+	var bottom_color := TEAM_B_COLOR
 	for team_data in teams:
-		var team_slot := str(team_data.get("team_slot", ""))
-		if team_slot == "a":
-			top_name = str(team_data.get("team_name", "Team"))
+		var team_name := str(team_data.get("team_name", "Team"))
+		var team_color := _team_color(team_data)
+		var players: Array = team_data.get("players", [])
+		if players.is_empty():
+			continue
+		var average_x := 0.0
+		for player_data in players:
+			var player_position: Dictionary = player_data.get("position", {})
+			average_x += float(player_position.get("x", 0.0))
+		average_x /= players.size()
+		if average_x >= 0.0:
+			top_name = team_name
+			top_color = team_color
 		else:
-			bottom_name = str(team_data.get("team_name", "Team"))
+			bottom_name = team_name
+			bottom_color = team_color
 	top_team_label.text = top_name if not top_name.is_empty() else "Team"
 	bottom_team_label.text = bottom_name if not bottom_name.is_empty() else "Team"
-	top_team_label.add_theme_color_override("font_color", _team_color_by_name(top_name))
-	bottom_team_label.add_theme_color_override("font_color", _team_color_by_name(bottom_name))
+	top_team_label.add_theme_color_override("font_color", top_color)
+	bottom_team_label.add_theme_color_override("font_color", bottom_color)
 
 func _update_players() -> void:
 	var player_index := 0
 	for team_data in teams:
-		var team_color := _team_color_by_name(str(team_data.get("team_name", "")))
+		var team_color := _team_color(team_data)
 		for player_data in team_data.get("players", []):
 			if player_index >= player_cards.size():
 				break
@@ -113,6 +126,7 @@ func _update_players() -> void:
 func _update_player_card(index: int, player_data: Dictionary, team_color: Color) -> void:
 	var card: Panel = player_cards[index]
 	var goal_card: Panel = goal_cards[index]
+	var card_size := _player_card_size()
 	var current_position: Dictionary = player_data.get("position", {})
 	var internal_state: Dictionary = player_data.get("internal_state", {})
 	var movement: Dictionary = internal_state.get("movement", {})
@@ -128,17 +142,22 @@ func _update_player_card(index: int, player_data: Dictionary, team_color: Color)
 	label.add_theme_color_override("font_color", LIBERO_COLOR if is_libero else Color.WHITE)
 	card.visible = true
 	card.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-	card.size = PLAYER_CARD_SIZE
-	card.position = _court_to_canvas(current_position) - PLAYER_CARD_SIZE * 0.5
+	card.size = card_size
+	card.position = _court_to_canvas(current_position) - card_size * 0.5
 	_apply_style(card, team_color.darkened(0.45), team_color)
 
 	var goal_position: Dictionary = movement.get("goal_position", {})
 	var has_goal := not movement.is_empty() and not goal_position.is_empty() and _distance_xz(current_position, goal_position) > 0.05
 	goal_card.visible = has_goal
 	if has_goal:
-		goal_card.size = PLAYER_CARD_SIZE
-		goal_card.position = _court_to_canvas(goal_position) - PLAYER_CARD_SIZE * 0.5
+		goal_card.size = card_size
+		goal_card.position = _court_to_canvas(goal_position) - card_size * 0.5
 		_apply_style(goal_card, Color(team_color, 0.12), Color(team_color, 0.7))
+
+func _player_card_size() -> Vector2:
+	var court_size: Vector2 = $Panel/Court.size
+	var scale_factor: float = minf(court_size.x / 360.0, court_size.y / 360.0)
+	return PLAYER_CARD_SIZE * clampf(scale_factor, 0.65, 1.0)
 
 func _update_ball() -> void:
 	ball_marker.visible = not ball_state.is_empty()
@@ -177,5 +196,5 @@ func _is_libero(player_data: Dictionary, internal_state: Dictionary) -> bool:
 		return true
 	return str(player_data.get("player_name", "")).findn("libero") != -1
 
-func _team_color_by_name(team_name: String) -> Color:
-	return HUMAN_COLOR if team_name == "Alpha" else OPPONENT_COLOR
+func _team_color(team_data: Dictionary) -> Color:
+	return TEAM_A_COLOR if str(team_data.get("team_slot", "")) == "a" else TEAM_B_COLOR

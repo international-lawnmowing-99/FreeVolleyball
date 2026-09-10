@@ -159,7 +159,7 @@ func _phase_court_position(athlete: AthleteStats, phase: String, team_side: floa
 			highlighted_player,
 			has_ball_control
 		)
-	return Vector3(local.x * team_side, local.y, local.z)
+	return Vector3(local.x * team_side, local.y, local.z * team_side)
 
 func _serialize_player_context(
 	athlete: AthleteStats,

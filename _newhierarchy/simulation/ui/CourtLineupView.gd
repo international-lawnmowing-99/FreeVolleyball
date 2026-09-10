@@ -1,8 +1,8 @@
 extends Control
 class_name CourtLineupView
 
-const HUMAN_COLOR := Color(0.13, 0.72, 0.98, 1.0)
-const OPPONENT_COLOR := Color(1.0, 0.42, 0.32, 1.0)
+const TEAM_A_COLOR := Color(0.13, 0.72, 0.98, 1.0)
+const TEAM_B_COLOR := Color(1.0, 0.42, 0.32, 1.0)
 const OCCUPIED_COLOR := Color(0.04, 0.08, 0.12, 0.94)
 const EMPTY_COLOR := Color(0.1, 0.14, 0.17, 0.9)
 
@@ -13,21 +13,34 @@ const EMPTY_COLOR := Color(0.1, 0.14, 0.17, 0.9)
 @onready var top_bench: VBoxContainer = $TopBench
 @onready var bottom_bench: VBoxContainer = $BottomBench
 
-var human_team: TeamData
-var opponent_team: TeamData
+var team_a: TeamData
+var team_b: TeamData
 var top_position_labels: Dictionary = {}
 var bottom_position_labels: Dictionary = {}
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	for position_index in range(1, 7):
-		top_position_labels[position_index] = get_node("Court/TopPosition%d/Label" % position_index)
-		bottom_position_labels[position_index] = get_node("Court/BottomPosition%d/Label" % position_index)
+	top_position_labels = {
+		1: $Court/TopPosition2/Label,
+		2: $Court/TopPosition1/Label,
+		3: $Court/TopPosition6/Label,
+		4: $Court/TopPosition5/Label,
+		5: $Court/TopPosition4/Label,
+		6: $Court/TopPosition3/Label
+	}
+	bottom_position_labels = {
+		1: $Court/BottomPosition5/Label,
+		2: $Court/BottomPosition4/Label,
+		3: $Court/BottomPosition3/Label,
+		4: $Court/BottomPosition2/Label,
+		5: $Court/BottomPosition1/Label,
+		6: $Court/BottomPosition6/Label
+	}
 	refresh()
 
-func set_teams(_human_team: TeamData, _opponent_team: TeamData) -> void:
-	human_team = _human_team
-	opponent_team = _opponent_team
+func set_teams(_team_a: TeamData, _team_b: TeamData) -> void:
+	team_a = _team_a
+	team_b = _team_b
 	refresh()
 
 func _process(_delta: float) -> void:
@@ -36,13 +49,13 @@ func _process(_delta: float) -> void:
 func refresh() -> void:
 	if not is_node_ready():
 		return
-	_update_team_half(opponent_team, OPPONENT_COLOR, top_team_label, top_position_labels)
-	_update_team_half(human_team, HUMAN_COLOR, bottom_team_label, bottom_position_labels)
-	_update_bench(opponent_team, top_bench, top_bench_label, OPPONENT_COLOR)
-	_update_bench(human_team, bottom_bench, bottom_bench_label, HUMAN_COLOR)
+	_update_team_half(team_b, TEAM_B_COLOR, top_team_label, top_position_labels)
+	_update_team_half(team_a, TEAM_A_COLOR, bottom_team_label, bottom_position_labels)
+	_update_bench(team_b, top_bench, top_bench_label, TEAM_B_COLOR)
+	_update_bench(team_a, bottom_bench, bottom_bench_label, TEAM_A_COLOR)
 
 func _update_team_half(team: TeamData, team_color: Color, team_label: Label, labels: Dictionary) -> void:
-	team_label.text = "Opponent" if team == null else team.teamName
+	team_label.text = "Team B" if team == null else team.teamName
 	team_label.add_theme_color_override("font_color", team_color)
 	var players_by_position := _players_by_position(team)
 	for position_index in range(1, 7):
