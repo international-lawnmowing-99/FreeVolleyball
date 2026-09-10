@@ -20,9 +20,9 @@ var bottom_position_labels: Dictionary = {}
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	for position in range(1, 7):
-		top_position_labels[position] = get_node("Court/TopPosition%d/Label" % position)
-		bottom_position_labels[position] = get_node("Court/BottomPosition%d/Label" % position)
+	for position_index in range(1, 7):
+		top_position_labels[position_index] = get_node("Court/TopPosition%d/Label" % position_index)
+		bottom_position_labels[position_index] = get_node("Court/BottomPosition%d/Label" % position_index)
 	refresh()
 
 func set_teams(_human_team: TeamData, _opponent_team: TeamData) -> void:
@@ -45,10 +45,10 @@ func _update_team_half(team: TeamData, team_color: Color, team_label: Label, lab
 	team_label.text = "Opponent" if team == null else team.teamName
 	team_label.add_theme_color_override("font_color", team_color)
 	var players_by_position := _players_by_position(team)
-	for position in range(1, 7):
-		var athlete: AthleteStats = players_by_position.get(position)
-		var label: Label = labels[position]
-		label.text = "Position %d\n%s" % [position, _athlete_name(athlete)]
+	for position_index in range(1, 7):
+		var athlete: AthleteStats = players_by_position.get(position_index)
+		var label: Label = labels[position_index]
+		label.text = "Position %d\n%s" % [position_index, _athlete_name(athlete)]
 		label.modulate = Color.WHITE if athlete != null else Color(1, 1, 1, 0.45)
 		var card: Panel = label.get_parent()
 		_set_card_color(card, team_color, athlete != null)

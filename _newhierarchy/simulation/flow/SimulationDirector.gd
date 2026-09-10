@@ -1,7 +1,7 @@
 class_name SimulationDirector
 extends RefCounted
 
-var log: SimulationEventLog
+var event_log: SimulationEventLog
 
 var world_bootstrap: WorldBootstrapStage
 var national_program: NationalProgramStage
@@ -15,21 +15,21 @@ var match_review: MatchReviewStage
 var player_condition: PlayerConditionStage
 
 func _init(_log: SimulationEventLog = null) -> void:
-	log = _log if _log != null else SimulationEventLog.new()
-	world_bootstrap = WorldBootstrapStage.new(log)
-	national_program = NationalProgramStage.new(log)
-	season_planning = SeasonPlanningStage.new(log)
-	training = TrainingStage.new(log)
-	match_preparation = MatchPreparationStage.new(log)
+	event_log = _log if _log != null else SimulationEventLog.new()
+	world_bootstrap = WorldBootstrapStage.new(event_log)
+	national_program = NationalProgramStage.new(event_log)
+	season_planning = SeasonPlanningStage.new(event_log)
+	training = TrainingStage.new(event_log)
+	match_preparation = MatchPreparationStage.new(event_log)
 
 	#these belong in the match sim
-	point_break = PointBreakStage.new(log)
-	set_review = SetReviewStage.new(log)
-	match_review = MatchReviewStage.new(log)
-	load_tracking = LoadTrackingStage.new(log)
+	point_break = PointBreakStage.new(event_log)
+	set_review = SetReviewStage.new(event_log)
+	match_review = MatchReviewStage.new(event_log)
+	load_tracking = LoadTrackingStage.new(event_log)
 	#
 
-	player_condition = PlayerConditionStage.new(log)
+	player_condition = PlayerConditionStage.new(event_log)
 
 func generate_game_world(world: SimulationWorldState) -> void:
 	world_bootstrap.create_initial_world(world)

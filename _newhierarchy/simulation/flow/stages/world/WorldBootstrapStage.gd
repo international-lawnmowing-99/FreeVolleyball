@@ -1,13 +1,13 @@
 class_name WorldBootstrapStage
 extends RefCounted
 
-var log: SimulationEventLog
+var event_log: SimulationEventLog
 
 func _init(_log: SimulationEventLog) -> void:
-	log = _log
+	event_log = _log
 
 func create_initial_world(world: SimulationWorldState) -> void:
-	log.log("world", "Initial world creation started.")
+	event_log.log("world", "Initial world creation started.")
 	generate_professional_athletes(world)
 	generate_professional_teams(world)
 	for team in world.professional_teams:
@@ -16,25 +16,25 @@ func create_initial_world(world: SimulationWorldState) -> void:
 		#apply_international_player_limits(team)
 		#finalize_roster(team)
 		allocate_team_budget(team)
-	log.log("world", "Initial world creation completed.")
+	event_log.log("world", "Initial world creation completed.")
 
-func generate_professional_athletes(world: SimulationWorldState) -> void:
-	log.log("world", "Generating professional athletes distributed around the world.")
+func generate_professional_athletes(_world: SimulationWorldState) -> void:
+	event_log.log("world", "Generating professional athletes distributed around the world.")
 	# TODO: Create athletes with nationality, age, current ability, potential, and location.
 	# TODO: Add athletes to world.athletes and world.free_agents.
 
-func generate_professional_teams(world: SimulationWorldState) -> void:
-	log.log("world", "Generating professional teams.")
+func generate_professional_teams(_world: SimulationWorldState) -> void:
+	event_log.log("world", "Generating professional teams.")
 	# TODO: Create professional teams, leagues, budgets, and operating context.
 	# TODO: Add teams to world.professional_teams.
 
 func assign_team_strategic_preferences(team: TeamData) -> void:
-	log.log("world", "Assigning team and coach strategic preferences.", team)
+	event_log.log("world", "Assigning team and coach strategic preferences.", team)
 	# TODO: Set strategy weights for youth, key stats, international status, role priorities, and contract length.
 	# TODO: Decide later whether coaches remain abstract or become separate hireable entities.
 
-func negotiate_contracts(team: TeamData, free_agents: Array[AthleteData]) -> void:
-	log.log("world", "Negotiating contracts to build roster.", team)
+func negotiate_contracts(team: TeamData, _free_agents: Array[AthleteData]) -> void:
+	event_log.log("world", "Negotiating contracts to build roster.", team)
 	# TODO: Model team spending priorities against athlete goals, promises, salary demands, and court-time expectations.
 	# TODO: Track athlete happiness and future re-sign desire based on offer quality and promises kept.
 	# TODO: Move signed players from free_agents into the team roster.
@@ -48,5 +48,5 @@ func negotiate_contracts(team: TeamData, free_agents: Array[AthleteData]) -> voi
 	## TODO: Confirm final roster size, role balance, and depth chart.
 
 func allocate_team_budget(team: TeamData) -> void:
-	log.log("world", "Allocating budget to training, facilities, and operations.", team)
+	event_log.log("world", "Allocating budget to training, facilities, and operations.", team)
 	# TODO: Decide budget split for training, facilities, staff, scouting, and other operating expenses.

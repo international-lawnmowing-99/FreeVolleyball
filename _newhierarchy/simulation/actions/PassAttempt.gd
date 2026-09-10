@@ -5,7 +5,7 @@ const GRAVITY: float = 9.8
 const PASS_TOPSPIN: float = 1.0
 
 func resolve() -> AttemptOutcome:
-	var outcome: PassOutcome = PassOutcome.new()
+	var outcome: AttemptOutcome = AttemptOutcome.new()
 	var receive_difficulty_rating: float = _receive_difficulty_rating()
 	var pass_roll: float = rng.randf_range(0.0, float(actor.reception))
 	var roll_off_difference: float = pass_roll - receive_difficulty_rating
@@ -28,29 +28,25 @@ func resolve() -> AttemptOutcome:
 			#pass_band = "good"
 			reception_target = _good_pass_target()
 			ball_max_height = _standard_pass_max_height(reception_target)
-		outcome.pass_quality = 1.0
 	elif roll_off_difference >= -10.0:
 		#pass_band = "good"
 		reception_target = _good_pass_target()
 		ball_max_height = _standard_pass_max_height(reception_target)
-		outcome.pass_quality = 0.75
 	elif roll_off_difference >= -50.0:
 		#pass_band = "poor"
 		reception_target = _poor_pass_target()
 		ball_max_height = _standard_pass_max_height(reception_target)
-		outcome.pass_quality = 0.4
 	else:
 		#pass_band = "error"
 		var shank_result: Dictionary = _shank_pass_result()
 		reception_target = shank_result["target"]
 		ball_max_height = float(shank_result["ball_max_height"])
 		result_velocity = shank_result["velocity"]
-		outcome.pass_quality = 0.1
 
 	if result_velocity == Vector3.ZERO:
 		result_velocity = _find_well_behaved_parabola(ctx.ball_position, reception_target, ball_max_height)
 
-	outcome.success = outcome.pass_quality > 0.1
+	outcome.success = result_velocity != Vector3.ZERO
 	outcome.terminal = false
 	outcome.metadata["reception_target"] = _serialize_vector3(reception_target)
 	outcome.metadata["projected_target_position"] = _serialize_vector3(reception_target)
@@ -199,28 +195,6 @@ func _time_till_ball_at_position(position: Vector3, linear_velocity: Vector3, re
 
 	var ball_xz_distance: float = Vector3(position.x - reception_target.x, 0.0, position.z - reception_target.z).length()
 	return ball_xz_distance / ball_xz_velocity
-
-func _result_for_pass_band(pass_band: String) -> String:
-	match pass_band:
-		"perfect":
-			return "perfect_pass"
-		"good":
-			return "good_pass"
-		"poor":
-			return "poor_pass"
-		_:
-			return "shank_pass"
-
-func _description_for_pass_band(pass_band: String) -> String:
-	match pass_band:
-		"perfect":
-			return "Perfect pass to the setter window."
-		"good":
-			return "Playable two-point pass."
-		"poor":
-			return "One-point pass that forces adjustment."
-		_:
-			return "Shanked pass with emergency recovery trajectory."
 
 func _serialize_ball_state(position: Vector3, velocity: Vector3, topspin: float) -> Dictionary:
 	return {

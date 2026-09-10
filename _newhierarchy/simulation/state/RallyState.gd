@@ -2,7 +2,7 @@ class_name RallyState
 extends RefCounted
 const Enums = preload("res://Scripts/World/Enums.gd")
 
-const RallyReplayBuilder = preload("res://_newhierarchy/simulation/replay/RallyReplayBuilder.gd")
+const RallyReplayBuilderScript = preload("res://_newhierarchy/simulation/replay/RallyReplayBuilder.gd")
 
 var event_log: RallyEventLog = RallyEventLog.new()
 
@@ -76,4 +76,4 @@ func court_side_for(team: TeamData) -> float:
 	return 1.0
 
 func build_replay_data() -> Dictionary:
-	return RallyReplayBuilder.build(self)
+	return RallyReplayBuilderScript.build(self)

@@ -294,15 +294,15 @@ func _describe_replay_team(team_data: Dictionary) -> String:
 	var snippets: Array[String] = []
 	for i in range(min(players.size(), 2)):
 		var player: Dictionary = players[i]
-		var position: Dictionary = player.get("position", {})
+		var player_position: Dictionary = player.get("position", {})
 		var animation: Dictionary = player.get("animation", {})
 		snippets.append(
 			"%s @ (%.1f, %.1f, %.1f) -> %s"
 			% [
 				str(player.get("player_name", "")),
-				float(position.get("x", 0.0)),
-				float(position.get("y", 0.0)),
-				float(position.get("z", 0.0)),
+				float(player_position.get("x", 0.0)),
+				float(player_position.get("y", 0.0)),
+				float(player_position.get("z", 0.0)),
 				str(animation.get("name", ""))
 			]
 		)

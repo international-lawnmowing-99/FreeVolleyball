@@ -538,7 +538,7 @@ func setter_tendency_scouting_confidence() -> float:
 	var defense_weight: float = float(lineup_component_weights.get("defense", 1.0))
 	return clamp(opponent_setter_scouting_budget * (0.75 + defense_weight * 0.25), 0.0, 1.0)
 
-func choose_serve_plan(server: AthleteStats, team_match_data: TeamMatchData = null, opponent_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> Dictionary:
+func choose_serve_plan(server: AthleteStats, _team_match_data: TeamMatchData = null, opponent_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> Dictionary:
 	if server == null:
 		return {
 			"target": Vector3(4.0, 0.0, 0.0),

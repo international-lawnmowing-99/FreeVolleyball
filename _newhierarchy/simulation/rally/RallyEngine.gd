@@ -2,8 +2,8 @@ extends RefCounted
 
 class_name RallyEngine
 
-const SetPlayAnalysis = preload("res://_newhierarchy/simulation/tactics/SetPlayAnalysis.gd")
-const PlayerMovementPlanner = preload("res://_newhierarchy/simulation/team/PlayerMovementPlanner.gd")
+const SetPlayAnalysisScript = preload("res://_newhierarchy/simulation/tactics/SetPlayAnalysis.gd")
+const PlayerMovementPlannerScript = preload("res://_newhierarchy/simulation/team/PlayerMovementPlanner.gd")
 
 var rng:RandomNumberGenerator
 var workflow_log: SimulationEventLog
@@ -17,7 +17,7 @@ func _init(_rng, _workflow_log: SimulationEventLog = null) -> void:
 	workflow_log = _workflow_log
 
 func Resolve(ctx: RallyState) -> RallyState:
-	PlayerMovementPlanner.initialize_rally_tracking(ctx)
+	PlayerMovementPlannerScript.initialize_rally_tracking(ctx)
 	_log_phase(ctx, "pre serve", "Choosing serving strategy for this rally.", ctx.serving_team, ctx.server)
 	_choose_serving_strategy(ctx)
 	_log_phase(ctx, "pre serve - receiving team", "Choosing serve-receive strategy for this rally.", ctx.serving_team, ctx.server)
@@ -137,7 +137,7 @@ func _resolve_attack(ctx:RallyState) -> RallyState:
 func _resolve_block(ctx:RallyState) -> RallyState:
 	var blocker = ctx.chosen_blocker
 	if blocker == null:
-		blocker = SetPlayAnalysis.choose_reacting_blocker(ctx.defensive_positioning_plan, ctx.chosen_set_option)
+				blocker = SetPlayAnalysisScript.choose_reacting_blocker(ctx.defensive_positioning_plan, ctx.chosen_set_option)
 	if blocker == null:
 		blocker = ctx.attacker.teamStrategy.choose_blocker(ctx.attacker_match_data, rng)
 	_log_phase(ctx, "block", "Executing block.", ctx.attacker, blocker)
@@ -189,7 +189,7 @@ func _record_ball_touch(ctx: RallyState, outcome: AttemptOutcome, phase: String,
 	ctx.ball_position = snapshot["position"]
 	ctx.ball_velocity = snapshot["velocity"]
 	ctx.ball_topspin = snapshot["topspin"]
-	PlayerMovementPlanner.advance_phase(ctx, phase, source_team, target_team, outcome, ctx.ball_time)
+	PlayerMovementPlannerScript.advance_phase(ctx, phase, source_team, target_team, outcome, ctx.ball_time)
 	var phase_context: Dictionary = _build_phase_context_snapshot(ctx, phase, outcome, source_team, target_team)
 	ctx.phase_context = phase_context
 	ctx.phase_context_history.append(phase_context.duplicate(true))
@@ -426,7 +426,7 @@ func _assess_set_phase(ctx: RallyState, provided_setter: AthleteStats = null) ->
 	if set_origin == Vector3.ZERO:
 		set_origin = Vector3(defender_side * 0.5, max(float(setter.jumpSetHeight), 2.4), 0.0)
 
-	ctx.set_options = SetPlayAnalysis.evaluate_attacking_options(
+	ctx.set_options = SetPlayAnalysisScript.evaluate_attacking_options(
 		set_origin,
 		defender_side,
 		ctx.defender_match_data,
@@ -434,27 +434,27 @@ func _assess_set_phase(ctx: RallyState, provided_setter: AthleteStats = null) ->
 		ctx.defender.teamStrategy
 	)
 	ctx.set_options = _refine_set_options_for_pass(ctx.set_options)
-	ctx.chosen_set_option = SetPlayAnalysis.choose_attacking_option(ctx.set_options, ctx.defender.teamStrategy, rng)
-	ctx.defensive_set_read = SetPlayAnalysis.build_defensive_read(
+	ctx.chosen_set_option = SetPlayAnalysisScript.choose_attacking_option(ctx.set_options, ctx.defender.teamStrategy, rng)
+	ctx.defensive_set_read = SetPlayAnalysisScript.build_defensive_read(
 		ctx.set_options,
 		ctx.defender.teamStrategy,
 		ctx.attacker.teamStrategy if ctx.attacker != null else null,
 		rng
 	)
-	ctx.defensive_positioning_plan = SetPlayAnalysis.build_defensive_positioning_plan(
+	ctx.defensive_positioning_plan = SetPlayAnalysisScript.build_defensive_positioning_plan(
 		ctx.court_side_for(ctx.attacker),
 		ctx.attacker_match_data,
 		ctx.attacker.teamStrategy if ctx.attacker != null else null,
 		ctx.defensive_set_read
 	)
-	ctx.chosen_blocker = SetPlayAnalysis.choose_reacting_blocker(ctx.defensive_positioning_plan, ctx.chosen_set_option)
+	ctx.chosen_blocker = SetPlayAnalysisScript.choose_reacting_blocker(ctx.defensive_positioning_plan, ctx.chosen_set_option)
 
 	_emit_step(ctx, _set_assessment_summary(ctx))
 	_emit_step(ctx, _defensive_read_summary(ctx))
 
 func _set_assessment_summary(ctx: RallyState) -> String:
 	if ctx.chosen_set_option.is_empty():
-		return "[Rally %d] SET READ | no viable set options found after %s pass" % [ctx.rally_number, ctx.last_pass_band]
+		return "[Rally %d] SET READ | no viable set options found after pass trajectory assessment" % ctx.rally_number
 
 	return "[Rally %d] SET READ | > %s selected (difficulty=%.2f, time=%.2fs, lane=%s)" % [
 		ctx.rally_number,
