@@ -488,9 +488,26 @@ func select_starting_lineup(players: Array[AthleteStats]) -> Array[AthleteStats]
 	var best_lineup: Array[AthleteStats] = _assignment_to_lineup(best_assignment, role_keys)
 	return _apply_system_position_rules(best_lineup)
 
-func choose_passer(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
+func choose_passer_for_ball(
+	team_match_data: TeamMatchData,
+	ball_position: Vector3,
+	team_side: float
+) -> AthleteStats:
 	var players := _resolve_players(team_match_data)
-	return _choose_player_by_skill(players, "reception", _rng)
+	if players.is_empty() or team_match_data == null or ball_position == Vector3.ZERO:
+		return players[0] if not players.is_empty() else null
+
+	var passer: AthleteStats = players[0]
+	var shortest_distance: float = INF
+	for player in players:
+		var player_position := team_match_data.get_phase_position_for_player(player, "receive", team_side)
+		var distance := ball_position.distance_squared_to(player_position)
+		if player.role == Enums.Role.Setter:
+			distance *= 3.0
+		if distance < shortest_distance:
+			shortest_distance = distance
+			passer = player
+	return passer
 
 func choose_setter(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
 	var players: Array[AthleteStats] = _resolve_players(team_match_data)
@@ -875,27 +892,6 @@ func _athlete_name(player: AthleteStats) -> String:
 		return ""
 	return "%s %s" % [player.firstName, player.lastName]
 
-func _choose_player_by_skill(players: Array[AthleteStats], skill_property: String, _rng: RandomNumberGenerator = null) -> AthleteStats:
-	if players.is_empty():
-		return null
-
-	var chosen: AthleteStats = players[0]
-	var best_score := -INF
-
-	for player in players:
-		var base_score: float = float(player.get(skill_property))
-		var noise := 0.0
-		if _rng != null:
-			noise = _rng.randf_range(-10.0, 10.0)
-		else:
-			noise = randf_range(-10.0, 10.0)
-
-		var sampled_score := base_score + noise
-		if sampled_score > best_score:
-			best_score = sampled_score
-			chosen = player
-
-	return chosen
 
 func _system_role_requirements(system: SetterSystem) -> Dictionary:
 	match system:

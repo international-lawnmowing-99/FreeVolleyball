@@ -124,6 +124,7 @@ static func _build_touch_keyframe(index: int, touch: Dictionary, context: Dictio
 		"is_keyframe": true,
 		"source": "simulation_touch",
 		"ball": ball_state,
+		"target_position": context.get("target_position", {}).duplicate(true),
 		"teams": context.get("teams", []),
 		"focus": {
 			"actor_name": str(event.get("actor_name", touch.get("actor_name", "Unknown Athlete"))),

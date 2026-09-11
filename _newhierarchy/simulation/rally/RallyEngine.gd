@@ -83,7 +83,11 @@ func _resolve_pass(ctx: RallyState) -> RallyState:
 	if true: #how do we decide this?
 		ctx.next_phase = Enums.Phase.Set
 
-	var passer = ctx.defender.teamStrategy.choose_passer(ctx.defender_match_data, rng)
+	var passer = ctx.defender.teamStrategy.choose_passer_for_ball(
+		ctx.defender_match_data,
+		ctx.ball_position,
+		ctx.court_side_for(ctx.defender)
+	)
 	_log_phase(ctx, "pass", "Executing pass.", ctx.defender, passer)
 	var attempt := PassAttempt.new(passer, ctx, rng)
 
@@ -185,6 +189,7 @@ func _athlete_name(athlete: AthleteStats) -> String:
 
 func _record_ball_touch(ctx: RallyState, outcome: AttemptOutcome, phase: String, source_team: TeamData, target_team: TeamData) -> void:
 	ctx.touch_count += 1
+	ctx.ball_time += _ball_flight_time(ctx, outcome, phase)
 	var snapshot := _build_ball_snapshot(ctx, outcome, phase, source_team, target_team)
 	ctx.ball_position = snapshot["position"]
 	ctx.ball_velocity = snapshot["velocity"]
@@ -208,6 +213,11 @@ func _record_ball_touch(ctx: RallyState, outcome: AttemptOutcome, phase: String,
 			snapshot["topspin"]
 		]
 	)
+
+func _ball_flight_time(_ctx: RallyState, outcome: AttemptOutcome, phase: String) -> float:
+	if outcome.metadata.has("projected_flight_time"):
+		return maxf(float(outcome.metadata.get("projected_flight_time", 0.0)), 0.0)
+	return float(_phase_trajectory(phase).get("travel_time", 0.0))
 
 func _build_ball_snapshot(ctx: RallyState, outcome: AttemptOutcome, phase: String, source_team: TeamData, target_team: TeamData) -> Dictionary:
 	if outcome.metadata.has("projected_velocity"):
@@ -290,6 +300,19 @@ func _build_phase_context_snapshot(ctx: RallyState, phase: String, outcome: Atte
 
 	var position: Vector3 = ctx.ball_position
 	var velocity: Vector3 = ctx.ball_velocity
+	var target_position := Vector3.ZERO
+	match phase:
+		"serve":
+			target_position = ctx.serve_target
+		"receive":
+			target_position = _vector3_from_metadata(outcome.metadata.get("reception_target", {}), ctx.last_pass_target)
+		"set":
+			target_position = _vector3_from_metadata(outcome.metadata.get("projected_target_position", {}), Vector3.ZERO)
+		"attack":
+			target_position = ctx.chosen_set_option.get("contact_position", Vector3.ZERO)
+	var target_snapshot := {}
+	if target_position != Vector3.ZERO:
+		target_snapshot = {"x": target_position.x, "y": target_position.y, "z": target_position.z}
 	return {
 		"touch_index": ctx.touch_count,
 		"phase": phase,
@@ -300,6 +323,7 @@ func _build_phase_context_snapshot(ctx: RallyState, phase: String, outcome: Atte
 			"velocity": {"x": velocity.x, "y": velocity.y, "z": velocity.z},
 			"topspin": ctx.ball_topspin
 		},
+		"target_position": target_snapshot,
 		"teams": [source_context, target_context]
 	}
 

@@ -92,6 +92,7 @@ func _on_play_point_button_pressed() -> void:
 	_load_replay(result.get("replay", {}))
 	_update_court_from_replay()
 	court_lineup_view.queue_redraw()
+	_refresh_rally_step_text("Total in-game rally time: %.2fs" % float(result.get("rally_time", 0.0)))
 
 	var score_event: Dictionary = result["score_event"]
 	var summary := "Point played"
@@ -115,6 +116,7 @@ func _on_play_set_button_pressed() -> void:
 		_load_replay(sim.rally_replays[sim.rally_replays.size() - 1].get("replay", {}))
 		_update_court_from_replay()
 	court_lineup_view.queue_redraw()
+	_refresh_rally_step_text("Total in-game rally time: %.2fs" % float(result.get("rally_time", 0.0)))
 
 	var ending_event: Dictionary = result["ending_event"]
 	var summary := "Set %d completed (%d rallies)" % [result["set_number"], result["rallies_played"]]
@@ -133,7 +135,8 @@ func _on_next_rally_step_button_pressed() -> void:
 
 	var result := sim.next_rally_step()
 	court_lineup_view.queue_redraw()
-	_refresh_rally_step_text(result.get("message", ""))
+	var snapshot: Dictionary = result.get("court_snapshot", {})
+	_refresh_rally_step_text(result.get("message", ""), float(snapshot.get("timestamp", 0.0)))
 	if not result.get("court_snapshot", {}).is_empty():
 		court_mini_map.set_snapshot(result.get("court_snapshot", {}))
 
@@ -207,8 +210,8 @@ func _set_match_buttons_enabled(enabled: bool) -> void:
 	next_replay_frame_button.disabled = not enabled
 	strategy_panel.modulate = Color(1, 1, 1, 1.0 if enabled else 0.72)
 
-func _refresh_rally_step_text(message: String) -> void:
-	rally_step_label.text = "Rally Step Output:\n%s" % message
+func _refresh_rally_step_text(message: String, elapsed_time: float = 0.0) -> void:
+	rally_step_label.text = "In-game rally time: %.2fs\nRally Step Output:\n%s" % [elapsed_time, message]
 
 func _refresh_replay_text(message: String) -> void:
 	replay_label.text = "Replay Output:\n%s" % message

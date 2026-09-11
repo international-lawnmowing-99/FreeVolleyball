@@ -5,9 +5,11 @@ const COURT_LENGTH := 9.0
 const COURT_WIDTH := 9.0
 const PLAYER_CARD_SIZE := Vector2(82.0, 34.0)
 const BALL_SIZE := Vector2(12.0, 12.0)
+const TARGET_SIZE := Vector2(24.0, 24.0)
 const TEAM_A_COLOR := Color(0.13, 0.72, 0.98, 1.0)
 const TEAM_B_COLOR := Color(1.0, 0.42, 0.32, 1.0)
 const LIBERO_COLOR := Color(0.95, 0.9, 0.25, 1.0)
+const TARGET_COLOR := Color(1.0, 0.2, 0.72, 1.0)
 
 @onready var title_label: Label = $Panel/Title
 @onready var top_team_label: Label = $Panel/Court/TopTeamLabel
@@ -20,15 +22,18 @@ const LIBERO_COLOR := Color(0.95, 0.9, 0.25, 1.0)
 ]
 var goal_cards: Array[Panel] = []
 var ball_marker: Panel
+var target_marker: Panel
 
 var phase_name := "No phase"
 var teams: Array = []
 var ball_state: Dictionary = {}
+var target_position: Dictionary = {}
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_create_goal_cards()
 	_create_ball_marker()
+	_create_target_marker()
 	refresh_styles()
 	refresh()
 
@@ -36,12 +41,14 @@ func set_snapshot(snapshot: Dictionary) -> void:
 	phase_name = str(snapshot.get("phase", "No phase"))
 	teams = snapshot.get("teams", []).duplicate(true)
 	ball_state = snapshot.get("ball_state", {}).duplicate(true)
+	target_position = snapshot.get("target_position", {}).duplicate(true)
 	refresh()
 
 func clear_snapshot() -> void:
 	phase_name = "No phase"
 	teams = []
 	ball_state = {}
+	target_position = {}
 	refresh()
 
 func refresh() -> void:
@@ -51,6 +58,7 @@ func refresh() -> void:
 	_update_team_headers()
 	_update_players()
 	_update_ball()
+	_update_target()
 
 func refresh_styles() -> void:
 	_apply_style($Panel, Color(0.035, 0.055, 0.075, 0.96), Color(0.35, 0.42, 0.46, 0.8))
@@ -60,6 +68,7 @@ func refresh_styles() -> void:
 	for card in goal_cards:
 		_apply_style(card, Color(0.04, 0.08, 0.12, 0.16), Color.WHITE)
 	_apply_style(ball_marker, Color(1.0, 0.86, 0.22, 1.0), Color(1.0, 1.0, 0.85, 1.0))
+	_apply_style(target_marker, Color(TARGET_COLOR, 0.22), TARGET_COLOR)
 
 func _create_goal_cards() -> void:
 	for index in range(player_cards.size()):
@@ -82,6 +91,19 @@ func _create_ball_marker() -> void:
 	style.corner_radius_bottom_left = 6
 	style.corner_radius_bottom_right = 6
 	ball_marker.add_theme_stylebox_override("panel", style)
+
+func _create_target_marker() -> void:
+	target_marker = Panel.new()
+	target_marker.name = "TargetMarker"
+	target_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	target_marker.z_index = 3
+	$Panel/Court.add_child(target_marker)
+	var style := StyleBoxFlat.new()
+	style.corner_radius_top_left = 7
+	style.corner_radius_top_right = 7
+	style.corner_radius_bottom_left = 7
+	style.corner_radius_bottom_right = 7
+	target_marker.add_theme_stylebox_override("panel", style)
 
 func _update_team_headers() -> void:
 	var top_name := ""
@@ -166,6 +188,13 @@ func _update_ball() -> void:
 	var ball_position: Dictionary = ball_state.get("position", {})
 	ball_marker.size = BALL_SIZE
 	ball_marker.position = _court_to_canvas(ball_position) - BALL_SIZE * 0.5
+
+func _update_target() -> void:
+	target_marker.visible = not target_position.is_empty()
+	if not target_marker.visible:
+		return
+	target_marker.size = TARGET_SIZE
+	target_marker.position = _court_to_canvas(target_position) - TARGET_SIZE * 0.5
 
 func _court_to_canvas(position_data: Dictionary) -> Vector2:
 	var court_size: Vector2 = $Panel/Court.size

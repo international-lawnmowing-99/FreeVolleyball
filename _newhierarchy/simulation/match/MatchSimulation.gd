@@ -87,16 +87,19 @@ func play_set() -> Dictionary:
 	var set_index_before: int = score.previous_set_scores.size()
 	var rallies_in_set: int = 0
 	var last_event: Dictionary = {"type": "point"}
+	var last_rally_time: float = 0.0
 
 	while not match_over and score.previous_set_scores.size() == set_index_before:
 		var point_result = play_point()
 		last_event = point_result["score_event"]
+		last_rally_time = float(point_result.get("rally_time", 0.0))
 		rallies_in_set += 1
 
 	return {
 		"type": "set_complete",
 		"set_number": set_index_before + 1,
 		"rallies_played": rallies_in_set,
+		"rally_time": last_rally_time,
 		"ending_event": last_event
 	}
 
@@ -267,6 +270,7 @@ func _commit_pending_rally() -> Dictionary:
 	var point_result := {
 		"type": "point_complete",
 		"rally_number": rally_result.rally_number,
+		"rally_time": rally_result.ball_time,
 		"point_winner": rally_result.point_winner,
 		"point_winner_name": rally_result.point_winner.teamName,
 		"score_event": score_event,
@@ -326,6 +330,7 @@ func _build_pending_court_snapshots(rally_result: RallyState) -> Array[Dictionar
 			"phase": str(phase_context.get("phase", "")),
 			"timestamp": float(phase_context.get("timestamp", 0.0)),
 			"ball_state": phase_context.get("ball_state", {}).duplicate(true),
+			"target_position": phase_context.get("target_position", {}).duplicate(true),
 			"teams": phase_context.get("teams", []).duplicate(true)
 		})
 
