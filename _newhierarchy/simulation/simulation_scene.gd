@@ -21,7 +21,6 @@ const TeamStrategyScript = preload("res://_newhierarchy/simulation/team/strategy
 @onready var front_court_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/FrontCourtRow/FrontCourtOption
 @onready var middle_set_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/MiddleSetRow/MiddleSetOption
 @onready var outside_set_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/OutsideSetRow/OutsideSetOption
-@onready var scouting_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/ScoutingRow/ScoutingOption
 @onready var block_commit_option: OptionButton = $CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/BlockCommitRow/BlockCommitOption
 @onready var court_mini_map: CourtMiniMap = $CanvasLayer/Control/CourtMiniMap as CourtMiniMap
 @onready var court_lineup_view: CourtLineupView = $CanvasLayer/Control/CourtLineupView
@@ -383,14 +382,6 @@ func _setup_strategy_ui() -> void:
 			{"label": "Reduce Pins", "value": 0.75}
 		]
 	)
-	strategy_option_maps["scouting"] = _fill_option_button(
-		scouting_option,
-		[
-			{"label": "Low", "value": 0.15},
-			{"label": "Medium", "value": 0.35},
-			{"label": "High", "value": 0.65}
-		]
-	)
 	strategy_option_maps["block_commit"] = _fill_option_button(
 		block_commit_option,
 		[
@@ -406,7 +397,6 @@ func _setup_strategy_ui() -> void:
 	front_court_option.item_selected.connect(_on_front_court_selected)
 	middle_set_option.item_selected.connect(_on_middle_set_selected)
 	outside_set_option.item_selected.connect(_on_outside_set_selected)
-	scouting_option.item_selected.connect(_on_scouting_selected)
 	block_commit_option.item_selected.connect(_on_block_commit_selected)
 
 func _fill_option_button(button: OptionButton, entries: Array) -> Array:
@@ -424,7 +414,6 @@ func _refresh_strategy_ui() -> void:
 	front_court_option.disabled = not has_strategy
 	middle_set_option.disabled = not has_strategy
 	outside_set_option.disabled = not has_strategy
-	scouting_option.disabled = not has_strategy
 	block_commit_option.disabled = not has_strategy
 
 	if not has_strategy:
@@ -437,7 +426,6 @@ func _refresh_strategy_ui() -> void:
 	_select_option_for_value(front_court_option, strategy_option_maps["front_court"], strategy.prefer_front_court_sets)
 	_select_option_for_value(middle_set_option, strategy_option_maps["middle"], strategy.prefer_middle_sets)
 	_select_option_for_value(outside_set_option, strategy_option_maps["outside"], strategy.prefer_outside_sets)
-	_select_option_for_value(scouting_option, strategy_option_maps["scouting"], strategy.opponent_setter_scouting_budget)
 	_select_option_for_value(block_commit_option, strategy_option_maps["block_commit"], strategy.block_commit_tendency)
 	fixed_setter_option.disabled = strategy.preferred_setter_system != TeamStrategyScript.SetterSystem.FIXED_POSITION_SETTER
 
@@ -483,10 +471,7 @@ func _describe_alpha_strategy(strategy) -> String:
 		strategy.prefer_middle_sets,
 		strategy.prefer_outside_sets
 	])
-	lines.append("Scout %.2f | block commit %.2f" % [
-		strategy.opponent_setter_scouting_budget,
-		strategy.block_commit_tendency,
-	])
+	lines.append("Block commit %.2f" % strategy.block_commit_tendency)
 	return "\n".join(lines)
 
 func _entry_value(entries: Array, index: int, fallback: Variant) -> Variant:
@@ -536,13 +521,6 @@ func _on_outside_set_selected(index: int) -> void:
 	if strategy == null:
 		return
 	strategy.prefer_outside_sets = float(_entry_value(strategy_option_maps["outside"], index, strategy.prefer_outside_sets))
-	_refresh_strategy_ui()
-
-func _on_scouting_selected(index: int) -> void:
-	var strategy = _alpha_strategy()
-	if strategy == null:
-		return
-	strategy.opponent_setter_scouting_budget = float(_entry_value(strategy_option_maps["scouting"], index, strategy.opponent_setter_scouting_budget))
 	_refresh_strategy_ui()
 
 func _on_block_commit_selected(index: int) -> void:

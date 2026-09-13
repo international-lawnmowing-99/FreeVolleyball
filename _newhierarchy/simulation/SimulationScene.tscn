@@ -177,18 +177,6 @@ text = "Outside Preference"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ScoutingRow" type="HBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=68301089]
-layout_mode = 2
-
-[node name="ScoutingLabel" type="Label" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/ScoutingRow" unique_id=97201102]
-custom_minimum_size = Vector2(170, 0)
-layout_mode = 2
-text = "Setter Scouting"
-
-[node name="ScoutingOption" type="OptionButton" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox/ScoutingRow" unique_id=29301114]
-layout_mode = 2
-size_flags_horizontal = 3
-
 [node name="BlockCommitRow" type="HBoxContainer" parent="CanvasLayer/Control/StrategyPanel/MarginContainer/StrategyVBox" unique_id=61201126]
 layout_mode = 2
 

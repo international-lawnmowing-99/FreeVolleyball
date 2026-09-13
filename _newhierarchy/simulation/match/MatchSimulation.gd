@@ -22,6 +22,7 @@ var pending_rally_steps: Array[String] = []
 var pending_rally_result: Dictionary = {}
 var pending_court_snapshots: Array[Dictionary] = []
 var pending_court_snapshot_index: int = -1
+var pending_serve_plan_locked: bool = false
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -133,6 +134,17 @@ func next_rally_step() -> Dictionary:
 	if not pending_court_snapshots.is_empty():
 		pending_court_snapshot_index = mini(pending_court_snapshot_index + 1, pending_court_snapshots.size() - 1)
 		snapshot = pending_court_snapshots[pending_court_snapshot_index].duplicate(true)
+	if message.contains("Serve plan locked in"):
+		pending_serve_plan_locked = true
+	if pending_serve_plan_locked:
+		var serve_target: Vector3 = pending_rally_result["rally_result"].serve_target
+		snapshot["target_position"] = {
+			"x": serve_target.x,
+			"y": serve_target.y,
+			"z": serve_target.z
+		} if serve_target != Vector3.ZERO else {}
+	else:
+		snapshot["target_position"] = {}
 	var result: Dictionary = {
 		"type": "rally_step",
 		"message": message,
@@ -229,6 +241,7 @@ func _prepare_pending_rally() -> bool:
 		pending_rally_steps.size()
 	)
 	pending_court_snapshot_index = -1
+	pending_serve_plan_locked = false
 	pending_rally_result = {
 		"rally_number": rally_number,
 		"previous_serving_team": serving_team,
@@ -286,11 +299,11 @@ func _build_pending_court_snapshots(rally_result: RallyState) -> Array[Dictionar
 	var snapshots: Array[Dictionary] = []
 	if rally_result == null:
 		return snapshots
-
 	var setup_snapshot := {
 		"phase": "serve_setup",
 		"timestamp": 0.0,
-		"teams": []
+		"teams": [],
+		"target_position": {}
 	}
 	if rally_result.serving_team_match_data != null:
 		setup_snapshot["teams"].append(

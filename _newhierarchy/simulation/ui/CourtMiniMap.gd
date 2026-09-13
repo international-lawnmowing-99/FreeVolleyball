@@ -20,9 +20,14 @@ const TARGET_COLOR := Color(1.0, 0.2, 0.72, 1.0)
 	$Panel/Court/BottomPosition1, $Panel/Court/BottomPosition6, $Panel/Court/BottomPosition5,
 	$Panel/Court/BottomPosition2, $Panel/Court/BottomPosition3, $Panel/Court/BottomPosition4
 ]
-var goal_cards: Array[Panel] = []
-var ball_marker: Panel
-var target_marker: Panel
+@onready var goal_cards: Array[Panel] = [
+	$Panel/Court/GoalCard1, $Panel/Court/GoalCard2, $Panel/Court/GoalCard3,
+	$Panel/Court/GoalCard4, $Panel/Court/GoalCard5, $Panel/Court/GoalCard6,
+	$Panel/Court/GoalCard7, $Panel/Court/GoalCard8, $Panel/Court/GoalCard9,
+	$Panel/Court/GoalCard10, $Panel/Court/GoalCard11, $Panel/Court/GoalCard12
+]
+@onready var ball_marker: Panel = $Panel/Court/BallMarker
+@onready var target_marker: Panel = $Panel/Court/TargetMarker
 
 var phase_name := "No phase"
 var teams: Array = []
@@ -31,9 +36,6 @@ var target_position: Dictionary = {}
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_create_goal_cards()
-	_create_ball_marker()
-	_create_target_marker()
 	refresh_styles()
 	refresh()
 
@@ -69,41 +71,6 @@ func refresh_styles() -> void:
 		_apply_style(card, Color(0.04, 0.08, 0.12, 0.16), Color.WHITE)
 	_apply_style(ball_marker, Color(1.0, 0.86, 0.22, 1.0), Color(1.0, 1.0, 0.85, 1.0))
 	_apply_style(target_marker, Color(TARGET_COLOR, 0.22), TARGET_COLOR)
-
-func _create_goal_cards() -> void:
-	for index in range(player_cards.size()):
-		var goal_card := Panel.new()
-		goal_card.name = "GoalCard%d" % (index + 1)
-		goal_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		goal_card.z_index = -1
-		$Panel/Court.add_child(goal_card)
-		goal_cards.append(goal_card)
-
-func _create_ball_marker() -> void:
-	ball_marker = Panel.new()
-	ball_marker.name = "BallMarker"
-	ball_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ball_marker.z_index = 4
-	$Panel/Court.add_child(ball_marker)
-	var style := StyleBoxFlat.new()
-	style.corner_radius_top_left = 6
-	style.corner_radius_top_right = 6
-	style.corner_radius_bottom_left = 6
-	style.corner_radius_bottom_right = 6
-	ball_marker.add_theme_stylebox_override("panel", style)
-
-func _create_target_marker() -> void:
-	target_marker = Panel.new()
-	target_marker.name = "TargetMarker"
-	target_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	target_marker.z_index = 3
-	$Panel/Court.add_child(target_marker)
-	var style := StyleBoxFlat.new()
-	style.corner_radius_top_left = 7
-	style.corner_radius_top_right = 7
-	style.corner_radius_bottom_left = 7
-	style.corner_radius_bottom_right = 7
-	target_marker.add_theme_stylebox_override("panel", style)
 
 func _update_team_headers() -> void:
 	var top_name := ""

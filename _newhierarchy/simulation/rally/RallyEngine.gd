@@ -238,7 +238,7 @@ func _build_ball_snapshot(ctx: RallyState, outcome: AttemptOutcome, phase: Strin
 	)
 	var travel_time: float = float(trajectory["travel_time"])
 	var velocity: Vector3 = (target_position - position) / max(travel_time, 0.01)
-	var topspin: float = _phase_topspin(phase, outcome)
+	var topspin: float = 1
 
 	if phase == "block" and str(outcome.metadata.get("result", "")) == "stuff_block":
 		velocity = Vector3(-velocity.x * 0.55, max(velocity.y * 0.2, -2.0), velocity.z * 0.25)
@@ -258,7 +258,7 @@ func _projected_ball_snapshot(ctx: RallyState, outcome: AttemptOutcome, phase: S
 	var position: Vector3 = ctx.ball_position
 	var velocity: Vector3 = _vector3_from_metadata(outcome.metadata.get("projected_velocity", {}), Vector3.ZERO)
 	var target_position: Vector3 = _vector3_from_metadata(outcome.metadata.get("projected_target_position", {}), position)
-	var topspin: float = float(outcome.metadata.get("projected_topspin", _phase_topspin(phase, outcome)))
+	var topspin: float = 1
 
 	return {
 		"touch_index": ctx.touch_count,
@@ -390,40 +390,6 @@ func _phase_trajectory(phase: String) -> Dictionary:
 				"travel_time": 0.5
 			}
 
-func _phase_topspin(phase: String, outcome: AttemptOutcome) -> float:
-	var skill_value: float = 50.0
-	match phase:
-		"serve":
-			skill_value = float(outcome.actor.serve)
-		"receive":
-			skill_value = float(outcome.actor.reception)
-		"set":
-			skill_value = float(outcome.actor.set)
-		"attack":
-			skill_value = float(outcome.actor.spike)
-		"block":
-			skill_value = float(outcome.actor.block)
-
-	var normalized_skill: float = float(clamp(skill_value / 100.0, 0.0, 1.2))
-	match phase:
-		"serve":
-			return float(clamp(4.0 + normalized_skill * 8.0 + rng.randf_range(-0.5, 0.5), 2.5, 13.0))
-		"receive":
-			return float(clamp(0.4 + (1.0 - normalized_skill) * 1.1 + rng.randf_range(-0.15, 0.15), 0.0, 2.0))
-		"set":
-			return float(clamp(0.25 + (1.0 - normalized_skill) * 0.8 + rng.randf_range(-0.1, 0.1), 0.0, 1.4))
-		"attack":
-			return float(clamp(7.0 + normalized_skill * 11.0 + rng.randf_range(-0.8, 0.8), 5.0, 20.0))
-		"block":
-			var result := str(outcome.metadata.get("result", ""))
-			if result == "stuff_block":
-				return float(clamp(1.4 + normalized_skill * 2.0 + rng.randf_range(-0.2, 0.2), 0.8, 4.0))
-			if result == "soft_touch_continues":
-				return float(clamp(0.5 + normalized_skill * 1.3 + rng.randf_range(-0.2, 0.2), 0.2, 2.4))
-			return 0.0
-		_:
-			return 0.0
-
 func _match_data_for_team(ctx: RallyState, team: TeamData) -> TeamMatchData:
 	if team == ctx.attacker:
 		return ctx.attacker_match_data
@@ -459,22 +425,15 @@ func _assess_set_phase(ctx: RallyState, provided_setter: AthleteStats = null) ->
 	)
 	ctx.set_options = _refine_set_options_for_pass(ctx.set_options)
 	ctx.chosen_set_option = SetPlayAnalysisScript.choose_attacking_option(ctx.set_options, ctx.defender.teamStrategy, rng)
-	ctx.defensive_set_read = SetPlayAnalysisScript.build_defensive_read(
-		ctx.set_options,
-		ctx.defender.teamStrategy,
-		ctx.attacker.teamStrategy if ctx.attacker != null else null,
-		rng
-	)
 	ctx.defensive_positioning_plan = SetPlayAnalysisScript.build_defensive_positioning_plan(
 		ctx.court_side_for(ctx.attacker),
 		ctx.attacker_match_data,
 		ctx.attacker.teamStrategy if ctx.attacker != null else null,
-		ctx.defensive_set_read
+		ctx.set_options
 	)
 	ctx.chosen_blocker = SetPlayAnalysisScript.choose_reacting_blocker(ctx.defensive_positioning_plan, ctx.chosen_set_option)
 
 	_emit_step(ctx, _set_assessment_summary(ctx))
-	_emit_step(ctx, _defensive_read_summary(ctx))
 
 func _set_assessment_summary(ctx: RallyState) -> String:
 	if ctx.chosen_set_option.is_empty():
@@ -488,32 +447,10 @@ func _set_assessment_summary(ctx: RallyState) -> String:
 		str(ctx.chosen_set_option.get("attack_lane", ""))
 	]
 
-func _defensive_read_summary(ctx: RallyState) -> String:
-	var predicted_primary: Dictionary = ctx.defensive_set_read.get("predicted_primary", {})
-	if predicted_primary.is_empty():
-		return "[Rally %d] BLOCK PLAN | defence has no clear set read" % [ctx.rally_number]
-
-	var blocker_name := ""
-	if ctx.chosen_blocker != null:
-		blocker_name = _athlete_name(ctx.chosen_blocker)
-	var moving_defenders: int = 0
-	for defender_plan in ctx.defensive_positioning_plan.get("backcourt", []):
-		if bool(defender_plan.get("should_move", false)):
-			moving_defenders += 1
-
-	return "[Rally %d] BLOCK PLAN | read=%s scout=%.2f blocker=%s backcourt_shifts=%d" % [
-		ctx.rally_number,
-		str(predicted_primary.get("attacker_name", "")),
-		float(ctx.defensive_set_read.get("scouting_confidence", 0.0)),
-		blocker_name,
-		moving_defenders
-	]
-
 func _reset_sideout_assessment(ctx: RallyState) -> void:
 	ctx.last_pass_target = Vector3.ZERO
 	ctx.set_options.clear()
 	ctx.chosen_set_option = {}
-	ctx.defensive_set_read = {}
 	ctx.defensive_positioning_plan = {}
 	ctx.chosen_blocker = null
 	ctx.available_blockers.clear()
@@ -598,6 +535,7 @@ func _choose_serving_strategy(ctx: RallyState) -> void:
 		rng
 	)
 	ctx.serve_target = plan.get("target", Vector3.ZERO)
+	ctx.serve_target.x *= -ctx.court_side_for(ctx.serving_team)
 	ctx.serve_type = str(plan.get("serve_type", "float"))
 	ctx.serve_aggression = str(plan.get("aggression", "moderate"))
 	ctx.serve_target_strategy = str(plan.get("strategy", ""))

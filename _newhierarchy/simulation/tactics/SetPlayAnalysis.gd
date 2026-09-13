@@ -82,51 +82,16 @@ static func choose_attacking_option(options: Array[Dictionary], team_strategy: T
 
 	return _weighted_option_choice(weighted_options, "attack_weight", rng)
 
-static func build_defensive_read(
-	options: Array[Dictionary],
-	attacking_strategy: TeamStrategy,
-	defending_strategy: TeamStrategy,
-	rng: RandomNumberGenerator
-) -> Dictionary:
-	if options.is_empty():
-		return {}
-
-	var scouting_confidence: float = 0.0
-	if defending_strategy != null:
-		scouting_confidence = defending_strategy.setter_tendency_scouting_confidence()
-
-	var weighted_options: Array[Dictionary] = []
-	for option in options:
-		var skill_ratio: float = float(option.get("spike_skill_ratio", 1.0))
-		var difficulty: float = float(option.get("set_difficulty", 0.5))
-		var real_tendency: float = 1.0
-		if attacking_strategy != null:
-			real_tendency = attacking_strategy.setting_preference_weight_for_attacker(option.get("attacker"))
-		var perceived_tendency: float = lerp(1.0, real_tendency, scouting_confidence)
-		var threat_weight: float = max(0.01, perceived_tendency * skill_ratio * clamp(1.15 - difficulty * 0.55, 0.4, 1.25))
-		var enriched: Dictionary = option.duplicate(true)
-		enriched["perceived_tendency"] = perceived_tendency
-		enriched["threat_weight"] = threat_weight
-		weighted_options.append(enriched)
-
-	var predicted_primary: Dictionary = _weighted_option_choice(weighted_options, "threat_weight", rng)
-	return {
-		"scouting_confidence": scouting_confidence,
-		"predicted_primary": predicted_primary,
-		"weighted_options": weighted_options
-	}
-
 static func build_defensive_positioning_plan(
 	team_side: float,
 	defending_match_data: TeamMatchData,
 	defending_strategy: TeamStrategy,
-	defensive_read: Dictionary
+	options: Array[Dictionary]
 ) -> Dictionary:
 	if defending_match_data == null:
 		return {}
 
-	var weighted_options: Array = defensive_read.get("weighted_options", [])
-	if weighted_options.is_empty():
+	if options.is_empty():
 		return {}
 
 	var block_commit: float = 1.0
@@ -149,10 +114,6 @@ static func build_defensive_positioning_plan(
 				"block_role_pull": role_pull
 			}
 			blocker_positions.append(assignment)
-
-			var predicted_target: Dictionary = defensive_read.get("predicted_primary", {})
-			if not predicted_target.is_empty():
-				var predicted_contact: Vector3 = predicted_target.get("contact_position", Vector3.ZERO)
 
 			sorted_front_row.append(assignment)
 		else:

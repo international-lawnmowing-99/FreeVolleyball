@@ -2,7 +2,21 @@ extends Resource
 class_name TeamStrategy
 # Holds all the input the user/ai has generated to direct their team
 
+const TeamLineupStrategyScript = preload("res://_newhierarchy/simulation/team/strategy/TeamLineupStrategy.gd")
+const TeamServeStrategyScript = preload("res://_newhierarchy/simulation/team/strategy/TeamServeStrategy.gd")
+const TeamReceiveStrategyScript = preload("res://_newhierarchy/simulation/team/strategy/TeamReceiveStrategy.gd")
+const TeamSettingStrategyScript = preload("res://_newhierarchy/simulation/team/strategy/TeamSettingStrategy.gd")
+const TeamAttackStrategyScript = preload("res://_newhierarchy/simulation/team/strategy/TeamAttackStrategy.gd")
+const TeamBlockStrategyScript = preload("res://_newhierarchy/simulation/team/strategy/TeamBlockStrategy.gd")
+
 var teamData: TeamData
+
+var lineup_strategy = null
+var serve_strategy = null
+var receive_strategy = null
+var setting_strategy = null
+var attack_strategy = null
+var block_strategy = null
 
 enum SetterSystem {
 	ONE_SETTER,
@@ -106,7 +120,6 @@ const ROLE_POOL_LIMITS := {
 @export_range(0.2, 2.5) var prefer_back_court_sets: float = 0.9
 @export_range(0.2, 2.5) var prefer_middle_sets: float = 1.0
 @export_range(0.2, 2.5) var prefer_outside_sets: float = 1.0
-@export_range(0.0, 1.0) var opponent_setter_scouting_budget: float = 0.35
 @export_range(0.3, 1.7) var block_commit_tendency: float = 1.0
 
 @export var defaultReceiveRotations =  [
@@ -284,8 +297,17 @@ const ATTACK_COVER_OFFSETS := {
 
 func _init(_teamData:TeamData = null) -> void:
 	teamData = _teamData
+	lineup_strategy = TeamLineupStrategyScript.new(self)
+	serve_strategy = TeamServeStrategyScript.new(self)
+	receive_strategy = TeamReceiveStrategyScript.new(self)
+	setting_strategy = TeamSettingStrategyScript.new(self)
+	attack_strategy = TeamAttackStrategyScript.new(self)
+	block_strategy = TeamBlockStrategyScript.new(self)
 
 func choose_starting_rotation() -> int:
+	return lineup_strategy.choose_starting_rotation()
+
+func _choose_starting_rotation_impl() -> int:
 	var best_rotation := 0
 	var best_score := -INF
 
@@ -298,6 +320,15 @@ func choose_starting_rotation() -> int:
 	return best_rotation
 
 func phase_local_target(
+	athlete: AthleteStats,
+	team_match_data: TeamMatchData,
+	phase: String,
+	highlighted_player: AthleteStats = null,
+	has_ball_control: bool = false
+) -> Vector3:
+	return receive_strategy.phase_local_target(athlete, team_match_data, phase, highlighted_player, has_ball_control)
+
+func _phase_local_target_impl(
 	athlete: AthleteStats,
 	team_match_data: TeamMatchData,
 	phase: String,
@@ -339,9 +370,20 @@ func phase_local_target(
 	return base_local
 
 func reception_target_for_side(team_side: float) -> Vector3:
+	return receive_strategy.reception_target_for_side(team_side)
+
+func _reception_target_for_side_impl(team_side: float) -> Vector3:
 	return Vector3(abs(reception_target_local.x) * team_side, reception_target_local.y, reception_target_local.z * team_side)
 
 func receive_transition_local(
+	team_match_data: TeamMatchData,
+	athlete: AthleteStats,
+	pass_target_world: Vector3 = Vector3.ZERO,
+	chosen_option: Dictionary = {}
+) -> Vector3:
+	return receive_strategy.receive_transition_local(team_match_data, athlete, pass_target_world, chosen_option)
+
+func _receive_transition_local_impl(
 	team_match_data: TeamMatchData,
 	athlete: AthleteStats,
 	pass_target_world: Vector3 = Vector3.ZERO,
@@ -375,6 +417,9 @@ func receive_transition_local(
 	return transition
 
 func attack_runup_start_local(contact_local: Vector3, athlete: AthleteStats) -> Vector3:
+	return attack_strategy.attack_runup_start_local(contact_local, athlete)
+
+func _attack_runup_start_local_impl(contact_local: Vector3, athlete: AthleteStats) -> Vector3:
 	if athlete == null:
 		return contact_local
 	if contact_local == Vector3.ZERO:
@@ -386,6 +431,9 @@ func attack_runup_start_local(contact_local: Vector3, athlete: AthleteStats) -> 
 	)
 
 func attack_approach_time(from_local: Vector3, runup_start_local: Vector3, athlete: AthleteStats) -> float:
+	return attack_strategy.attack_approach_time(from_local, runup_start_local, athlete)
+
+func _attack_approach_time_impl(from_local: Vector3, runup_start_local: Vector3, athlete: AthleteStats) -> float:
 	if athlete == null:
 		return 0.0
 	var speed: float = max(float(athlete.speed), 0.5)
@@ -393,6 +441,9 @@ func attack_approach_time(from_local: Vector3, runup_start_local: Vector3, athle
 	return from_local.distance_to(runup_start_local) / speed + jump_buffer
 
 func attack_cover_local(athlete: AthleteStats, chosen_option: Dictionary) -> Vector3:
+	return attack_strategy.attack_cover_local(athlete, chosen_option)
+
+func _attack_cover_local_impl(athlete: AthleteStats, chosen_option: Dictionary) -> Vector3:
 	if athlete == null:
 		return Vector3.ZERO
 	if chosen_option.is_empty():
@@ -414,6 +465,9 @@ func attack_cover_local(athlete: AthleteStats, chosen_option: Dictionary) -> Vec
 	return cover_target
 
 func defensive_plan_local_target(athlete: AthleteStats, positioning_plan: Dictionary) -> Vector3:
+	return block_strategy.defensive_plan_local_target(athlete, positioning_plan)
+
+func _defensive_plan_local_target_impl(athlete: AthleteStats, positioning_plan: Dictionary) -> Vector3:
 	if athlete == null:
 		return Vector3.ZERO
 	for blocker_plan_variant in positioning_plan.get("blockers", []):
@@ -451,6 +505,9 @@ func score_rotation(rotation:int) -> float:
 	return score
 
 func select_starting_lineup(players: Array[AthleteStats]) -> Array[AthleteStats]:
+	return lineup_strategy.select_starting_lineup(players)
+
+func _select_starting_lineup_impl(players: Array[AthleteStats]) -> Array[AthleteStats]:
 	if players.size() < 6:
 		return players.duplicate()
 
@@ -493,6 +550,13 @@ func choose_passer_for_ball(
 	ball_position: Vector3,
 	team_side: float
 ) -> AthleteStats:
+	return receive_strategy.choose_passer_for_ball(team_match_data, ball_position, team_side)
+
+func _choose_passer_for_ball_impl(
+	team_match_data: TeamMatchData,
+	ball_position: Vector3,
+	team_side: float
+) -> AthleteStats:
 	var players := _resolve_players(team_match_data)
 	if players.is_empty() or team_match_data == null or ball_position == Vector3.ZERO:
 		return players[0] if not players.is_empty() else null
@@ -510,6 +574,9 @@ func choose_passer_for_ball(
 	return passer
 
 func choose_setter(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
+	return setting_strategy.choose_setter(team_match_data, _rng)
+
+func _choose_setter_impl(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
 	var players: Array[AthleteStats] = _resolve_players(team_match_data)
 	if players.is_empty():
 		return null
@@ -529,14 +596,23 @@ func choose_setter(team_match_data: TeamMatchData = null, _rng: RandomNumberGene
 	return _choose_player_by_skill(setter_candidates, "set", _rng)
 
 func choose_attacker(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
+	return attack_strategy.choose_attacker(team_match_data, _rng)
+
+func _choose_attacker_impl(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
 	var players := _resolve_players(team_match_data)
 	return _choose_player_by_skill(players, "spike", _rng)
 
 func choose_blocker(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
+	return block_strategy.choose_blocker(team_match_data, _rng)
+
+func _choose_blocker_impl(team_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> AthleteStats:
 	var players := _resolve_players(team_match_data)
 	return _choose_player_by_skill(players, "block", _rng)
 
 func setting_preference_weight_for_attacker(attacker: AthleteStats) -> float:
+	return setting_strategy.setting_preference_weight_for_attacker(attacker)
+
+func _setting_preference_weight_for_attacker_impl(attacker: AthleteStats) -> float:
 	if attacker == null:
 		return 1.0
 
@@ -551,11 +627,10 @@ func setting_preference_weight_for_attacker(attacker: AthleteStats) -> float:
 
 	return max(weight, 0.05)
 
-func setter_tendency_scouting_confidence() -> float:
-	var defense_weight: float = float(lineup_component_weights.get("defense", 1.0))
-	return clamp(opponent_setter_scouting_budget * (0.75 + defense_weight * 0.25), 0.0, 1.0)
-
 func choose_serve_plan(server: AthleteStats, _team_match_data: TeamMatchData = null, opponent_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> Dictionary:
+	return serve_strategy.choose_serve_plan(server, _team_match_data, opponent_match_data, _rng)
+
+func _choose_serve_plan_impl(server: AthleteStats, _team_match_data: TeamMatchData = null, opponent_match_data: TeamMatchData = null, _rng: RandomNumberGenerator = null) -> Dictionary:
 	if server == null:
 		return {
 			"target": Vector3(4.0, 0.0, 0.0),
@@ -588,6 +663,19 @@ func _resolve_players(team_match_data: TeamMatchData) -> Array[AthleteStats]:
 	if team_match_data != null and not team_match_data.court_players.is_empty():
 		return team_match_data.court_players
 	return teamData.courtPlayers
+
+func _choose_player_by_skill(players: Array[AthleteStats], attribute_name: String, _rng: RandomNumberGenerator = null) -> AthleteStats:
+	if players.is_empty():
+		return null
+
+	var best_player: AthleteStats = players[0]
+	var best_value: float = float(best_player.get(attribute_name))
+	for player in players:
+		var value: float = float(player.get(attribute_name))
+		if value > best_value:
+			best_player = player
+			best_value = value
+	return best_player
 
 func _serve_target_weights() -> Dictionary:
 	var weights: Dictionary = DEFAULT_SERVE_TARGET_WEIGHTS.duplicate(true)
@@ -670,7 +758,6 @@ func _resolve_serve_target(strategy: String, opponent_match_data: TeamMatchData,
 	var target: Vector3 = Vector3(4.0, 0.0, 0.0)
 	var receive_phase := "receive"
 	var receive_side := 1.0
-
 	match strategy:
 		"target_libero":
 			target_player = opponent_match_data.get_libero_on_court()
