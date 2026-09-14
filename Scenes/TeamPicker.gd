@@ -56,4 +56,3 @@ func probabilities(attack:float, defence:float):
 		attackWins = (float(attack) - 1) / (2 * defence)
 		defWins = (2*defence - attack - 1) / (2 * defence)
 	print ("attack wins: " + str(attackWins) + "   def: " + str(defWins) + "   draws: " + str(tie))
-

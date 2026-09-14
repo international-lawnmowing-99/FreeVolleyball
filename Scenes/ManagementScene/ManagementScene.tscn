@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://mc50i6pbakuk"]
+[gd_scene load_steps=10 format=3 uid="uid://mc50i6pbakuk"]
 
 [ext_resource type="Texture2D" uid="uid://bamxyyq7k8h0o" path="res://Textures/Captain.png" id="1"]
 [ext_resource type="Script" uid="uid://burhy5b5kyutb" path="res://Scenes/ManagementScene/ManagementScene.gd" id="1_vgkfa"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dopbn4dj6p3ca" path="res://Textures/warning.png" id="4_t6drj"]
 [ext_resource type="Texture2D" uid="uid://bohxkkb71fd34" path="res://Textures/headIcon.jpg" id="4_uaxp5"]
 [ext_resource type="PackedScene" uid="uid://ccj7p7uqu3r7p" path="res://Scenes/ManagementScene/Conventional Calendar Scene/CalendarStandard.tscn" id="8_uaxp5"]
+[ext_resource type="PackedScene" path="res://Scenes/ManagementScene/Roles/PlayerRoleEditor.tscn" id="9_roles"]
 
 [node name="ManagementScene" type="Control"]
 layout_mode = 3
@@ -1930,6 +1931,11 @@ offset_right = 472.0
 offset_bottom = 179.0
 text = "Team Info"
 
+[node name="PlayerRolesButton" type="Button" parent="Background/VBoxContainer/TricolourContainer/Column2"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+text = "Player Roles"
+
 [node name="Column3" type="VBoxContainer" parent="Background/VBoxContainer/TricolourContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -2039,9 +2045,14 @@ autowrap_mode = 2
 visible = false
 layout_mode = 1
 
+[node name="PlayerRoleEditor" parent="." instance=ExtResource("9_roles")]
+visible = false
+layout_mode = 1
+
 [connection signal="pressed" from="MarginContainer/VBoxContainer/BasicInfo/CalendarButton" to="." method="_on_calendar_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/BasicInfo/NextDayButton" to="." method="_on_next_day_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/BasicInfo/NextMatchButton" to="." method="_on_next_match_button_pressed"]
 [connection signal="pressed" from="Background/VBoxContainer/TricolourContainer/Column3/CalendarManagementScene/NextDayButton" to="." method="_on_next_day_button_pressed"]
 [connection signal="pressed" from="Background/VBoxContainer/TricolourContainer/Column3/CalendarManagementScene/NextMatchButton" to="." method="_on_next_match_button_pressed"]
+[connection signal="pressed" from="Background/VBoxContainer/TricolourContainer/Column2/PlayerRolesButton" to="." method="_on_player_roles_button_pressed"]
 [connection signal="visibility_changed" from="SimulatingPopup" to="." method="_on_simulating_popup_visibility_changed"]

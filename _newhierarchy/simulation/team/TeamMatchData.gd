@@ -7,14 +7,8 @@ var court_players: Array[AthleteStats]
 var bench_players: Array[AthleteStats]
 var sideout_rotations: int = 0
 
-const ROTATION_BASE_POSITIONS := {
-	1: Vector3(4.2, 0.0, -3.0),
-	2: Vector3(1.4, 0.0, -3.0),
-	3: Vector3(1.1, 0.0, 0.0),
-	4: Vector3(1.4, 0.0, 3.0),
-	5: Vector3(4.2, 0.0, 3.0),
-	6: Vector3(4.0, 0.0, 0.0)
-}
+const CourtCoordinates = preload("res://_newhierarchy/simulation/team/roles/CourtCoordinateSystem.gd")
+const ROTATION_BASE_POSITIONS := CourtCoordinates.ROTATION_ANCHORS
 
 func _init(_team: TeamData):
 	team = _team

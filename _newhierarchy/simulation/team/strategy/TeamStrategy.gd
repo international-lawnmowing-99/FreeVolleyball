@@ -8,6 +8,7 @@ const TeamReceiveStrategyScript = preload("res://_newhierarchy/simulation/team/s
 const TeamSettingStrategyScript = preload("res://_newhierarchy/simulation/team/strategy/TeamSettingStrategy.gd")
 const TeamAttackStrategyScript = preload("res://_newhierarchy/simulation/team/strategy/TeamAttackStrategy.gd")
 const TeamBlockStrategyScript = preload("res://_newhierarchy/simulation/team/strategy/TeamBlockStrategy.gd")
+const CourtCoordinates = preload("res://_newhierarchy/simulation/team/roles/CourtCoordinateSystem.gd")
 
 var teamData: TeamData
 
@@ -225,14 +226,7 @@ const DEFAULT_SERVE_AGGRESSION_WEIGHTS := {
 	"aggressive": 0.75
 }
 
-const ROTATION_BASE_POSITIONS := {
-	1: Vector3(4.2, 0.0, -3.0),
-	2: Vector3(1.4, 0.0, -3.0),
-	3: Vector3(1.1, 0.0, 0.0),
-	4: Vector3(1.4, 0.0, 3.0),
-	5: Vector3(4.2, 0.0, 3.0),
-	6: Vector3(4.0, 0.0, 0.0)
-}
+const ROTATION_BASE_POSITIONS := CourtCoordinates.ROTATION_ANCHORS
 
 const DEFENSIVE_HOME_BY_ROTATION := {
 	1: Vector3(3.65, 0.0, -2.55),

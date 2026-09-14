@@ -40,6 +40,11 @@ class_name AthleteStats
 @export var floatServe:float
 
 @export var role:Enums.Role
+## Roster role above remains an archetype. This ID selects a reusable tactical
+## PlayerRoleDefinition owned by the team, without coupling the player to a
+## particular TeamStrategy implementation.
+@export var athlete_id: String = ""
+@export var role_definition_id: String = ""
 @export var rotationPosition:int
 @export var uiSelected:bool = false
 @export var salary:int
@@ -47,6 +52,10 @@ class_name AthleteStats
 #return (int)(timeNow - dob).TotalDays/365;
 
 var matchPassingStats:AthleteMatchPassingStats = AthleteMatchPassingStats.new()
+
+func ensure_athlete_id() -> void:
+	if athlete_id.is_empty():
+		athlete_id = "athlete-%s" % str(Time.get_ticks_usec())
 
 func SetterEvaluation()->float:
 	var eval = set
