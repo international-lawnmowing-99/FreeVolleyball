@@ -17,9 +17,7 @@ class_name TeamData
 @export var playerChoiceState:PlayerChoiceState
 
 @export var teamLineupWeightProfile: TeamLineupWeightProfile
-## Reusable player responsibilities belong to the team, not TeamStrategy.
-@export var roleLibrary: PlayerRoleLibrary = PlayerRoleLibrary.new()
-@export var roleTacticalSystem: RoleTacticalSystem = RoleTacticalSystem.new()
+@export var active_system: TeamSystem = TeamSystem.new()
 
 @export var squad:Array[AthleteData] = []
 
@@ -31,6 +29,10 @@ func _init() -> void:
 
 	if teamLineupWeightProfile == null:
 		teamLineupWeightProfile = TeamLineupWeightProfile.new()
+	if active_system == null:
+		active_system = TeamSystem.new()
+	active_system.initialize_default_roles()
+	teamStrategy.configure_system(active_system)
 
 func Populate(_playerChoiceState, firstNames:Array[String], lastNames:Array[String]):
 	playerChoiceState = _playerChoiceState
@@ -79,6 +81,7 @@ func select_starting_lineup() -> void:
 		teamStrategy = TeamStrategy.new(self)
 	else:
 		teamStrategy.teamData = self
+	teamStrategy.configure_system(active_system)
 
 	var selected: Array[AthleteStats] = teamStrategy.select_starting_lineup(matchPlayers)
 	courtPlayers = selected

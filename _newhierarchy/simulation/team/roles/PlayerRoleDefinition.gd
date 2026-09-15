@@ -12,6 +12,15 @@ enum DefensiveSlot { NONE, LEFT, MIDDLE, RIGHT }
 @export var id: String = ""
 @export var display_name: String = "New role"
 
+@export_group("System responsibilities")
+@export var receive: bool = false
+@export var set_role: bool = false
+@export var attack: bool = false
+@export var block: bool = false
+@export var defend: bool = false
+@export var backup_setter: bool = false
+@export_enum("Prepare for next role", "Chill") var non_receive_preparation: int = 0
+
 @export_group("Receive")
 @export var designated_receiver: bool = false
 @export var non_receiver_preparation: Preparation = Preparation.NONE

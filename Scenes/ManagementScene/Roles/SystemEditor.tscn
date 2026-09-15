@@ -1,0 +1,570 @@
+[gd_scene format=3 uid="uid://crt7qshla2xnr"]
+
+[ext_resource type="Script" uid="uid://yv341f0jplgt" path="res://Scenes/ManagementScene/Roles/SystemEditor.gd" id="1_system"]
+[ext_resource type="Script" uid="uid://cmemfrhqy04dg" path="res://Scenes/ManagementScene/Roles/SystemCourtView.gd" id="2_court"]
+
+[sub_resource type="StyleBoxFlat" id="StylePlayerA"]
+bg_color = Color(0.12, 0.34, 0.52, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.75, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StylePlayerB"]
+bg_color = Color(0.13, 0.4, 0.24, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.9, 0.55, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StylePlayerC"]
+bg_color = Color(0.48, 0.32, 0.08, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.75, 0.3, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StylePlayerD"]
+bg_color = Color(0.5, 0.18, 0.18, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.45, 0.45, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StylePlayerE"]
+bg_color = Color(0.3, 0.2, 0.48, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.75, 0.5, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StylePlayerF"]
+bg_color = Color(0.5, 0.2, 0.36, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.55, 0.8, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="SystemEditor" type="Control" unique_id=926576842]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_system")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=399071224]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.025, 0.04, 0.06, 0.98)
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=46588455]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 22.0
+offset_right = -30.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Root" type="VBoxContainer" parent="Margin" unique_id=274154403]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="Margin/Root" unique_id=378468247]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Margin/Root/Header" unique_id=1784167470]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "System Editor"
+
+[node name="Status" type="Label" parent="Margin/Root/Header" unique_id=1039167541]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+
+[node name="Close" type="Button" parent="Margin/Root/Header" unique_id=2136954571]
+layout_mode = 2
+text = "Close"
+
+[node name="Content" type="HBoxContainer" parent="Margin/Root" unique_id=2129688046]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Library" type="VBoxContainer" parent="Margin/Root/Content" unique_id=604231491]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+
+[node name="LibraryHeading" type="Label" parent="Margin/Root/Content/Library" unique_id=879667917]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Systems"
+
+[node name="SavedHeading" type="Label" parent="Margin/Root/Content/Library" unique_id=902529692]
+layout_mode = 2
+text = "Saved Systems"
+
+[node name="SavedSystems" type="ItemList" parent="Margin/Root/Content/Library" unique_id=1846392095]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DefaultHeading" type="Label" parent="Margin/Root/Content/Library" unique_id=867705194]
+layout_mode = 2
+text = "Default Systems"
+
+[node name="DefaultSystems" type="ItemList" parent="Margin/Root/Content/Library" unique_id=1090985352]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+
+[node name="New" type="Button" parent="Margin/Root/Content/Library" unique_id=2058633201]
+layout_mode = 2
+text = "New System"
+
+[node name="Edit" type="Button" parent="Margin/Root/Content/Library" unique_id=2082914417]
+layout_mode = 2
+text = "Edit selected"
+
+[node name="Use" type="Button" parent="Margin/Root/Content/Library" unique_id=76703934]
+layout_mode = 2
+text = "Use for team"
+
+[node name="Load" type="Button" parent="Margin/Root/Content/Library" unique_id=919736148]
+layout_mode = 2
+text = "Load systems"
+
+[node name="SaveLibrary" type="Button" parent="Margin/Root/Content/Library" unique_id=746259085]
+layout_mode = 2
+text = "Save systems"
+
+[node name="Editor" type="VBoxContainer" parent="Margin/Root/Content" unique_id=1843710068]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SystemName" type="LineEdit" parent="Margin/Root/Content/Editor" unique_id=1709844193]
+layout_mode = 2
+placeholder_text = "System name"
+
+[node name="Tabs" type="TabContainer" parent="Margin/Root/Content/Editor" unique_id=871964940]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 1
+
+[node name="Guide" type="VBoxContainer" parent="Margin/Root/Content/Editor/Tabs" unique_id=1099035048]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Heading" type="Label" parent="Margin/Root/Content/Editor/Tabs/Guide" unique_id=277740973]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Guide"
+
+[node name="Explanation" type="Label" parent="Margin/Root/Content/Editor/Tabs/Guide" unique_id=377173301]
+layout_mode = 2
+text = "A System is the team's high-level plan for what players generally do during a rally. Phase Goal sets the default first, second, and third touch. Player Roles assigns broad responsibilities to the six players and shows their rotational positions."
+autowrap_mode = 2
+
+[node name="GuideText" type="TextEdit" parent="Margin/Root/Content/Editor/Tabs/Guide" unique_id=1205254583]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Describe this System"
+
+[node name="PhaseGoal" type="VBoxContainer" parent="Margin/Root/Content/Editor/Tabs" unique_id=1198589093]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Heading" type="Label" parent="Margin/Root/Content/Editor/Tabs/PhaseGoal" unique_id=1370631474]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Phase Goal"
+
+[node name="Explanation" type="Label" parent="Margin/Root/Content/Editor/Tabs/PhaseGoal" unique_id=643301099]
+layout_mode = 2
+text = "Choose the team's default high-level behaviour for each touch. The available choices are constrained by the selected first touch."
+autowrap_mode = 2
+
+[node name="Goals" type="GridContainer" parent="Margin/Root/Content/Editor/Tabs/PhaseGoal" unique_id=1893517606]
+layout_mode = 2
+columns = 2
+
+[node name="FirstLabel" type="Label" parent="Margin/Root/Content/Editor/Tabs/PhaseGoal/Goals" unique_id=1254187997]
+layout_mode = 2
+text = "1st touch"
+
+[node name="FirstTouch" type="OptionButton" parent="Margin/Root/Content/Editor/Tabs/PhaseGoal/Goals" unique_id=970900083]
+layout_mode = 2
+
+[node name="SecondLabel" type="Label" parent="Margin/Root/Content/Editor/Tabs/PhaseGoal/Goals" unique_id=71196255]
+layout_mode = 2
+text = "2nd touch"
+
+[node name="SecondTouch" type="OptionButton" parent="Margin/Root/Content/Editor/Tabs/PhaseGoal/Goals" unique_id=1105715430]
+layout_mode = 2
+
+[node name="ThirdLabel" type="Label" parent="Margin/Root/Content/Editor/Tabs/PhaseGoal/Goals" unique_id=595217723]
+layout_mode = 2
+text = "3rd touch"
+
+[node name="ThirdTouch" type="OptionButton" parent="Margin/Root/Content/Editor/Tabs/PhaseGoal/Goals" unique_id=290376787]
+layout_mode = 2
+
+[node name="PlayerRoles" type="VBoxContainer" parent="Margin/Root/Content/Editor/Tabs" unique_id=421079753]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Heading" type="Label" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles" unique_id=105074178]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Player Roles"
+
+[node name="RotationBar" type="HBoxContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles" unique_id=79938978]
+layout_mode = 2
+
+[node name="Rotation1" type="Button" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/RotationBar" unique_id=601883715]
+layout_mode = 2
+toggle_mode = true
+text = "Rotation 1"
+
+[node name="Rotation2" type="Button" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/RotationBar" unique_id=31105264]
+layout_mode = 2
+toggle_mode = true
+text = "Rotation 2"
+
+[node name="Rotation3" type="Button" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/RotationBar" unique_id=1053540616]
+layout_mode = 2
+toggle_mode = true
+text = "Rotation 3"
+
+[node name="Rotation4" type="Button" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/RotationBar" unique_id=1501659166]
+layout_mode = 2
+toggle_mode = true
+text = "Rotation 4"
+
+[node name="Rotation5" type="Button" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/RotationBar" unique_id=265382445]
+layout_mode = 2
+toggle_mode = true
+text = "Rotation 5"
+
+[node name="Rotation6" type="Button" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/RotationBar" unique_id=94477819]
+layout_mode = 2
+toggle_mode = true
+text = "Rotation 6"
+
+[node name="Court" type="Control" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles" unique_id=1914521861]
+custom_minimum_size = Vector2(760, 520)
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_court")
+
+[node name="PlayerCard1" type="PanelContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court" unique_id=2136022817]
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StylePlayerA")
+
+[node name="Body" type="VBoxContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard1" unique_id=746115912]
+layout_mode = 2
+
+[node name="PlayerName" type="Label" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard1/Body" unique_id=1760755518]
+layout_mode = 2
+text = "Player A"
+horizontal_alignment = 1
+
+[node name="Receive" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard1/Body" unique_id=980539256]
+layout_mode = 2
+text = "Receive"
+
+[node name="Set" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard1/Body" unique_id=845847211]
+layout_mode = 2
+text = "Set"
+
+[node name="Attack" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard1/Body" unique_id=962963365]
+layout_mode = 2
+text = "Attack"
+
+[node name="Block" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard1/Body" unique_id=524804667]
+layout_mode = 2
+text = "Block"
+
+[node name="Defend" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard1/Body" unique_id=1793173902]
+layout_mode = 2
+text = "Defend"
+
+[node name="BackupSetter" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard1/Body" unique_id=749284257]
+layout_mode = 2
+text = "Backup Setter"
+
+[node name="Preparation" type="OptionButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard1/Body" unique_id=870737219]
+layout_mode = 2
+
+[node name="PlayerCard2" type="PanelContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court" unique_id=1744024721]
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StylePlayerB")
+
+[node name="Body" type="VBoxContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard2" unique_id=659376023]
+layout_mode = 2
+
+[node name="PlayerName" type="Label" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard2/Body" unique_id=950476956]
+layout_mode = 2
+text = "Player B"
+horizontal_alignment = 1
+
+[node name="Receive" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard2/Body" unique_id=1401831569]
+layout_mode = 2
+text = "Receive"
+
+[node name="Set" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard2/Body" unique_id=284178718]
+layout_mode = 2
+text = "Set"
+
+[node name="Attack" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard2/Body" unique_id=1490065668]
+layout_mode = 2
+text = "Attack"
+
+[node name="Block" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard2/Body" unique_id=1784617738]
+layout_mode = 2
+text = "Block"
+
+[node name="Defend" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard2/Body" unique_id=1010777629]
+layout_mode = 2
+text = "Defend"
+
+[node name="BackupSetter" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard2/Body" unique_id=1638141506]
+layout_mode = 2
+text = "Backup Setter"
+
+[node name="Preparation" type="OptionButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard2/Body" unique_id=8769590]
+layout_mode = 2
+
+[node name="PlayerCard3" type="PanelContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court" unique_id=1676956283]
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StylePlayerC")
+
+[node name="Body" type="VBoxContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard3" unique_id=2124498117]
+layout_mode = 2
+
+[node name="PlayerName" type="Label" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard3/Body" unique_id=1761356721]
+layout_mode = 2
+text = "Player C"
+horizontal_alignment = 1
+
+[node name="Receive" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard3/Body" unique_id=1836244811]
+layout_mode = 2
+text = "Receive"
+
+[node name="Set" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard3/Body" unique_id=1176555410]
+layout_mode = 2
+text = "Set"
+
+[node name="Attack" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard3/Body" unique_id=1438808888]
+layout_mode = 2
+text = "Attack"
+
+[node name="Block" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard3/Body" unique_id=2043035208]
+layout_mode = 2
+text = "Block"
+
+[node name="Defend" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard3/Body" unique_id=1370103218]
+layout_mode = 2
+text = "Defend"
+
+[node name="BackupSetter" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard3/Body" unique_id=1186233765]
+layout_mode = 2
+text = "Backup Setter"
+
+[node name="Preparation" type="OptionButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard3/Body" unique_id=1577818108]
+layout_mode = 2
+
+[node name="PlayerCard4" type="PanelContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court" unique_id=1496983562]
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StylePlayerD")
+
+[node name="Body" type="VBoxContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard4" unique_id=1330367481]
+layout_mode = 2
+
+[node name="PlayerName" type="Label" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard4/Body" unique_id=1602936465]
+layout_mode = 2
+text = "Player D"
+horizontal_alignment = 1
+
+[node name="Receive" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard4/Body" unique_id=1087362341]
+layout_mode = 2
+text = "Receive"
+
+[node name="Set" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard4/Body" unique_id=1902538486]
+layout_mode = 2
+text = "Set"
+
+[node name="Attack" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard4/Body" unique_id=1597793363]
+layout_mode = 2
+text = "Attack"
+
+[node name="Block" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard4/Body" unique_id=626967998]
+layout_mode = 2
+text = "Block"
+
+[node name="Defend" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard4/Body" unique_id=1650433088]
+layout_mode = 2
+text = "Defend"
+
+[node name="BackupSetter" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard4/Body" unique_id=473918265]
+layout_mode = 2
+text = "Backup Setter"
+
+[node name="Preparation" type="OptionButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard4/Body" unique_id=1729307363]
+layout_mode = 2
+
+[node name="PlayerCard5" type="PanelContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court" unique_id=496386784]
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StylePlayerE")
+
+[node name="Body" type="VBoxContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard5" unique_id=198720575]
+layout_mode = 2
+
+[node name="PlayerName" type="Label" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard5/Body" unique_id=1512605079]
+layout_mode = 2
+text = "Player E"
+horizontal_alignment = 1
+
+[node name="Receive" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard5/Body" unique_id=1364728265]
+layout_mode = 2
+text = "Receive"
+
+[node name="Set" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard5/Body" unique_id=1615534334]
+layout_mode = 2
+text = "Set"
+
+[node name="Attack" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard5/Body" unique_id=1961438216]
+layout_mode = 2
+text = "Attack"
+
+[node name="Block" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard5/Body" unique_id=1133100017]
+layout_mode = 2
+text = "Block"
+
+[node name="Defend" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard5/Body" unique_id=1421378144]
+layout_mode = 2
+text = "Defend"
+
+[node name="BackupSetter" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard5/Body" unique_id=1947345979]
+layout_mode = 2
+text = "Backup Setter"
+
+[node name="Preparation" type="OptionButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard5/Body" unique_id=1766735898]
+layout_mode = 2
+
+[node name="PlayerCard6" type="PanelContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court" unique_id=262358241]
+layout_mode = 0
+offset_right = 150.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StylePlayerF")
+
+[node name="Body" type="VBoxContainer" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard6" unique_id=1958804061]
+layout_mode = 2
+
+[node name="PlayerName" type="Label" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard6/Body" unique_id=1259365799]
+layout_mode = 2
+text = "Player F"
+horizontal_alignment = 1
+
+[node name="Receive" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard6/Body" unique_id=1661187624]
+layout_mode = 2
+text = "Receive"
+
+[node name="Set" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard6/Body" unique_id=859557341]
+layout_mode = 2
+text = "Set"
+
+[node name="Attack" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard6/Body" unique_id=986732385]
+layout_mode = 2
+text = "Attack"
+
+[node name="Block" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard6/Body" unique_id=292500304]
+layout_mode = 2
+text = "Block"
+
+[node name="Defend" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard6/Body" unique_id=1713770837]
+layout_mode = 2
+text = "Defend"
+
+[node name="BackupSetter" type="CheckButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard6/Body" unique_id=240736499]
+layout_mode = 2
+text = "Backup Setter"
+
+[node name="Preparation" type="OptionButton" parent="Margin/Root/Content/Editor/Tabs/PlayerRoles/Court/PlayerCard6/Body" unique_id=2046647736]
+layout_mode = 2
+
+[node name="ValidationBar" type="HBoxContainer" parent="Margin/Root" unique_id=428321373]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Check" type="Button" parent="Margin/Root/ValidationBar" unique_id=1244487799]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Check System"
+
+[node name="Results" type="RichTextLabel" parent="Margin/Root/ValidationBar" unique_id=282993761]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+
+[node name="SaveBar" type="HBoxContainer" parent="Margin/Root" unique_id=558533803]
+layout_mode = 2
+
+[node name="Save" type="Button" parent="Margin/Root/SaveBar" unique_id=1928455911]
+layout_mode = 2
+text = "Save System"
+
+[node name="SaveCopy" type="Button" parent="Margin/Root/SaveBar" unique_id=1087007767]
+layout_mode = 2
+text = "Save as Copy"

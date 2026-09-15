@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://bnbexu3yx8ms4"]
 
 [ext_resource type="Script" path="res://Scenes/ManagementScene/Roles/PlayerRoleEditor.gd" id="1"]
+[ext_resource type="Script" path="res://Scenes/ManagementScene/Roles/RoleCourtPreview.gd" id="2"]
 
-[node name="PlayerRoleEditor" type="Control"]
+[node name="PlayerRoleEditor" type="Control" unique_id=1041960069]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,3 +11,373 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1516596306]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.025, 0.04, 0.06, 0.98)
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1707889502]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 22.0
+offset_right = -30.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Margin" unique_id=2108359737]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="Margin/VBox" unique_id=787176072]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Margin/VBox/Header" unique_id=1928064985]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "Player Roles"
+
+[node name="Status" type="Label" parent="Margin/VBox/Header" unique_id=689548100]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+
+[node name="Close" type="Button" parent="Margin/VBox/Header" unique_id=1808778858]
+layout_mode = 2
+text = "Close"
+
+[node name="Body" type="HBoxContainer" parent="Margin/VBox" unique_id=634008524]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Left" type="VBoxContainer" parent="Margin/VBox/Body" unique_id=1029717332]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+
+[node name="RoleList" type="ItemList" parent="Margin/VBox/Body/Left" unique_id=1318933143]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LibraryButtons" type="HBoxContainer" parent="Margin/VBox/Body/Left" unique_id=265968424]
+layout_mode = 2
+
+[node name="New" type="Button" parent="Margin/VBox/Body/Left/LibraryButtons" unique_id=572227211]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "New"
+
+[node name="Copy" type="Button" parent="Margin/VBox/Body/Left/LibraryButtons" unique_id=677147979]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Copy"
+
+[node name="Delete" type="Button" parent="Margin/VBox/Body/Left/LibraryButtons" unique_id=643680463]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Delete"
+
+[node name="LoadLibrary" type="Button" parent="Margin/VBox/Body/Left" unique_id=583233858]
+layout_mode = 2
+text = "Load library"
+
+[node name="SaveLibrary" type="Button" parent="Margin/VBox/Body/Left" unique_id=445485640]
+layout_mode = 2
+text = "Save library"
+
+[node name="EditorScroll" type="ScrollContainer" parent="Margin/VBox/Body" unique_id=969116533]
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Editor" type="VBoxContainer" parent="Margin/VBox/Body/EditorScroll" unique_id=5910438]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="LineEdit" parent="Margin/VBox/Body/EditorScroll/Editor" unique_id=1645169308]
+layout_mode = 2
+placeholder_text = "Role name"
+
+[node name="Receive" type="VBoxContainer" parent="Margin/VBox/Body/EditorScroll/Editor" unique_id=1088239564]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/Receive" unique_id=1078160445]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.556863, 0.839216, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Receive"
+
+[node name="DesignatedReceiver" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Receive" unique_id=1932656197]
+layout_mode = 2
+text = "Designated receiver"
+
+[node name="NonReceiverLabel" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/Receive" unique_id=400752871]
+layout_mode = 2
+text = "If not receiving"
+
+[node name="NonReceiverPreparation" type="OptionButton" parent="Margin/VBox/Body/EditorScroll/Editor/Receive" unique_id=1426667364]
+layout_mode = 2
+
+[node name="Set" type="VBoxContainer" parent="Margin/VBox/Body/EditorScroll/Editor" unique_id=104305730]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/Set" unique_id=1136548019]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.556863, 0.839216, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Set"
+
+[node name="DesignatedSetter" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Set" unique_id=1658949128]
+layout_mode = 2
+text = "Setter for good pass"
+
+[node name="BackupSetter" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Set" unique_id=1527258512]
+layout_mode = 2
+text = "Backup if setter receives"
+
+[node name="EmergencySetter" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Set" unique_id=1767256226]
+layout_mode = 2
+text = "Emergency setter if designated options cannot reach"
+
+[node name="Attack" type="VBoxContainer" parent="Margin/VBox/Body/EditorScroll/Editor" unique_id=1948666421]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/Attack" unique_id=706624992]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.556863, 0.839216, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Attack"
+
+[node name="FrontAttackLabel" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/Attack" unique_id=1668689753]
+layout_mode = 2
+text = "Front-court attack"
+
+[node name="FrontAttackLane" type="OptionButton" parent="Margin/VBox/Body/EditorScroll/Editor/Attack" unique_id=1466947807]
+layout_mode = 2
+
+[node name="BackAttackLabel" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/Attack" unique_id=183229714]
+layout_mode = 2
+text = "Back-court attack"
+
+[node name="BackAttackLane" type="OptionButton" parent="Margin/VBox/Body/EditorScroll/Editor/Attack" unique_id=628368005]
+layout_mode = 2
+
+[node name="Block" type="VBoxContainer" parent="Margin/VBox/Body/EditorScroll/Editor" unique_id=2094574154]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/Block" unique_id=1122336505]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.556863, 0.839216, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Block"
+
+[node name="DesignatedBlocker" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Block" unique_id=1989242019]
+layout_mode = 2
+text = "Designated blocker when front court"
+
+[node name="BlockLaneLabel" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/Block" unique_id=1938744867]
+layout_mode = 2
+text = "Block lane"
+
+[node name="BlockLane" type="OptionButton" parent="Margin/VBox/Body/EditorScroll/Editor/Block" unique_id=1928539133]
+layout_mode = 2
+
+[node name="Defence" type="VBoxContainer" parent="Margin/VBox/Body/EditorScroll/Editor" unique_id=424333182]
+layout_mode = 2
+
+[node name="Heading" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/Defence" unique_id=327454560]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.556863, 0.839216, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Defence"
+
+[node name="DefendInBackCourt" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Defence" unique_id=1539751914]
+layout_mode = 2
+text = "Defensive position when back court"
+
+[node name="DefensiveSlotLabel" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/Defence" unique_id=933014798]
+layout_mode = 2
+text = "Defensive position"
+
+[node name="DefensiveSlot" type="OptionButton" parent="Margin/VBox/Body/EditorScroll/Editor/Defence" unique_id=399450816]
+layout_mode = 2
+
+[node name="PhysicalHeading" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor" unique_id=873825618]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.556863, 0.839216, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Physical-position instruction"
+
+[node name="PositionRow" type="HBoxContainer" parent="Margin/VBox/Body/EditorScroll/Editor" unique_id=808900813]
+layout_mode = 2
+
+[node name="PositionLabel" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/PositionRow" unique_id=1576535574]
+layout_mode = 2
+text = "Court position"
+
+[node name="CourtPosition" type="SpinBox" parent="Margin/VBox/Body/EditorScroll/Editor/PositionRow" unique_id=257002250]
+layout_mode = 2
+min_value = 1.0
+max_value = 6.0
+value = 1.0
+
+[node name="Rotations" type="HBoxContainer" parent="Margin/VBox/Body/EditorScroll/Editor" unique_id=249954124]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Margin/VBox/Body/EditorScroll/Editor/Rotations" unique_id=272256470]
+layout_mode = 2
+text = "Rotations"
+
+[node name="Rotation1" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Rotations" unique_id=83983809]
+layout_mode = 2
+button_pressed = true
+text = "1"
+
+[node name="Rotation2" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Rotations" unique_id=73757677]
+layout_mode = 2
+button_pressed = true
+text = "2"
+
+[node name="Rotation3" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Rotations" unique_id=303220390]
+layout_mode = 2
+button_pressed = true
+text = "3"
+
+[node name="Rotation4" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Rotations" unique_id=1554298483]
+layout_mode = 2
+button_pressed = true
+text = "4"
+
+[node name="Rotation5" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Rotations" unique_id=966620994]
+layout_mode = 2
+button_pressed = true
+text = "5"
+
+[node name="Rotation6" type="CheckButton" parent="Margin/VBox/Body/EditorScroll/Editor/Rotations" unique_id=583597329]
+layout_mode = 2
+button_pressed = true
+text = "6"
+
+[node name="ApplyOverride" type="Button" parent="Margin/VBox/Body/EditorScroll/Editor" unique_id=1492617632]
+layout_mode = 2
+text = "Apply current instructions to selected rotations"
+
+[node name="RemoveOverride" type="Button" parent="Margin/VBox/Body/EditorScroll/Editor" unique_id=1444792511]
+layout_mode = 2
+text = "Remove matching physical-position instruction"
+
+[node name="Right" type="VBoxContainer" parent="Margin/VBox/Body" unique_id=1218364097]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PreviewControls" type="HBoxContainer" parent="Margin/VBox/Body/Right" unique_id=743740995]
+layout_mode = 2
+
+[node name="RotationLabel" type="Label" parent="Margin/VBox/Body/Right/PreviewControls" unique_id=1429081387]
+layout_mode = 2
+text = "Rotation"
+
+[node name="Rotation" type="OptionButton" parent="Margin/VBox/Body/Right/PreviewControls" unique_id=311028635]
+layout_mode = 2
+
+[node name="PhaseLabel" type="Label" parent="Margin/VBox/Body/Right/PreviewControls" unique_id=570009470]
+layout_mode = 2
+text = "Phase"
+
+[node name="Phase" type="OptionButton" parent="Margin/VBox/Body/Right/PreviewControls" unique_id=1553737389]
+layout_mode = 2
+
+[node name="Preview" type="Control" parent="Margin/VBox/Body/Right" unique_id=2143047345]
+custom_minimum_size = Vector2(520, 430)
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2")
+
+[node name="LineupHeading" type="Label" parent="Margin/VBox/Body/Right" unique_id=1123821784]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.556863, 0.839216, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Proposed six-role lineup"
+
+[node name="LineupGrid" type="GridContainer" parent="Margin/VBox/Body/Right" unique_id=1353221765]
+layout_mode = 2
+columns = 2
+
+[node name="SlotLabel1" type="Label" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=1944002885]
+layout_mode = 2
+text = "Player slot 1"
+
+[node name="PlayerSlot1" type="OptionButton" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=1274364949]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SlotLabel2" type="Label" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=1695291035]
+layout_mode = 2
+text = "Player slot 2"
+
+[node name="PlayerSlot2" type="OptionButton" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=363691276]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SlotLabel3" type="Label" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=53885623]
+layout_mode = 2
+text = "Player slot 3"
+
+[node name="PlayerSlot3" type="OptionButton" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=1457727737]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SlotLabel4" type="Label" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=1408177989]
+layout_mode = 2
+text = "Player slot 4"
+
+[node name="PlayerSlot4" type="OptionButton" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=1924011530]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SlotLabel5" type="Label" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=1183743862]
+layout_mode = 2
+text = "Player slot 5"
+
+[node name="PlayerSlot5" type="OptionButton" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=1030967428]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SlotLabel6" type="Label" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=426961662]
+layout_mode = 2
+text = "Player slot 6"
+
+[node name="PlayerSlot6" type="OptionButton" parent="Margin/VBox/Body/Right/LineupGrid" unique_id=1424203954]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CheckLineup" type="Button" parent="Margin/VBox/Body/Right" unique_id=1420564865]
+layout_mode = 2
+text = "Check all rotations"
+
+[node name="Results" type="RichTextLabel" parent="Margin/VBox/Body/Right" unique_id=518242907]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+
+[node name="SaveRow" type="HBoxContainer" parent="Margin/VBox" unique_id=1735907417]
+layout_mode = 2
+
+[node name="SaveRoles" type="Button" parent="Margin/VBox/SaveRow" unique_id=507882058]
+layout_mode = 2
+text = "Save roles to team"
+
+[node name="Overwrite" type="Button" parent="Margin/VBox/SaveRow" unique_id=467348310]
+layout_mode = 2
+text = "Overwrite selected role"

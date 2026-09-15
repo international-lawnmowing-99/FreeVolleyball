@@ -56,6 +56,6 @@ func _on_calendar_button_pressed() -> void:
 	$CalendarStandard.show()
 	pass # Replace with function body.
 
-func _on_player_roles_button_pressed() -> void:
+func _on_system_editor_button_pressed() -> void:
 	var active_team: TeamData = savedCareer.gameWorld.GetTeam(savedCareer.myTeamChoiceState, savedCareer.isClubOrInternational)
-	$PlayerRoleEditor.open_for_team(active_team, savedCareer)
+	$SystemEditor.open_for_team(active_team, savedCareer)

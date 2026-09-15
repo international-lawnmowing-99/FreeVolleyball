@@ -11,6 +11,10 @@ const TeamBlockStrategyScript = preload("res://_newhierarchy/simulation/team/str
 const CourtCoordinates = preload("res://_newhierarchy/simulation/team/roles/CourtCoordinateSystem.gd")
 
 var teamData: TeamData
+var active_system: TeamSystem
+
+func configure_system(system: TeamSystem) -> void:
+	active_system = system
 
 var lineup_strategy = null
 var serve_strategy = null
